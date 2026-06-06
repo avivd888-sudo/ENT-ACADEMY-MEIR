@@ -470,7 +470,7 @@
   .bl-art-wrap {
     position: relative; width: 320px; height: 320px;
     /* Settle animation runs after the drawing finishes — subtle scale + drop-shadow expand */
-    animation: bl-settle 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 3.05s both;
+    animation: bl-settle 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 2.45s both;
   }
   /* Soft warm shadow that grows as the drawing completes */
   .bl-trace-svg {
@@ -485,25 +485,26 @@
   .bl-trace-p {
     stroke-dasharray: 8000;
     stroke-dashoffset: 8000;
-    animation: bl-draw-real 0.9s cubic-bezier(0.4, 0, 0.25, 1) forwards;
+    animation: bl-draw-real 1.5s cubic-bezier(0.33, 0.05, 0.2, 1) forwards;
     opacity: 0;
   }
-  /* Stagger 14 paths over ~2.8s. Longest paths (the outer profile + internal anatomy)
-     draw first and longer; shorter paths fill in detail near the end. */
-  .bl-trace-p.tp0  { animation-delay: 0.00s; animation-duration: 2.2s; }
-  .bl-trace-p.tp1  { animation-delay: 0.40s; animation-duration: 1.8s; }
-  .bl-trace-p.tp2  { animation-delay: 0.90s; animation-duration: 0.9s; }
-  .bl-trace-p.tp3  { animation-delay: 1.05s; animation-duration: 0.9s; }
-  .bl-trace-p.tp4  { animation-delay: 1.20s; animation-duration: 0.8s; }
-  .bl-trace-p.tp5  { animation-delay: 1.35s; animation-duration: 0.8s; }
-  .bl-trace-p.tp6  { animation-delay: 1.50s; animation-duration: 0.7s; }
-  .bl-trace-p.tp7  { animation-delay: 1.65s; animation-duration: 0.7s; }
-  .bl-trace-p.tp8  { animation-delay: 1.80s; animation-duration: 0.6s; }
-  .bl-trace-p.tp9  { animation-delay: 1.95s; animation-duration: 0.6s; }
-  .bl-trace-p.tp10 { animation-delay: 2.10s; animation-duration: 0.5s; }
-  .bl-trace-p.tp11 { animation-delay: 2.25s; animation-duration: 0.5s; }
-  .bl-trace-p.tp12 { animation-delay: 2.40s; animation-duration: 0.5s; }
-  .bl-trace-p.tp13 { animation-delay: 2.55s; animation-duration: 0.5s; }
+  /* Continuous-flow stagger: short, heavily overlapping starts.
+     All paths share the SAME duration so the pencil moves at uniform speed and there
+     are never gaps where nothing is being drawn. */
+  .bl-trace-p.tp0  { animation-delay: 0.00s; animation-duration: 1.8s; }
+  .bl-trace-p.tp1  { animation-delay: 0.18s; animation-duration: 1.5s; }
+  .bl-trace-p.tp2  { animation-delay: 0.36s; }
+  .bl-trace-p.tp3  { animation-delay: 0.50s; }
+  .bl-trace-p.tp4  { animation-delay: 0.64s; }
+  .bl-trace-p.tp5  { animation-delay: 0.78s; }
+  .bl-trace-p.tp6  { animation-delay: 0.92s; }
+  .bl-trace-p.tp7  { animation-delay: 1.06s; }
+  .bl-trace-p.tp8  { animation-delay: 1.20s; }
+  .bl-trace-p.tp9  { animation-delay: 1.34s; }
+  .bl-trace-p.tp10 { animation-delay: 1.48s; }
+  .bl-trace-p.tp11 { animation-delay: 1.62s; }
+  .bl-trace-p.tp12 { animation-delay: 1.76s; }
+  .bl-trace-p.tp13 { animation-delay: 1.90s; }
   @keyframes bl-draw-real {
     0%   { stroke-dashoffset: var(--draw-len, 8000); opacity: 0; }
     5%   { opacity: 1; }
@@ -523,7 +524,7 @@
     pointer-events: none;
     transform: translate(-50%, -50%);
     will-change: transform, opacity;
-    animation: bl-pencil-fadeout 0.5s ease-out 2.95s forwards;
+    animation: bl-pencil-fadeout 0.5s ease-out 2.50s forwards;
   }
   /* Pencil-shavings trailing speck — tiny dot that follows + lags slightly */
   .bl-pencil::after {
@@ -560,56 +561,66 @@
     100% { stroke-dashoffset: -8000; opacity: 0; }
   }
   .bl-title {
-    position: relative;
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 50px;
+    font-size: 54px;
     font-weight: 700;
     color: #5b6231;
-    letter-spacing: 6px;
-    margin-top: 6px;
+    letter-spacing: 8px;
+    margin-top: 8px;
     line-height: 1;
     display: inline-block;
-    padding-bottom: 14px;
   }
   /* Each letter rises into place with its own delay — elegant typewriter feel */
   .bl-letter {
     display: inline-block;
     opacity: 0;
     transform: translateY(14px);
-    animation: bl-letter-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation: bl-letter-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
-  .bl-l1 { animation-delay: 2.55s; }
-  .bl-l2 { animation-delay: 2.70s; }
-  .bl-l3 { animation-delay: 2.85s; }
+  .bl-l1 { animation-delay: 2.40s; }
+  .bl-l2 { animation-delay: 2.50s; }
+  .bl-l3 { animation-delay: 2.60s; }
   @keyframes bl-letter-rise {
     from { opacity: 0; transform: translateY(14px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  /* Decorative underline that draws on after the letters appear */
-  .bl-underline {
-    position: absolute;
-    left: 50%; bottom: 0;
-    width: 70px; height: 6px;
-    transform: translateX(-50%);
-    pointer-events: none;
-  }
-  .bl-underline path {
-    stroke-dasharray: 110;
-    stroke-dashoffset: 110;
-    animation: bl-underline-draw 0.7s cubic-bezier(0.4, 0, 0.25, 1) 3.05s forwards;
-  }
-  @keyframes bl-underline-draw {
-    to { stroke-dashoffset: 0; }
-  }
-  .bl-sub {
-    font-size: 12px;
-    color: #8a8f6a;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 600;
+  /* "Academy" — refined italic serif, sits right under ENT */
+  .bl-academy {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: #7a8847;
+    letter-spacing: 3px;
+    margin-top: 4px;
     opacity: 0;
     transform: translateY(4px);
-    animation: bl-fade-up 0.7s ease-out 3.25s forwards;
+    animation: bl-fade-up 0.6s ease-out 2.85s forwards;
+  }
+  /* Animated divider line — draws after Academy, separates header from tagline */
+  .bl-divider {
+    width: 160px; height: 6px;
+    margin-top: 14px;
+    pointer-events: none;
+  }
+  .bl-divider path {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+    animation: bl-divider-draw 0.9s cubic-bezier(0.4, 0, 0.25, 1) 3.10s forwards;
+  }
+  @keyframes bl-divider-draw {
+    to { stroke-dashoffset: 0; }
+  }
+  /* Tagline on its own line under the divider */
+  .bl-sub {
+    font-size: 11.5px;
+    color: #8a8f6a;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-top: 12px;
+    opacity: 0;
+    transform: translateY(4px);
+    animation: bl-fade-up 0.7s ease-out 3.65s forwards;
   }
   @keyframes bl-fade-up {
     from { opacity: 0; transform: translateY(4px); }
@@ -3309,11 +3320,13 @@
     </div>
     <div class="bl-title">
       <span class="bl-letter bl-l1">E</span><span class="bl-letter bl-l2">N</span><span class="bl-letter bl-l3">T</span>
-      <svg class="bl-underline" viewBox="0 0 100 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
-        <path d="M 2 3 Q 25 0.5 50 3 T 98 3" fill="none" stroke="#7a8847" stroke-width="1.4" stroke-linecap="round"/>
-      </svg>
     </div>
-    <div class="bl-sub" id="boot-loader-msg">Academy · loading your study companion</div>
+    <div class="bl-academy">Academy</div>
+    <!-- Animated divider line — draws elegantly after Academy appears -->
+    <svg class="bl-divider" viewBox="0 0 160 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
+      <path d="M 2 3 Q 40 0.5 80 3 T 158 3" fill="none" stroke="#7a8847" stroke-width="1.4" stroke-linecap="round"/>
+    </svg>
+    <div class="bl-sub" id="boot-loader-msg">Loading your study companion</div>
   </div>
 </div>
 <div id="app"></div>
@@ -3339,12 +3352,13 @@ window.__bootStart = Date.now();
   function run() {
     const paths = Array.from(document.querySelectorAll('.bl-trace-p'));
     if (!paths.length) return;
-    // Per-path schedule (delay + duration in seconds) — keep in sync with CSS
+    // Per-path schedule (delay + duration in seconds) — keep in sync with CSS.
+    // Uniform short durations with heavy overlap = smooth continuous flow, no stuck pauses.
     const SCHEDULE = [
-      [0.00, 2.20], [0.40, 1.80], [0.90, 0.90], [1.05, 0.90],
-      [1.20, 0.80], [1.35, 0.80], [1.50, 0.70], [1.65, 0.70],
-      [1.80, 0.60], [1.95, 0.60], [2.10, 0.50], [2.25, 0.50],
-      [2.40, 0.50], [2.55, 0.50]
+      [0.00, 1.80], [0.18, 1.50], [0.36, 1.50], [0.50, 1.50],
+      [0.64, 1.50], [0.78, 1.50], [0.92, 1.50], [1.06, 1.50],
+      [1.20, 1.50], [1.34, 1.50], [1.48, 1.50], [1.62, 1.50],
+      [1.76, 1.50], [1.90, 1.50]
     ];
     paths.forEach((p, i) => {
       try {
@@ -11461,10 +11475,10 @@ function render() {
   // After full animation cycle plays it fades out smoothly.
   if (!window.__bootLoaderHidden) {
     window.__bootLoaderHidden = true;
-    // Let the user enjoy: 14 traced paths (~3.05s) + ENT letters rise (3.0s) + underline (3.05s)
-    // + settle (3.05s) + tagline fade (3.25s). Total polish complete ~3.8s.
+    // Drawing finishes ~2.4s. ENT rises 2.4-2.6s, Academy fades 2.85s, divider draws 3.10s,
+    // tagline fades 3.65s. Plus 0.7s settle. Full polish complete ~4.3s.
     const elapsedSinceBoot = Date.now() - (window.__bootStart || Date.now());
-    const minVisible = 3900; // ms — generous buffer to see the full finishing flourish
+    const minVisible = 4300; // ms — wait for the full finishing flourish
     const delay = Math.max(0, minVisible - elapsedSinceBoot);
     setTimeout(() => {
       if (typeof hideBootLoader === 'function') hideBootLoader();
