@@ -448,48 +448,47 @@
   [data-theme="dark"] .boot-loader .bl-svg path { stroke: #a3a460; }
   .boot-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
   .boot-loader-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; }
-  .bl-svg { display: block; }
-  /* Each path animates from "hidden" (full dash offset) to "drawn" (offset 0).
-     Generous dasharray covers the longest path so all draws work without per-path math. */
-  .bl-p { stroke-dasharray: 800; stroke-dashoffset: 800; animation: bl-draw 2.4s ease-out forwards; }
-  .bl-p1  { animation-delay: 0.00s; }
-  .bl-p2  { animation-delay: 0.50s; }
-  .bl-p3  { animation-delay: 0.85s; }
-  .bl-p4  { animation-delay: 0.95s; }
-  .bl-p5  { animation-delay: 1.05s; }
-  .bl-p6  { animation-delay: 1.20s; }
-  .bl-p7  { animation-delay: 1.35s; }
-  .bl-p8  { animation-delay: 1.45s; }
-  .bl-p9  { animation-delay: 1.55s; }
-  .bl-p10 { animation-delay: 1.65s; }
-  .bl-p11 { animation-delay: 1.80s; }
-  .bl-p12 { animation-delay: 1.95s; }
-  .bl-p13 { animation-delay: 2.10s; }
-  /* Looping mode (during long ops like Claude generation) — fade out + redraw */
-  .boot-loader.looping .bl-p { animation: bl-draw-loop 3.5s ease-in-out infinite; }
-  .boot-loader.looping .bl-p1 { animation-delay: 0s; }
-  .boot-loader.looping .bl-p2 { animation-delay: 0.25s; }
-  .boot-loader.looping .bl-p3 { animation-delay: 0.50s; }
-  .boot-loader.looping .bl-p4 { animation-delay: 0.55s; }
-  .boot-loader.looping .bl-p5 { animation-delay: 0.65s; }
-  .boot-loader.looping .bl-p6 { animation-delay: 0.75s; }
-  .boot-loader.looping .bl-p7 { animation-delay: 0.85s; }
-  .boot-loader.looping .bl-p8 { animation-delay: 0.95s; }
-  .boot-loader.looping .bl-p9 { animation-delay: 1.05s; }
-  .boot-loader.looping .bl-p10 { animation-delay: 1.15s; }
-  .boot-loader.looping .bl-p11 { animation-delay: 1.25s; }
-  .boot-loader.looping .bl-p12 { animation-delay: 1.35s; }
-  .boot-loader.looping .bl-p13 { animation-delay: 1.45s; }
-  @keyframes bl-draw {
-    from { stroke-dashoffset: 800; }
-    to   { stroke-dashoffset: 0; }
+  /* PNG reveal: clip-path animates from "fully hidden" (left edge only) to "fully shown".
+     Effect: the user's actual pencil-drawing materializes left-to-right as if being drawn live. */
+  .bl-art-wrap { position: relative; width: 240px; height: 240px; }
+  .bl-art {
+    display: block; width: 240px; height: 240px;
+    border-radius: 18px;
+    clip-path: inset(0 100% 0 0);
+    animation: bl-reveal 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
   }
-  @keyframes bl-draw-loop {
-    0%   { stroke-dashoffset: 800; opacity: 0.0; }
-    20%  { opacity: 1; }
-    55%  { stroke-dashoffset: 0; opacity: 1; }
-    85%  { stroke-dashoffset: 0; opacity: 1; }
-    100% { stroke-dashoffset: -800; opacity: 0; }
+  /* Pencil tip — a small olive dot that travels along the reveal edge */
+  .bl-pencil {
+    position: absolute; top: 50%; left: 0;
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #5b6231; box-shadow: 0 0 0 3px rgba(154,165,90,.25);
+    transform: translateY(-50%);
+    animation: bl-pencil-move 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+  }
+  @keyframes bl-reveal {
+    0%   { clip-path: inset(0 100% 0 0); }
+    100% { clip-path: inset(0 0 0 0); }
+  }
+  @keyframes bl-pencil-move {
+    0%   { left: 0; opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { left: 240px; opacity: 0; }
+  }
+  /* Looping mode (during long ops like Claude generation) — repeats the reveal forever */
+  .boot-loader.looping .bl-art { animation: bl-reveal-loop 3.0s ease-in-out infinite; }
+  .boot-loader.looping .bl-pencil { animation: bl-pencil-loop 3.0s ease-in-out infinite; }
+  @keyframes bl-reveal-loop {
+    0%   { clip-path: inset(0 100% 0 0); }
+    50%  { clip-path: inset(0 0 0 0); }
+    100% { clip-path: inset(0 0 0 100%); }
+  }
+  @keyframes bl-pencil-loop {
+    0%   { left: 0; opacity: 0; }
+    5%   { opacity: 1; }
+    50%  { left: 240px; opacity: 1; }
+    55%  { left: 240px; opacity: 0; }
+    100% { left: 240px; opacity: 0; }
   }
   .bl-title {
     font-family: Georgia, 'Times New Roman', serif;
@@ -518,7 +517,8 @@
   .boot-loader.looping .bl-title,
   .boot-loader.looping .bl-sub { opacity: 1; animation: none; }
   @media (prefers-reduced-motion: reduce) {
-    .bl-p { animation: none; stroke-dashoffset: 0; }
+    .bl-art { animation: none; clip-path: inset(0 0 0 0); }
+    .bl-pencil { display: none; }
     .bl-title, .bl-sub { opacity: 1; animation: none; }
   }
 
@@ -3184,41 +3184,17 @@
 </style>
 </head>
 <body>
-<!-- LOADING OVERLAY — pencil draws the sagittal head & neck while content loads.
-     Shows on initial app boot, hides after first render. Re-appears for heavy ops
-     (extended-podcast generation). Decorative svg, paths animate via stroke-dashoffset. -->
+<!-- LOADING OVERLAY — shows the REAL logo (PNG from user's reference PDF) appearing
+     as if being drawn. Uses a left-to-right clip-path sweep so the artwork is never
+     distorted by an SVG approximation — the user's pencil drawing IS the image. -->
 <div id="boot-loader" class="boot-loader" role="status" aria-live="polite" aria-label="Loading ENT Academy">
   <div class="boot-loader-inner">
-    <svg viewBox="0 0 200 220" width="240" height="264" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="bl-svg">
-      <g fill="none" stroke="#9aa55a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <!-- Outer profile (longest path — draws first, takes ~1.4s) -->
-        <path class="bl-p bl-p1" d="M 70 215 L 70 178 C 65 168 60 155 65 140 C 70 122 55 105 60 80 C 65 50 95 28 130 32 C 158 36 174 58 174 82 C 174 96 168 108 158 116 L 156 120 L 158 123 C 160 126 162 130 160 134 L 156 138 L 152 142 C 148 144 144 142 142 140 L 140 142 C 138 145 138 148 140 151 C 144 153 148 153 150 152 C 152 154 150 158 146 159 L 142 162 L 144 165 C 148 168 148 173 144 175 L 140 180 C 136 187 128 192 118 192 C 105 192 95 196 88 204 L 86 215"/>
-        <!-- Ear (helix swirl) -->
-        <path class="bl-p bl-p2" d="M 110 96 C 100 92 92 98 92 108 C 92 118 100 124 110 122 C 116 121 118 115 116 110 C 114 107 110 106 108 109 C 107 112 110 114 112 113"/>
-        <!-- Brow ridge -->
-        <path class="bl-p bl-p3" d="M 148 105 Q 153 103 158 105"/>
-        <!-- Eye / orbital hint -->
-        <path class="bl-p bl-p4" d="M 148 112 Q 154 115 160 113"/>
-        <!-- Nasal cavity arch -->
-        <path class="bl-p bl-p5" d="M 156 120 C 145 122 132 122 122 118 C 116 116 114 112 116 108"/>
-        <!-- Hard palate arch -->
-        <path class="bl-p bl-p6" d="M 142 145 C 130 148 118 152 110 158 Q 108 162 112 164"/>
-        <!-- Soft palate + uvula -->
-        <path class="bl-p bl-p7" d="M 122 154 Q 121 159 122 163"/>
-        <!-- Tongue body -->
-        <path class="bl-p bl-p8" d="M 130 168 C 122 170 116 175 116 182"/>
-        <!-- Epiglottis tip -->
-        <path class="bl-p bl-p9" d="M 118 178 Q 115 180 113 184"/>
-        <!-- Thyroid cartilage (Adam's apple) -->
-        <path class="bl-p bl-p10" d="M 100 186 C 105 184 112 184 116 188 C 118 190 117 194 114 196 L 110 198"/>
-        <!-- Cricoid -->
-        <path class="bl-p bl-p11" d="M 100 202 Q 108 200 114 202"/>
-        <!-- Tracheal rings -->
-        <path class="bl-p bl-p12" d="M 100 208 Q 108 207 114 208 M 100 212 Q 108 211 114 212"/>
-        <!-- Cervical vertebrae -->
-        <path class="bl-p bl-p13" d="M 78 130 Q 82 132 86 130 M 78 138 Q 82 140 86 138 M 78 146 Q 82 148 86 146 M 78 154 Q 82 156 86 154 M 78 162 Q 82 164 86 162"/>
-      </g>
-    </svg>
+    <div class="bl-art-wrap">
+      <!-- The actual PNG from the user's PDF reference, served from same folder as index.html -->
+      <img class="bl-art" src="apple_touch_180.png" width="240" height="240" alt="" aria-hidden="true" />
+      <!-- "Pencil tip" — small olive dot that travels along the reveal edge, suggesting a pencil drawing the figure -->
+      <span class="bl-pencil" aria-hidden="true"></span>
+    </div>
     <div class="bl-title">ENT Academy</div>
     <div class="bl-sub" id="boot-loader-msg">Drawing your study companion…</div>
   </div>
@@ -11295,13 +11271,143 @@ function render() {
   // After full animation cycle plays it fades out smoothly.
   if (!window.__bootLoaderHidden) {
     window.__bootLoaderHidden = true;
-    // Let the user see the drawing complete (~2.5s) on first load before fading.
+    // Let the user see the drawing complete (~2.6s) on first load before fading.
     // Subsequent renders never re-show the loader.
     const elapsedSinceBoot = Date.now() - (window.__bootStart || Date.now());
-    const minVisible = 2400; // ms — enough to enjoy the animation
+    const minVisible = 2600; // ms — enough to enjoy the animation
     const delay = Math.max(0, minVisible - elapsedSinceBoot);
-    setTimeout(() => { if (typeof hideBootLoader === 'function') hideBootLoader(); }, delay);
+    setTimeout(() => {
+      if (typeof hideBootLoader === 'function') hideBootLoader();
+      // After the loader fades out, prompt for API key if missing (first session of this app open).
+      if (typeof maybeShowApiKeyPrompt === 'function') maybeShowApiKeyPrompt();
+    }, delay);
   }
+}
+
+/* ---------- STARTUP API KEY PROMPT ----------
+   On every fresh app load, check whether the user has ANY HD voice key (ElevenLabs or OpenAI).
+   If not, surface a centered modal asking for the key — verifies it works, saves to localStorage.
+   The modal can be skipped (the user might want to study without audio). */
+function maybeShowApiKeyPrompt() {
+  // Already shown this session — don't nag again
+  if (window.__apiKeyPromptShown) return;
+  if (state.elevenLabsKey || state.openaiKey) return; // user has at least one key
+  if (state.apiKeyPromptDismissed === todayKey()) return; // explicitly dismissed today
+  showApiKeyPrompt();
+}
+function todayKey() {
+  const d = new Date();
+  return d.getUTCFullYear() + '-' + (d.getUTCMonth()+1) + '-' + d.getUTCDate();
+}
+function showApiKeyPrompt() {
+  window.__apiKeyPromptShown = true;
+  // Diagnose whether the user's storage is actually persisting (helps with PWA / private mode issues)
+  let storageWorks = false;
+  try {
+    const testKey = '__ent_test_' + Math.random();
+    localStorage.setItem(testKey, '1');
+    storageWorks = localStorage.getItem(testKey) === '1';
+    localStorage.removeItem(testKey);
+  } catch (e) {}
+  const overlay = document.createElement('div');
+  overlay.id = 'api-key-overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(11,30,54,.62);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = `
+    <div style="background:var(--card,#fff);border-radius:18px;max-width:480px;width:100%;padding:28px 28px 22px;box-shadow:0 30px 80px rgba(0,0,0,.4);">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <div style="font-size:22px;">🎙️</div>
+        <h2 style="margin:0;font-family:Georgia,serif;font-size:22px;color:var(--navy-900,#0b1e36);">Activate human-grade voice</h2>
+      </div>
+      <p style="margin:0 0 16px;color:var(--text-soft,#475569);font-size:13.5px;line-height:1.55;">
+        ENT Academy uses your own ElevenLabs key for studio-quality podcast voices. Paste it once — saved permanently to this browser.
+      </p>
+      ${storageWorks ? '' : `
+        <div style="background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;padding:10px 12px;border-radius:10px;font-size:12.5px;margin-bottom:14px;">
+          ⚠️ <strong>Warning:</strong> This browser is blocking persistent storage. If you're in Private Browsing, disable it. If you opened the app from a home-screen icon (PWA), remove it and re-add via Share → "Add to Home Screen".
+        </div>
+      `}
+      <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text-soft,#475569);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;">ElevenLabs API key</label>
+      <input id="startup-eleven-key" type="password" placeholder="sk_..." autocomplete="off" autocapitalize="off" spellcheck="false"
+        style="width:100%;padding:13px 14px;border:1px solid var(--border,#e2e8f0);border-radius:10px;font-family:ui-monospace,monospace;font-size:14px;background:var(--card-soft,#f8fafc);outline:none;margin-bottom:10px;" />
+      <div style="font-size:11px;color:var(--text-soft,#475569);margin-bottom:14px;">
+        🔒 Stored only in your browser's localStorage. Never sent anywhere except elevenlabs.io.
+        <a href="https://elevenlabs.io/app/settings/api-keys" target="_blank" rel="noopener" style="color:#2563eb;">Get your key →</a>
+      </div>
+      <div id="startup-key-feedback" style="display:none;font-size:13px;margin-bottom:10px;"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <button id="startup-key-save" class="btn btn-primary" style="flex:1;min-width:140px;padding:12px;font-size:14px;">✓ Save &amp; verify key</button>
+        <button id="startup-key-skip" class="btn btn-ghost" style="padding:12px 16px;font-size:13px;">Skip — silent study</button>
+      </div>
+      <details style="margin-top:14px;font-size:12px;color:var(--text-soft,#475569);">
+        <summary style="cursor:pointer;font-weight:600;">Use OpenAI key instead?</summary>
+        <input id="startup-openai-key" type="password" placeholder="sk-..." autocomplete="off" autocapitalize="off" spellcheck="false"
+          style="width:100%;padding:11px 13px;border:1px solid var(--border,#e2e8f0);border-radius:10px;font-family:ui-monospace,monospace;font-size:13px;margin-top:8px;" />
+        <button id="startup-openai-save" class="btn btn-ghost" style="margin-top:8px;padding:9px 14px;font-size:12.5px;">Save OpenAI key</button>
+      </details>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  const feedback = (msg, isError) => {
+    const fb = document.getElementById('startup-key-feedback');
+    fb.textContent = msg;
+    fb.style.display = 'block';
+    fb.style.color = isError ? '#991b1b' : '#15803d';
+    fb.style.background = isError ? '#fef2f2' : '#dcfce7';
+    fb.style.border = isError ? '1px solid #fca5a5' : '1px solid #86efac';
+    fb.style.padding = '8px 12px';
+    fb.style.borderRadius = '8px';
+  };
+  const closeOverlay = () => {
+    overlay.style.transition = 'opacity 0.25s';
+    overlay.style.opacity = '0';
+    setTimeout(() => overlay.remove(), 260);
+  };
+
+  document.getElementById('startup-key-save').addEventListener('click', async () => {
+    const v = (document.getElementById('startup-eleven-key').value || '').trim();
+    if (!v) { feedback('Paste your key first.', true); return; }
+    feedback('⏳ Verifying with ElevenLabs…', false);
+    try {
+      const r = await fetch('https://api.elevenlabs.io/v1/user/subscription', { headers: { 'xi-api-key': v } });
+      if (!r.ok) throw new Error('Key rejected (HTTP ' + r.status + ')');
+      const info = await r.json();
+      state.elevenLabsKey = v;
+      persist();
+      // Double-check localStorage actually has it
+      let ok = false;
+      try { ok = localStorage.getItem(STORE_KEY).indexOf(v.slice(0, 12)) >= 0; } catch(e){}
+      const tier = info.tier || 'free';
+      const remaining = info.character_limit ? (info.character_limit - info.character_count) : null;
+      feedback('✅ Saved! Tier: ' + tier + (remaining !== null ? ' · ' + remaining.toLocaleString() + ' chars left' : '') + (ok ? ' · persists forever' : ' · ⚠️ storage failed'), false);
+      setTimeout(() => { closeOverlay(); setState({}); }, 1400);
+    } catch (e) {
+      feedback('❌ ' + (e.message || 'Verification failed') + '. Check the key and try again.', true);
+    }
+  });
+  document.getElementById('startup-openai-save').addEventListener('click', async () => {
+    const v = (document.getElementById('startup-openai-key').value || '').trim();
+    if (!v) { feedback('Paste OpenAI key first.', true); return; }
+    feedback('⏳ Verifying with OpenAI…', false);
+    try {
+      const r = await fetch('https://api.openai.com/v1/models', { headers: { 'authorization': 'Bearer ' + v } });
+      if (!r.ok) throw new Error('Key rejected (HTTP ' + r.status + ')');
+      state.openaiKey = v;
+      persist();
+      feedback('✅ OpenAI key saved.', false);
+      setTimeout(() => { closeOverlay(); setState({}); }, 1200);
+    } catch (e) {
+      feedback('❌ ' + (e.message || 'Verification failed'), true);
+    }
+  });
+  document.getElementById('startup-key-skip').addEventListener('click', () => {
+    state.apiKeyPromptDismissed = todayKey();
+    persist();
+    closeOverlay();
+  });
+
+  // Focus the input
+  setTimeout(() => { const el = document.getElementById('startup-eleven-key'); if (el) el.focus(); }, 100);
 }
 
 /* ---------- Quiz timer ticker (1Hz background loop) ---------- */
