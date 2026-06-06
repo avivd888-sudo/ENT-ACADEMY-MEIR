@@ -438,9 +438,26 @@
     position: fixed; inset: 0; z-index: 99999;
     display: flex; align-items: center; justify-content: center;
     background: #f5f0e6;  /* cream — matches the reference PDF */
-    background-image: radial-gradient(circle at 50% 40%, #faf6ec 0%, #f1eadc 100%);
-    transition: opacity 0.6s ease-out, visibility 0s linear 0.6s;
+    background-image:
+      /* Subtle paper grain via tiny dot grid */
+      radial-gradient(rgba(91, 98, 49, 0.045) 1px, transparent 1px),
+      /* Soft warm vignette pulling toward the center */
+      radial-gradient(circle at 50% 40%, #fbf7ed 0%, #f1eadc 65%, #e8dec6 100%);
+    background-size: 18px 18px, 100% 100%;
+    background-position: 0 0, 0 0;
+    transition: opacity 0.7s ease-out, visibility 0s linear 0.7s;
     opacity: 1;
+  }
+  /* Vintage paper torn-edge stripe along the top — adds anatomy-book character */
+  .boot-loader::before {
+    content: ''; position: absolute; inset: 0 0 auto 0; height: 4px;
+    background: linear-gradient(90deg, transparent 0%, rgba(122, 136, 71, 0.35) 50%, transparent 100%);
+    z-index: 1;
+  }
+  .boot-loader::after {
+    content: ''; position: absolute; inset: auto 0 0 0; height: 4px;
+    background: linear-gradient(90deg, transparent 0%, rgba(122, 136, 71, 0.35) 50%, transparent 100%);
+    z-index: 1;
   }
   [data-theme="dark"] .boot-loader { background: #0b1e36; background-image: radial-gradient(circle at 50% 40%, #102a4c 0%, #0b1e36 100%); }
   [data-theme="dark"] .boot-loader .bl-title { color: #f1eadc; }
@@ -450,8 +467,21 @@
   .boot-loader-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; }
   /* Loader uses traced SVG paths (auto-vectorized from the user's actual artwork).
      Each path animates with stroke-dashoffset → the real anatomical drawing literally appears stroke by stroke. */
-  .bl-art-wrap { position: relative; width: 320px; height: 320px; }
-  .bl-trace-svg { position: absolute; inset: 0; width: 320px; height: 320px; z-index: 2; }
+  .bl-art-wrap {
+    position: relative; width: 320px; height: 320px;
+    /* Settle animation runs after the drawing finishes — subtle scale + drop-shadow expand */
+    animation: bl-settle 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 3.05s both;
+  }
+  /* Soft warm shadow that grows as the drawing completes */
+  .bl-trace-svg {
+    position: absolute; inset: 0; width: 320px; height: 320px; z-index: 2;
+    filter: drop-shadow(0 6px 16px rgba(91, 98, 49, 0.08)) drop-shadow(0 2px 4px rgba(91, 98, 49, 0.05));
+  }
+  @keyframes bl-settle {
+    0%   { transform: scale(1); }
+    40%  { transform: scale(1.025); }
+    100% { transform: scale(1.005); }
+  }
   .bl-trace-p {
     stroke-dasharray: 8000;
     stroke-dashoffset: 8000;
@@ -479,14 +509,28 @@
     5%   { opacity: 1; }
     100% { stroke-dashoffset: 0; opacity: 1; }
   }
-  /* Pencil tip — pulses as the sketch is being drawn */
+  /* Pencil tip — tracks the active stroke as it's being drawn (positioned by JS via getPointAtLength).
+     Has a soft glow that pulses + a tiny trailing "graphite dust" effect. */
   .bl-pencil {
-    position: absolute; bottom: 12px; right: 8px;
-    width: 9px; height: 9px; border-radius: 50%;
-    background: #5b6231; box-shadow: 0 0 0 4px rgba(154,165,90,.22);
-    z-index: 3;
+    position: absolute; left: 0; top: 0;
+    width: 10px; height: 10px; border-radius: 50%;
+    background: radial-gradient(circle, #5b6231 30%, #7a8847 100%);
+    box-shadow:
+      0 0 0 4px rgba(154,165,90,.18),
+      0 0 12px rgba(91, 98, 49, 0.35);
+    z-index: 4;
     opacity: 0;
-    animation: bl-pencil-pulse 0.6s ease-in-out 0.1s infinite alternate, bl-pencil-fadeout 0.4s ease-out 2.2s forwards;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    will-change: transform, opacity;
+    animation: bl-pencil-fadeout 0.5s ease-out 2.95s forwards;
+  }
+  /* Pencil-shavings trailing speck — tiny dot that follows + lags slightly */
+  .bl-pencil::after {
+    content: ''; position: absolute; left: -8px; top: 4px;
+    width: 3px; height: 3px; border-radius: 50%;
+    background: rgba(91, 98, 49, 0.5);
+    box-shadow: -5px 2px 0 -1px rgba(91, 98, 49, 0.3);
   }
   @keyframes bl-draw-stroke {
     0%   { stroke-dashoffset: 500; opacity: 0; }
@@ -516,23 +560,60 @@
     100% { stroke-dashoffset: -8000; opacity: 0; }
   }
   .bl-title {
+    position: relative;
     font-family: Georgia, 'Times New Roman', serif;
-    font-size: 28px;
-    font-weight: 600;
+    font-size: 50px;
+    font-weight: 700;
     color: #5b6231;
-    letter-spacing: 0.5px;
-    margin-top: 8px;
+    letter-spacing: 6px;
+    margin-top: 6px;
+    line-height: 1;
+    display: inline-block;
+    padding-bottom: 14px;
+  }
+  /* Each letter rises into place with its own delay — elegant typewriter feel */
+  .bl-letter {
+    display: inline-block;
     opacity: 0;
-    animation: bl-fade-in 0.8s ease-out 1.5s forwards;
+    transform: translateY(14px);
+    animation: bl-letter-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  .bl-l1 { animation-delay: 2.55s; }
+  .bl-l2 { animation-delay: 2.70s; }
+  .bl-l3 { animation-delay: 2.85s; }
+  @keyframes bl-letter-rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  /* Decorative underline that draws on after the letters appear */
+  .bl-underline {
+    position: absolute;
+    left: 50%; bottom: 0;
+    width: 70px; height: 6px;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .bl-underline path {
+    stroke-dasharray: 110;
+    stroke-dashoffset: 110;
+    animation: bl-underline-draw 0.7s cubic-bezier(0.4, 0, 0.25, 1) 3.05s forwards;
+  }
+  @keyframes bl-underline-draw {
+    to { stroke-dashoffset: 0; }
   }
   .bl-sub {
-    font-size: 13px;
+    font-size: 12px;
     color: #8a8f6a;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
     font-weight: 600;
     opacity: 0;
-    animation: bl-fade-in 0.8s ease-out 1.9s forwards;
+    transform: translateY(4px);
+    animation: bl-fade-up 0.7s ease-out 3.25s forwards;
+  }
+  @keyframes bl-fade-up {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes bl-fade-in {
     from { opacity: 0; transform: translateY(4px); }
@@ -3226,7 +3307,12 @@
       <!-- Pencil tip — small olive pulse so it feels like a pencil is drawing -->
       <span class="bl-pencil" aria-hidden="true"></span>
     </div>
-    <div class="bl-title" style="font-family:Georgia,serif;font-size:46px;letter-spacing:4px;font-weight:700;line-height:1;">ENT</div>
+    <div class="bl-title">
+      <span class="bl-letter bl-l1">E</span><span class="bl-letter bl-l2">N</span><span class="bl-letter bl-l3">T</span>
+      <svg class="bl-underline" viewBox="0 0 100 6" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
+        <path d="M 2 3 Q 25 0.5 50 3 T 98 3" fill="none" stroke="#7a8847" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+    </div>
     <div class="bl-sub" id="boot-loader-msg">Academy · loading your study companion</div>
   </div>
 </div>
@@ -3245,21 +3331,75 @@
    hideBootLoader()              — fade out and remove (kept in DOM, hidden via .hidden class)
    On initial boot, the loader is visible from page-load until first render completes. */
 window.__bootStart = Date.now();
-// Set each traced path's stroke-dasharray to its actual length so the draw-on animation looks
-// natural — long paths take their full animation-duration to draw, short paths complete quickly.
+// Calibrate each traced path's stroke-dasharray to its actual length so the draw-on
+// animation interpolates correctly, AND drive the "pencil tip" cursor along the currently
+// active path using getPointAtLength().
 (function calibrateTracePaths(){
   if (typeof document === 'undefined') return;
   function run() {
-    document.querySelectorAll('.bl-trace-p').forEach(p => {
+    const paths = Array.from(document.querySelectorAll('.bl-trace-p'));
+    if (!paths.length) return;
+    // Per-path schedule (delay + duration in seconds) — keep in sync with CSS
+    const SCHEDULE = [
+      [0.00, 2.20], [0.40, 1.80], [0.90, 0.90], [1.05, 0.90],
+      [1.20, 0.80], [1.35, 0.80], [1.50, 0.70], [1.65, 0.70],
+      [1.80, 0.60], [1.95, 0.60], [2.10, 0.50], [2.25, 0.50],
+      [2.40, 0.50], [2.55, 0.50]
+    ];
+    paths.forEach((p, i) => {
       try {
         const len = p.getTotalLength();
         if (len > 0) {
           p.style.setProperty('--draw-len', len);
           p.style.strokeDasharray = len;
           p.style.strokeDashoffset = len;
+          p.dataset.len = len;
+          p.dataset.delay = (SCHEDULE[i] || [0, 1])[0];
+          p.dataset.dur   = (SCHEDULE[i] || [0, 1])[1];
         }
       } catch(e){}
     });
+
+    // Pencil tip cursor — follows the head of the currently-drawing path
+    const pencil = document.querySelector('.bl-pencil');
+    const svg = document.querySelector('.bl-trace-svg');
+    if (!pencil || !svg) return;
+    const startTime = performance.now();
+    let raf = null;
+    function tick(now) {
+      const t = (now - startTime) / 1000;
+      // Find the path that's currently animating (within its delay…delay+dur window)
+      let active = null;
+      let progress = 0;
+      for (let i = paths.length - 1; i >= 0; i--) {
+        const p = paths[i];
+        const d = parseFloat(p.dataset.delay || 0);
+        const dur = parseFloat(p.dataset.dur || 1);
+        if (t >= d && t < d + dur) { active = p; progress = (t - d) / dur; break; }
+      }
+      if (active) {
+        try {
+          const len = parseFloat(active.dataset.len);
+          const pt = active.getPointAtLength(len * Math.min(1, progress));
+          // SVG point is in viewBox space (0..400). Wrapper is 320x320. Scale accordingly.
+          const wrap = svg.getBoundingClientRect();
+          const vb = svg.viewBox.baseVal;
+          const sx = wrap.width / vb.width;
+          const sy = wrap.height / vb.height;
+          pencil.style.opacity = '1';
+          pencil.style.transform = 'translate(' + (pt.x * sx) + 'px, ' + (pt.y * sy) + 'px) translate(-50%, -50%)';
+        } catch(e){}
+      } else if (t > 3.0) {
+        // Past all animations — let CSS fade it out and stop the loop
+        cancelAnimationFrame(raf);
+        return;
+      } else {
+        // Between strokes — fade out briefly
+        pencil.style.opacity = '0.35';
+      }
+      raf = requestAnimationFrame(tick);
+    }
+    raf = requestAnimationFrame(tick);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run);
   else run();
@@ -11321,10 +11461,10 @@ function render() {
   // After full animation cycle plays it fades out smoothly.
   if (!window.__bootLoaderHidden) {
     window.__bootLoaderHidden = true;
-    // Let the user see the drawing complete (~3.2s — 14 traced paths drawing sequentially).
-    // Subsequent renders never re-show the loader.
+    // Let the user enjoy: 14 traced paths (~3.05s) + ENT letters rise (3.0s) + underline (3.05s)
+    // + settle (3.05s) + tagline fade (3.25s). Total polish complete ~3.8s.
     const elapsedSinceBoot = Date.now() - (window.__bootStart || Date.now());
-    const minVisible = 3200; // ms — enough to watch the figure get drawn
+    const minVisible = 3900; // ms — generous buffer to see the full finishing flourish
     const delay = Math.max(0, minVisible - elapsedSinceBoot);
     setTimeout(() => {
       if (typeof hideBootLoader === 'function') hideBootLoader();
