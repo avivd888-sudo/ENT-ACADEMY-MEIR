@@ -11463,100 +11463,100 @@ function renderSidebar() {
     <aside class="sidebar">
       <button class="brand brand-button" data-action="nav" data-view="dashboard" aria-label="Go to Home" title="Go to Home">
         <div class="brand-logo">
-          <!-- Continuous single-line sagittal head & neck — olive-green minimalist style.
-               Re-drawn to better match a real anatomical sagittal profile (cranium → brow → nose →
-               lip → chin → anterior neck → posterior neck), with the internal aerodigestive tract
-               (nasal cavity → oral cavity → oropharynx → larynx → trachea) traced inside. -->
-          <svg viewBox="0 0 110 120" width="40" height="44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <g fill="none" stroke="#a3a460" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-              <!-- Outer profile: top of cranium → forehead → brow → nose bridge → nose tip → philtrum → upper lip → lower lip → chin → submandibular → anterior neck -->
+          <!-- Sagittal head & neck — single-flow olive-green line drawing.
+               Carefully traced to match the visual style of an anatomically-stylized profile:
+               smooth cranium dome, defined nose bridge/tip/columella, lips & chin, ear with
+               helix swirl, and the internal aerodigestive tract (nasal cavity arch, hard/soft
+               palate, uvula, tongue body, epiglottis, thyroid cartilage, cricoid, tracheal
+               rings, cervical vertebrae stack). -->
+          <svg viewBox="0 0 200 220" width="46" height="50" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g fill="none" stroke="#9aa55a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <!-- Outer profile (one fluid stroke): bottom back of neck → up posterior neck →
+                   occiput → over cranium dome → forehead → brow → nose bridge → tip →
+                   columella → upper lip → lip line → lower lip → chin → under jaw → anterior
+                   neck → base. -->
               <path d="
-                M 55 12
-                C 36 12, 22 30, 22 52
-                C 22 64, 25 74, 28 80
-                L 26 88
-                L 28 96
-                L 30 102
-                L 50 102
-                M 55 12
-                C 70 12, 82 22, 86 36
-                C 88 44, 87 50, 85 54
-                L 83 56
-                L 79 58
-                L 77 60
-                Q 75 61, 73 62
-                L 71 65
-                L 69 65
-                L 71 68
-                L 73 70
-                Q 73 72, 71 73
-                L 68 73
-                L 65 75
-                Q 62 76, 60 78
-                L 58 82
-                L 56 86
-                L 53 89
-                L 52 93
-                L 53 97
-                L 55 101
-                L 56 104
-                L 56 108
-              " />
-              <!-- Ear (auricle) -->
+                M 70 215
+                L 70 178
+                C 65 168 60 155 65 140
+                C 70 122 55 105 60 80
+                C 65 50 95 28 130 32
+                C 158 36 174 58 174 82
+                C 174 96 168 108 158 116
+                L 156 120
+                L 158 123
+                C 160 126 162 130 160 134
+                L 156 138
+                L 152 142
+                C 148 144 144 142 142 140
+                L 140 142
+                C 138 145 138 148 140 151
+                C 144 153 148 153 150 152
+                C 152 154 150 158 146 159
+                L 142 162
+                L 144 165
+                C 148 168 148 173 144 175
+                L 140 180
+                C 136 187 128 192 118 192
+                C 105 192 95 196 88 204
+                L 86 215
+              "/>
+              <!-- Ear: pinna with helix swirl + tragus -->
               <path d="
-                M 49 46
-                C 44 44, 41 47, 42 52
-                C 43 57, 47 59, 51 57
-                C 53 55, 52 51, 50 50
-                C 49 51, 49 53, 50 53
-              " />
-              <!-- Nasal cavity outline (inside profile, behind nose) -->
+                M 110 96
+                C 100 92 92 98 92 108
+                C 92 118 100 124 110 122
+                C 116 121 118 115 116 110
+                C 114 107 110 106 108 109
+                C 107 112 110 114 112 113
+              "/>
+              <!-- Brow ridge -->
+              <path d="M 148 105 Q 153 103 158 105"/>
+              <!-- Eye / orbital arc hint -->
+              <path d="M 148 112 Q 154 115 160 113"/>
+              <!-- Nasal cavity arch (inside the face, behind nose) -->
               <path d="
-                M 71 65
-                C 66 65, 62 64, 58 62
-                C 56 60, 56 56, 60 56
-                C 64 56, 68 58, 71 60
-              " />
-              <!-- Hard + soft palate continuing into oropharynx -->
+                M 156 120
+                C 145 122 132 122 122 118
+                C 116 116 114 112 116 108
+              "/>
+              <!-- Hard palate arch + roof of mouth -->
               <path d="
-                M 60 66
-                C 54 67, 49 70, 47 73
-                C 46 75, 47 78, 50 78
-                C 53 78, 56 76, 58 74
-              " />
-              <!-- Uvula / soft palate -->
-              <path d="M 53 66 Q 52 70, 53 73" />
-              <!-- Tongue base -->
-              <path d="M 50 78 C 45 80, 42 83, 41 87" />
-              <!-- Epiglottis -->
-              <path d="M 47 84 Q 45 85, 44 88" />
-              <!-- Larynx (thyroid cartilage notch) -->
+                M 142 145
+                C 130 148 118 152 110 158
+                Q 108 162 112 164
+              "/>
+              <!-- Soft palate + uvula -->
+              <path d="M 122 154 Q 121 159 122 163"/>
+              <!-- Tongue body -->
               <path d="
-                M 42 90
-                C 44 88, 47 88, 50 90
-                C 51 92, 50 95, 48 96
-                L 45 98
-              " />
-              <!-- Trachea -->
+                M 130 168
+                C 122 170 116 175 116 182
+              "/>
+              <!-- Epiglottis tip -->
+              <path d="M 118 178 Q 115 180 113 184"/>
+              <!-- Thyroid cartilage notch (Adam's apple) -->
               <path d="
-                M 44 100
-                L 44 110
-                M 47 100
-                L 47 110
-              " />
-              <!-- Cervical spine (C1–C5 sketch) -->
+                M 100 186
+                C 105 184 112 184 116 188
+                C 118 190 117 194 114 196
+                L 110 198
+              "/>
+              <!-- Cricoid cartilage -->
+              <path d="M 100 202 Q 108 200 114 202"/>
+              <!-- Tracheal rings (2 stacked) -->
               <path d="
-                M 30 78
-                q 2 1, 3 0
-                q 1 1, 0 2
-                q 2 1, 3 0
-                q 1 1, 0 2
-                q 2 1, 3 0
-                q 1 1, 0 2
-                q 2 1, 3 0
-                q 1 1, 0 2
-                q 2 1, 3 0
-              " />
+                M 100 208 Q 108 207 114 208
+                M 100 212 Q 108 211 114 212
+              "/>
+              <!-- Cervical vertebrae stack (C1–C5) -->
+              <path d="
+                M 78 130 Q 82 132 86 130
+                M 78 138 Q 82 140 86 138
+                M 78 146 Q 82 148 86 146
+                M 78 154 Q 82 156 86 154
+                M 78 162 Q 82 164 86 162
+              "/>
             </g>
           </svg>
         </div>
@@ -14411,8 +14411,8 @@ function updatePodcastDOM() {
       if (i === state.podcastTurn) {
         if (!el.classList.contains('active')) {
           el.classList.add('active');
-          // Smooth-scroll just the active turn into view (no jarring)
-          try { el.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch(e){}
+          // Scroll just the active turn into view (use safeScroll — smooth fails silently in some Chrome builds)
+          try { safeScrollIntoView(el, { block: 'center' }); } catch(e){}
         }
       } else {
         el.classList.remove('active');
@@ -16131,7 +16131,7 @@ function ppodHighlight(idx) {
   const cur = document.querySelector('.ppod-turn[data-turn="' + idx + '"]');
   if (cur) {
     cur.classList.add('speaking');
-    cur.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    try { safeScrollIntoView(cur, { block: 'center' }); } catch(e){}
   }
 }
 async function ppodPlayFrom(idx) {
@@ -17993,6 +17993,52 @@ function setAnatomyView(view) {
   else { g.rotation.set(-0.1, 0.45, 0); SCENE.camera.position.set(2.6, 1.2, 4.2); }
 }
 
+/* ---------------- SAFE SCROLL HELPERS ----------------
+   In some Chrome builds / Vercel CDN responses the native
+   `scrollIntoView({behavior:'smooth'})` and `window.scrollTo({behavior:'smooth'})`
+   silently fail (event runs, no scroll). That made every Teaching-tile click
+   feel "dead" — the page didn't move when you clicked Podcast / Slides / etc.
+
+   These helpers compute the target Y manually and animate via requestAnimationFrame,
+   so they always reach the destination. They also fall back to an instant jump
+   if the user has prefers-reduced-motion. */
+const __safeScroll = { raf: null };
+function safeScrollTo(targetY, opts = {}) {
+  const duration = Math.max(0, opts.duration ?? 350);
+  const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  const startY = window.scrollY || document.documentElement.scrollTop || 0;
+  const maxY = Math.max(0, (document.documentElement.scrollHeight || 0) - window.innerHeight);
+  const endY = Math.max(0, Math.min(maxY, Math.round(targetY)));
+  if (__safeScroll.raf) { cancelAnimationFrame(__safeScroll.raf); __safeScroll.raf = null; }
+  if (reduce || duration === 0) { window.scrollTo(0, endY); return; }
+  const startTime = performance.now();
+  const ease = t => 1 - Math.pow(1 - t, 3); // easeOutCubic
+  const step = (now) => {
+    const elapsed = now - startTime;
+    const t = Math.min(1, elapsed / duration);
+    const y = startY + (endY - startY) * ease(t);
+    window.scrollTo(0, y);
+    if (t < 1) __safeScroll.raf = requestAnimationFrame(step);
+    else __safeScroll.raf = null;
+  };
+  __safeScroll.raf = requestAnimationFrame(step);
+}
+function safeScrollIntoView(el, opts = {}) {
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  const block = opts.block || 'start';
+  const offset = opts.offset ?? 0;
+  let y;
+  if (block === 'center') {
+    y = (window.scrollY || 0) + rect.top - (window.innerHeight - rect.height) / 2 + offset;
+  } else if (block === 'end') {
+    y = (window.scrollY || 0) + rect.bottom - window.innerHeight + offset;
+  } else { // 'start'
+    y = (window.scrollY || 0) + rect.top + offset;
+  }
+  safeScrollTo(y, { duration: opts.duration ?? 350 });
+}
+
 /* ---------------- EVENT HANDLERS ---------------- */
 function attachListeners() {
   document.querySelectorAll('[data-action]').forEach(el => {
@@ -18026,16 +18072,13 @@ function attachListeners() {
         case 'week-tab':
         case 'open-week-tab':
           setState({ weekTab: el.dataset.tab, flashcardFlipped: false });
-          // Scroll to top so user sees the new tab immediately
-          try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch(e){}
+          // Scroll to top so user sees the new tab immediately (animated, falls back to instant)
+          safeScrollTo(0, { duration: 350 });
           break;
         case 'scroll-to-section': {
           const id = el.dataset.target;
           const target = document.getElementById(id);
-          if (target) {
-            try { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-            catch(e) { target.scrollIntoView(); }
-          }
+          if (target) safeScrollIntoView(target, { block: 'start', offset: -8, duration: 400 });
           break;
         }
         case 'flip-card':
@@ -18276,7 +18319,7 @@ function attachListeners() {
           // Scroll the image card into view after render
           requestAnimationFrame(() => {
             const el = document.querySelector('.web-images-card');
-            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (el) safeScrollIntoView(el, { block: 'start', offset: -8, duration: 350 });
           });
           break;
         case 'read-summary':
