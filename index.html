@@ -450,10 +450,10 @@
   .boot-loader-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; }
   /* PNG reveal: clip-path animates from "fully hidden" (left edge only) to "fully shown".
      Effect: the user's actual pencil-drawing materializes left-to-right as if being drawn live. */
-  .bl-art-wrap { position: relative; width: 240px; height: 240px; }
+  .bl-art-wrap { position: relative; width: 280px; height: 280px; }
   .bl-art {
-    display: block; width: 240px; height: 240px;
-    border-radius: 18px;
+    display: block; width: 280px; height: 280px;
+    background: transparent;  /* No cream square — the artwork itself has transparency baked in */
     clip-path: inset(0 100% 0 0);
     animation: bl-reveal 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
   }
@@ -3190,13 +3190,13 @@
 <div id="boot-loader" class="boot-loader" role="status" aria-live="polite" aria-label="Loading ENT Academy">
   <div class="boot-loader-inner">
     <div class="bl-art-wrap">
-      <!-- The actual PNG from the user's PDF reference, served from same folder as index.html -->
-      <img class="bl-art" src="apple_touch_180.png" width="240" height="240" alt="" aria-hidden="true" />
-      <!-- "Pencil tip" — small olive dot that travels along the reveal edge, suggesting a pencil drawing the figure -->
+      <!-- Transparent PNG — line drawing only, no cream square. Same artwork as the logo. -->
+      <img class="bl-art" src="logo_transparent.png" width="280" height="280" alt="" aria-hidden="true" />
+      <!-- "Pencil tip" — small olive dot that travels along the reveal edge -->
       <span class="bl-pencil" aria-hidden="true"></span>
     </div>
-    <div class="bl-title">ENT Academy</div>
-    <div class="bl-sub" id="boot-loader-msg">Drawing your study companion…</div>
+    <div class="bl-title" style="font-family:Georgia,serif;font-size:42px;letter-spacing:2px;font-weight:700;">ENT</div>
+    <div class="bl-sub" id="boot-loader-msg">Academy · loading your study companion</div>
   </div>
 </div>
 <div id="app"></div>
@@ -11776,6 +11776,7 @@ function renderSidebar() {
     { id: 'practice',   label: 'Practice 🎯',         icon: I.quiz },
     { id: 'research',   label: 'Research 🔬',         icon: I.book },
     { id: 'my-research', label: 'My Research 🧪',    icon: I.book },
+    { id: 'notebook',   label: 'My Notes 📓',        icon: I.book },
     { id: 'projects',   label: 'Projects 🧪',         icon: I.book },
     { id: 'smart-search', label: 'Smart Search 🔍',   icon: I.search },
     { id: 'resources',  label: 'Settings ⚙️',         icon: I.gear || I.book }
@@ -11865,6 +11866,7 @@ function renderView() {
     case 'practice':      return renderPractice();
     case 'tumor-board':   return renderTumorBoard();
     case 'my-research':    return renderMyResearch();
+    case 'notebook':       return renderNotebook();
     case 'achievements':  return renderAchievements();
     case 'resources':     return renderResources();
     case 'dashboard-mgr': return isManager() ? renderManagerDashboard() : renderDashboard();
@@ -12139,9 +12141,9 @@ function renderDashboard() {
       <p class="hero-meta">${sec.name} · ${w.chapters}</p>
       <div class="hero-actions">
         <button class="btn btn-primary" data-action="open-week" data-week="${w.week}">${I.play} Start this week</button>
-        <button class="btn btn-light" data-action="nav" data-view="podcast">${I.podcast} Listen to the podcast</button>
-        <button class="btn btn-light" data-action="nav" data-view="anatomy">${I.image} Anatomy &amp; Imaging</button>
-        <a class="btn btn-light" href="${pdfUrlForWeek(w.week)}" target="_blank" rel="noopener">${I.pdf} Open in Cummings PDF</a>
+        <button class="btn btn-light on-dark" data-action="open-week-section" data-week="${w.week}" data-tab="teaching" data-section="teach-podcast">${I.podcast} Listen to the podcast</button>
+        <button class="btn btn-light on-dark" data-action="open-week-section" data-week="${w.week}" data-tab="images" data-section="teach-images">${I.image} Anatomy &amp; Imaging</button>
+        <a class="btn btn-light on-dark" href="${pdfUrlForWeek(w.week)}" target="_blank" rel="noopener">${I.pdf} Open in Cummings PDF</a>
       </div>
       <div style="margin-top:18px;font-size:12px;color:#b5c8e8;">
         <span class="tts-status" style="background:rgba(74,222,128,.18);"><span class="pulse"></span> Weekly reminder active · Sundays 8 AM</span>
@@ -14520,15 +14522,15 @@ async function _elevenLabsCall(voiceId, modelId, inputText) {
     body: JSON.stringify({
       text: inputText,
       model_id: modelId,
-      // Ultra-human podcast tuning — slightly more lively than documentary-flat:
-      //   stability 0.45        → naturally alive without jitter
-      //   similarity_boost 0.88 → strong identity + room for organic variation
-      //   style 0.40            → subtle emotional color (not theatrical)
+      // Tuned for warmth + naturalness with multilingual_v2 (the model the user prefers).
+      //   stability 0.40        → alive prosody, not flat
+      //   similarity_boost 0.85 → strong identity + breathing room for organic variation
+      //   style 0.50            → real emotional color in podcast delivery
       //   speaker_boost true    → consistent voice across long sessions
       voice_settings: {
-        stability: 0.45,
-        similarity_boost: 0.88,
-        style: 0.40,
+        stability: 0.40,
+        similarity_boost: 0.85,
+        style: 0.50,
         use_speaker_boost: true
       }
     })
@@ -14536,23 +14538,19 @@ async function _elevenLabsCall(voiceId, modelId, inputText) {
 }
 
 async function elevenLabsTtsBlobUrl(speakerId, text) {
-  // v4 cache key — bumped: try eleven_v3 first + tuned voice_settings (June 2026)
-  const cacheKey = 'eleven|v4|' + speakerId + '|' + text;
+  // v5 cache key — bumped: reverted to multilingual_v2 default + warmer tuning (stab 0.40 / sim 0.85 / style 0.50)
+  const cacheKey = 'eleven|v5|' + speakerId + '|' + text;
   if (TTS_CACHE.has(cacheKey)) return TTS_CACHE.get(cacheKey);
   const voiceId = (state.elevenLabsVoices && state.elevenLabsVoices[speakerId]) || ELEVENLABS_VOICES[speakerId] || ELEVENLABS_VOICES.host;
   const inputText = preprocessTtsText(text);
-  // Try eleven_v3 (newest, most human-sounding) first — falls back to multilingual_v2 if not available.
-  let resp;
-  if (state.elevenLabsModel) {
-    // User explicitly chose a model — honor it without fallback
-    resp = await _elevenLabsCall(voiceId, state.elevenLabsModel, inputText);
-  } else {
-    resp = await _elevenLabsCall(voiceId, 'eleven_v3', inputText);
-    if (!resp.ok && (resp.status === 400 || resp.status === 403 || resp.status === 422 || resp.status === 404)) {
-      // v3 not available on this account/voice — fall back to the proven multilingual model.
-      console.warn('[TTS] eleven_v3 unavailable (' + resp.status + '), falling back to eleven_multilingual_v2');
-      resp = await _elevenLabsCall(voiceId, 'eleven_multilingual_v2', inputText);
-    }
+  // Default to eleven_multilingual_v2 — the model the user remembers as the warmest, most natural.
+  // eleven_v3 (alpha) had inconsistent character variation that some users dislike.
+  // User can opt into v3 explicitly via state.elevenLabsModel.
+  const modelId = state.elevenLabsModel || 'eleven_multilingual_v2';
+  let resp = await _elevenLabsCall(voiceId, modelId, inputText);
+  if (!resp.ok && modelId !== 'eleven_multilingual_v2' && (resp.status === 400 || resp.status === 403 || resp.status === 422 || resp.status === 404)) {
+    console.warn('[TTS] ' + modelId + ' unavailable (' + resp.status + '), falling back to eleven_multilingual_v2');
+    resp = await _elevenLabsCall(voiceId, 'eleven_multilingual_v2', inputText);
   }
   if (!resp.ok) {
     const err = await resp.text();
@@ -17179,6 +17177,103 @@ function _newResearchProject() {
     updatedAt: new Date().toISOString()
   };
 }
+/* ---------- NOTEBOOK — view all personal notes by chapter, search, export ---------- */
+function renderNotebook() {
+  const userKey = state.userName || 'guest';
+  const notesByWeek = (state.personalNotes && state.personalNotes[userKey]) || {};
+  const filter = (state.notebookFilter || '').toLowerCase();
+  // Build list of (week, title, text) only for chapters with non-empty notes
+  const entries = CURRICULUM
+    .map(w => ({ w, text: (notesByWeek[w.week] || '').trim() }))
+    .filter(e => e.text.length > 0)
+    .filter(e => !filter || e.w.title.toLowerCase().includes(filter) || e.text.toLowerCase().includes(filter))
+    .sort((a, b) => (a.w.chapter || a.w.week) - (b.w.chapter || b.w.week));
+  const totalChars = entries.reduce((s, e) => s + e.text.length, 0);
+  const totalChapters = entries.length;
+  return `
+    <div class="page-header">
+      <div>
+        <div class="breadcrumb"><span>My Notes</span></div>
+        <h1 class="page-title">📓 Notebook</h1>
+        <p class="page-sub">${totalChapters} chapter${totalChapters!==1?'s':''} · ${totalChars.toLocaleString()} characters</p>
+      </div>
+      <div class="toolbar-actions" style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-light" data-action="notes-export" data-format="txt">⬇ Export .txt</button>
+        <button class="btn btn-light" data-action="notes-export" data-format="md">⬇ Export Markdown</button>
+        <button class="btn btn-primary" data-action="notes-export" data-format="doc">⬇ Export Word (.doc)</button>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:14px;padding:14px 16px;">
+      <input id="notebook-search" type="search" placeholder="🔍 Filter by chapter title or note text…"
+        value="${escapeAttr(filter)}"
+        oninput="state.notebookFilter=this.value; clearTimeout(window.__nbT); window.__nbT=setTimeout(()=>setState({}),200);"
+        style="width:100%;padding:11px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card-soft);outline:none;font-size:14px;" />
+    </div>
+    ${entries.length === 0 ? `
+      <div class="card" style="text-align:center;padding:40px 20px;">
+        <div style="font-size:42px;margin-bottom:10px;">📝</div>
+        <h3 style="margin:0 0 6px;color:var(--navy-900);">No notes yet</h3>
+        <p style="color:var(--text-soft);font-size:14px;max-width:420px;margin:0 auto;">Open any chapter, write notes in the sticky panel on the right, and they'll appear here organized by chapter.</p>
+      </div>
+    ` : entries.map(e => `
+      <div class="card" style="margin-bottom:12px;padding:18px 20px;">
+        <div style="display:flex;align-items:start;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:11px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:1.2px;">Chapter ${e.w.chapter || e.w.week}</div>
+            <div style="font-size:17px;font-weight:700;color:var(--navy-900);line-height:1.25;font-family:Georgia,serif;">${escapeHTML(e.w.title)}</div>
+          </div>
+          <button class="btn btn-sm btn-ghost" data-action="open-week" data-week="${e.w.week}">Open chapter →</button>
+        </div>
+        <pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;line-height:1.6;color:var(--text);margin:0;padding:12px 14px;background:var(--card-soft);border-left:3px solid #a3a460;border-radius:6px;">${escapeHTML(e.text)}</pre>
+      </div>
+    `).join('')}
+  `;
+}
+
+function exportAllNotes(format) {
+  const userKey = state.userName || 'guest';
+  const notesByWeek = (state.personalNotes && state.personalNotes[userKey]) || {};
+  const entries = CURRICULUM
+    .map(w => ({ w, text: (notesByWeek[w.week] || '').trim() }))
+    .filter(e => e.text.length > 0)
+    .sort((a, b) => (a.w.chapter || a.w.week) - (b.w.chapter || b.w.week));
+  if (entries.length === 0) { alert('You don\'t have any notes yet.'); return; }
+  const today = new Date().toLocaleDateString();
+  let content = '', mime = 'text/plain', ext = 'txt';
+  if (format === 'md') {
+    content = '# ENT Academy — My Notes\n\nExported ' + today + ' · ' + entries.length + ' chapters\n\n---\n\n';
+    entries.forEach(e => {
+      content += '## Chapter ' + (e.w.chapter || e.w.week) + ' — ' + e.w.title + '\n\n' + e.text + '\n\n---\n\n';
+    });
+    mime = 'text/markdown'; ext = 'md';
+  } else if (format === 'doc') {
+    // .doc via HTML-in-Word — Word opens this fine; preserves headings/formatting.
+    let body = '<h1 style="font-family:Calibri;">ENT Academy — My Notes</h1>' +
+               '<p style="color:#666;font-family:Calibri;">Exported ' + today + ' · ' + entries.length + ' chapters</p><hr/>';
+    entries.forEach(e => {
+      body += '<h2 style="color:#0b1e36;font-family:Calibri;">Chapter ' + (e.w.chapter || e.w.week) + ' — ' + escapeHTML(e.w.title) + '</h2>';
+      body += '<pre style="font-family:Calibri;font-size:11pt;white-space:pre-wrap;">' + escapeHTML(e.text) + '</pre><hr/>';
+    });
+    content = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8"><title>ENT Academy Notes</title></head><body>' + body + '</body></html>';
+    mime = 'application/msword'; ext = 'doc';
+  } else {
+    // Plain text
+    content = 'ENT ACADEMY — MY NOTES\n' + '='.repeat(40) + '\nExported ' + today + ' · ' + entries.length + ' chapters\n\n';
+    entries.forEach(e => {
+      content += '─'.repeat(60) + '\nCHAPTER ' + (e.w.chapter || e.w.week) + ': ' + e.w.title + '\n' + '─'.repeat(60) + '\n\n' + e.text + '\n\n';
+    });
+    mime = 'text/plain'; ext = 'txt';
+  }
+  const blob = new Blob([content], { type: mime + ';charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ENT-Academy-Notes-' + today.replace(/\//g, '-') + '.' + ext;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
+}
+
 function renderMyResearch() {
   const projects = state.researchProjects || [];
   const editing = state.researchEditingId;
@@ -18554,6 +18649,28 @@ function attachListeners() {
           safeScrollTo(0);  // Opening chapter → start at top
           break;
         }
+        case 'open-week-section': {
+          // Open a specific chapter, jump to a specific tab, and scroll to a section anchor inside it.
+          // Used by Home-page "Listen to the podcast" / "Anatomy & Imaging" buttons.
+          const wn = Number(el.dataset.week);
+          const tab = el.dataset.tab || 'teaching';
+          const section = el.dataset.section || '';
+          state.progress[wn] = { ...(state.progress[wn]||{}), lastVisited: new Date().toISOString() };
+          state.lastSessionStart = Date.now();
+          markStudyActivity(0);
+          setState({ view: 'week', selectedWeek: wn, weekTab: tab, flashcardIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
+          // After render, scroll to the section anchor inside the new tab.
+          if (section) {
+            requestAnimationFrame(() => {
+              const target = document.getElementById(section);
+              if (target) safeScrollIntoView(target, { block: 'start', offset: -8 });
+              else safeScrollTo(0);
+            });
+          } else {
+            safeScrollTo(0);
+          }
+          break;
+        }
         case 'week-tab':
         case 'open-week-tab':
           setState({ weekTab: el.dataset.tab, flashcardFlipped: false });
@@ -19050,6 +19167,11 @@ function attachListeners() {
             setState({});
           }
           break;
+        case 'notes-export': {
+          const fmt = el.dataset.format || 'txt';
+          exportAllNotes(fmt);
+          break;
+        }
         case 'gen-extended-podcast': {
           const wn = Number(el.dataset.week);
           if (!state.apiKey) {
