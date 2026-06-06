@@ -433,6 +433,95 @@
   /* btn-light: visible on BOTH light and dark backgrounds (auto-themed).
      Was white-on-white-transparent → invisible inside light cards (quiz count buttons,
      timer buttons, Settings Save/Clear, Retake, etc.). Now soft-card with proper text. */
+  /* ---------- BOOT / PENCIL-DRAW LOADING OVERLAY ---------- */
+  .boot-loader {
+    position: fixed; inset: 0; z-index: 99999;
+    display: flex; align-items: center; justify-content: center;
+    background: #f5f0e6;  /* cream — matches the reference PDF */
+    background-image: radial-gradient(circle at 50% 40%, #faf6ec 0%, #f1eadc 100%);
+    transition: opacity 0.6s ease-out, visibility 0s linear 0.6s;
+    opacity: 1;
+  }
+  [data-theme="dark"] .boot-loader { background: #0b1e36; background-image: radial-gradient(circle at 50% 40%, #102a4c 0%, #0b1e36 100%); }
+  [data-theme="dark"] .boot-loader .bl-title { color: #f1eadc; }
+  [data-theme="dark"] .boot-loader .bl-sub { color: #9aa55a; }
+  [data-theme="dark"] .boot-loader .bl-svg path { stroke: #a3a460; }
+  .boot-loader.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+  .boot-loader-inner { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+  .bl-svg { display: block; }
+  /* Each path animates from "hidden" (full dash offset) to "drawn" (offset 0).
+     Generous dasharray covers the longest path so all draws work without per-path math. */
+  .bl-p { stroke-dasharray: 800; stroke-dashoffset: 800; animation: bl-draw 2.4s ease-out forwards; }
+  .bl-p1  { animation-delay: 0.00s; }
+  .bl-p2  { animation-delay: 0.50s; }
+  .bl-p3  { animation-delay: 0.85s; }
+  .bl-p4  { animation-delay: 0.95s; }
+  .bl-p5  { animation-delay: 1.05s; }
+  .bl-p6  { animation-delay: 1.20s; }
+  .bl-p7  { animation-delay: 1.35s; }
+  .bl-p8  { animation-delay: 1.45s; }
+  .bl-p9  { animation-delay: 1.55s; }
+  .bl-p10 { animation-delay: 1.65s; }
+  .bl-p11 { animation-delay: 1.80s; }
+  .bl-p12 { animation-delay: 1.95s; }
+  .bl-p13 { animation-delay: 2.10s; }
+  /* Looping mode (during long ops like Claude generation) — fade out + redraw */
+  .boot-loader.looping .bl-p { animation: bl-draw-loop 3.5s ease-in-out infinite; }
+  .boot-loader.looping .bl-p1 { animation-delay: 0s; }
+  .boot-loader.looping .bl-p2 { animation-delay: 0.25s; }
+  .boot-loader.looping .bl-p3 { animation-delay: 0.50s; }
+  .boot-loader.looping .bl-p4 { animation-delay: 0.55s; }
+  .boot-loader.looping .bl-p5 { animation-delay: 0.65s; }
+  .boot-loader.looping .bl-p6 { animation-delay: 0.75s; }
+  .boot-loader.looping .bl-p7 { animation-delay: 0.85s; }
+  .boot-loader.looping .bl-p8 { animation-delay: 0.95s; }
+  .boot-loader.looping .bl-p9 { animation-delay: 1.05s; }
+  .boot-loader.looping .bl-p10 { animation-delay: 1.15s; }
+  .boot-loader.looping .bl-p11 { animation-delay: 1.25s; }
+  .boot-loader.looping .bl-p12 { animation-delay: 1.35s; }
+  .boot-loader.looping .bl-p13 { animation-delay: 1.45s; }
+  @keyframes bl-draw {
+    from { stroke-dashoffset: 800; }
+    to   { stroke-dashoffset: 0; }
+  }
+  @keyframes bl-draw-loop {
+    0%   { stroke-dashoffset: 800; opacity: 0.0; }
+    20%  { opacity: 1; }
+    55%  { stroke-dashoffset: 0; opacity: 1; }
+    85%  { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: -800; opacity: 0; }
+  }
+  .bl-title {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 28px;
+    font-weight: 600;
+    color: #5b6231;
+    letter-spacing: 0.5px;
+    margin-top: 8px;
+    opacity: 0;
+    animation: bl-fade-in 0.8s ease-out 1.5s forwards;
+  }
+  .bl-sub {
+    font-size: 13px;
+    color: #8a8f6a;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: 600;
+    opacity: 0;
+    animation: bl-fade-in 0.8s ease-out 1.9s forwards;
+  }
+  @keyframes bl-fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  /* When the loader is in "looping" (busy) mode the text just stays visible */
+  .boot-loader.looping .bl-title,
+  .boot-loader.looping .bl-sub { opacity: 1; animation: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .bl-p { animation: none; stroke-dashoffset: 0; }
+    .bl-title, .bl-sub { opacity: 1; animation: none; }
+  }
+
   .btn-light { background: var(--card-soft, #f1f5f9); color: var(--text); border: 1px solid var(--border); }
   .btn-light:hover { background: var(--card, #fff); border-color: var(--accent); }
   /* On genuinely dark surfaces (sidebar hero, podcast bar) the inline-style overrides win,
@@ -3095,6 +3184,45 @@
 </style>
 </head>
 <body>
+<!-- LOADING OVERLAY — pencil draws the sagittal head & neck while content loads.
+     Shows on initial app boot, hides after first render. Re-appears for heavy ops
+     (extended-podcast generation). Decorative svg, paths animate via stroke-dashoffset. -->
+<div id="boot-loader" class="boot-loader" role="status" aria-live="polite" aria-label="Loading ENT Academy">
+  <div class="boot-loader-inner">
+    <svg viewBox="0 0 200 220" width="240" height="264" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="bl-svg">
+      <g fill="none" stroke="#9aa55a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Outer profile (longest path — draws first, takes ~1.4s) -->
+        <path class="bl-p bl-p1" d="M 70 215 L 70 178 C 65 168 60 155 65 140 C 70 122 55 105 60 80 C 65 50 95 28 130 32 C 158 36 174 58 174 82 C 174 96 168 108 158 116 L 156 120 L 158 123 C 160 126 162 130 160 134 L 156 138 L 152 142 C 148 144 144 142 142 140 L 140 142 C 138 145 138 148 140 151 C 144 153 148 153 150 152 C 152 154 150 158 146 159 L 142 162 L 144 165 C 148 168 148 173 144 175 L 140 180 C 136 187 128 192 118 192 C 105 192 95 196 88 204 L 86 215"/>
+        <!-- Ear (helix swirl) -->
+        <path class="bl-p bl-p2" d="M 110 96 C 100 92 92 98 92 108 C 92 118 100 124 110 122 C 116 121 118 115 116 110 C 114 107 110 106 108 109 C 107 112 110 114 112 113"/>
+        <!-- Brow ridge -->
+        <path class="bl-p bl-p3" d="M 148 105 Q 153 103 158 105"/>
+        <!-- Eye / orbital hint -->
+        <path class="bl-p bl-p4" d="M 148 112 Q 154 115 160 113"/>
+        <!-- Nasal cavity arch -->
+        <path class="bl-p bl-p5" d="M 156 120 C 145 122 132 122 122 118 C 116 116 114 112 116 108"/>
+        <!-- Hard palate arch -->
+        <path class="bl-p bl-p6" d="M 142 145 C 130 148 118 152 110 158 Q 108 162 112 164"/>
+        <!-- Soft palate + uvula -->
+        <path class="bl-p bl-p7" d="M 122 154 Q 121 159 122 163"/>
+        <!-- Tongue body -->
+        <path class="bl-p bl-p8" d="M 130 168 C 122 170 116 175 116 182"/>
+        <!-- Epiglottis tip -->
+        <path class="bl-p bl-p9" d="M 118 178 Q 115 180 113 184"/>
+        <!-- Thyroid cartilage (Adam's apple) -->
+        <path class="bl-p bl-p10" d="M 100 186 C 105 184 112 184 116 188 C 118 190 117 194 114 196 L 110 198"/>
+        <!-- Cricoid -->
+        <path class="bl-p bl-p11" d="M 100 202 Q 108 200 114 202"/>
+        <!-- Tracheal rings -->
+        <path class="bl-p bl-p12" d="M 100 208 Q 108 207 114 208 M 100 212 Q 108 211 114 212"/>
+        <!-- Cervical vertebrae -->
+        <path class="bl-p bl-p13" d="M 78 130 Q 82 132 86 130 M 78 138 Q 82 140 86 138 M 78 146 Q 82 148 86 146 M 78 154 Q 82 156 86 154 M 78 162 Q 82 164 86 162"/>
+      </g>
+    </svg>
+    <div class="bl-title">ENT Academy</div>
+    <div class="bl-sub" id="boot-loader-msg">Drawing your study companion…</div>
+  </div>
+</div>
 <div id="app"></div>
 <!-- Persistent floating mini-player — survives full re-renders -->
 <div id="floating-player" class="fp-hidden"></div>
@@ -3104,6 +3232,29 @@
    ENT ACADEMY — Cummings Otolaryngology 8th Edition Companion
    ENT residency study companion
    ============================================================ */
+
+/* ---------- BOOT LOADER CONTROL ----------
+   showBootLoader(msg, looping)  — display overlay, optionally with custom message + infinite loop
+   hideBootLoader()              — fade out and remove (kept in DOM, hidden via .hidden class)
+   On initial boot, the loader is visible from page-load until first render completes. */
+window.__bootStart = Date.now();
+function showBootLoader(msg, looping) {
+  const el = document.getElementById('boot-loader');
+  if (!el) return;
+  if (msg) {
+    const m = document.getElementById('boot-loader-msg');
+    if (m) m.textContent = msg;
+  }
+  el.classList.toggle('looping', !!looping);
+  el.classList.remove('hidden');
+  el.style.visibility = 'visible';
+  el.style.opacity = '1';
+}
+function hideBootLoader() {
+  const el = document.getElementById('boot-loader');
+  if (!el) return;
+  el.classList.add('hidden');
+}
 
 const PDF_PATH_RAW = '/Users/AvivD2/Documents/רפואה/התמחות/Cummings Otolaryngology 8th Edition .pdf';
 const PDF_URL = 'file://' + encodeURI(PDF_PATH_RAW);
@@ -11140,6 +11291,17 @@ function render() {
   if (typeof restoreTeachingScroll === 'function') restoreTeachingScroll();
   // Wire up IntersectionObserver for teaching scroll tracking
   if (typeof attachTeachingScrollTracker === 'function') attachTeachingScrollTracker();
+  // Hide the pencil-draw boot loader once the first render completes (only on initial render).
+  // After full animation cycle plays it fades out smoothly.
+  if (!window.__bootLoaderHidden) {
+    window.__bootLoaderHidden = true;
+    // Let the user see the drawing complete (~2.5s) on first load before fading.
+    // Subsequent renders never re-show the loader.
+    const elapsedSinceBoot = Date.now() - (window.__bootStart || Date.now());
+    const minVisible = 2400; // ms — enough to enjoy the animation
+    const delay = Math.max(0, minVisible - elapsedSinceBoot);
+    setTimeout(() => { if (typeof hideBootLoader === 'function') hideBootLoader(); }, delay);
+  }
 }
 
 /* ---------- Quiz timer ticker (1Hz background loop) ---------- */
@@ -14317,6 +14479,10 @@ async function generateExtendedPodcast(weekNum) {
 
   state.extendedPodcastGenerating = weekNum;
   setState({});
+  // Show the pencil-drawing overlay (looping mode) while Claude generates
+  if (typeof showBootLoader === 'function') {
+    showBootLoader('Composing your extended Deep Dive… ~60 turns, board-exam grade', true);
+  }
 
   try {
     const resp = await callClaude({
@@ -14356,10 +14522,12 @@ async function generateExtendedPodcast(weekNum) {
     if (typeof TTS_CACHE !== 'undefined' && TTS_CACHE.clear) TTS_CACHE.clear();
     persist();
     setState({});
+    if (typeof hideBootLoader === 'function') hideBootLoader();
     alert('✅ Extended Deep Dive ready — ' + cleaned.length + ' turns (~' + Math.round(cleaned.length * 0.35) + ' min). Press Play to start.');
   } catch (e) {
     state.extendedPodcastGenerating = null;
     setState({});
+    if (typeof hideBootLoader === 'function') hideBootLoader();
     alert('❌ Could not generate extended podcast:\n\n' + (e.message || e) + '\n\nMake sure your Anthropic key is valid and try again.');
   }
 }
