@@ -424,8 +424,15 @@
   }
   .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 4px 12px rgba(37,99,235,.35); }
   .btn-primary:hover { background: #1d4ed8; transform: translateY(-1px); }
-  .btn-light { background: rgba(255,255,255,.13); color: #fff; border-color: rgba(255,255,255,.18); }
-  .btn-light:hover { background: rgba(255,255,255,.22); }
+  /* btn-light: visible on BOTH light and dark backgrounds (auto-themed).
+     Was white-on-white-transparent → invisible inside light cards (quiz count buttons,
+     timer buttons, Settings Save/Clear, Retake, etc.). Now soft-card with proper text. */
+  .btn-light { background: var(--card-soft, #f1f5f9); color: var(--text); border: 1px solid var(--border); }
+  .btn-light:hover { background: var(--card, #fff); border-color: var(--accent); }
+  /* On genuinely dark surfaces (sidebar hero, podcast bar) the inline-style overrides win,
+     and a .on-dark utility opt-in restores the old white look. */
+  .on-dark .btn-light, .on-dark.btn-light { background: rgba(255,255,255,.14); color:#fff; border-color: rgba(255,255,255,.22); }
+  .on-dark .btn-light:hover, .on-dark.btn-light:hover { background: rgba(255,255,255,.24); }
   .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
   .btn-ghost:hover { background: var(--slate-50); border-color: var(--slate-300); }
   .btn-outline { background: var(--card); color: var(--accent); border: 1px solid var(--accent); }
@@ -11057,7 +11064,18 @@ function extractJSON(s) {
 function setState(patch) {
   Object.assign(state, patch);
   persist();
+  // Preserve scroll position across re-renders so navigating slides / flashcards /
+  // quiz answers / activity tiles doesn't jump the page back to the top while the
+  // user is reading or listening. View/tab changes that DO want a fresh top should
+  // call safeScrollTo(0, ...) explicitly after setState — the nav and week-tab
+  // handlers already do this.
+  const _preservedY = window.scrollY || document.documentElement.scrollTop || 0;
   render();
+  if (_preservedY > 0) {
+    // Restore synchronously then re-apply in next frame in case render layout shifted height
+    try { window.scrollTo(0, _preservedY); } catch(e){}
+    requestAnimationFrame(() => { try { window.scrollTo(0, _preservedY); } catch(e){} });
+  }
 }
 
 function getSection(id) { return SECTIONS.find(s => s.id === id); }
@@ -12618,7 +12636,24 @@ function renderWeekTeaching(w, c) {
   const summarySection      = `<div id="teach-summary">${summaryAndKPHTML}</div>`;
   const factsSection        = `<div id="teach-facts">${factsHTML}</div>`;
   const presentationSection = `<div id="teach-slides">${presentationHTML}</div>`;
-  const podcastSection      = `<div id="teach-podcast">${podHTML}</div>`;
+  // ElevenLabs / OpenAI / Browser status — small chip so user can SEE which engine will play
+  const _hasEleven = !!state.elevenLabsKey;
+  const _hasOpenAI = !!state.openaiKey;
+  const _ttsChip = _hasEleven
+    ? `<div style="display:inline-flex;align-items:center;gap:8px;background:#dcfce7;border:1px solid #86efac;color:#15803d;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:10px;">
+         <span style="width:8px;height:8px;border-radius:50%;background:#15803d;box-shadow:0 0 0 3px rgba(21,128,61,.2);"></span>
+         ElevenLabs HD voice · ${state.elevenLabsModel || 'eleven_v3 → multilingual_v2'} · key configured
+       </div>`
+    : _hasOpenAI
+    ? `<div style="display:inline-flex;align-items:center;gap:8px;background:#fef3c7;border:1px solid #fcd34d;color:#92400e;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:10px;">
+         <span style="width:8px;height:8px;border-radius:50%;background:#92400e;"></span>
+         OpenAI HD voice · ElevenLabs key not set
+       </div>`
+    : `<div style="display:inline-flex;align-items:center;gap:8px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:10px;">
+         <span style="width:8px;height:8px;border-radius:50%;background:#991b1b;"></span>
+         No HD key set — using browser voice (robotic)
+       </div>`;
+  const podcastSection      = `<div id="teach-podcast">${_ttsChip}${podHTML}</div>`;
   const chatSection         = `<div id="teach-chat">${chatHTML}</div>`;
 
   return `${realMedia}${landingGrid}${summarySection}${factsSection}${presentationSection}${podcastSection}${chatSection}${flashcardsPreviewHTML}`;
@@ -13611,8 +13646,9 @@ function renderQuiz(asTab) {
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;">
           ${[5, 10, 20, c.quiz.length].filter((v, i, a) => a.indexOf(v) === i && v <= c.quiz.length).map(n => {
             const isActive = activeIndices.length === n;
-            const label = n === c.quiz.length ? 'All ' + n : n;
-            return `<button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-light'}" data-action="quiz-set-count" data-week="${w.week}" data-count="${n}">${label}</button>`;
+            const label = n === c.quiz.length ? 'All ' + n : String(n);
+            // btn-ghost (visible bordered) instead of btn-light (white-on-white invisible in light card)
+            return `<button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-ghost'}" data-action="quiz-set-count" data-week="${w.week}" data-count="${n}">${label}</button>`;
           }).join('')}
         </div>
       </div>
@@ -13627,7 +13663,7 @@ function renderQuiz(asTab) {
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-left:auto;">
           ${timeLimits.map(t => {
             const isActive = activeTimer === t.sec;
-            return `<button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-light'}" data-action="quiz-set-timer" data-week="${w.week}" data-sec="${t.sec}">${t.label}</button>`;
+            return `<button class="btn btn-sm ${isActive ? 'btn-primary' : 'btn-ghost'}" data-action="quiz-set-timer" data-week="${w.week}" data-sec="${t.sec}">${t.label}</button>`;
           }).join('')}
         </div>
       </div>
@@ -14112,18 +14148,10 @@ function preprocessTtsText(text) {
   return t;
 }
 
-async function elevenLabsTtsBlobUrl(speakerId, text) {
-  // v3 cache key — bumped: new voice_settings tuning + abbrev preprocessing (June 2026)
-  const cacheKey = 'eleven|v3|' + speakerId + '|' + text;
-  if (TTS_CACHE.has(cacheKey)) return TTS_CACHE.get(cacheKey);
-  const voiceId = (state.elevenLabsVoices && state.elevenLabsVoices[speakerId]) || ELEVENLABS_VOICES[speakerId] || ELEVENLABS_VOICES.host;
-  // eleven_multilingual_v2 — current best for naturalistic podcast delivery (eleven_v3 still
-  // in alpha as of June 2026 and not available on all accounts).
-  const modelId = (state.elevenLabsModel) || 'eleven_multilingual_v2';
-  // Highest mp3 quality available on Starter+ tier. Pro tier could use pcm_44100 (lossless).
+// Single call helper — used twice (once for v3, once for fallback)
+async function _elevenLabsCall(voiceId, modelId, inputText) {
   const outputFormat = 'mp3_44100_192';
-  const inputText = preprocessTtsText(text);
-  const resp = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '?output_format=' + outputFormat, {
+  return fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '?output_format=' + outputFormat, {
     method: 'POST',
     headers: {
       'xi-api-key': state.elevenLabsKey,
@@ -14133,22 +14161,40 @@ async function elevenLabsTtsBlobUrl(speakerId, text) {
     body: JSON.stringify({
       text: inputText,
       model_id: modelId,
-      // Documentary-narration sweet spot — what professional podcast producers use.
-      // Previous tuning (stability 0.30 / style 0.65) was over-expressive: voice swung
-      // between dramatic and rushed, which read as "robotic but jittery". These values
-      // give a confident, evenly-paced delivery with natural prosody:
-      //   stability 0.50    → balanced (consistent yet alive)
-      //   similarity_boost 0.90 → strong voice-identity preservation = sounds like one real person
-      //   style 0.35        → subtle natural inflection (not theatrical)
-      //   speaker_boost true → consistent voice over long sessions
+      // Ultra-human podcast tuning — slightly more lively than documentary-flat:
+      //   stability 0.45        → naturally alive without jitter
+      //   similarity_boost 0.88 → strong identity + room for organic variation
+      //   style 0.40            → subtle emotional color (not theatrical)
+      //   speaker_boost true    → consistent voice across long sessions
       voice_settings: {
-        stability: 0.50,
-        similarity_boost: 0.90,
-        style: 0.35,
+        stability: 0.45,
+        similarity_boost: 0.88,
+        style: 0.40,
         use_speaker_boost: true
       }
     })
   });
+}
+
+async function elevenLabsTtsBlobUrl(speakerId, text) {
+  // v4 cache key — bumped: try eleven_v3 first + tuned voice_settings (June 2026)
+  const cacheKey = 'eleven|v4|' + speakerId + '|' + text;
+  if (TTS_CACHE.has(cacheKey)) return TTS_CACHE.get(cacheKey);
+  const voiceId = (state.elevenLabsVoices && state.elevenLabsVoices[speakerId]) || ELEVENLABS_VOICES[speakerId] || ELEVENLABS_VOICES.host;
+  const inputText = preprocessTtsText(text);
+  // Try eleven_v3 (newest, most human-sounding) first — falls back to multilingual_v2 if not available.
+  let resp;
+  if (state.elevenLabsModel) {
+    // User explicitly chose a model — honor it without fallback
+    resp = await _elevenLabsCall(voiceId, state.elevenLabsModel, inputText);
+  } else {
+    resp = await _elevenLabsCall(voiceId, 'eleven_v3', inputText);
+    if (!resp.ok && (resp.status === 400 || resp.status === 403 || resp.status === 422 || resp.status === 404)) {
+      // v3 not available on this account/voice — fall back to the proven multilingual model.
+      console.warn('[TTS] eleven_v3 unavailable (' + resp.status + '), falling back to eleven_multilingual_v2');
+      resp = await _elevenLabsCall(voiceId, 'eleven_multilingual_v2', inputText);
+    }
+  }
   if (!resp.ok) {
     const err = await resp.text();
     throw new Error('ElevenLabs TTS ' + resp.status + ': ' + err.slice(0, 200));
@@ -18027,6 +18073,7 @@ function attachListeners() {
             markStudyActivity(0);
           }
           setState({ view: el.dataset.view, weekTab: 'overview', flashcardIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
+          safeScrollTo(0);  // Navigating to a new page → start at top
           break;
         }
         case 'open-week': {
@@ -18035,6 +18082,7 @@ function attachListeners() {
           state.lastSessionStart = Date.now();
           markStudyActivity(0);
           setState({ view: 'week', selectedWeek: wn, weekTab: 'overview', flashcardIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
+          safeScrollTo(0);  // Opening chapter → start at top
           break;
         }
         case 'week-tab':
