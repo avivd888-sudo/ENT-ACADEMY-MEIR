@@ -11284,6 +11284,58 @@ function render() {
   }
 }
 
+/* ---------- ElevenLabs key verifier ----------
+   Modern ElevenLabs keys can be SCOPED — e.g. text_to_speech only. Those keys 401 on
+   /v1/user/subscription (needs user_read scope) even though they work fine for podcasts.
+   Strategy: try /v1/voices first (basic read — almost any key has this). If it 401s too,
+   try the actual TTS endpoint with a 1-character payload. If THAT succeeds, the key works
+   for what we actually need. Returns { message } on success, throws Error on failure. */
+async function verifyElevenLabsKey(key) {
+  // 1) Cheapest: /v1/voices (almost universal permission)
+  try {
+    const r = await fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': key } });
+    if (r.ok) {
+      const j = await r.json();
+      const n = (j.voices && j.voices.length) || 0;
+      // 2) Also try subscription endpoint to enrich the message — but ignore if it fails
+      let extra = '';
+      try {
+        const sub = await fetch('https://api.elevenlabs.io/v1/user/subscription', { headers: { 'xi-api-key': key } });
+        if (sub.ok) {
+          const info = await sub.json();
+          const remaining = info.character_limit ? (info.character_limit - info.character_count) : null;
+          extra = ' · ' + (info.tier || 'free') + ' tier' + (remaining !== null ? ' · ' + remaining.toLocaleString() + ' chars left' : '');
+        }
+      } catch(e) {}
+      return { message: 'Saved! ' + n + ' voices available' + extra };
+    }
+    // Not 200 — fall through to TTS test
+    if (r.status !== 401 && r.status !== 403) {
+      throw new Error('ElevenLabs voices endpoint returned HTTP ' + r.status);
+    }
+  } catch (e) {
+    // Network or non-401 error — re-throw
+    if (e && e.message && e.message.indexOf('HTTP ') >= 0) throw e;
+  }
+  // 3) Final attempt: actual TTS call (this is what we'll use in production)
+  // If THIS succeeds the key works regardless of any scope quirks.
+  const voiceId = '21m00Tcm4TlvDq8ikWAM'; // Rachel — default ElevenLabs voice
+  const r2 = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '?output_format=mp3_22050_32', {
+    method: 'POST',
+    headers: { 'xi-api-key': key, 'content-type': 'application/json', 'accept': 'audio/mpeg' },
+    body: JSON.stringify({ text: 'hi', model_id: 'eleven_multilingual_v2' })
+  });
+  if (r2.ok) {
+    return { message: 'Saved! Key verified via test TTS call' };
+  }
+  let errMsg = '';
+  try {
+    const j = await r2.json();
+    errMsg = (j.detail && (j.detail.message || j.detail.status)) || JSON.stringify(j).slice(0, 200);
+  } catch(e) { errMsg = 'HTTP ' + r2.status; }
+  throw new Error('Key rejected: ' + errMsg);
+}
+
 /* ---------- STARTUP API KEY PROMPT ----------
    On every fresh app load, check whether the user has ANY HD voice key (ElevenLabs or OpenAI).
    If not, surface a centered modal asking for the key — verifies it works, saves to localStorage.
@@ -11369,17 +11421,13 @@ function showApiKeyPrompt() {
     if (!v) { feedback('Paste your key first.', true); return; }
     feedback('⏳ Verifying with ElevenLabs…', false);
     try {
-      const r = await fetch('https://api.elevenlabs.io/v1/user/subscription', { headers: { 'xi-api-key': v } });
-      if (!r.ok) throw new Error('Key rejected (HTTP ' + r.status + ')');
-      const info = await r.json();
+      const result = await verifyElevenLabsKey(v);
       state.elevenLabsKey = v;
       persist();
       // Double-check localStorage actually has it
       let ok = false;
       try { ok = localStorage.getItem(STORE_KEY).indexOf(v.slice(0, 12)) >= 0; } catch(e){}
-      const tier = info.tier || 'free';
-      const remaining = info.character_limit ? (info.character_limit - info.character_count) : null;
-      feedback('✅ Saved! Tier: ' + tier + (remaining !== null ? ' · ' + remaining.toLocaleString() + ' chars left' : '') + (ok ? ' · persists forever' : ' · ⚠️ storage failed'), false);
+      feedback('✅ ' + result.message + (ok ? ' · persists forever' : ' · ⚠️ storage failed'), false);
       setTimeout(() => { closeOverlay(); setState({}); }, 1400);
     } catch (e) {
       feedback('❌ ' + (e.message || 'Verification failed') + '. Check the key and try again.', true);
@@ -19031,31 +19079,23 @@ function attachListeners() {
           const inp = document.getElementById('elevenlabs-key-input');
           const v = (inp && inp.value || '').trim();
           if (!v) { alert('Paste your ElevenLabs API key first.'); return; }
-          // Verify the key works before "confirming" save — call the user/me endpoint.
+          // Verify the key works using a scoped-key-tolerant strategy.
           el.textContent = '⏳ Verifying…';
           (async () => {
             try {
-              const r = await fetch('https://api.elevenlabs.io/v1/user/subscription', {
-                headers: { 'xi-api-key': v }
-              });
-              if (!r.ok) throw new Error('ElevenLabs rejected the key (HTTP ' + r.status + ')');
-              const info = await r.json();
+              const result = await verifyElevenLabsKey(v);
               state.elevenLabsKey = v;
               TTS_CACHE.clear();
               persist();
               // Verify localStorage actually saved (catches Safari private mode etc.)
               let lsOK = false;
               try {
-                const raw = localStorage.getItem('ent-cummings-v1');
+                const raw = localStorage.getItem(STORE_KEY);
                 lsOK = raw && raw.indexOf(v.slice(0, 12)) >= 0;
               } catch(e){}
-              const tier = info.tier || 'free';
-              const remaining = info.character_limit ? (info.character_limit - info.character_count) : null;
-              alert('✅ ElevenLabs key verified and saved permanently.\n\n' +
-                    'Tier: ' + tier + '\n' +
-                    (remaining !== null ? 'Characters remaining: ' + remaining.toLocaleString() + '\n' : '') +
-                    (lsOK ? 'Saved to this browser — will persist across sessions.' :
-                            '⚠️ Could not save to localStorage (private browsing?). Disable Private mode and try again.'));
+              alert('✅ ' + result.message + '\n\n' +
+                    (lsOK ? 'Saved to this browser — will persist across sessions.'
+                          : '⚠️ Could not save to localStorage (private browsing?). Disable Private mode and try again.'));
               setState({});
             } catch (e) {
               alert('❌ Key not saved.\n\n' + e.message + '\n\nDouble-check the key (must start with "sk_...") and try again.');
