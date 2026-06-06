@@ -14007,10 +14007,12 @@ const ELEVENLABS_VOICES = {
 };
 
 async function openaiTtsBlobUrl(speakerId, text) {
-  const cacheKey = 'openai|' + speakerId + '|' + text;
+  const cacheKey = 'openai|v2|' + speakerId + '|' + text;
   if (TTS_CACHE.has(cacheKey)) return TTS_CACHE.get(cacheKey);
   const voice = OPENAI_VOICES[speakerId] || 'ballad';
   const instructions = OPENAI_STYLE[speakerId] || OPENAI_STYLE.host;
+  // Apply same medical-abbreviation preprocessing so OpenAI doesn't say "ent" instead of E-N-T etc.
+  const inputText = (typeof preprocessTtsText === 'function') ? preprocessTtsText(text) : text;
   // Use gpt-4o-mini-tts — significantly more natural than legacy tts-1-hd
   const resp = await fetch('https://api.openai.com/v1/audio/speech', {
     method: 'POST',
@@ -14021,7 +14023,7 @@ async function openaiTtsBlobUrl(speakerId, text) {
     body: JSON.stringify({
       model: 'gpt-4o-mini-tts',
       voice: voice,
-      input: text,
+      input: inputText,
       instructions: instructions,
       response_format: 'mp3'
     })
@@ -14031,7 +14033,7 @@ async function openaiTtsBlobUrl(speakerId, text) {
     const fallback = await fetch('https://api.openai.com/v1/audio/speech', {
       method: 'POST',
       headers: { 'authorization': 'Bearer ' + state.openaiKey, 'content-type': 'application/json' },
-      body: JSON.stringify({ model: 'tts-1-hd', voice: voice === 'ballad' ? 'nova' : voice === 'ash' ? 'onyx' : voice, input: text, response_format: 'mp3', speed: 1.0 })
+      body: JSON.stringify({ model: 'tts-1-hd', voice: voice === 'ballad' ? 'nova' : voice === 'ash' ? 'onyx' : voice, input: inputText, response_format: 'mp3', speed: 1.0 })
     });
     if (!fallback.ok) {
       const err = await fallback.text();
@@ -14048,21 +14050,79 @@ async function openaiTtsBlobUrl(speakerId, text) {
   return url;
 }
 
+// Medical-abbreviation pronunciation map.
+// ElevenLabs sometimes mispronounces or rushes through capital-letter acronyms.
+// Spelling them out with spaces forces correct letter-by-letter delivery.
+// Common one-word acronyms ("CPAP", "ENT" when spoken as "ee-en-tee") get hand-tuned phonetic spelling.
+const TTS_ABBREV_MAP = [
+  // Common medical/imaging acronyms — spelled letter-by-letter
+  [/\bMRI\b/g,    'M R I'],
+  [/\bCT\b/g,     'C T'],
+  [/\bMR\b/g,     'M R'],
+  [/\bUS\b/g,     'ultrasound'],
+  [/\bCBC\b/g,    'C B C'],
+  [/\bENT\b/g,    'E N T'],
+  [/\bCSF\b/g,    'C S F'],
+  [/\bCNS\b/g,    'C N S'],
+  [/\bCN\b/g,     'cranial nerve'],
+  [/\bSSNHL\b/g,  'S S N H L'],
+  [/\bOSA\b/g,    'O S A'],
+  [/\bBPPV\b/g,   'B P P V'],
+  [/\bVCD\b/g,    'V C D'],
+  [/\bGERD\b/g,   'gerd'],
+  [/\bOME\b/g,    'O M E'],
+  [/\bAOM\b/g,    'A O M'],
+  [/\bCRS\b/g,    'C R S'],
+  [/\bNGT\b/g,    'N G T'],
+  [/\bICU\b/g,    'I C U'],
+  [/\bED\b/g,     'E D'],
+  [/\bOR\b/g,     'O R'],
+  [/\bRT\b/g,     'radiation therapy'],
+  [/\bIM\b/g,     'I M'],
+  [/\bIV\b/g,     'I V'],
+  [/\bCPAP\b/g,   'see-pap'],   // spoken word
+  [/\bBiPAP\b/g,  'bye-pap'],   // spoken word
+  [/\bSCC\b/g,    'S C C'],
+  [/\bHPV\b/g,    'H P V'],
+  [/\bEBV\b/g,    'E B V'],
+  [/\bTNM\b/g,    'T N M'],
+  [/\bNCCN\b/g,   'N C C N'],
+  [/\bFEES\b/g,   'fees'],
+  [/\bMBSS\b/g,   'M B S S'],
+  [/\bFNA\b/g,    'F N A'],
+  [/\bABG\b/g,    'A B G'],
+  [/\bEMG\b/g,    'E M G'],
+  [/\bdB\b/g,     'decibels'],
+  [/\bdBHL\b/g,   'decibels H L'],
+  [/\bHz\b/g,     'hertz'],
+  [/\bkHz\b/g,    'kilohertz'],
+  // "vs." → "versus" reads more naturally
+  [/\bvs\.\s/g,   'versus '],
+  // "e.g." and "i.e." can stutter the model
+  [/\be\.g\.,?\s/g, 'for example, '],
+  [/\bi\.e\.,?\s/g, 'that is, '],
+];
+function preprocessTtsText(text) {
+  let t = text.trim();
+  for (const [re, repl] of TTS_ABBREV_MAP) t = t.replace(re, repl);
+  // Convert "—" and " - " sentences into clearer pause cues
+  t = t.replace(/\s+—\s+/g, ' — ');
+  // Collapse double-spaces created by replacements
+  t = t.replace(/\s{2,}/g, ' ');
+  return t;
+}
+
 async function elevenLabsTtsBlobUrl(speakerId, text) {
-  // v2 cache key — bumped because of preroll/previous_text addition (June 2026)
-  const cacheKey = 'eleven|v2|' + speakerId + '|' + text;
+  // v3 cache key — bumped: new voice_settings tuning + abbrev preprocessing (June 2026)
+  const cacheKey = 'eleven|v3|' + speakerId + '|' + text;
   if (TTS_CACHE.has(cacheKey)) return TTS_CACHE.get(cacheKey);
   const voiceId = (state.elevenLabsVoices && state.elevenLabsVoices[speakerId]) || ELEVENLABS_VOICES[speakerId] || ELEVENLABS_VOICES.host;
-  // eleven_multilingual_v2 — best naturalness for podcast-style English + Hebrew support
-  const modelId = 'eleven_multilingual_v2';
-  // Request the highest-quality audio output Starter+ tier supports: mp3 44.1 kHz @ 192 kbps
+  // eleven_multilingual_v2 — current best for naturalistic podcast delivery (eleven_v3 still
+  // in alpha as of June 2026 and not available on all accounts).
+  const modelId = (state.elevenLabsModel) || 'eleven_multilingual_v2';
+  // Highest mp3 quality available on Starter+ tier. Pro tier could use pcm_44100 (lossless).
   const outputFormat = 'mp3_44100_192';
-  // Anti-burst preroll: ElevenLabs (like most neural TTS) tends to rush the first few words
-  // because the prosody model "warms up". Prepending a short hesitation + period gives it
-  // a settling beat so the actual content starts at natural pace.
-  // The previous_text field also helps anchor the prosody.
-  const previousText = "Okay. ";
-  const inputText = text.trim();
+  const inputText = preprocessTtsText(text);
   const resp = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '?output_format=' + outputFormat, {
     method: 'POST',
     headers: {
@@ -14072,17 +14132,19 @@ async function elevenLabsTtsBlobUrl(speakerId, text) {
     },
     body: JSON.stringify({
       text: inputText,
-      previous_text: previousText, // primes prosody — natural pace from word 1
       model_id: modelId,
-      // Tuned for absolute max NotebookLM-style naturalness:
-      // - stability 0.30 → maximum emotional/prosodic variation, least monotone
-      // - similarity_boost 0.82 → strong voice identity preservation
-      // - style 0.65 → expressive podcast-host delivery, not flat
-      // - speaker_boost true → consistent voice across long sessions
+      // Documentary-narration sweet spot — what professional podcast producers use.
+      // Previous tuning (stability 0.30 / style 0.65) was over-expressive: voice swung
+      // between dramatic and rushed, which read as "robotic but jittery". These values
+      // give a confident, evenly-paced delivery with natural prosody:
+      //   stability 0.50    → balanced (consistent yet alive)
+      //   similarity_boost 0.90 → strong voice-identity preservation = sounds like one real person
+      //   style 0.35        → subtle natural inflection (not theatrical)
+      //   speaker_boost true → consistent voice over long sessions
       voice_settings: {
-        stability: 0.30,
-        similarity_boost: 0.82,
-        style: 0.65,
+        stability: 0.50,
+        similarity_boost: 0.90,
+        style: 0.35,
         use_speaker_boost: true
       }
     })
