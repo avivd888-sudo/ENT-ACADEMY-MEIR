@@ -18002,41 +18002,38 @@ function setAnatomyView(view) {
    These helpers compute the target Y manually and animate via requestAnimationFrame,
    so they always reach the destination. They also fall back to an instant jump
    if the user has prefers-reduced-motion. */
-const __safeScroll = { raf: null };
-function safeScrollTo(targetY, opts = {}) {
-  const duration = Math.max(0, opts.duration ?? 350);
-  const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-  const startY = window.scrollY || document.documentElement.scrollTop || 0;
-  const maxY = Math.max(0, (document.documentElement.scrollHeight || 0) - window.innerHeight);
-  const endY = Math.max(0, Math.min(maxY, Math.round(targetY)));
-  if (__safeScroll.raf) { cancelAnimationFrame(__safeScroll.raf); __safeScroll.raf = null; }
-  if (reduce || duration === 0) { window.scrollTo(0, endY); return; }
-  const startTime = performance.now();
-  const ease = t => 1 - Math.pow(1 - t, 3); // easeOutCubic
-  const step = (now) => {
-    const elapsed = now - startTime;
-    const t = Math.min(1, elapsed / duration);
-    const y = startY + (endY - startY) * ease(t);
-    window.scrollTo(0, y);
-    if (t < 1) __safeScroll.raf = requestAnimationFrame(step);
-    else __safeScroll.raf = null;
-  };
-  __safeScroll.raf = requestAnimationFrame(step);
+function safeScrollTo(targetY) {
+  // We deliberately use instant scroll only.
+  // Both `behavior:'smooth'` on scrollIntoView/scrollTo and rAF-based animations
+  // exhibited silent-fail or visibility-throttling issues in real-user testing —
+  // tile clicks felt completely dead. Instant scroll is 100% reliable.
+  try {
+    const maxY = Math.max(0, (document.documentElement.scrollHeight || 0) - window.innerHeight);
+    const endY = Math.max(0, Math.min(maxY, Math.round(targetY)));
+    window.scrollTo(0, endY);
+  } catch (e) {
+    try { window.scrollTo(0, targetY); } catch(e2){}
+  }
 }
 function safeScrollIntoView(el, opts = {}) {
   if (!el) return;
-  const rect = el.getBoundingClientRect();
-  const block = opts.block || 'start';
-  const offset = opts.offset ?? 0;
-  let y;
-  if (block === 'center') {
-    y = (window.scrollY || 0) + rect.top - (window.innerHeight - rect.height) / 2 + offset;
-  } else if (block === 'end') {
-    y = (window.scrollY || 0) + rect.bottom - window.innerHeight + offset;
-  } else { // 'start'
-    y = (window.scrollY || 0) + rect.top + offset;
+  try {
+    const rect = el.getBoundingClientRect();
+    const block = opts.block || 'start';
+    const offset = opts.offset ?? -8;
+    const cy = window.scrollY || document.documentElement.scrollTop || 0;
+    let y;
+    if (block === 'center') {
+      y = cy + rect.top - (window.innerHeight - rect.height) / 2 + offset;
+    } else if (block === 'end') {
+      y = cy + rect.bottom - window.innerHeight + offset;
+    } else { // 'start'
+      y = cy + rect.top + offset;
+    }
+    safeScrollTo(y);
+  } catch (e) {
+    try { el.scrollIntoView({ block: opts.block || 'start' }); } catch(e2){}
   }
-  safeScrollTo(y, { duration: opts.duration ?? 350 });
 }
 
 /* ---------------- EVENT HANDLERS ---------------- */
