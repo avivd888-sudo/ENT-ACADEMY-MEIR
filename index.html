@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
 <title>ENT Academy</title>
 <!-- iOS PWA meta -->
-<meta name="apple-mobile-web-app-capable" content="yes">
+<!-- Intentionally NOT "yes": standalone-PWA mode on iOS uses an isolated localStorage that
+     is NOT shared with regular Safari, which made saved API keys disappear when launching
+     from the home-screen icon. By staying "no" the icon opens in normal Safari context,
+     so the key entered once in Safari persists everywhere. -->
+<meta name="apple-mobile-web-app-capable" content="no">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="ENT">
 <meta name="mobile-web-app-capable" content="yes">
@@ -17,7 +21,9 @@
 <link rel="icon" type="image/png" sizes="16x16" href="favicon_16.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon_192.png">
 <!-- PWA manifest for installable home-screen icon labeled "ENT" -->
-<link rel="manifest" href='data:application/manifest+json;utf8,{"name":"ENT Academy","short_name":"ENT","display":"standalone","start_url":".","theme_color":"#0b1e36","background_color":"#f5f0e6","orientation":"any","icons":[{"src":"icon_192.png","sizes":"192x192","type":"image/png"},{"src":"icon_512.png","sizes":"512x512","type":"image/png"}]}'>
+<!-- display: "browser" (not "standalone") so the iOS home-screen icon launches in Safari
+     context — same localStorage as regular browsing, so the API key persists once entered. -->
+<link rel="manifest" href='data:application/manifest+json;utf8,{"name":"ENT Academy","short_name":"ENT","display":"browser","start_url":".","theme_color":"#0b1e36","background_color":"#f5f0e6","orientation":"any","icons":[{"src":"icon_192.png","sizes":"192x192","type":"image/png"},{"src":"icon_512.png","sizes":"512x512","type":"image/png"}]}'>
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 <style>
   :root {
@@ -10816,6 +10822,8 @@ let state = {
   // Each: { id, title, description, status, collaborators: [], milestones: [], notes, nextStep, createdAt, updatedAt }
   researchProjects: [],
   researchEditingId: null, // currently being edited (or 'new' for a new entry)
+  extendedPodcasts: {},    // { [weekNum]: { script: [{speaker,text}], generatedAt: ISO } }
+  extendedPodcastGenerating: null, // weekNum currently being generated, for UI lock
   chapterChatInput: '',
   chapterChatThinking: false,
   // Smart Search
@@ -10948,6 +10956,7 @@ function loadStored() {
       state.teachingActivity = parsed.teachingActivity || {};
       state.lastTeachingSection = parsed.lastTeachingSection || {};
       state.researchProjects = Array.isArray(parsed.researchProjects) ? parsed.researchProjects : [];
+      state.extendedPodcasts = (parsed.extendedPodcasts && typeof parsed.extendedPodcasts === 'object') ? parsed.extendedPodcasts : {};
       // Reset daily counter if a new day
       const today = new Date().toISOString().slice(0,10);
       if (state.srsStats.lastDay !== today) state.srsStats = { reviewedToday: 0, lastDay: today };
@@ -10994,7 +11003,8 @@ function persist() {
       unlocked: state.unlocked,
       teachingActivity: state.teachingActivity,
       lastTeachingSection: state.lastTeachingSection,
-      researchProjects: state.researchProjects
+      researchProjects: state.researchProjects,
+      extendedPodcasts: state.extendedPodcasts
     }));
   } catch (e) { /* ignore */ }
 }
@@ -12353,6 +12363,15 @@ function renderWeekMediaPanel(w) {
 /* ---------- TEACHING TAB (real media + script + slides + summary) ---------- */
 function renderWeekTeaching(w, c) {
   const cast = getCast();
+  // If user has generated an EXTENDED deep dive for this week, prefer it over the built-in script.
+  // The extended version is a 60-turn, 15-20 min, board-exam-focused dialogue produced by Claude
+  // on demand (see action 'gen-extended-podcast').
+  const ext = state.extendedPodcasts && state.extendedPodcasts[w.week];
+  if (c && ext && Array.isArray(ext.script) && ext.script.length) {
+    c.podcastScript = ext.script;
+    c.podcastTitle = 'Extended Deep Dive · ' + w.title;
+    c.podcastDuration = '~' + Math.max(15, Math.round(ext.script.length * 0.35)) + ' min · extended';
+  }
   // Auto-generate podcast script from summary when curated script isn\'t present
   const podcastScript = getPodcastScript(c, w.title);
   const hasScript = podcastScript && podcastScript.length;
@@ -12636,6 +12655,30 @@ function renderWeekTeaching(w, c) {
   const summarySection      = `<div id="teach-summary">${summaryAndKPHTML}</div>`;
   const factsSection        = `<div id="teach-facts">${factsHTML}</div>`;
   const presentationSection = `<div id="teach-slides">${presentationHTML}</div>`;
+  // Extended Deep Dive control — Claude-generated 15-20 min, board-exam-focused dialogue.
+  const _hasAnthro = !!state.apiKey;
+  const _extRow = (state.extendedPodcastGenerating === w.week)
+    ? `<div style="margin-bottom:10px;padding:12px 14px;background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;font-size:13px;color:#92400e;font-weight:600;">
+         ⏳ Generating extended Deep Dive (15–20 min, ~60 turns)… this can take 30–60 seconds. Don't navigate away.
+       </div>`
+    : (state.extendedPodcasts && state.extendedPodcasts[w.week])
+      ? `<div style="margin-bottom:10px;padding:10px 14px;background:#e0f2fe;border:1px solid #7dd3fc;border-radius:10px;font-size:13px;color:#075985;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+           <span style="font-weight:700;">✨ Extended Deep Dive active</span>
+           <span style="color:#475569;font-size:12px;">${(state.extendedPodcasts[w.week].script || []).length} turns · generated ${new Date(state.extendedPodcasts[w.week].generatedAt || Date.now()).toLocaleDateString()}</span>
+           <button class="btn btn-sm btn-ghost" data-action="gen-extended-podcast" data-week="${w.week}" style="margin-left:auto;">🔄 Regenerate</button>
+           <button class="btn btn-sm btn-ghost" data-action="reset-extended-podcast" data-week="${w.week}">↩ Use original</button>
+         </div>`
+      : _hasAnthro
+        ? `<div style="margin-bottom:10px;padding:12px 14px;background:linear-gradient(135deg,#dbeafe,#ede9fe);border:1px solid #c4b5fd;border-radius:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+             <div style="flex:1;min-width:200px;">
+               <div style="font-size:14px;font-weight:700;color:#4c1d95;">🎙️ Generate Extended Deep Dive (15–20 min)</div>
+               <div style="font-size:12px;color:#5b21b6;margin-top:2px;">Claude AI builds a richer dialogue: ~60 turns, fact-by-fact, board-exam style (Stage A & B). Saved per chapter — one-time generation.</div>
+             </div>
+             <button class="btn btn-primary" data-action="gen-extended-podcast" data-week="${w.week}" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);">⚡ Generate</button>
+           </div>`
+        : `<div style="margin-bottom:10px;padding:10px 14px;background:#fef9c3;border:1px solid #fde047;border-radius:10px;font-size:12.5px;color:#854d0e;">
+             💡 To unlock <strong>Extended Deep Dives</strong> (15–20 min, board-exam tailored) — add your Anthropic Claude key in Settings ⚙️.
+           </div>`;
   // ElevenLabs / OpenAI / Browser status — small chip so user can SEE which engine will play
   const _hasEleven = !!state.elevenLabsKey;
   const _hasOpenAI = !!state.openaiKey;
@@ -12653,7 +12696,7 @@ function renderWeekTeaching(w, c) {
          <span style="width:8px;height:8px;border-radius:50%;background:#991b1b;"></span>
          No HD key set — using browser voice (robotic)
        </div>`;
-  const podcastSection      = `<div id="teach-podcast">${_ttsChip}${podHTML}</div>`;
+  const podcastSection      = `<div id="teach-podcast">${_ttsChip}${_extRow}${podHTML}</div>`;
   const chatSection         = `<div id="teach-chat">${chatHTML}</div>`;
 
   return `${realMedia}${landingGrid}${summarySection}${factsSection}${presentationSection}${podcastSection}${chatSection}${flashcardsPreviewHTML}`;
@@ -14215,6 +14258,110 @@ async function bestTtsBlobUrl(speakerId, text) {
     return await openaiTtsBlobUrl(speakerId, text);
   }
   throw new Error('No HD TTS key configured');
+}
+
+/* ---------- EXTENDED DEEP DIVE PODCAST GENERATOR ----------
+   Uses Claude API to produce a longer, dialogue-rich, board-exam-focused script for a chapter.
+   Replaces the built-in podcast script on a per-chapter basis. Persists in localStorage so
+   each chapter is a one-time generation. */
+async function generateExtendedPodcast(weekNum) {
+  const w = (typeof CURRICULUM !== 'undefined') && CURRICULUM.find(x => x.week === weekNum);
+  const c = CONTENT[weekNum];
+  if (!w || !c) { alert('Chapter not found.'); return; }
+
+  // Build the source material we'll feed to Claude.
+  const summary = (c.summary || '').toString().replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 8000);
+  const keyPoints = (Array.isArray(c.keyPoints) ? c.keyPoints : [])
+    .map(k => '• ' + (typeof k === 'string' ? k : (k.text || k.point || JSON.stringify(k))))
+    .join('\n').slice(0, 4000);
+  const flashcards = (Array.isArray(c.flashcards) ? c.flashcards : [])
+    .slice(0, 40)
+    .map(f => 'Q: ' + (f.q || f.front || '') + '\nA: ' + (f.a || f.back || ''))
+    .join('\n\n').slice(0, 6000);
+  const slidesTxt = (Array.isArray(c.slides) ? c.slides : [])
+    .slice(0, 20)
+    .map((s, i) => 'Slide ' + (i+1) + ': ' + (s.title || '') + ' — ' + (s.body || s.content || s.text || '').toString().slice(0, 400))
+    .join('\n').slice(0, 5000);
+  const originalScript = (Array.isArray(c.podcastScript) ? c.podcastScript : [])
+    .map(t => '[' + (t.speaker || 'host') + '] ' + (t.text || ''))
+    .join('\n').slice(0, 6000);
+
+  const systemPrompt =
+    "You are a senior otolaryngology educator producing a podcast Deep Dive episode for ENT residents preparing for the Israeli שלב א' (Stage A, basic sciences) and שלב ב' (Stage B, clinical) board exams. " +
+    "Output STRICT JSON only — an object: { \"script\": [ { \"speaker\": \"host\"|\"cohost\", \"text\": \"...\" }, ... ] }. " +
+    "No prose before or after. No markdown. Plain ASCII for the JSON keys. Inside `text`, use natural English prose only, no markdown, no SSML.";
+
+  const userPrompt =
+    "Create an EXTENDED Deep Dive podcast on this Cummings 8e chapter for an ENT resident preparing for board exams.\n\n" +
+    "Target length: 15–20 minutes spoken (≈ 55–70 conversational turns, ≈ 2,400–3,200 words total).\n\n" +
+    "STYLE:\n" +
+    "• Two hosts in genuine dialogue: \"host\" = warm female attending (Dr. Elena Marchetti). \"cohost\" = grounded male attending (Dr. Aaron Chen). They challenge each other, ask follow-ups, clarify confusing points, and occasionally disagree before reconciling.\n" +
+    "• Conversational and engaging — never a monologue. Each turn 1–4 sentences typically; occasional longer teaching turns up to 6 sentences are OK.\n" +
+    "• ENGLISH only. Natural spoken English, with contractions. Speakable, not written.\n\n" +
+    "CONTENT REQUIREMENTS:\n" +
+    "1. Open with a 1-minute hook framing why this topic matters clinically AND on boards.\n" +
+    "2. Cover the chapter systematically: anatomy / pathophysiology / clinical presentation / workup / classification / management (medical & surgical) / complications / outcomes / pearls.\n" +
+    "3. Emphasize EXAM-CRITICAL FACTS — numbers, classifications, eponyms, contraindications, first-line vs. second-line management. Explicitly flag \"This is high-yield for boards\" or \"שלב א/ב favorite\" when relevant.\n" +
+    "4. Quote concrete data wherever possible — incidence, sensitivity/specificity of tests, drug doses, dB thresholds, TNM cutoffs, follow-up intervals.\n" +
+    "5. Walk through 2–3 mini clinical vignettes mid-episode, with the cohost answering and the host confirming with the rationale.\n" +
+    "6. Close with a 1-minute \"3 things to remember for the exam\" summary.\n" +
+    "7. Avoid filler. No \"so basically\" or empty phrases. Every turn must teach something.\n\n" +
+    "AVOID: external citations, fake studies, made-up statistics. If you don't know the exact number, say \"roughly\" or skip it.\n\n" +
+    "==== CHAPTER: " + (w.title || '') + " (Cummings 8e Chapter " + (w.chapter || w.week) + ") ====\n\n" +
+    "SUMMARY:\n" + (summary || '(no summary)') + "\n\n" +
+    "KEY POINTS:\n" + (keyPoints || '(none)') + "\n\n" +
+    "SLIDE OUTLINE:\n" + (slidesTxt || '(none)') + "\n\n" +
+    "FLASHCARDS (Q/A pairs):\n" + (flashcards || '(none)') + "\n\n" +
+    "ORIGINAL SHORTER SCRIPT (for reference — your job is to make it richer, longer, more conversational):\n" + (originalScript || '(none)') + "\n\n" +
+    "Return ONLY the JSON object now.";
+
+  state.extendedPodcastGenerating = weekNum;
+  setState({});
+
+  try {
+    const resp = await callClaude({
+      system: systemPrompt,
+      messages: [{ role: 'user', content: userPrompt }],
+      model: 'claude-sonnet-4-6',
+      maxTokens: 16000
+    });
+    const raw = (resp && resp.content && resp.content[0] && resp.content[0].text) || '';
+    // Extract JSON from the response (model sometimes wraps in markdown despite instructions)
+    let jsonStr = raw.trim();
+    const fenced = jsonStr.match(/```(?:json)?\s*([\s\S]*?)```/);
+    if (fenced) jsonStr = fenced[1].trim();
+    // Find first { and last } to be tolerant
+    const first = jsonStr.indexOf('{');
+    const last = jsonStr.lastIndexOf('}');
+    if (first >= 0 && last > first) jsonStr = jsonStr.slice(first, last + 1);
+    const parsed = JSON.parse(jsonStr);
+    if (!parsed || !Array.isArray(parsed.script) || parsed.script.length < 30) {
+      throw new Error('Claude returned too few turns (' + (parsed && parsed.script ? parsed.script.length : 0) + '). Try again.');
+    }
+    // Sanitize each turn: ensure speaker is host/cohost, text is string
+    const cleaned = parsed.script
+      .map(t => ({
+        speaker: (t.speaker === 'cohost') ? 'cohost' : 'host',
+        text: (typeof t.text === 'string' ? t.text : String(t.text || '')).trim()
+      }))
+      .filter(t => t.text.length > 0);
+    state.extendedPodcasts = state.extendedPodcasts || {};
+    state.extendedPodcasts[weekNum] = {
+      script: cleaned,
+      generatedAt: new Date().toISOString(),
+      model: 'claude-sonnet-4-6'
+    };
+    state.extendedPodcastGenerating = null;
+    // Drop any old podcast cache for this week so new script is heard fresh
+    if (typeof TTS_CACHE !== 'undefined' && TTS_CACHE.clear) TTS_CACHE.clear();
+    persist();
+    setState({});
+    alert('✅ Extended Deep Dive ready — ' + cleaned.length + ' turns (~' + Math.round(cleaned.length * 0.35) + ' min). Press Play to start.');
+  } catch (e) {
+    state.extendedPodcastGenerating = null;
+    setState({});
+    alert('❌ Could not generate extended podcast:\n\n' + (e.message || e) + '\n\nMake sure your Anthropic key is valid and try again.');
+  }
 }
 
 /* ---------- TTS ENGINE ---------- */
@@ -18581,13 +18728,66 @@ function attachListeners() {
             setState({});
           }
           break;
+        case 'gen-extended-podcast': {
+          const wn = Number(el.dataset.week);
+          if (!state.apiKey) {
+            alert('Add your Anthropic Claude API key in Settings first — that\'s the AI that writes the extended dialogue.');
+            return;
+          }
+          if (state.extendedPodcastGenerating) {
+            alert('Already generating — please wait.');
+            return;
+          }
+          if (state.extendedPodcasts && state.extendedPodcasts[wn]) {
+            if (!confirm('You already have an extended Deep Dive for this chapter. Regenerate (will use API credits)?')) return;
+          }
+          generateExtendedPodcast(wn);
+          break;
+        }
+        case 'reset-extended-podcast': {
+          const wn = Number(el.dataset.week);
+          if (!confirm('Remove the extended Deep Dive and go back to the original built-in script?')) return;
+          if (state.extendedPodcasts) delete state.extendedPodcasts[wn];
+          // Stop playback so we don't keep playing the wrong script
+          TTS.stop();
+          setState({});
+          break;
+        }
         case 'elevenlabs-save': {
           const inp = document.getElementById('elevenlabs-key-input');
           const v = (inp && inp.value || '').trim();
           if (!v) { alert('Paste your ElevenLabs API key first.'); return; }
-          state.elevenLabsKey = v;
-          TTS_CACHE.clear();
-          setState({});
+          // Verify the key works before "confirming" save — call the user/me endpoint.
+          el.textContent = '⏳ Verifying…';
+          (async () => {
+            try {
+              const r = await fetch('https://api.elevenlabs.io/v1/user/subscription', {
+                headers: { 'xi-api-key': v }
+              });
+              if (!r.ok) throw new Error('ElevenLabs rejected the key (HTTP ' + r.status + ')');
+              const info = await r.json();
+              state.elevenLabsKey = v;
+              TTS_CACHE.clear();
+              persist();
+              // Verify localStorage actually saved (catches Safari private mode etc.)
+              let lsOK = false;
+              try {
+                const raw = localStorage.getItem('ent-cummings-v1');
+                lsOK = raw && raw.indexOf(v.slice(0, 12)) >= 0;
+              } catch(e){}
+              const tier = info.tier || 'free';
+              const remaining = info.character_limit ? (info.character_limit - info.character_count) : null;
+              alert('✅ ElevenLabs key verified and saved permanently.\n\n' +
+                    'Tier: ' + tier + '\n' +
+                    (remaining !== null ? 'Characters remaining: ' + remaining.toLocaleString() + '\n' : '') +
+                    (lsOK ? 'Saved to this browser — will persist across sessions.' :
+                            '⚠️ Could not save to localStorage (private browsing?). Disable Private mode and try again.'));
+              setState({});
+            } catch (e) {
+              alert('❌ Key not saved.\n\n' + e.message + '\n\nDouble-check the key (must start with "sk_...") and try again.');
+              el.textContent = '✓ Save';
+            }
+          })();
           break;
         }
         case 'elevenlabs-clear':
