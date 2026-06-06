@@ -451,44 +451,74 @@
   /* PNG reveal: clip-path animates from "fully hidden" (left edge only) to "fully shown".
      Effect: the user's actual pencil-drawing materializes left-to-right as if being drawn live. */
   .bl-art-wrap { position: relative; width: 280px; height: 280px; }
-  .bl-art {
-    display: block; width: 280px; height: 280px;
-    background: transparent;  /* No cream square — the artwork itself has transparency baked in */
-    clip-path: inset(0 100% 0 0);
-    animation: bl-reveal 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+  /* SVG sketch sits on top — animates being drawn stroke by stroke */
+  .bl-sketch { position: absolute; inset: 0; width: 280px; height: 280px; z-index: 2; }
+  /* PNG sits beneath at 0% opacity; fades up late, after the sketch lines have drawn */
+  .bl-art-png {
+    position: absolute; inset: 0; width: 280px; height: 280px;
+    opacity: 0;
+    animation: bl-fade-png 0.9s ease-out 2.2s forwards;
   }
-  /* Pencil tip — a small olive dot that travels along the reveal edge */
+  /* Each sketch path animates from "ink not yet laid down" (full dashoffset) to fully drawn.
+     stroke-dasharray:500 covers our longest stroke. */
+  .bl-stroke {
+    stroke-dasharray: 500;
+    stroke-dashoffset: 500;
+    animation: bl-draw-stroke 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    opacity: 0;
+  }
+  .bl-stroke.s1  { animation-delay: 0.05s; }
+  .bl-stroke.s2  { animation-delay: 0.25s; }
+  .bl-stroke.s3  { animation-delay: 0.45s; }
+  .bl-stroke.s4  { animation-delay: 0.65s; }
+  .bl-stroke.s5  { animation-delay: 0.85s; }
+  .bl-stroke.s6  { animation-delay: 1.00s; }
+  .bl-stroke.s7  { animation-delay: 1.15s; }
+  .bl-stroke.s8  { animation-delay: 1.30s; }
+  .bl-stroke.s9  { animation-delay: 1.45s; }
+  .bl-stroke.s10 { animation-delay: 1.60s; }
+  .bl-stroke.s11 { animation-delay: 1.75s; }
+  .bl-stroke.s12 { animation-delay: 1.90s; }
+  /* Pencil tip — pulses as the sketch is being drawn */
   .bl-pencil {
-    position: absolute; top: 50%; left: 0;
-    width: 7px; height: 7px; border-radius: 50%;
-    background: #5b6231; box-shadow: 0 0 0 3px rgba(154,165,90,.25);
-    transform: translateY(-50%);
-    animation: bl-pencil-move 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) forwards;
+    position: absolute; bottom: 12px; right: 8px;
+    width: 9px; height: 9px; border-radius: 50%;
+    background: #5b6231; box-shadow: 0 0 0 4px rgba(154,165,90,.22);
+    z-index: 3;
+    opacity: 0;
+    animation: bl-pencil-pulse 0.6s ease-in-out 0.1s infinite alternate, bl-pencil-fadeout 0.4s ease-out 2.2s forwards;
   }
-  @keyframes bl-reveal {
-    0%   { clip-path: inset(0 100% 0 0); }
-    100% { clip-path: inset(0 0 0 0); }
-  }
-  @keyframes bl-pencil-move {
-    0%   { left: 0; opacity: 0; }
+  @keyframes bl-draw-stroke {
+    0%   { stroke-dashoffset: 500; opacity: 0; }
     8%   { opacity: 1; }
-    92%  { opacity: 1; }
-    100% { left: 240px; opacity: 0; }
+    100% { stroke-dashoffset: 0; opacity: 1; }
   }
-  /* Looping mode (during long ops like Claude generation) — repeats the reveal forever */
-  .boot-loader.looping .bl-art { animation: bl-reveal-loop 3.0s ease-in-out infinite; }
-  .boot-loader.looping .bl-pencil { animation: bl-pencil-loop 3.0s ease-in-out infinite; }
-  @keyframes bl-reveal-loop {
-    0%   { clip-path: inset(0 100% 0 0); }
-    50%  { clip-path: inset(0 0 0 0); }
-    100% { clip-path: inset(0 0 0 100%); }
+  @keyframes bl-fade-png {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
-  @keyframes bl-pencil-loop {
-    0%   { left: 0; opacity: 0; }
-    5%   { opacity: 1; }
-    50%  { left: 240px; opacity: 1; }
-    55%  { left: 240px; opacity: 0; }
-    100% { left: 240px; opacity: 0; }
+  @keyframes bl-pencil-pulse {
+    0%   { opacity: 0.8; transform: scale(1); }
+    100% { opacity: 1.0; transform: scale(1.18); }
+  }
+  @keyframes bl-pencil-fadeout {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+  /* Looping mode — strokes redraw infinitely so we have something to look at during long ops */
+  .boot-loader.looping .bl-stroke { animation: bl-draw-loop 3.5s ease-in-out infinite; }
+  .boot-loader.looping .bl-art-png { animation: bl-png-pulse 3.5s ease-in-out infinite; }
+  .boot-loader.looping .bl-pencil { animation: bl-pencil-pulse 0.7s ease-in-out infinite alternate; }
+  @keyframes bl-draw-loop {
+    0%   { stroke-dashoffset: 500; opacity: 0; }
+    15%  { opacity: 1; }
+    55%  { stroke-dashoffset: 0; opacity: 1; }
+    85%  { stroke-dashoffset: 0; opacity: 1; }
+    100% { stroke-dashoffset: -500; opacity: 0; }
+  }
+  @keyframes bl-png-pulse {
+    0%, 100% { opacity: 0; }
+    60%, 80% { opacity: 0.6; }
   }
   .bl-title {
     font-family: Georgia, 'Times New Roman', serif;
@@ -517,7 +547,8 @@
   .boot-loader.looping .bl-title,
   .boot-loader.looping .bl-sub { opacity: 1; animation: none; }
   @media (prefers-reduced-motion: reduce) {
-    .bl-art { animation: none; clip-path: inset(0 0 0 0); }
+    .bl-stroke { animation: none; stroke-dashoffset: 0; opacity: 1; }
+    .bl-art-png { animation: none; opacity: 1; }
     .bl-pencil { display: none; }
     .bl-title, .bl-sub { opacity: 1; animation: none; }
   }
@@ -3190,12 +3221,41 @@
 <div id="boot-loader" class="boot-loader" role="status" aria-live="polite" aria-label="Loading ENT Academy">
   <div class="boot-loader-inner">
     <div class="bl-art-wrap">
-      <!-- Transparent PNG — line drawing only, no cream square. Same artwork as the logo. -->
-      <img class="bl-art" src="logo_transparent.png" width="280" height="280" alt="" aria-hidden="true" />
-      <!-- "Pencil tip" — small olive dot that travels along the reveal edge -->
+      <!-- SVG sketch strokes — each draws via stroke-dashoffset (true pencil-drawing effect) -->
+      <svg class="bl-sketch" viewBox="0 0 200 220" width="280" height="280" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g fill="none" stroke="#7a8847" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+          <!-- Cranium top arc -->
+          <path class="bl-stroke s1" d="M 70 80 C 65 50 95 28 130 32"/>
+          <!-- Cranium forward + over crown -->
+          <path class="bl-stroke s2" d="M 130 32 C 158 36 174 58 174 82"/>
+          <!-- Forehead → nose bridge -->
+          <path class="bl-stroke s3" d="M 174 82 C 174 96 168 108 158 116"/>
+          <!-- Nose tip -->
+          <path class="bl-stroke s4" d="M 158 116 L 156 120 L 158 123 C 160 126 162 130 160 134 L 156 138 L 152 142"/>
+          <!-- Columella → upper lip -->
+          <path class="bl-stroke s5" d="M 152 142 C 148 144 144 142 142 140 L 140 142 C 138 145 138 148 140 151"/>
+          <!-- Mouth/lips -->
+          <path class="bl-stroke s6" d="M 140 151 C 144 153 148 153 150 152 C 152 154 150 158 146 159 L 142 162 L 144 165 C 148 168 148 173 144 175"/>
+          <!-- Chin → under-jaw -->
+          <path class="bl-stroke s7" d="M 144 175 L 140 180 C 136 187 128 192 118 192 C 105 192 95 196 88 204"/>
+          <!-- Neck back → base -->
+          <path class="bl-stroke s8" d="M 70 215 L 70 178 C 65 168 60 155 65 140 C 70 122 55 105 60 80"/>
+          <!-- Ear -->
+          <path class="bl-stroke s9" d="M 110 96 C 100 92 92 98 92 108 C 92 118 100 124 110 122 C 116 121 118 115 116 110"/>
+          <!-- Internal: nasal cavity arch -->
+          <path class="bl-stroke s10" d="M 156 120 C 145 122 132 122 122 118 C 116 116 114 112 116 108"/>
+          <!-- Internal: palate + uvula -->
+          <path class="bl-stroke s11" d="M 142 145 C 130 148 118 152 110 158 Q 108 162 112 164"/>
+          <!-- Internal: tongue + larynx + trachea -->
+          <path class="bl-stroke s12" d="M 130 168 C 122 170 116 175 116 182 M 100 186 C 105 184 112 184 116 188 C 118 190 117 194 114 196 M 100 202 Q 108 200 114 202 M 100 208 Q 108 207 114 208"/>
+        </g>
+      </svg>
+      <!-- Actual artwork PNG fades in toward the end so the user sees the final image, not just the sketch lines -->
+      <img class="bl-art-png" src="logo_transparent.png" width="280" height="280" alt="" aria-hidden="true" />
+      <!-- Pencil tip cursor that travels along the current stroke -->
       <span class="bl-pencil" aria-hidden="true"></span>
     </div>
-    <div class="bl-title" style="font-family:Georgia,serif;font-size:42px;letter-spacing:2px;font-weight:700;">ENT</div>
+    <div class="bl-title" style="font-family:Georgia,serif;font-size:46px;letter-spacing:4px;font-weight:700;line-height:1;">ENT</div>
     <div class="bl-sub" id="boot-loader-msg">Academy · loading your study companion</div>
   </div>
 </div>
@@ -11271,10 +11331,10 @@ function render() {
   // After full animation cycle plays it fades out smoothly.
   if (!window.__bootLoaderHidden) {
     window.__bootLoaderHidden = true;
-    // Let the user see the drawing complete (~2.6s) on first load before fading.
+    // Let the user see the drawing complete (~3.2s = strokes 2.4s + PNG fade 0.9s) before fading.
     // Subsequent renders never re-show the loader.
     const elapsedSinceBoot = Date.now() - (window.__bootStart || Date.now());
-    const minVisible = 2600; // ms — enough to enjoy the animation
+    const minVisible = 3200; // ms — enough to enjoy the animation
     const delay = Math.max(0, minVisible - elapsedSinceBoot);
     setTimeout(() => {
       if (typeof hideBootLoader === 'function') hideBootLoader();
@@ -12105,6 +12165,8 @@ function renderDashboard() {
         <button class="btn btn-primary" data-action="nav" data-view="resources" aria-label="Open Settings page">⚙️ Open Settings →</button>
       </div>
     ` : ''}
+
+    ${(state.apiKey && (state.elevenLabsKey || state.openaiKey)) ? renderBatchPremiumBanner() : ''}
 
     ${renderStudyTrackerWidget()}
 
@@ -17177,6 +17239,68 @@ function _newResearchProject() {
     updatedAt: new Date().toISOString()
   };
 }
+/* ---------- BATCH PREMIUM UPGRADE — generate Extended Deep Dives for first 10 chapters ---------- */
+function firstTenStudyChapters() {
+  // Skip the Foundations "chapter" (which is PDF-only). Return the first 10 weeks that have CONTENT.
+  return CURRICULUM
+    .filter(w => !w.isFoundations && hasContent(w.week))
+    .slice(0, 10);
+}
+function renderBatchPremiumBanner() {
+  const ten = firstTenStudyChapters();
+  const done = ten.filter(w => state.extendedPodcasts && state.extendedPodcasts[w.week]);
+  const remaining = ten.length - done.length;
+  if (remaining === 0) {
+    return `
+      <div class="card" style="margin:14px 0;padding:14px 18px;background:linear-gradient(135deg,#dcfce7,#f0fdf4);border:1px solid #86efac;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="font-size:24px;">✨</div>
+          <div style="flex:1;">
+            <div style="font-weight:700;color:#15803d;">All 10 first chapters are premium-grade</div>
+            <div style="font-size:12.5px;color:#166534;">Extended Deep Dives ready for ${ten.length} chapters · ~15-20 min each, board-exam tailored.</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  const inProgress = !!state.extendedPodcastGenerating;
+  return `
+    <div class="card" style="margin:14px 0;padding:18px 20px;background:linear-gradient(135deg,#ede9fe,#dbeafe);border:1px solid #c4b5fd;">
+      <div style="display:flex;align-items:start;gap:14px;flex-wrap:wrap;">
+        <div style="font-size:30px;">🎓</div>
+        <div style="flex:1;min-width:220px;">
+          <div style="font-size:16px;font-weight:700;color:#4c1d95;">Premium Deep Dive — first 10 chapters</div>
+          <div style="font-size:13px;color:#5b21b6;margin-top:4px;line-height:1.5;">
+            One click → Claude generates board-exam-grade 60-turn dialogues (~15-20 min each) for the first 10 study chapters. ${done.length} already done · ${remaining} remaining. Runs sequentially in the background; takes 5-10 min total.
+          </div>
+        </div>
+        <button class="btn btn-primary" data-action="batch-premium-10" ${inProgress ? 'disabled' : ''} style="background:linear-gradient(135deg,#7c3aed,#4f46e5);">
+          ${inProgress ? '⏳ Generating…' : '⚡ Generate all ' + remaining}
+        </button>
+      </div>
+    </div>
+  `;
+}
+async function batchGenerateExtendedFor10() {
+  const ten = firstTenStudyChapters();
+  const todo = ten.filter(w => !(state.extendedPodcasts && state.extendedPodcasts[w.week]));
+  if (todo.length === 0) { alert('All 10 first chapters already have Extended Deep Dives. ✨'); return; }
+  if (!confirm('Generate Extended Deep Dives for ' + todo.length + ' chapter(s)? This will run sequentially (~30-60 sec per chapter) and will use your Anthropic API credits.\n\nKeep the tab open until it finishes.')) return;
+  for (let i = 0; i < todo.length; i++) {
+    const w = todo[i];
+    if (typeof showBootLoader === 'function') {
+      showBootLoader('Composing Extended Deep Dive ' + (i+1) + '/' + todo.length + ' · ' + w.title, true);
+    }
+    try {
+      await generateExtendedPodcast(w.week);
+    } catch (e) {
+      console.error('Batch failed at', w.week, e);
+    }
+  }
+  if (typeof hideBootLoader === 'function') hideBootLoader();
+  alert('✅ Batch complete!\n\n' + todo.length + ' Extended Deep Dives generated. Open any chapter to listen.');
+}
+
 /* ---------- NOTEBOOK — view all personal notes by chapter, search, export ---------- */
 function renderNotebook() {
   const userKey = state.userName || 'guest';
@@ -19170,6 +19294,14 @@ function attachListeners() {
         case 'notes-export': {
           const fmt = el.dataset.format || 'txt';
           exportAllNotes(fmt);
+          break;
+        }
+        case 'batch-premium-10': {
+          if (!state.apiKey) {
+            alert('Add your Anthropic Claude key in Settings first — that\'s the AI that writes the dialogues.');
+            return;
+          }
+          batchGenerateExtendedFor10();
           break;
         }
         case 'gen-extended-podcast': {
