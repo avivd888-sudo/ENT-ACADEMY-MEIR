@@ -904,6 +904,163 @@
     .chapter-pdf-cta .btn-primary { width: 100%; justify-content: center; }
   }
 
+  /* ====== Home page redesign: hero + stat row ====== */
+  .home-hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 240px;
+    gap: 24px;
+    align-items: center;
+    background: linear-gradient(135deg, #0b1e36 0%, #1f4d85 70%, #14b8a6 100%);
+    color: #fff;
+    border-radius: 22px;
+    padding: 28px 32px;
+    margin-bottom: 16px;
+    box-shadow: 0 16px 40px rgba(11,30,54,.28), 0 2px 6px rgba(0,0,0,.06);
+    overflow: hidden;
+  }
+  .home-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 18px 18px;
+    pointer-events: none;
+  }
+  .home-hero-text { position: relative; z-index: 1; min-width: 0; }
+  .home-hero-eyebrow {
+    font-size: 11.5px; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase;
+    color: rgba(255,255,255,0.72);
+    margin-bottom: 8px;
+  }
+  .home-hero-title {
+    font-family: var(--font-serif);
+    font-size: 34px; font-weight: 700; line-height: 1.1;
+    margin: 0 0 10px;
+    color: #fff;
+  }
+  .home-hero-sub {
+    font-size: 14.5px; color: rgba(255,255,255,0.88);
+    line-height: 1.55; margin: 0 0 16px;
+  }
+  .home-hero-progress {
+    display: flex; align-items: center; gap: 12px;
+    max-width: 380px;
+  }
+  .home-hero-progress-track {
+    flex: 1; height: 8px; background: rgba(255,255,255,0.18);
+    border-radius: 999px; overflow: hidden;
+  }
+  .home-hero-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #fbbf24, #f97316);
+    border-radius: 999px;
+    box-shadow: 0 0 12px rgba(251,191,36,0.5);
+    transition: width .5s ease-out;
+  }
+  .home-hero-progress-num {
+    font-size: 13px; font-weight: 700; color: #fff;
+    min-width: 38px; text-align: right;
+  }
+  .home-hero-art {
+    position: relative; z-index: 1;
+    width: 220px; height: 220px;
+    opacity: 0.85;
+    align-self: center; justify-self: end;
+  }
+  .home-hero-art svg { width: 100%; height: 100%; }
+  @media (max-width: 720px) {
+    .home-hero { grid-template-columns: 1fr; padding: 22px 22px; }
+    .home-hero-title { font-size: 26px; }
+    .home-hero-art { display: none; }
+  }
+  /* Stat row */
+  .home-stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .home-stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 14px;
+    position: relative;
+    overflow: hidden;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .home-stat::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    background: var(--c, #3b82f6);
+    border-radius: 4px 0 0 4px;
+  }
+  .home-stat:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,.06); }
+  .hs-icon { font-size: 20px; margin-bottom: 4px; }
+  .hs-value {
+    font-family: var(--font-serif); font-size: 28px; font-weight: 700;
+    color: var(--navy-900); line-height: 1; margin: 4px 0 2px;
+  }
+  .hs-value .hs-of { color: var(--text-soft); font-size: 16px; font-weight: 500; }
+  .hs-label { font-size: 11.5px; color: var(--text-soft); font-weight: 600; letter-spacing: .2px; }
+  @media (max-width: 640px) {
+    .home-stat-row { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* ====== Premium Batch Podcast Banner (Home) ====== */
+  .batch-premium-card {
+    display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    background: linear-gradient(135deg, #4338ca 0%, #7c3aed 50%, #db2777 100%);
+    color: #fff;
+    border-radius: 18px;
+    padding: 22px 26px;
+    margin: 16px 0 22px;
+    box-shadow: 0 14px 36px rgba(124,58,237,.30), 0 2px 6px rgba(0,0,0,.06);
+    position: relative;
+    overflow: hidden;
+  }
+  /* Soft decorative blob behind the banner */
+  .batch-premium-card::before {
+    content: ''; position: absolute; right: -60px; top: -80px;
+    width: 240px; height: 240px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .batch-premium-card.done-state { background: linear-gradient(135deg, #047857 0%, #10b981 100%); box-shadow: 0 14px 36px rgba(16,185,129,.25); }
+  .batch-premium-card.setup-state { background: linear-gradient(135deg, #b45309 0%, #f59e0b 60%, #ea580c 100%); box-shadow: 0 14px 36px rgba(245,158,11,.30); }
+  .bp-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: rgba(255,255,255,.22);
+    font-size: 32px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,.25);
+  }
+  .bp-body { flex: 1; min-width: 240px; }
+  .bp-title { font-family: var(--font-serif); font-size: 20px; font-weight: 700; color: #fff; line-height: 1.2; margin: 0; }
+  .bp-sub { font-size: 13.5px; color: rgba(255,255,255,.92); line-height: 1.55; margin-top: 6px; }
+  .bp-progress { margin-top: 10px; height: 6px; background: rgba(255,255,255,.22); border-radius: 999px; overflow: hidden; max-width: 280px; }
+  .bp-progress-fill { height: 100%; background: #fff; border-radius: 999px; transition: width .4s; box-shadow: 0 0 8px rgba(255,255,255,.5); }
+  .bp-keys { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+  .bp-key-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: rgba(255,255,255,.95); font-weight: 500; }
+  .bp-key-row.ready { opacity: .75; }
+  .bp-keyok { font-size: 12px; opacity: .85; font-style: italic; }
+  .bp-key-row .btn { background: rgba(255,255,255,.18); color: #fff; border-color: rgba(255,255,255,.3); font-weight: 600; }
+  .bp-key-row .btn:hover { background: rgba(255,255,255,.28); }
+  .bp-cta {
+    background: #fff !important; color: #4338ca !important; flex-shrink: 0;
+    font-weight: 700; font-size: 14.5px; padding: 12px 22px; border-radius: 12px;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  }
+  .bp-cta:hover:not(:disabled) { background: #f5f3ff !important; transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+  .batch-premium-card.done-state .bp-cta { color: #047857 !important; }
+  .batch-premium-card.setup-state .bp-cta { color: #b45309 !important; }
+  .bp-cta:disabled { opacity: 0.6; cursor: not-allowed; }
+  @media (max-width: 640px) {
+    .batch-premium-card { flex-direction: column; align-items: stretch; }
+    .bp-cta { width: 100%; }
+  }
+
   /* ====== HD voice activation banner (Home) ====== */
   .hd-voice-banner {
     display: flex; align-items: center; gap: 16px;
@@ -12500,14 +12657,60 @@ function renderDashboard() {
     </div>
   ` : '';
 
-  return `
-    <div class="page-header">
-      <div>
-        <div class="breadcrumb"><span>Home</span></div>
-        <h1 class="page-title">Welcome back${state.userName ? ', Dr. ' + escapeHTML(state.userName) : ''}</h1>
-        <p class="page-sub">Your structured year through Cummings Otolaryngology — Head & Neck Surgery, 8th edition.</p>
+  // Visual stat row — quick at-a-glance numbers above the fold
+  const _streak = state.studyDays ? (Object.keys(state.studyDays).length) : 0;
+  const _totalNotes = Object.values((state.personalNotes && state.personalNotes[state.userName || 'guest']) || {}).filter(n => (n||'').trim()).length;
+  const _xtPodcasts = state.extendedPodcasts ? Object.keys(state.extendedPodcasts).length : 0;
+  const _stat = (icon, value, label, color) => `
+    <div class="home-stat" style="--c:${color};">
+      <div class="hs-icon">${icon}</div>
+      <div class="hs-value">${value}</div>
+      <div class="hs-label">${label}</div>
+    </div>`;
+  const statRowHTML = `
+    <div class="home-stat-row">
+      ${_stat('📚', prog.done + '<span class="hs-of">/' + prog.total + '</span>', 'Chapters done', '#3b82f6')}
+      ${_stat('🔥', _streak, 'Day streak', '#f97316')}
+      ${_stat('🎙️', _xtPodcasts, 'Premium podcasts', '#a855f7')}
+      ${_stat('📓', _totalNotes, 'Notes written', '#10b981')}
+    </div>`;
+
+  // Pretty hero with vector anatomical accent
+  const heroHTML = `
+    <div class="home-hero">
+      <div class="home-hero-text">
+        <div class="home-hero-eyebrow">Cummings Otolaryngology · 8th edition</div>
+        <h1 class="home-hero-title">${state.userName ? 'Welcome back, Dr. ' + escapeHTML(state.userName) : 'Welcome back, Dr. Resident'}</h1>
+        <p class="home-hero-sub">${prog.done > 0 ? `${prog.done} of ${prog.total} chapters complete · ${prog.pct}% of the way through residency` : 'Your structured year through head & neck surgery starts here.'}</p>
+        <div class="home-hero-progress">
+          <div class="home-hero-progress-track">
+            <div class="home-hero-progress-fill" style="width:${Math.max(2, prog.pct)}%;"></div>
+          </div>
+          <span class="home-hero-progress-num">${prog.pct}%</span>
+        </div>
       </div>
-    </div>
+      <div class="home-hero-art" aria-hidden="true">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="hheroGlow" cx="50%" cy="50%" r="55%">
+              <stop offset="0%" stop-color="#fff" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="200" cy="200" r="180" fill="url(#hheroGlow)" />
+          <g fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 186 44 C 154 49 126 61 102 83 C 86 100 84 125 84 140 C 86 162 96 187 113 213 C 118 225 120 232 120 253 C 117 269 109 289 95 309 C 105 313 121 317 141 328 C 159 335 164 333 175 320 C 188 308 195 286 195 264 C 196 240 196 222 200 210 C 206 195 210 178 215 162 C 222 138 220 110 200 80 C 195 65 195 60 192 50 Z"/>
+            <path d="M 110 150 C 116 145 124 145 130 150 C 134 158 130 168 122 170 C 116 168 110 162 110 156 Z"/>
+            <path d="M 220 100 C 240 110 250 130 245 150 C 240 175 230 200 220 215 C 215 220 210 220 205 215 L 200 200"/>
+            <path d="M 195 220 C 205 230 220 235 230 230 L 245 220"/>
+          </g>
+        </svg>
+      </div>
+    </div>`;
+
+  return `
+    ${heroHTML}
+    ${statRowHTML}
 
     ${resumeHTML}
     ${challengeHTML}
@@ -12524,7 +12727,7 @@ function renderDashboard() {
       </div>
     ` : ''}
 
-    ${(state.apiKey && (state.elevenLabsKey || state.openaiKey)) ? renderBatchPremiumBanner() : ''}
+    ${renderBatchPremiumBanner()}
 
     ${renderStudyTrackerWidget()}
 
@@ -17608,34 +17811,58 @@ function renderBatchPremiumBanner() {
   const ten = firstTenStudyChapters();
   const done = ten.filter(w => state.extendedPodcasts && state.extendedPodcasts[w.week]);
   const remaining = ten.length - done.length;
-  if (remaining === 0) {
+  const hasClaude = !!state.apiKey;
+  const hasVoice = !!(state.elevenLabsKey || state.openaiKey);
+  // All done — celebrate
+  if (remaining === 0 && hasClaude && hasVoice) {
     return `
-      <div class="card" style="margin:14px 0;padding:14px 18px;background:linear-gradient(135deg,#dcfce7,#f0fdf4);border:1px solid #86efac;">
-        <div style="display:flex;align-items:center;gap:12px;">
-          <div style="font-size:24px;">✨</div>
-          <div style="flex:1;">
-            <div style="font-weight:700;color:#15803d;">All 10 first chapters are premium-grade</div>
-            <div style="font-size:12.5px;color:#166534;">Extended Deep Dives ready for ${ten.length} chapters · ~15-20 min each, board-exam tailored.</div>
-          </div>
+      <div class="batch-premium-card done-state">
+        <div class="bp-icon" aria-hidden="true">✨</div>
+        <div class="bp-body">
+          <div class="bp-title">All 10 first chapters are premium-grade</div>
+          <div class="bp-sub">Extended Deep Dives ready for ${ten.length} chapters · ~15-20 min each, board-exam tailored.</div>
         </div>
       </div>
     `;
   }
-  const inProgress = !!state.extendedPodcastGenerating;
-  return `
-    <div class="card" style="margin:14px 0;padding:18px 20px;background:linear-gradient(135deg,#ede9fe,#dbeafe);border:1px solid #c4b5fd;">
-      <div style="display:flex;align-items:start;gap:14px;flex-wrap:wrap;">
-        <div style="font-size:30px;">🎓</div>
-        <div style="flex:1;min-width:220px;">
-          <div style="font-size:16px;font-weight:700;color:#4c1d95;">Premium Deep Dive — first 10 chapters</div>
-          <div style="font-size:13px;color:#5b21b6;margin-top:4px;line-height:1.5;">
-            One click → Claude generates board-exam-grade 60-turn dialogues (~15-20 min each) for the first 10 study chapters. ${done.length} already done · ${remaining} remaining. Runs sequentially in the background; takes 5-10 min total.
+  // Missing pre-reqs — show inline prompts to add keys
+  if (!hasClaude || !hasVoice) {
+    return `
+      <div class="batch-premium-card setup-state">
+        <div class="bp-icon" aria-hidden="true">🎓</div>
+        <div class="bp-body">
+          <div class="bp-title">Premium Deep Dive — first 10 chapters</div>
+          <div class="bp-sub">One click → Claude writes board-exam-grade 60-turn dialogues (~15-20 min each) for your first 10 study chapters.</div>
+          <div class="bp-keys">
+            <div class="bp-key-row ${hasClaude ? 'ready' : 'pending'}">
+              ${hasClaude ? '✅' : '⚠️'} Anthropic Claude key
+              ${hasClaude ? '<span class="bp-keyok">configured</span>' : '<button class="btn btn-sm btn-ghost" data-action="nav" data-view="resources">Add in Settings →</button>'}
+            </div>
+            <div class="bp-key-row ${hasVoice ? 'ready' : 'pending'}">
+              ${hasVoice ? '✅' : '⚠️'} ElevenLabs or OpenAI voice key
+              ${hasVoice ? '<span class="bp-keyok">configured</span>' : '<button class="btn btn-sm btn-ghost" data-action="nav" data-view="resources">Add in Settings →</button>'}
+            </div>
           </div>
         </div>
-        <button class="btn btn-primary" data-action="batch-premium-10" ${inProgress ? 'disabled' : ''} style="background:linear-gradient(135deg,#7c3aed,#4f46e5);">
-          ${inProgress ? '⏳ Generating…' : '⚡ Generate all ' + remaining}
+        <button class="btn btn-primary bp-cta" data-action="batch-premium-10" disabled>
+          ⚡ Generate all ${remaining}
         </button>
       </div>
+    `;
+  }
+  // Ready to go
+  const inProgress = !!state.extendedPodcastGenerating;
+  return `
+    <div class="batch-premium-card ready-state">
+      <div class="bp-icon" aria-hidden="true">🎓</div>
+      <div class="bp-body">
+        <div class="bp-title">Premium Deep Dive — first 10 chapters</div>
+        <div class="bp-sub">One click → Claude writes board-exam-grade 60-turn dialogues (~15-20 min each). ${done.length}/10 done · ${remaining} remaining. ~5-10 min total.</div>
+        ${done.length > 0 ? `<div class="bp-progress"><div class="bp-progress-fill" style="width:${Math.round(done.length/10*100)}%"></div></div>` : ''}
+      </div>
+      <button class="btn btn-primary bp-cta" data-action="batch-premium-10" ${inProgress ? 'disabled' : ''}>
+        ${inProgress ? '⏳ Generating…' : '⚡ Generate all ' + remaining}
+      </button>
     </div>
   `;
 }
