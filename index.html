@@ -4233,7 +4233,17 @@ const CONTENT = {
       { q: 'State the “rule of 80s” for adult neck masses.', a: '~80% of non-thyroid adult neck masses are neoplastic; 80% of those malignant; 80% of malignant are metastatic; 80% of metastases come from a primary above the clavicle.' },
       { q: 'How do you test the spinal accessory nerve (CN XI)?', a: 'Shoulder shrug against resistance (trapezius) and head turn against resistance to the contralateral side (SCM).' },
       { q: "What is Trotter's triad and what does it suggest?", a: 'Conductive hearing loss + ipsilateral temporoparietal pain + palatal paralysis — classic for nasopharyngeal carcinoma invading the eustachian tube and skull base via foramen lacerum.' },
-      { q: 'At what age does the pediatric Eustachian tube reach adult orientation, and why does this matter?', a: 'Around age 7. Until then, the shorter, more horizontal, less stiff ET predisposes to OME and recurrent AOM.' }
+      { q: 'At what age does the pediatric Eustachian tube reach adult orientation, and why does this matter?', a: 'Around age 7. Until then, the shorter, more horizontal, less stiff ET predisposes to OME and recurrent AOM.' },
+      { q: 'What 4 anatomic systems must be reviewed in every ENT history regardless of chief complaint?', a: 'Otologic, rhinologic, oropharyngeal/laryngeal, and neck/salivary — pathology in one cavity often refers to another.' },
+      { q: 'What is the rule of 80s for adult neck masses?', a: '80% of adult lateral neck masses are malignant, 80% of those are metastatic, 80% of metastatic primaries are above the clavicle (HNSCC).' },
+      { q: 'A normal-looking ear with persistent otalgia in a smoker requires what investigation?', a: 'Flexible nasopharyngolaryngoscopy — refer to CN V/IX/X distributions to rule out occult head and neck cancer.' },
+      { q: 'How is the gag reflex tested at the bedside, and which cranial nerves are involved?', a: 'Touch the posterior pharyngeal wall: afferent CN IX (glossopharyngeal), efferent CN X (vagus via pharyngeal plexus).' },
+      { q: 'Robbins Level Ib boundaries?', a: 'Mandible (superior), anterior belly of digastric (anterior), stylohyoid (posterior), submandibular gland is contained within. Drains anterior tongue, FOM, lower lip.' },
+      { q: 'What does Weber tuning fork lateralizing AWAY from the affected ear indicate?', a: 'Sensorineural hearing loss in the contralateral ear (sound goes to the better cochlea). Lateralization TOWARD the affected ear suggests conductive loss.' },
+      { q: 'Trotter triad signs and meaning?', a: 'Ipsilateral serous OM + referred otalgia + soft palate paralysis = nasopharyngeal carcinoma invading lateral nasopharynx.' },
+      { q: 'Best first-line imaging for a newly discovered thyroid nodule?', a: 'Thyroid ultrasound (TI-RADS) — characterizes the nodule and guides FNA. Avoid CT with iodine contrast (delays future radioiodine).' },
+      { q: 'Brodsky tonsil grading scale?', a: '0 = in fossa; 1+ = <25% of OP space; 2+ = 25-50%; 3+ = 50-75%; 4+ = >75% (kissing tonsils).' },
+      { q: 'Adult with unilateral serous OM lasting >6 weeks — workup?', a: 'Nasopharyngoscopy to rule out nasopharyngeal mass (NPC) obstructing the Eustachian tube — also evaluate for ET dysfunction and audiometry.' }
     ],
     quiz: [
       {
@@ -4340,6 +4350,90 @@ const CONTENT = {
         ],
         correct: 1,
         explain: 'The pediatric ET is shorter, more horizontal, and less stiff — predisposing to OME and recurrent AOM. Adult orientation is reached around age 7.'
+      },
+      {
+        stem: "A 65-year-old chronic smoker presents with right-sided ear pain and a normal otoscopic examination. Most appropriate next step:",
+        options: ["Reassurance and NSAIDs", "Bilateral audiometry only", "Flexible nasopharyngolaryngoscopy", "Tympanostomy tube placement"],
+        correct: 2,
+        explain: "Otalgia with a normal ear in an adult smoker requires a thorough exam of CN V, IX, X distributions — flexible scope of the upper aerodigestive tract is mandatory to rule out occult tumor."
+      },
+      {
+        stem: "Which of the following neck mass features is MOST concerning for malignancy in an adult?",
+        options: ["Tender, mobile, 1.5 cm anterior cervical node", "Persistent, firm, fixed 3 cm lateral neck mass for 6 weeks", "Soft, midline, moves with swallowing", "Fluctuant, painful, posterior auricular swelling"],
+        correct: 1,
+        explain: "Rule of 80s: in adults, a firm fixed neck mass >2 cm persisting >2 weeks is metastatic cancer until proven otherwise. Mobile tender nodes suggest reactive lymphadenitis."
+      },
+      {
+        stem: "Robbins Level IIb is bordered by which structures?",
+        options: ["Hyoid, sternocleidomastoid, anterior belly of digastric", "Spinal accessory nerve, base of skull, posterior border of SCM, jugular vein", "Cricoid, omohyoid, posterior SCM", "Mandible, hyoid, anterior digastric"],
+        correct: 1,
+        explain: "Level IIb is the upper jugular sub-region posterior/superior to the spinal accessory nerve (CN XI). Boundaries: skull base superiorly, hyoid inferiorly, SCM posteriorly, CN XI antero-inferiorly."
+      },
+      {
+        stem: "Anterior tongue tumors most commonly metastasize first to which nodal level?",
+        options: ["Level Ia (submental)", "Level Ib (submandibular)", "Level IIa", "Level III"],
+        correct: 1,
+        explain: "Oral cavity (anterior tongue, floor of mouth) drains primarily to Level Ib then IIa. Posterior tongue and oropharynx skip to II-IV. Nasopharynx → retropharyngeal + II + V."
+      },
+      {
+        stem: "Hoarseness > 2 weeks duration in an adult smoker mandates which exam?",
+        options: ["Audiometry only", "Direct laryngoscopy or flexible fiberoptic exam", "Sinus CT", "Modified barium swallow"],
+        correct: 1,
+        explain: "Persistent hoarseness >2 weeks in a smoker = vocal fold visualization REQUIRED. Cannot rule out glottic SCC without direct/indirect laryngoscopy."
+      },
+      {
+        stem: "On Weber test with a tuning fork (512 Hz), lateralization to the LEFT ear in a patient with right-sided sensorineural hearing loss is best explained by:",
+        options: ["Left ear conductive loss", "Right ear has SNHL — sound lateralizes to the better-hearing left ear", "Bilateral SNHL", "Malingering"],
+        correct: 1,
+        explain: "Weber lateralizes to the conductive ear OR to the better-hearing ear when SNHL is present. In unilateral SNHL on the right, Weber goes to the LEFT (better cochlea)."
+      },
+      {
+        stem: "Positive Rinne (AC > BC) in an ear with confirmed hearing loss indicates:",
+        options: ["Conductive loss >25 dB", "Sensorineural loss", "Mixed loss", "Always normal"],
+        correct: 1,
+        explain: "Rinne positive (air > bone) = either normal hearing OR sensorineural loss. Rinne negative (bone > air) = conductive loss ≥25 dB. The CHL must reach 25 dB to flip Rinne."
+      },
+      {
+        stem: "Which cranial nerve is tested by the gag reflex?",
+        options: ["V (afferent) and VII (efferent)", "IX (afferent) and X (efferent)", "X (afferent) and XII (efferent)", "V and X both afferent and efferent"],
+        correct: 1,
+        explain: "Gag reflex: sensory (afferent) = CN IX (glossopharyngeal); motor (efferent) = CN X (vagus, via pharyngeal plexus). Loss can indicate skull base or brainstem pathology."
+      },
+      {
+        stem: "A patient with unilateral serous otitis media >6 weeks in an adult requires which step beyond myringotomy?",
+        options: ["Audiogram alone", "Reassurance", "Nasopharyngoscopy to rule out nasopharyngeal carcinoma", "Antihistamines"],
+        correct: 2,
+        explain: "Unilateral adult SOM = nasopharyngeal mass (NPC) until proven otherwise — Eustachian tube obstruction by tumor. Always scope the nasopharynx."
+      },
+      {
+        stem: "A neck mass biopsy reveals metastatic squamous cell carcinoma but no primary is identified. The most likely occult primary site is:",
+        options: ["Larynx", "Oropharynx (palatine tonsil or base of tongue)", "Hypopharynx", "Nasal cavity"],
+        correct: 1,
+        explain: "Unknown primary HNSCC: most occult primaries are in the oropharynx — tonsillar crypts and tongue base. HPV testing of the FNA helps localize. Workup includes panendoscopy, ipsilateral tonsillectomy + tongue base biopsy + PET-CT."
+      },
+      {
+        stem: "Tonsil grade 3+ (Brodsky) means tonsils occupy what percentage of the oropharyngeal space?",
+        options: ["<25%", "25-50%", "50-75%", "100% (kissing)"],
+        correct: 2,
+        explain: "Brodsky scale: 0 = none/in fossa, 1+ = <25%, 2+ = 25-50%, 3+ = 50-75%, 4+ = >75% (kissing). Tonsil size is a key OSA predictor in children."
+      },
+      {
+        stem: "A 'rule of 80s' aphorism in adult neck masses says:",
+        options: ["80% of adult neck masses are infectious", "80% of adult neck masses are malignant; 80% of malignant are metastatic; 80% of metastatic primaries are above the clavicle", "80% of pediatric neck masses are congenital", "80% of biopsied nodes are reactive"],
+        correct: 1,
+        explain: "Classic rule: in adults, 80% of non-thyroid lateral neck masses are malignant, 80% of those are metastatic, 80% of metastatic primaries are above the clavicle (head and neck SCC). Excludes pediatric where 80% are inflammatory/congenital."
+      },
+      {
+        stem: "Most accurate FIRST-line imaging study for a thyroid nodule discovered on physical examination:",
+        options: ["CT neck with contrast", "Thyroid ultrasound", "MRI neck", "Nuclear thyroid scan"],
+        correct: 1,
+        explain: "Thyroid ultrasound is the gold-standard initial imaging — characterizes nodule features (TI-RADS), guides FNA. CT contrast iodine can delay future radioiodine treatment."
+      },
+      {
+        stem: "Trotter's triad (referred otalgia, ipsilateral conductive hearing loss, palatal asymmetry) suggests:",
+        options: ["Bell palsy", "Nasopharyngeal carcinoma", "Petrous apex meningioma", "Acoustic neuroma"],
+        correct: 1,
+        explain: "Trotter's triad = NPC invading the lateral wall of the nasopharynx: serous OM (ET obstruction), referred otalgia (CN V/IX), and ipsilateral soft palate paralysis (CN V/X via levator/tensor)."
       }
     ],
     podcastTitle: 'The ENT Exam — Eight Minutes That Decide Everything',
@@ -5821,7 +5915,127 @@ const CONTENT = {
         options: ["AHI, neck circumference, age", "Tongue position, tonsil size, BMI", "Mallampati alone", "Lung function tests"],
         correct: 1,
         explain: "Friedman staging combines modified tongue position (I-IV), tonsil size (0-4), and BMI to predict UPPP success."
-      }
+      },
+      {
+        stem: "An adult with AHI 22/h has predominantly hypopneas, oxygen nadir 88%, and Epworth Sleepiness Scale 14. By AASM criteria, the OSA severity is:",
+        options: ["Mild", "Moderate", "Severe", "Position-dependent — needs further testing"],
+        correct: 1,
+        explain: "AHI 15-30/h = moderate OSA. AHI <5 normal, 5-15 mild, 15-30 moderate, >30 severe. Symptom severity (ESS) and oxygen nadir add prognostic information but do not change the AASM severity category."
+      },
+      {
+        stem: "A 9-year-old with BMI 75th percentile has nightly snoring, witnessed apneas, AHI 6/h, and Tonsil 3+/Adenoid 75%. Most appropriate next step:",
+        options: ["CPAP", "Adenotonsillectomy", "Oral appliance", "Weight loss alone"],
+        correct: 1,
+        explain: "Adenotonsillectomy remains first-line therapy for pediatric OSA when adenotonsillar hypertrophy is present (AHI ≥1 in children is abnormal; ≥5 is moderate). Cures 60-80% of otherwise healthy children."
+      },
+      {
+        stem: "Which is the strongest single anatomic risk factor for adult OSA?",
+        options: ["Macroglossia", "Retrognathia/micrognathia", "Increased neck circumference (>43 cm M / >40 cm F)", "Deviated nasal septum"],
+        correct: 2,
+        explain: "Neck circumference reflects upper airway fat deposition and is the strongest single anatomic predictor in unselected adults. STOP-BANG uses neck >40 cm regardless of sex as a screening cutoff."
+      },
+      {
+        stem: "On polysomnography, a respiratory event with ≥30% airflow reduction lasting ≥10 s and accompanied by a 3% oxygen desaturation OR an arousal is scored as a:",
+        options: ["Apnea", "Hypopnea", "RERA (respiratory effort-related arousal)", "Central event"],
+        correct: 1,
+        explain: "AASM 2012 hypopnea: ≥30% flow drop, ≥10 s, with ≥3% desaturation or arousal. Apnea requires ≥90% flow drop. RERAs have <30% flow change but flow limitation + arousal."
+      },
+      {
+        stem: "The most effective non-surgical treatment for moderate-to-severe OSA in terms of AHI reduction is:",
+        options: ["Mandibular advancement device", "CPAP", "Positional therapy", "Weight loss"],
+        correct: 1,
+        explain: "CPAP is the most effective therapy, normalizing AHI in essentially all adherent patients. MADs reduce AHI ~50%; they are first-line only for mild-moderate OSA or CPAP-intolerant patients."
+      },
+      {
+        stem: "Hypoglossal nerve stimulation (Inspire) is FDA-approved with all of the following criteria EXCEPT:",
+        options: ["AHI 15-65/h", "BMI <32-35 (varies)", "Complete concentric velar collapse on DISE", "CPAP failure or intolerance"],
+        correct: 2,
+        explain: "Complete CONCENTRIC collapse at the velum is a CONTRAINDICATION to hypoglossal nerve stimulation. Anteroposterior collapse is favorable. CCC predicts treatment failure."
+      },
+      {
+        stem: "After uvulopalatopharyngoplasty (UPPP), the surgical success rate (defined as ≥50% AHI reduction AND AHI <20) in unselected adult OSA is approximately:",
+        options: ["20%", "40%", "60%", "85%"],
+        correct: 1,
+        explain: "Sher's classic meta-analysis showed ~40% success across unselected patients; Friedman stage I tonsillar OSA approaches 80%, while stage III lingual OSA is ~8%."
+      },
+      {
+        stem: "Maxillomandibular advancement (MMA) achieves what approximate AHI cure rate in severe OSA?",
+        options: ["20%", "45%", "65%", "85%"],
+        correct: 3,
+        explain: "MMA is the most effective single skeletal surgical treatment, with ~85-90% AHI reduction and ~45% cure rates approaching CPAP efficacy. Reserved for severe OSA with skeletal restriction."
+      },
+      {
+        stem: "Central sleep apnea with crescendo-decrescendo respiratory pattern is most characteristic of:",
+        options: ["Opioid-induced apnea", "Cheyne-Stokes respiration in heart failure", "Brainstem stroke", "High-altitude periodic breathing"],
+        correct: 1,
+        explain: "Cheyne-Stokes (cyclic crescendo-decrescendo) is the hallmark of HFrEF-related central sleep apnea. Treatment: optimize HF, then ASV (but ASV CONTRAINDICATED if EF <45% per SERVE-HF)."
+      },
+      {
+        stem: "Pediatric OSA most commonly presents with which non-classic symptom rather than daytime sleepiness?",
+        options: ["Behavioral problems / ADHD-like symptoms", "Headaches", "Polyuria", "Mood swings only"],
+        correct: 0,
+        explain: "Children with OSA typically present with behavioral problems (hyperactivity, inattention) rather than daytime sleepiness. Treating OSA can improve school performance and behavior."
+      },
+      {
+        stem: "Pickwickian syndrome (obesity hypoventilation syndrome, OHS) requires which two criteria?",
+        options: ["BMI >25 + AHI >5", "BMI ≥30 + awake PaCO₂ >45 mmHg", "OSA + nocturnal desaturation", "Cor pulmonale + obesity"],
+        correct: 1,
+        explain: "OHS = BMI ≥30 + chronic daytime hypercapnia (PaCO₂ >45 mmHg) not otherwise explained. ~90% also have OSA. Mortality higher than OSA alone; treat with PAP (often BiPAP)."
+      },
+      {
+        stem: "A patient on CPAP at 14 cmH₂O still has residual AHI 12 with persistent symptoms. Polysomnography shows treatment-emergent central apneas. Most appropriate next step:",
+        options: ["Increase CPAP", "Switch to adaptive servo-ventilation (ASV)", "Switch to BiPAP", "Add hypnotic"],
+        correct: 1,
+        explain: "Treatment-emergent central sleep apnea (TECSA, formerly complex sleep apnea) is best treated with ASV if EF ≥45%. If EF <45%, use BiPAP-ST or optimize HF therapy; ASV is contraindicated."
+      },
+      {
+        stem: "Drug-induced sleep endoscopy (DISE) is most useful BEFORE which intervention?",
+        options: ["CPAP initiation", "Hypoglossal nerve stimulation", "First-time tonsillectomy in children", "Lifestyle counseling"],
+        correct: 1,
+        explain: "DISE is critical before hypoglossal nerve stimulation to rule out CCC at the velum. Also used to localize collapse pattern (VOTE) before redo upper-airway surgery."
+      },
+      {
+        stem: "An adult OSA patient who is well-controlled on CPAP undergoes general anesthesia for elective surgery. Which is FALSE?",
+        options: ["Use CPAP postoperatively if patient brings it from home", "Continuous SpO₂ monitoring in PACU is warranted", "Opioids carry increased risk of respiratory depression", "Same-day discharge is always safe regardless of opioids"],
+        correct: 3,
+        explain: "Same-day discharge is NOT always safe; OSA patients on significant opioids may require monitored overnight observation. STOP-BANG ≥3 + planned opioids → consider monitored bed."
+      },
+      {
+        stem: "An adult presents with EDS, AHI 8/h, ESS 14, and ESS-confirmed sleepiness despite no insomnia. After PSG diagnoses mild OSA, the most appropriate first-line therapy is:",
+        options: ["CPAP", "Positional therapy alone", "Oral appliance (MAD)", "UPPP"],
+        correct: 2,
+        explain: "For mild OSA with symptoms, a mandibular advancement device is reasonable first-line. CPAP is acceptable too; choose based on patient preference. Surgery is not first-line for mild OSA."
+      },
+      {
+        stem: "Long-term untreated severe OSA increases risk of all the following EXCEPT:",
+        options: ["Resistant hypertension", "Atrial fibrillation recurrence", "Type 2 diabetes mellitus", "Hyperthyroidism"],
+        correct: 3,
+        explain: "OSA is associated with HTN, AF, T2DM, MI, stroke, and motor vehicle accidents. No causal link with hyperthyroidism — though hypothyroidism can worsen OSA via macroglossia and myxedema."
+      },
+      {
+        stem: "On DISE using the VOTE classification, scoring 'V₂A T₀ O₁L E₀' indicates:",
+        options: ["Complete velar collapse anteroposterior, partial oropharyngeal collapse lateral", "Tongue base collapse only", "Complete circumferential collapse", "Epiglottic collapse"],
+        correct: 0,
+        explain: "VOTE: Velum, Oropharynx (lateral walls), Tongue base, Epiglottis. Each scored 0 (none), 1 (partial), 2 (complete). Pattern: A (anteroposterior), L (lateral), C (concentric). V₂A = complete AP velar collapse."
+      },
+      {
+        stem: "STOP-BANG components include all EXCEPT:",
+        options: ["Snoring, Tired, Observed apneas, blood Pressure", "BMI >35, Age >50, Neck >40 cm, male Gender", "Epworth Sleepiness Scale score", "Yes/No questionnaire totaling 0-8"],
+        correct: 2,
+        explain: "STOP-BANG does NOT include the Epworth Scale. ESS is a separate sleepiness questionnaire. STOP-BANG ≥3 is high risk; ≥5 strongly suggests moderate-severe OSA."
+      },
+      {
+        stem: "Genioglossus advancement is most commonly combined with which other procedure in multilevel OSA surgery?",
+        options: ["Septoplasty", "UPPP / palatal surgery", "Inferior turbinate reduction", "Lingual tonsillectomy alone"],
+        correct: 1,
+        explain: "Multilevel surgery typically combines palatal (UPPP) and tongue base (genioglossus advancement, hyoid suspension, or lingual tonsillectomy) procedures to address both retropalatal and retrolingual obstruction."
+      },
+      {
+        stem: "Which sleep apnea phenotype is best treated by positional therapy alone?",
+        options: ["AHI 8 supine, AHI 2 lateral", "AHI 22 supine, AHI 18 lateral", "Severe OSA in REM only", "CCSA in heart failure"],
+        correct: 0,
+        explain: "Positional OSA = AHI ≥5 supine with ≥50% reduction in lateral position. Position devices (sleep position trainer vests, tennis ball technique) reduce supine sleep and AHI."
+      },
     ],
     podcastTitle: 'OSA — Diagnosis to Surgery',
     podcastDuration: '~14 min',
