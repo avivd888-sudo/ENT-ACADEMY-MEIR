@@ -1,7 +1,7 @@
 /* ENT Academy service worker — offline-first app shell.
    Lets the app open instantly on any network (hospital Wi-Fi, weak cellular,
    or fully offline) after the first successful load. Bump CACHE on each release. */
-const CACHE = 'ent-academy-v2';
+const CACHE = 'ent-academy-v3';
 const SHELL = [
   './',
   './index.html',
@@ -39,10 +39,12 @@ self.addEventListener('fetch', (e) => {
   // Never cache API calls (auth/streaming) — always go to network.
   if (isApi) return;
 
-  // HTML: network-first so users get updates when online, cache fallback offline.
+  // HTML: ALWAYS fetch fresh from the network when online (bypassing the browser HTTP
+  // cache with {cache:'no-store'}), so a new deploy is never masked by a stale copy.
+  // Only fall back to the cached page when the network is genuinely unavailable (offline).
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
     e.respondWith(
-      fetch(req).then((res) => {
+      fetch(req.url, { cache: 'no-store' }).then((res) => {
         const copy = res.clone();
         caches.open(CACHE).then((c) => c.put('./index.html', copy)).catch(() => {});
         return res;
