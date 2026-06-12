@@ -12261,9 +12261,10 @@ function renderChapterModal() {
 
 function renderMobileTabbar() {
   const items = [
+    { id: 'dashboard',  label: 'Home',     icon: I.home },
     { id: 'curriculum', label: 'Chapters', icon: I.curriculum },
+    { id: 'my-research', label: 'Research', icon: I.book },
     { id: 'practice',   label: 'Practice', icon: I.quiz },
-    { id: 'projects',   label: 'Projects', icon: I.book },
     { id: 'smart-search', label: 'Search', icon: I.search }
   ];
   return `
@@ -13393,13 +13394,12 @@ function renderWeekTeaching(w, c) {
     </div>
   `;
 
-  // Video summary
-  const hasVideo = c && c.videoSummary && c.videoSummary.narration;
-  const videoBtn = hasVideo ? (
-    state.videoPlaying
-      ? `<button class="btn btn-light" data-action="video-stop">${I.stop} Stop video</button>`
-      : `<button class="btn btn-light" data-action="video-play" style="background:linear-gradient(135deg, var(--violet-500), var(--rose-500));color:#fff;">${I.play} Play ${c.videoSummary.duration || '6 min'} video summary</button>`
-  ) : '';
+  // Video summary — cinematic auto-generated summary video. Available for EVERY
+  // chapter that has any content (curated narration OR derivable key points/summary).
+  const hasVideo = typeof entvHasVideo === 'function' ? entvHasVideo(c) : (c && c.videoSummary && c.videoSummary.narration);
+  const videoBtn = hasVideo
+    ? `<button class="btn btn-light" data-entv-action="open" data-week="${w.week}" style="background:linear-gradient(135deg, var(--violet-500), var(--rose-500));color:#fff;font-weight:700;">${I.play} Watch summary video</button>`
+    : '';
 
   const hasHdKey = !!(state.openaiKey || state.elevenLabsKey);
   const hdCta = !hasHdKey ? `
@@ -13592,6 +13592,7 @@ function renderWeekTeaching(w, c) {
     { id: 'tile-facts',    icon: '🎯', title: 'Important facts',       stat: signs.length + ' signs',             color: '#f97316', target: 'teach-facts',       present: signs.length > 0, done: !!activity['teach-facts'] },
     { id: 'tile-slides',   icon: '🎬', title: 'Presentation slides',   stat: slides.length + ' slides',           color: '#8b5cf6', target: 'teach-slides',      present: slides.length > 0, done: !!activity['teach-slides'] },
     { id: 'tile-pod',      icon: '🎙️', title: 'Deep Dive podcast',     stat: (hasScript ? c.podcastScript.length + ' turns · ' + (c.podcastDuration || '~15 min') : 'not available'), color: '#6366f1', target: 'teach-podcast', present: hasScript, done: !!activity['teach-podcast'] },
+    { id: 'tile-video',    icon: '🎬', title: 'Summary video',         stat: 'narrated recap', color: '#ec4899', entv: true, present: (typeof entvHasVideo === 'function' && entvHasVideo(c)), done: false },
     { id: 'tile-flash',    icon: '🧠', title: 'Flashcards',            stat: (c.flashcards||[]).length + ' cards', color: '#10b981', target: '', action: { type: 'nav', view: 'flashcards' }, present: (c.flashcards||[]).length > 0, done: !!(state.srsHistory && state.srsHistory[wn]) },
     { id: 'tile-chat',     icon: '💬', title: 'Ask this chapter',      stat: 'AI Q&A',                            color: '#7c3aed', target: 'teach-chat',        present: true, done: !!(state.chapterChats && state.chapterChats[wn] && state.chapterChats[wn].length) },
     { id: 'tile-quiz',     icon: '✅', title: 'Take the quiz',          stat: quizDone ? `Score: ${wProg.quizScore}/${wProg.quizTotal}` : ((c.quiz||[]).length + ' questions'),  color: '#dc2626', target: '', action: { type: 'tab', tab: 'quiz' }, present: (c.quiz||[]).length > 0, done: quizDone }
@@ -13605,10 +13606,12 @@ function renderWeekTeaching(w, c) {
     </div>
     <div class="teach-landing-grid">
       ${tilesData.map(t => {
-        const dataAttrs = t.action
-          ? (t.action.type === 'nav' ? `data-action="nav" data-view="${t.action.view}"`
-                                     : `data-action="week-tab" data-tab="${t.action.tab}"`)
-          : `data-action="scroll-to-section" data-target="${t.target}"`;
+        const dataAttrs = t.entv
+          ? `data-entv-action="open" data-week="${wn}"`
+          : t.action
+            ? (t.action.type === 'nav' ? `data-action="nav" data-view="${t.action.view}"`
+                                       : `data-action="week-tab" data-tab="${t.action.tab}"`)
+            : `data-action="scroll-to-section" data-target="${t.target}"`;
         return `<button class="teach-tile ${t.done ? 'teach-tile-done' : ''}" ${dataAttrs} style="--tile-color:${t.color};">
           <div class="teach-tile-icon" aria-hidden="true">${t.icon}</div>
           <div class="teach-tile-body">
@@ -18075,6 +18078,8 @@ function renderMyResearch() {
       </div>
       <div class="toolbar-actions">
         <button class="btn btn-primary" data-action="research-new">➕ Add new project</button>
+        <button class="btn btn-ghost" data-rx-action="export-portfolio" title="Download all projects as a shareable file">⬇️ Export</button>
+        <button class="btn btn-ghost" data-rx-action="import-portfolio" title="Import projects shared by a colleague">⬆️ Import</button>
       </div>
     </div>
 
@@ -18220,6 +18225,7 @@ function renderResearchProjectForm(p, isNew) {
         </label>
       </div>
     </div>
+    ${typeof renderResearchExtras === 'function' ? renderResearchExtras(cur, p) : ''}
   `;
 }
 
@@ -20420,6 +20426,8 @@ function attachListeners() {
             nextStep: (form.nextStep || '').trim(),
             notes: (form.notes || '').trim(),
             milestones: form.milestones || [],
+            documents: form.documents || [],
+            aiNotes: form.aiNotes || [],
             createdAt: form.createdAt || now,
             updatedAt: now
           };
@@ -20992,6 +21000,633 @@ function renderStudyTrackerWidget() {
 /* ---------------- BOOT ---------------- */
 loadStored();
 render();
+</script>
+
+<!-- =================================================================== -->
+<!-- ENT ACADEMY · UPGRADE MODULE (cinematic video, research, mobile)     -->
+<!-- Self-contained: runs after the main script; reuses its globals.      -->
+<!-- =================================================================== -->
+<style id="entv-upgrade-css">
+/* ---- Cinematic summary-video overlay ---- */
+.entv-overlay{position:fixed;inset:0;z-index:4000;display:flex;flex-direction:column;
+  background:radial-gradient(120% 120% at 20% 0%,#1b2a52 0%,#0b1424 55%,#070b14 100%);
+  color:#f4f7ff;font-family:var(--font-sans);animation:entvFade .35s ease;overflow:hidden;}
+@keyframes entvFade{from{opacity:0}to{opacity:1}}
+.entv-overlay::before{content:"";position:absolute;inset:-30%;z-index:0;pointer-events:none;
+  background:radial-gradient(40% 40% at 70% 20%,rgba(139,92,246,.30),transparent 70%),
+            radial-gradient(45% 45% at 25% 80%,rgba(20,184,166,.22),transparent 70%);
+  animation:entvDrift 18s ease-in-out infinite alternate;}
+@keyframes entvDrift{from{transform:translate(0,0) scale(1)}to{transform:translate(3%,-3%) scale(1.08)}}
+.entv-top{position:relative;z-index:3;display:flex;align-items:center;gap:12px;
+  padding:calc(14px + env(safe-area-inset-top)) 18px 6px;}
+.entv-progress{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;}
+.entv-progress-bar{height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,#a78bfa,#34d399);transition:width .5s ease;}
+.entv-close{flex-shrink:0;width:40px;height:40px;border:none;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.12);color:#fff;font-size:18px;line-height:1;display:grid;place-items:center;}
+.entv-close:active{transform:scale(.92)}
+.entv-stage{position:relative;z-index:2;flex:1;display:flex;align-items:center;justify-content:center;
+  padding:18px clamp(18px,6vw,80px);min-height:0;}
+.entv-scene{max-width:880px;width:100%;animation:entvSceneIn .6s cubic-bezier(.2,.8,.2,1);}
+@keyframes entvSceneIn{from{opacity:0;transform:translateY(22px) scale(.985)}to{opacity:1;transform:none}}
+.entv-eyebrow{font-size:clamp(11px,2.6vw,13px);font-weight:800;letter-spacing:2.4px;text-transform:uppercase;
+  color:#a5b4fc;margin-bottom:14px;}
+.entv-title{font-family:var(--font-serif);font-weight:600;line-height:1.12;margin:0 0 6px;
+  font-size:clamp(26px,6.4vw,52px);text-wrap:balance;}
+.entv-sub{font-size:clamp(13px,3vw,18px);color:#c7d2fe;margin:0 0 18px;}
+.entv-bullets{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:12px;}
+.entv-bullets li{position:relative;padding:14px 18px 14px 50px;border-radius:14px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);
+  font-size:clamp(14px,3.4vw,19px);line-height:1.5;opacity:0;transform:translateX(-12px);
+  animation:entvBulletIn .5s ease forwards;}
+.entv-bullets li::before{content:"";position:absolute;left:18px;top:50%;width:16px;height:16px;margin-top:-8px;
+  border-radius:50%;background:linear-gradient(135deg,#a78bfa,#34d399);}
+.entv-bullets li.entv-hot{background:rgba(167,139,250,.20);border-color:rgba(167,139,250,.55);box-shadow:0 6px 24px rgba(124,58,237,.25);}
+@keyframes entvBulletIn{to{opacity:1;transform:none}}
+.entv-caption{position:relative;z-index:3;margin:0 clamp(14px,5vw,60px);
+  background:rgba(7,11,20,.55);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px 18px;min-height:58px;
+  display:flex;align-items:center;gap:12px;}
+.entv-cap-dot{flex-shrink:0;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-size:16px;font-weight:700;}
+.entv-cap-text{font-size:clamp(13px,3.2vw,17px);line-height:1.45;color:#eef2ff;}
+.entv-controls{position:relative;z-index:3;display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 18px calc(18px + env(safe-area-inset-bottom));flex-wrap:wrap;}
+.entv-btn{border:none;border-radius:99px;cursor:pointer;color:#fff;font-weight:700;font-size:14px;
+  background:rgba(255,255,255,.12);padding:12px 18px;min-height:46px;display:inline-flex;align-items:center;gap:8px;}
+.entv-btn.primary{background:linear-gradient(135deg,#8b5cf6,#6366f1);padding:12px 26px;}
+.entv-btn:active{transform:scale(.95)}
+.entv-speed{background:rgba(255,255,255,.12);color:#fff;border:none;border-radius:99px;padding:12px 14px;min-height:46px;font-weight:700;font-size:13px;cursor:pointer;}
+.entv-hint{position:relative;z-index:3;text-align:center;color:#8aa0c8;font-size:11.5px;padding:0 18px 6px;}
+.entv-end{text-align:center;animation:entvSceneIn .6s ease;}
+.entv-end h2{font-family:var(--font-serif);font-size:clamp(24px,6vw,40px);margin:0 0 8px;}
+@media (max-width:560px){
+  .entv-bullets li{padding:12px 14px 12px 42px;}
+  .entv-bullets li::before{left:14px;width:13px;height:13px;margin-top:-6.5px;}
+  .entv-controls{gap:8px;}
+  .entv-btn{padding:11px 15px;font-size:13px;}
+}
+@media (prefers-reduced-motion: reduce){
+  .entv-overlay,.entv-overlay::before,.entv-scene,.entv-bullets li,.entv-end{animation:none !important;}
+  .entv-bullets li{opacity:1 !important;transform:none !important;}
+}
+/* ---- Research extras ---- */
+.rx-panel{margin-top:18px;border:1px solid var(--border);border-radius:14px;background:var(--card-soft);padding:16px 18px;}
+.rx-panel h4{margin:0 0 4px;font-size:14px;color:var(--navy-900);display:flex;align-items:center;gap:8px;}
+.rx-panel .rx-sub{font-size:12px;color:var(--text-soft);margin:0 0 12px;}
+.rx-doc{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--card);margin-bottom:8px;}
+.rx-doc .rx-doc-ico{font-size:18px;flex-shrink:0;}
+.rx-doc .rx-doc-main{flex:1;min-width:0;}
+.rx-doc .rx-doc-name{font-weight:600;font-size:13.5px;color:var(--navy-900);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.rx-doc .rx-doc-meta{font-size:11.5px;color:var(--text-soft);}
+.rx-ai-out{margin-top:12px;padding:14px 16px;border-radius:12px;background:var(--card);border:1px solid var(--border);font-size:13.5px;line-height:1.6;color:var(--text);white-space:pre-wrap;}
+.rx-chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+/* ---- Mobile polish ---- */
+@media (max-width:720px){
+  html,body{max-width:100%;overflow-x:hidden;}
+  .card{padding:15px 15px;}
+  .rf-grid{gap:12px;}
+  .rf-input{font-size:16px;}              /* prevents iOS zoom-on-focus */
+  input,select,textarea{font-size:16px;}
+  .research-projects-grid{grid-template-columns:1fr !important;}
+  .pdf-modal,.install-modal{padding:10px;}
+  .entv-overlay{font-size:16px;}
+  .mobile-tab{font-size:10px;}
+}
+</style>
+<script id="entv-upgrade">
+(function(){
+"use strict";
+
+/* ================= helpers ================= */
+function htmlToText(html){
+  if(!html) return '';
+  var d=document.createElement('div'); d.innerHTML=String(html);
+  return (d.textContent||'').replace(/\s+/g,' ').trim();
+}
+function bulletsFromHTML(html){
+  if(!html) return [];
+  var d=document.createElement('div'); d.innerHTML=String(html);
+  var lis=d.querySelectorAll('li');
+  if(lis.length) return Array.prototype.map.call(lis,function(li){return (li.textContent||'').replace(/\s+/g,' ').trim();}).filter(Boolean);
+  var txt=htmlToText(html);
+  return txt.split(/(?<=[.?!])\s+/).map(function(s){return s.trim();}).filter(function(s){return s.length>12;}).slice(0,5);
+}
+function weekContent(week){
+  return (typeof CONTENT!=='undefined'&&CONTENT[week]) ||
+         (window.state&&state.generatedContent&&state.generatedContent[week]) || null;
+}
+function chapterTitleForWeek(week){
+  try{ var w=(CURRICULUM||[]).find(function(x){return x.week===week;}); return w?w.title:('Chapter '+week); }catch(e){ return 'Chapter '+week; }
+}
+
+/* ================= scene builder ================= */
+window.entvHasVideo=function(c){
+  if(!c) return false;
+  if(c.videoSummary&&c.videoSummary.narration&&c.videoSummary.narration.length) return true;
+  var kp=(c.keyPoints&&c.keyPoints.length)?c.keyPoints:(typeof getKeyPoints==='function'?getKeyPoints(c):[]);
+  if(kp&&kp.length) return true;
+  if(c.summary&&htmlToText(c.summary).length>120) return true;
+  if(c.slides&&c.slides.length) return true;
+  return false;
+};
+
+function buildScenes(c,week){
+  var title=chapterTitleForWeek(week);
+  var scenes=[];
+  scenes.push({eyebrow:'ENT Academy · Episode '+week,title:title,sub:(c&&c.podcastDuration)?('High-yield summary'):'High-yield summary',bullets:[],
+    lines:[{speaker:'host',text:'Welcome to the ENT Academy summary for '+title+'.'},
+           {speaker:'cohost',text:"In a few minutes we'll lock in the highest-yield points you need for the wards and for boards."}]});
+
+  // Preferred: curated narration synced to curated slides
+  if(c&&c.videoSummary&&c.videoSummary.narration&&c.videoSummary.narration.length&&c.slides&&c.slides.length){
+    var slides=c.slides, nar=c.videoSummary.narration, bySlide={};
+    nar.forEach(function(t){var s=Math.min(slides.length-1,(t.slide!=null?t.slide:0));(bySlide[s]=bySlide[s]||[]).push({speaker:t.speaker||'host',text:t.text});});
+    Object.keys(bySlide).map(Number).sort(function(a,b){return a-b;}).forEach(function(si){
+      var sl=slides[si];
+      scenes.push({eyebrow:sl.subtitle||('Key idea '+(si+1)),title:sl.title||title,sub:'',
+        bullets:bulletsFromHTML(sl.body),lines:bySlide[si]});
+    });
+    scenes.push(endScene(title,c));
+    return scenes;
+  }
+
+  // Derived from key points
+  var kp=(c&&c.keyPoints&&c.keyPoints.length)?c.keyPoints:(typeof getKeyPoints==='function'&&c?getKeyPoints(c):[]);
+  if(kp&&kp.length){
+    kp.slice(0,6).forEach(function(g,i){
+      var items=(g.items||[]).map(htmlToText).filter(Boolean).slice(0,5);
+      if(!items.length) return;
+      var lines=[{speaker:'host',text:(i===0?'Let’s start with ':'Next — ')+String(g.category||'key points').toLowerCase()+'.'}];
+      items.forEach(function(it,j){ lines.push({speaker:j%2?'host':'cohost',text:it}); });
+      scenes.push({eyebrow:g.category||('Key points '+(i+1)),title:g.category||title,sub:'',bullets:items,lines:lines});
+    });
+  } else if(c&&c.summary){
+    // Fall back to summary sections (h4 headings)
+    var d=document.createElement('div'); d.innerHTML=c.summary;
+    var hs=d.querySelectorAll('h4');
+    Array.prototype.slice.call(hs,0,6).forEach(function(h,i){
+      var topic=(h.textContent||'').replace(/^\d+\.\s*/,'').trim(), body='', n=h.nextElementSibling;
+      while(n&&n.tagName!=='H4'){var t=(n.textContent||'').trim(); if(t) body+=(body?' ':'')+t; n=n.nextElementSibling;}
+      if(!body) return;
+      var bl=body.split(/(?<=[.?!])\s+/).map(function(s){return s.trim();}).filter(function(s){return s.length>15;}).slice(0,4);
+      var lines=[{speaker:'host',text:(i===0?'First, ':'Now, ')+topic.toLowerCase()+'.'}];
+      bl.forEach(function(s,j){lines.push({speaker:j%2?'host':'cohost',text:s});});
+      scenes.push({eyebrow:topic,title:topic,sub:'',bullets:bl,lines:lines});
+    });
+  }
+
+  // Pearls scene
+  var pearls=(c&&c.pearls&&c.pearls.length)?c.pearls.map(htmlToText).filter(Boolean).slice(0,4):[];
+  if(pearls.length){
+    var pl=[{speaker:'host',text:'Before we close, the clinical pearls.'}];
+    pearls.forEach(function(p,j){pl.push({speaker:j%2?'host':'cohost',text:p});});
+    scenes.push({eyebrow:'Clinical pearls',title:'High-yield pearls',sub:'',bullets:pearls,lines:pl});
+  }
+
+  scenes.push(endScene(title,c));
+  return scenes;
+}
+function endScene(title,c){
+  return {eyebrow:'Recap',title:'That’s the summary',sub:title,bullets:[],isEnd:true,
+    lines:[{speaker:'host',text:'That’s your summary of '+title+'.'},
+           {speaker:'cohost',text:'Replay it before rounds, then dive into the full chapter and the podcast for the deep version. See you next episode.'}]};
+}
+
+/* ================= player ================= */
+var ENTV={scenes:null,steps:null,i:0,playing:false,paused:false,speed:1,cur:null,shownScene:-1,jumped:false};
+
+function flatten(scenes){
+  var steps=[];
+  scenes.forEach(function(sc,si){ (sc.lines||[]).forEach(function(ln,li){ steps.push({sceneIdx:si,lineIdx:li,line:ln}); }); });
+  return steps;
+}
+function speakerMeta(sp){
+  return sp==='host'?{ico:'🎙️',bg:'linear-gradient(135deg,#a78bfa,#8b5cf6)',name:'Host'}
+                    :{ico:'🩺',bg:'linear-gradient(135deg,#2dd4bf,#14b8a6)',name:'Co-host'};
+}
+function stopCurrent(){ if(ENTV.cur&&ENTV.cur.stop) ENTV.cur.stop(); }
+
+function speakLine(line){
+  return new Promise(function(resolve){
+    var done=false; function fin(){ if(done)return; done=true; ENTV.cur=null; resolve(); }
+    var handle={audio:null,stop:function(){ try{ if(this.audio){this.audio.pause();this.audio.src='';} }catch(e){} if('speechSynthesis'in window)window.speechSynthesis.cancel(); fin(); },
+      pause:function(){ try{ if(this.audio)this.audio.pause(); else if('speechSynthesis'in window)window.speechSynthesis.pause(); }catch(e){} },
+      resume:function(){ try{ if(this.audio)this.audio.play(); else if('speechSynthesis'in window)window.speechSynthesis.resume(); }catch(e){} }};
+    ENTV.cur=handle;
+    var hasHd = window.state&&(state.openaiKey||state.elevenLabsKey);
+    if(hasHd&&typeof bestTtsBlobUrl==='function'){
+      bestTtsBlobUrl(line.speaker,(typeof ttsNormalize==='function'?ttsNormalize(line.text):line.text)).then(function(url){
+        if(ENTV.cur!==handle) return; var a=new Audio(url); a.playbackRate=ENTV.speed||1; handle.audio=a;
+        a.onended=fin; a.onerror=browser; a.play().catch(browser);
+      }).catch(browser);
+    } else browser();
+    function browser(){
+      if(!('speechSynthesis'in window)) return fin();
+      var u=new SpeechSynthesisUtterance(typeof ttsNormalize==='function'?ttsNormalize(line.text):line.text);
+      try{ var v=(typeof TTS!=='undefined'&&TTS.pickVoice)?TTS.pickVoice(line.speaker):null; if(v)u.voice=v; }catch(e){}
+      u.rate=(ENTV.speed||1)*1.02; u.pitch=line.speaker==='host'?1.05:1.0; u.onend=fin; u.onerror=fin;
+      window.speechSynthesis.speak(u);
+    }
+  });
+}
+
+function renderScene(si){
+  var sc=ENTV.scenes[si]; if(!sc) return;
+  var stage=document.getElementById('entv-stage'); if(!stage) return;
+  if(sc.isEnd){
+    stage.innerHTML='<div class="entv-end"><div class="entv-eyebrow">'+esc(sc.eyebrow)+'</div>'+
+      '<h2>'+esc(sc.title)+'</h2><div class="entv-sub">'+esc(sc.sub||'')+'</div>'+
+      '<div style="font-size:46px;margin-top:10px;">✅</div></div>';
+    return;
+  }
+  var bl=(sc.bullets||[]).map(function(b,j){
+    return '<li data-b="'+j+'" style="animation-delay:'+(j*0.18+0.1).toFixed(2)+'s">'+esc(b)+'</li>';
+  }).join('');
+  stage.innerHTML='<div class="entv-scene">'+
+    '<div class="entv-eyebrow">'+esc(sc.eyebrow||'')+'</div>'+
+    '<h1 class="entv-title">'+esc(sc.title||'')+'</h1>'+
+    (sc.sub?'<div class="entv-sub">'+esc(sc.sub)+'</div>':'')+
+    (bl?'<ul class="entv-bullets">'+bl+'</ul>':'')+
+    '</div>';
+}
+function updateCaption(step){
+  var sc=ENTV.scenes[step.sceneIdx]; var m=speakerMeta(step.line.speaker);
+  var cap=document.getElementById('entv-caption');
+  if(cap) cap.innerHTML='<span class="entv-cap-dot" style="background:'+m.bg+'">'+m.ico+'</span>'+
+    '<span class="entv-cap-text">'+esc(step.line.text)+'</span>';
+  // highlight matching bullet (lineIdx-1 because first line is the intro)
+  var bidx=step.lineIdx-1;
+  document.querySelectorAll('.entv-bullets li').forEach(function(li){
+    li.classList.toggle('entv-hot', String(bidx)===li.getAttribute('data-b'));
+  });
+}
+function updateProgress(){
+  var bar=document.getElementById('entv-bar');
+  if(bar) bar.style.width=Math.min(100,((ENTV.i+1)/ENTV.steps.length)*100).toFixed(1)+'%';
+  var pp=document.getElementById('entv-playpause');
+  if(pp) pp.innerHTML=ENTV.paused?'▶ Resume':'⏸ Pause';
+}
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(ch){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[ch];}); }
+
+async function runLoop(){
+  while(ENTV.playing&&ENTV.i<ENTV.steps.length){
+    var step=ENTV.steps[ENTV.i];
+    if(step.sceneIdx!==ENTV.shownScene){ ENTV.shownScene=step.sceneIdx; renderScene(step.sceneIdx);
+      var cnt=document.getElementById('entv-counter'); if(cnt) cnt.textContent=(step.sceneIdx+1)+' / '+ENTV.scenes.length; }
+    updateCaption(step); updateProgress();
+    await speakLine(step.line);
+    if(!ENTV.playing) return;
+    if(ENTV.jumped){ ENTV.jumped=false; continue; }
+    ENTV.i++;
+  }
+  if(ENTV.playing){ ENTV.shownScene=-1; renderScene(ENTV.scenes.length-1); updateProgress();
+    var cap=document.getElementById('entv-caption'); if(cap) cap.innerHTML='<span class="entv-cap-text" style="color:#a5b4fc;">Summary complete — replay or close.</span>';
+    ENTV.paused=true; var pp=document.getElementById('entv-playpause'); if(pp) pp.innerHTML='↺ Replay';
+  }
+}
+
+function open(week){
+  var c=weekContent(week);
+  if(!c){ alert('Activate this chapter first (Overview tab) to generate its summary video.'); return; }
+  // stop any other audio
+  try{ if(typeof ppodStop==='function') ppodStop(); }catch(e){}
+  try{ if(typeof TTS!=='undefined'&&TTS.stop) TTS.stop(); }catch(e){}
+  try{ if('speechSynthesis'in window) window.speechSynthesis.cancel(); }catch(e){}
+  ENTV.scenes=buildScenes(c,week); ENTV.steps=flatten(ENTV.scenes);
+  ENTV.i=0; ENTV.shownScene=-1; ENTV.playing=true; ENTV.paused=false; ENTV.jumped=false;
+  ENTV.speed=(window.state&&state.playbackSpeed)||1;
+  var ov=document.createElement('div'); ov.className='entv-overlay'; ov.id='entv-overlay';
+  ov.innerHTML=
+    '<div class="entv-top"><span id="entv-counter" style="flex-shrink:0;font-size:11px;font-weight:800;letter-spacing:1.4px;color:#a5b4fc;min-width:62px;"></span>'+
+      '<div class="entv-progress"><div class="entv-progress-bar" id="entv-bar"></div></div>'+
+      '<button class="entv-close" id="entv-close" aria-label="Close video">✕</button></div>'+
+    '<div class="entv-stage" id="entv-stage" title="Tap to pause / resume"></div>'+
+    '<div class="entv-caption" id="entv-caption"></div>'+
+    '<div class="entv-controls">'+
+      '<button class="entv-btn" id="entv-prev">⏮ Prev</button>'+
+      '<button class="entv-btn primary" id="entv-playpause">⏸ Pause</button>'+
+      '<button class="entv-btn" id="entv-next">Next ⏭</button>'+
+      '<button class="entv-speed" id="entv-speed">'+(ENTV.speed)+'×</button>'+
+    '</div>'+
+    '<div class="entv-hint">Auto-generated from this chapter’s key points · narrated with your selected voice</div>';
+  document.body.appendChild(ov);
+  document.body.style.overflow='hidden';
+  document.getElementById('entv-close').addEventListener('click',close);
+  document.getElementById('entv-playpause').addEventListener('click',togglePlay);
+  document.getElementById('entv-prev').addEventListener('click',function(){jump(-1);});
+  document.getElementById('entv-next').addEventListener('click',function(){jump(1);});
+  document.getElementById('entv-speed').addEventListener('click',cycleSpeed);
+  document.getElementById('entv-stage').addEventListener('click',function(){ togglePlay(); });
+  document.addEventListener('keydown',keyHandler);
+  runLoop();
+}
+function close(){
+  ENTV.playing=false; stopCurrent();
+  try{ if('speechSynthesis'in window) window.speechSynthesis.cancel(); }catch(e){}
+  var ov=document.getElementById('entv-overlay'); if(ov) ov.remove();
+  document.body.style.overflow='';
+  document.removeEventListener('keydown',keyHandler);
+}
+function togglePlay(){
+  if(ENTV.paused&&ENTV.i>=ENTV.steps.length-0&&document.getElementById('entv-playpause').innerHTML.indexOf('Replay')>-1){
+    // replay
+    ENTV.i=0; ENTV.shownScene=-1; ENTV.paused=false; ENTV.playing=true; updateProgress(); runLoop(); return;
+  }
+  ENTV.paused=!ENTV.paused;
+  if(ENTV.paused){ if(ENTV.cur&&ENTV.cur.pause) ENTV.cur.pause(); }
+  else { if(ENTV.cur&&ENTV.cur.resume) ENTV.cur.resume(); }
+  updateProgress();
+}
+function jump(delta){
+  var cur=ENTV.steps[ENTV.i]; var curScene=cur?cur.sceneIdx:0;
+  var target=Math.max(0,Math.min(ENTV.scenes.length-1,curScene+delta));
+  var idx=ENTV.steps.findIndex(function(s){return s.sceneIdx===target;});
+  ENTV.i=idx<0?0:idx; ENTV.jumped=true; ENTV.paused=false;
+  if(!ENTV.playing){ ENTV.playing=true; runLoop(); }
+  stopCurrent();
+}
+function cycleSpeed(){
+  var opts=[0.85,1,1.15,1.3,1.5]; var k=opts.indexOf(ENTV.speed); ENTV.speed=opts[(k+1)%opts.length];
+  if(window.state){ state.playbackSpeed=ENTV.speed; }
+  var b=document.getElementById('entv-speed'); if(b) b.textContent=ENTV.speed+'×';
+  if(ENTV.cur&&ENTV.cur.audio){ try{ENTV.cur.audio.playbackRate=ENTV.speed;}catch(e){} }
+}
+function keyHandler(e){
+  if(e.key==='Escape') close();
+  else if(e.key===' '){ e.preventDefault(); togglePlay(); }
+  else if(e.key==='ArrowRight') jump(1);
+  else if(e.key==='ArrowLeft') jump(-1);
+}
+
+/* delegated trigger for the "Watch summary video" buttons */
+document.addEventListener('click',function(e){
+  var t=e.target.closest&&e.target.closest('[data-entv-action]');
+  if(!t) return;
+  e.preventDefault();
+  var act=t.getAttribute('data-entv-action');
+  if(act==='open'){ var wk=Number(t.getAttribute('data-week'))|| (window.state&&state.selectedWeek); open(wk); }
+});
+window.entvOpenVideo=open;
+})();
+</script>
+
+<!-- =================================================================== -->
+<!-- MY RESEARCH · department workspace (docs, AI assistant, sharing)     -->
+<!-- =================================================================== -->
+<script id="rx-upgrade">
+(function(){
+"use strict";
+window.__rxAi = window.__rxAi || {};      // transient AI output keyed by project id
+window.__rxBusy = window.__rxBusy || {};  // busy flag keyed by project id
+
+function esc(s){ return String(s==null?'':s).replace(/[&<>"]/g,function(ch){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[ch];}); }
+function docIcon(type){ var t=(type||'').toLowerCase();
+  if(/pdf/.test(t)) return '📄'; if(/data|csv|xls|sheet/.test(t)) return '📊';
+  if(/irb|ethic|consent/.test(t)) return '📋'; if(/draft|manuscript|doc|paper/.test(t)) return '📝';
+  if(/link|url|http/.test(t)) return '🔗'; return '📁'; }
+
+window.renderResearchExtras=function(cur,p){
+  var docs=cur.documents||[];
+  var ai=window.__rxAi[p.id];
+  var busy=window.__rxBusy[p.id];
+  var hasKey=!!(window.state&&state.apiKey);
+  return ''+
+  '<div class="rx-panel">'+
+    '<h4>📁 Documents &amp; data</h4>'+
+    '<p class="rx-sub">Keep links to protocols, IRB forms, datasets, drafts and references in one place. (Links &amp; notes are stored on this device with the project.)</p>'+
+    (docs.length? docs.map(function(d,i){
+      var href=d.link&&/^https?:\/\//i.test(d.link)?d.link:null;
+      return '<div class="rx-doc">'+
+        '<span class="rx-doc-ico">'+docIcon(d.type||d.link)+'</span>'+
+        '<div class="rx-doc-main"><div class="rx-doc-name">'+esc(d.name||'Untitled')+'</div>'+
+        '<div class="rx-doc-meta">'+(d.type?esc(d.type)+' · ':'')+(href?'<a href="'+esc(href)+'" target="_blank" rel="noopener" style="color:var(--accent);">open link</a>':esc(d.link||'note'))+'</div></div>'+
+        '<button class="btn btn-sm btn-ghost" data-rx-action="doc-del" data-id="'+p.id+'" data-idx="'+i+'" style="color:#dc2626;">✕</button>'+
+      '</div>';
+    }).join('') : '<div style="font-size:12.5px;color:var(--text-soft);padding:6px 0;">No documents yet.</div>')+
+    '<div class="rx-chip-row"><button class="btn btn-sm btn-light" data-rx-action="doc-add" data-id="'+p.id+'">➕ Add document / link</button></div>'+
+  '</div>'+
+
+  '<div class="rx-panel">'+
+    '<h4>🤖 AI research assistant</h4>'+
+    '<p class="rx-sub">'+(hasKey?'Drafts grounded in this project’s details. Always review before use.':'Add your Anthropic API key in Settings to enable AI drafting.')+'</p>'+
+    '<div class="rx-chip-row">'+
+      ['abstract|✍️ Draft abstract','litsearch|🔎 Literature search plan','stats|📊 Statistical analysis plan','nextsteps|✅ Suggest next steps','summary|🧾 Summarize my notes']
+      .map(function(s){var a=s.split('|');return '<button class="btn btn-sm '+(busy===a[0]?'btn-primary':'btn-light')+'" data-rx-action="ai" data-kind="'+a[0]+'" data-id="'+p.id+'" '+(hasKey&&!busy?'':'disabled')+'>'+(busy===a[0]?'⏳ Working…':a[1])+'</button>';}).join('')+
+    '</div>'+
+    (ai? '<div class="rx-ai-out" id="rx-ai-'+p.id+'">'+esc(ai.text)+'</div>'+
+         '<div class="rx-chip-row"><button class="btn btn-sm btn-ghost" data-rx-action="ai-copy" data-id="'+p.id+'">📋 Copy</button>'+
+         '<button class="btn btn-sm btn-ghost" data-rx-action="ai-save" data-id="'+p.id+'">📌 Save to notes</button></div>' : '')+
+  '</div>'+
+
+  '<div class="rx-panel">'+
+    '<h4>👥 Team &amp; sharing</h4>'+
+    '<p class="rx-sub">Share this project with your department — export a file a colleague can import, or copy a plain-text status update.</p>'+
+    '<div class="rx-chip-row">'+
+      '<button class="btn btn-sm btn-light" data-rx-action="export-project" data-id="'+p.id+'">⬇️ Export this project</button>'+
+      '<button class="btn btn-sm btn-light" data-rx-action="copy-summary" data-id="'+p.id+'">📋 Copy status update</button>'+
+    '</div>'+
+  '</div>';
+};
+
+/* ---------- data helpers ---------- */
+function curProject(id){ var s=window.state; if(s&&s.researchForm&&s.researchFormId===id) return s.researchForm;
+  return (s&&s.researchProjects||[]).find(function(x){return x.id===id;})||null; }
+function download(name,text,mime){ var b=new Blob([text],{type:mime||'application/json'}); var u=URL.createObjectURL(b);
+  var a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click();
+  setTimeout(function(){URL.revokeObjectURL(u);a.remove();},500); }
+function projectSummaryText(p){
+  var meta=(typeof getStatusMeta==='function')?getStatusMeta(p.status):{label:p.status,icon:''};
+  var lines=['ENT Research — project update','',
+    'Title: '+(p.title||'Untitled'),
+    'Status: '+meta.icon+' '+meta.label,
+    p.pi?('PI: '+p.pi):null, p.institution?('Site: '+p.institution):null,
+    (p.collaborators&&p.collaborators.length)?('Team: '+p.collaborators.join(', ')):null,
+    p.nextStep?('Next step: '+p.nextStep):null,
+    p.description?('\nAims: '+p.description):null,
+    p.notes?('\nNotes:\n'+p.notes):null].filter(Boolean);
+  return lines.join('\n');
+}
+async function copyText(t){ try{ await navigator.clipboard.writeText(t); return true; }catch(e){
+  try{ var ta=document.createElement('textarea'); ta.value=t; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); return true;}catch(e2){return false;} } }
+
+/* ---------- AI prompts ---------- */
+function buildAiPrompt(kind,p){
+  var ctx='Project title: '+(p.title||'')+'\nStatus: '+(p.status||'')+'\nAims/description: '+(p.description||'')+
+    '\nPI: '+(p.pi||'')+'\nSite: '+(p.institution||'')+'\nTeam: '+((p.collaborators||[]).join(', '))+
+    '\nNext step: '+(p.nextStep||'')+'\nNotes: '+(p.notes||'');
+  var map={
+    abstract:'Write a structured scientific abstract (Background, Methods, Results placeholder, Conclusion) for this otolaryngology research project. ~250 words. Use a placeholder for results if data is not yet available. Keep it submission-ready and specific to ENT.',
+    litsearch:'Propose a focused literature-search plan: 4-6 PubMed-style search strings (with MeSH terms and boolean operators), key journals to monitor, and 5 seminal-topic areas to review for this otolaryngology project.',
+    stats:'Propose a statistical analysis plan: primary and secondary endpoints, appropriate statistical tests, sample-size considerations, handling of confounders/missing data, and software. Tailor to this ENT study design.',
+    nextsteps:'Given the current status, list the 5 most important concrete next steps to move this project forward, each with a one-line rationale. Be practical and ordered.',
+    summary:'Summarize the project notes into a tight executive update: where things stand, blockers, and decisions needed. 5-8 bullet points.'
+  };
+  return {system:'You are a senior otolaryngology research mentor and methodologist helping a hospital department. Be rigorous, specific, evidence-aware, and concise. Output plain text (no markdown headers needed).',
+          user:map[kind]+'\n\n=== PROJECT CONTEXT ===\n'+ctx};
+}
+
+/* ---------- delegated actions ---------- */
+document.addEventListener('click',async function(e){
+  var t=e.target.closest&&e.target.closest('[data-rx-action]');
+  if(!t) return;
+  e.preventDefault();
+  var act=t.getAttribute('data-rx-action'); var id=t.getAttribute('data-id');
+  var s=window.state;
+
+  if(act==='doc-add'){
+    var name=prompt('Document name (e.g. "Protocol v3", "IRB approval", "Dataset – n=120"):'); if(!name) return;
+    var link=prompt('Paste a link (Google Drive, Dropbox, PubMed…) or a short note:')||'';
+    var type=prompt('Type (pdf / data / IRB / draft / link / reference) — optional:')||'';
+    if(!s.researchForm) s.researchForm={}; if(!s.researchForm.documents) s.researchForm.documents=[];
+    s.researchForm.documents.push({name:name.trim(),link:link.trim(),type:type.trim(),addedAt:new Date().toISOString()});
+    setState({}); return;
+  }
+  if(act==='doc-del'){
+    var idx=Number(t.getAttribute('data-idx'));
+    if(s.researchForm&&s.researchForm.documents){ s.researchForm.documents.splice(idx,1); setState({}); }
+    return;
+  }
+  if(act==='ai'){
+    var kind=t.getAttribute('data-kind'); var p=curProject(id); if(!p) return;
+    if(!s.apiKey){ alert('Add your Anthropic API key in Settings to use the AI assistant.'); return; }
+    window.__rxBusy[id]=kind; setState({});
+    try{
+      var pr=buildAiPrompt(kind,p);
+      var text=await callClaude({system:pr.system,messages:[{role:'user',content:pr.user}],model:(typeof CLAUDE_MODEL_QUALITY!=='undefined'?CLAUDE_MODEL_QUALITY:undefined),maxTokens:1600});
+      window.__rxAi[id]={kind:kind,text:(text||'').trim()};
+    }catch(err){ window.__rxAi[id]={kind:kind,text:'⚠️ '+(err&&err.message||'AI request failed')}; }
+    window.__rxBusy[id]=null; setState({}); return;
+  }
+  if(act==='ai-copy'){ var a=window.__rxAi[id]; if(a){ var ok=await copyText(a.text); t.textContent=ok?'✓ Copied':'Copy failed'; setTimeout(function(){t.textContent='📋 Copy';},1500);} return; }
+  if(act==='ai-save'){
+    var a2=window.__rxAi[id]; if(!a2) return;
+    if(!s.researchForm) s.researchForm={};
+    s.researchForm.notes=((s.researchForm.notes||'')+'\n\n--- AI ('+a2.kind+') ---\n'+a2.text).trim();
+    t.textContent='✓ Saved to notes'; setState({}); return;
+  }
+  if(act==='export-project'){
+    var pe=curProject(id); if(!pe) return;
+    download('ENT-research-'+(pe.title||'project').replace(/[^a-z0-9]+/gi,'-').slice(0,40)+'.json',
+      JSON.stringify({_ent_research:1,version:1,exportedAt:new Date().toISOString(),projects:[pe]},null,2));
+    return;
+  }
+  if(act==='copy-summary'){
+    var pc=curProject(id); if(!pc) return; var ok2=await copyText(projectSummaryText(pc));
+    t.textContent=ok2?'✓ Copied':'Copy failed'; setTimeout(function(){t.textContent='📋 Copy status update';},1600); return;
+  }
+  if(act==='export-portfolio'){
+    var all=(s.researchProjects||[]);
+    if(!all.length){ alert('No projects to export yet.'); return; }
+    download('ENT-research-portfolio.json',JSON.stringify({_ent_research:1,version:1,exportedAt:new Date().toISOString(),projects:all},null,2));
+    return;
+  }
+  if(act==='import-portfolio'){
+    var inp=document.createElement('input'); inp.type='file'; inp.accept='.json,application/json';
+    inp.onchange=function(){ var f=inp.files&&inp.files[0]; if(!f) return; var r=new FileReader();
+      r.onload=function(){ try{
+        var data=JSON.parse(r.result); var incoming=(data&&data.projects)||(Array.isArray(data)?data:null);
+        if(!incoming||!incoming.length){ alert('No projects found in that file.'); return; }
+        if(!s.researchProjects) s.researchProjects=[];
+        var existing={}; s.researchProjects.forEach(function(x){existing[x.id]=true;});
+        var added=0;
+        incoming.forEach(function(pr){ if(!pr||!pr.title) return;
+          if(existing[pr.id]) pr.id='p_'+Date.now()+'_'+Math.floor(Math.random()*1000);
+          s.researchProjects.push(pr); added++; });
+        setState({}); alert('Imported '+added+' project'+(added===1?'':'s')+'.');
+      }catch(err){ alert('Could not read that file: '+(err&&err.message)); } };
+      r.readAsText(f); };
+    inp.click(); return;
+  }
+});
+})();
+</script>
+
+<!-- =================================================================== -->
+<!-- PODCAST · richer auto-generation for chapters without a curated script -->
+<!-- =================================================================== -->
+<script id="pod-upgrade">
+(function(){
+"use strict";
+function txt(html){ if(!html) return ''; var d=document.createElement('div'); d.innerHTML=String(html); return (d.textContent||'').replace(/\s+/g,' ').trim(); }
+function items(html){ if(!html) return []; var d=document.createElement('div'); d.innerHTML=String(html);
+  var lis=d.querySelectorAll('li'); if(lis.length) return Array.prototype.map.call(lis,function(li){return (li.textContent||'').replace(/\s+/g,' ').trim();}).filter(Boolean);
+  return txt(html).split(/(?<=[.?!])\s+/).map(function(s){return s.trim();}).filter(function(s){return s.length>15;}); }
+
+var PROBES=["What's the one thing residents get wrong here?","Why does that matter clinically?","Give me the board-exam version of that.",
+  "How does that change management?","What's the red flag to watch for?","And the bottom line?","Anything that trips people up?","What would you tell a junior on call?"];
+
+function overview(c){
+  if(c){
+    if(c.objectives&&c.objectives.length) return 'By the end you should be able to '+txt(c.objectives[0]).replace(/^[A-Z]/,function(m){return m.toLowerCase();})+(c.objectives[1]?(', and '+txt(c.objectives[1]).replace(/^[A-Z]/,function(m){return m.toLowerCase();})):'')+'.';
+    if(c.summary){ var first=txt(c.summary); if(first) return first.slice(0,300).replace(/\s+\S*$/,'')+(first.length>300?'…':''); }
+  }
+  return 'a high-yield walk through the essentials.';
+}
+
+window.getPodcastScript=function(c,titleHint){
+  if(c&&c.podcastScript&&c.podcastScript.length) return c.podcastScript;
+  return buildRich(c,titleHint);
+};
+
+function buildRich(c,title){
+  title=title||'this chapter';
+  var kp=(c&&c.keyPoints&&c.keyPoints.length)?c.keyPoints
+        :(typeof getKeyPoints==='function'&&c?getKeyPoints(c):[]);
+  // If we truly have nothing structured, fall back to the original summary splitter
+  if((!kp||!kp.length)&&typeof autoPodcastFromSummary==='function'){
+    var t=autoPodcastFromSummary(c&&c.summary,title);
+    if(t&&t.length) return t;
+  }
+  var turns=[];
+  turns.push({speaker:'host',text:"Welcome back to ENT Academy. I'm Elena."});
+  turns.push({speaker:'cohost',text:"And I'm Marcus. Today we're doing a deep dive on "+title+"."});
+  turns.push({speaker:'host',text:"Before we get into specifics — give me the big picture."});
+  turns.push({speaker:'cohost',text:overview(c)});
+
+  (kp||[]).slice(0,7).forEach(function(g,gi){
+    var its=(g.items||[]).map(txt).filter(Boolean);
+    if(!its.length) return;
+    turns.push({speaker:'host',text:(gi===0?"Let's start with ":"Next up — ")+String(g.category||'the key points').toLowerCase()+"."});
+    var capped=its.slice(0,6);
+    capped.forEach(function(it,ii){
+      // occasional host probe before a point keeps it conversational
+      if(ii>0 && ii%3===0){ turns.push({speaker:'host',text:PROBES[(gi*2+ii)%PROBES.length]}); }
+      turns.push({speaker:'cohost',text:it});
+    });
+  });
+
+  // Pearls
+  var pearls=(c&&c.pearls&&c.pearls.length)?c.pearls.map(txt).filter(Boolean):[];
+  if(pearls.length){
+    turns.push({speaker:'host',text:"Before we wrap, hit me with the clinical pearls."});
+    pearls.slice(0,5).forEach(function(p,pi){ turns.push({speaker:pi%2?'host':'cohost',text:p}); });
+  }
+
+  // Three takeaways — prefer a "Memorize"/"High-yield" group, else first group
+  var takeGroup=(kp||[]).find(function(g){return /memor|high.?yield|takeaway|board/i.test(g.category||'');})||(kp||[])[0];
+  var takes=takeGroup?(takeGroup.items||[]).map(txt).filter(Boolean).slice(0,3):[];
+  if(takes.length){
+    turns.push({speaker:'host',text:"Let's land the plane. Three things to remember."});
+    takes.forEach(function(tk){ turns.push({speaker:'cohost',text:tk}); });
+  }
+  turns.push({speaker:'host',text:"That's "+title+". Review the summary and the key points, then test yourself on the quiz. See you next episode."});
+  return turns;
+}
+window.buildRichPodcast=buildRich;
+})();
+</script>
+
+<!-- =================================================================== -->
+<!-- OFFLINE · register the service worker (HTTPS only, e.g. GitHub Pages) -->
+<!-- =================================================================== -->
+<script id="sw-register">
+(function(){
+  if(!('serviceWorker' in navigator)) return;
+  if(location.protocol!=='https:' && location.hostname!=='localhost') return; // SW needs https
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(e){ console.warn('SW registration failed:', e&&e.message); });
+  });
+})();
 </script>
 </body>
 </html>
