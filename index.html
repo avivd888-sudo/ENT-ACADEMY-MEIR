@@ -475,8 +475,10 @@
   /* Soft warm shadow that grows as the drawing completes */
   .bl-trace-svg {
     position: absolute; inset: 0; width: 320px; height: 320px; z-index: 2;
-    filter: drop-shadow(0 6px 16px rgba(91, 98, 49, 0.08)) drop-shadow(0 2px 4px rgba(91, 98, 49, 0.05));
+    /* No drop-shadow filter here: filters re-render every frame while the stroke draws,
+       which stutters under main-thread load. The settle shadow is applied to the wrapper. */
   }
+  .bl-art-wrap { contain: layout paint; }
   @keyframes bl-settle {
     0%   { transform: scale(1); }
     40%  { transform: scale(1.025); }
@@ -3563,37 +3565,36 @@ window.__bootStart = Date.now();
     const pencil = document.querySelector('.bl-pencil');
     const svg = document.querySelector('.bl-trace-svg');
     if (!pencil || !svg) return;
+    // Cache the scale ONCE. Reading getBoundingClientRect()/viewBox every frame forces a
+    // synchronous layout reflow 60×/s — the main cause of the choppy boot animation while
+    // the 1.5 MB app is parsing. The loader size never changes, so compute it a single time.
+    let sx = 1, sy = 1;
+    try {
+      const wrap = svg.getBoundingClientRect();
+      const vb = svg.viewBox.baseVal;
+      if (wrap.width && vb.width) { sx = wrap.width / vb.width; sy = wrap.height / vb.height; }
+    } catch(e){}
+    // Pre-resolve delay/dur once instead of parseFloat-ing per frame.
+    const meta = paths.map(p => ({ p, d: parseFloat(p.dataset.delay || 0), dur: parseFloat(p.dataset.dur || 1), len: parseFloat(p.dataset.len || 0) }));
     const startTime = performance.now();
     let raf = null;
     function tick(now) {
       const t = (now - startTime) / 1000;
-      // Find the path that's currently animating (within its delay…delay+dur window)
-      let active = null;
-      let progress = 0;
-      for (let i = paths.length - 1; i >= 0; i--) {
-        const p = paths[i];
-        const d = parseFloat(p.dataset.delay || 0);
-        const dur = parseFloat(p.dataset.dur || 1);
-        if (t >= d && t < d + dur) { active = p; progress = (t - d) / dur; break; }
+      let active = null, progress = 0;
+      for (let i = meta.length - 1; i >= 0; i--) {
+        const m = meta[i];
+        if (t >= m.d && t < m.d + m.dur) { active = m; progress = (t - m.d) / m.dur; break; }
       }
       if (active) {
         try {
-          const len = parseFloat(active.dataset.len);
-          const pt = active.getPointAtLength(len * Math.min(1, progress));
-          // SVG point is in viewBox space (0..400). Wrapper is 320x320. Scale accordingly.
-          const wrap = svg.getBoundingClientRect();
-          const vb = svg.viewBox.baseVal;
-          const sx = wrap.width / vb.width;
-          const sy = wrap.height / vb.height;
+          const pt = active.p.getPointAtLength(active.len * Math.min(1, progress));
           pencil.style.opacity = '1';
           pencil.style.transform = 'translate(' + (pt.x * sx) + 'px, ' + (pt.y * sy) + 'px) translate(-50%, -50%)';
         } catch(e){}
       } else if (t > 3.0) {
-        // Past all animations — let CSS fade it out and stop the loop
         cancelAnimationFrame(raf);
         return;
       } else {
-        // Between strokes — fade out briefly
         pencil.style.opacity = '0.35';
       }
       raf = requestAnimationFrame(tick);
@@ -12726,13 +12727,19 @@ function renderDashboard() {
               <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
             </radialGradient>
           </defs>
-          <circle cx="200" cy="200" r="180" fill="url(#hheroGlow)" />
-          <g fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M 186 44 C 154 49 126 61 102 83 C 86 100 84 125 84 140 C 86 162 96 187 113 213 C 118 225 120 232 120 253 C 117 269 109 289 95 309 C 105 313 121 317 141 328 C 159 335 164 333 175 320 C 188 308 195 286 195 264 C 196 240 196 222 200 210 C 206 195 210 178 215 162 C 222 138 220 110 200 80 C 195 65 195 60 192 50 Z"/>
-            <path d="M 110 150 C 116 145 124 145 130 150 C 134 158 130 168 122 170 C 116 168 110 162 110 156 Z"/>
-            <path d="M 220 100 C 240 110 250 130 245 150 C 240 175 230 200 220 215 C 215 220 210 220 205 215 L 200 200"/>
-            <path d="M 195 220 C 205 230 220 235 230 230 L 245 220"/>
+          <circle cx="200" cy="195" r="180" fill="url(#hheroGlow)" />
+          <g fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <!-- Clean anatomical profile (ENT) — cranium, brow, nose, lips, chin, jaw, ear -->
+            <path d="M 176 70 C 128 74 96 112 92 162 C 90 196 100 218 116 234 C 128 246 138 252 150 258 C 172 282 208 300 248 296 C 256 284 252 268 260 256 C 264 250 260 244 264 238 C 268 232 276 230 286 226 C 298 221 305 217 300 209 C 294 203 280 201 268 200 C 262 198 259 193 257 184 C 251 150 242 112 218 90 C 204 76 194 70 176 70 Z"/>
+            <path d="M 152 206 C 140 202 128 209 130 223 C 132 236 144 242 156 237"/>
+            <path d="M 150 215 C 144 214 140 219 143 226 C 146 231 152 229 153 224"/>
+            <path d="M 228 162 C 236 157 248 159 254 166"/>
+            <path d="M 274 210 C 280 209 287 211 289 216"/>
+            <path d="M 260 244 C 266 246 272 245 276 242"/>
           </g>
+          <circle cx="146" cy="220" r="6.5" fill="#2dd4bf"/>
+          <circle cx="284" cy="214" r="6.5" fill="#34d399"/>
+          <circle cx="214" cy="286" r="6.5" fill="#60a5fa"/>
         </svg>
       </div>
     </div>`;
@@ -20997,9 +21004,12 @@ function renderStudyTrackerWidget() {
   `;
 }
 
-/* ---------------- BOOT ---------------- */
+/* ---------------- BOOT ----------------
+   loadStored() is cheap; the first render() builds a large DOM tree in one synchronous
+   task. We yield two animation frames first so the boot-loader animation gets a clean
+   initial paint before that one heavy task runs — eliminating the early stutter. */
 loadStored();
-render();
+requestAnimationFrame(function(){ requestAnimationFrame(render); });
 </script>
 
 <!-- =================================================================== -->
@@ -21059,6 +21069,25 @@ render();
 .entv-hint{position:relative;z-index:3;text-align:center;color:#8aa0c8;font-size:11.5px;padding:0 18px 6px;}
 .entv-end{text-align:center;animation:entvSceneIn .6s ease;}
 .entv-end h2{font-family:var(--font-serif);font-size:clamp(24px,6vw,40px);margin:0 0 8px;}
+/* Two-column scene: animated visual + text — makes it read as a video, not slides */
+.entv-scene-2col{display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr);gap:clamp(20px,5vw,52px);align-items:center;max-width:1000px;margin:0 auto;width:100%;}
+.entv-visual{width:100%;max-width:340px;aspect-ratio:1;justify-self:center;}
+.entv-visual svg{width:100%;height:100%;overflow:visible;}
+.entv-vstroke{fill:none;stroke:rgba(255,255,255,.6);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;}
+.entv-spin{transform-origin:center;animation:entvSpin 18s linear infinite;}
+.entv-spin-rev{transform-origin:center;animation:entvSpin 24s linear infinite reverse;}
+@keyframes entvSpin{to{transform:rotate(360deg);}}
+.entv-pulse{transform-origin:center;animation:entvPulse 2.4s ease-in-out infinite;}
+.entv-pulse2{transform-origin:center;animation:entvPulse 2.4s ease-in-out infinite .8s;}
+.entv-pulse3{transform-origin:center;animation:entvPulse 2.4s ease-in-out infinite 1.6s;}
+@keyframes entvPulse{0%,100%{transform:scale(.7);opacity:.45;}50%{transform:scale(1.15);opacity:1;}}
+.entv-draw{stroke-dasharray:var(--l,900);stroke-dashoffset:var(--l,900);animation:entvDraw 2.6s cubic-bezier(.4,0,.2,1) forwards;}
+@keyframes entvDraw{to{stroke-dashoffset:0;}}
+.entv-ekg{stroke-dasharray:120 600;animation:entvEkg 2.4s linear infinite;}
+@keyframes entvEkg{from{stroke-dashoffset:720;}to{stroke-dashoffset:0;}}
+.entv-float{animation:entvFloat 5s ease-in-out infinite;transform-origin:center;}
+@keyframes entvFloat{0%,100%{transform:translateY(-2%);}50%{transform:translateY(2%);}}
+@media (max-width:760px){ .entv-scene-2col{grid-template-columns:1fr;gap:14px;} .entv-visual{max-width:170px;} }
 @media (max-width:560px){
   .entv-bullets li{padding:12px 14px 12px 42px;}
   .entv-bullets li::before{left:14px;width:13px;height:13px;margin-top:-6.5px;}
@@ -21242,12 +21271,56 @@ function renderScene(si){
   var bl=(sc.bullets||[]).map(function(b,j){
     return '<li data-b="'+j+'" style="animation-delay:'+(j*0.18+0.1).toFixed(2)+'s">'+esc(b)+'</li>';
   }).join('');
-  stage.innerHTML='<div class="entv-scene">'+
-    '<div class="entv-eyebrow">'+esc(sc.eyebrow||'')+'</div>'+
-    '<h1 class="entv-title">'+esc(sc.title||'')+'</h1>'+
-    (sc.sub?'<div class="entv-sub">'+esc(sc.sub)+'</div>':'')+
-    (bl?'<ul class="entv-bullets">'+bl+'</ul>':'')+
-    '</div>';
+  stage.innerHTML='<div class="entv-scene entv-scene-2col">'+
+    '<div class="entv-visual">'+entvVisual(si,sc)+'</div>'+
+    '<div class="entv-scene-text">'+
+      '<div class="entv-eyebrow">'+esc(sc.eyebrow||'')+'</div>'+
+      '<h1 class="entv-title">'+esc(sc.title||'')+'</h1>'+
+      (sc.sub?'<div class="entv-sub">'+esc(sc.sub)+'</div>':'')+
+      (bl?'<ul class="entv-bullets">'+bl+'</ul>':'')+
+    '</div>'+
+  '</div>';
+}
+/* ---- animated motion-graphic motifs (so the summary reads as a video, not slides) ---- */
+var V_HEAD='<svg viewBox="0 0 200 200">'+
+  '<circle cx="100" cy="100" r="92" class="entv-vstroke" style="opacity:.14"/>'+
+  '<g class="entv-spin" style="opacity:.3"><circle cx="100" cy="100" r="82" class="entv-vstroke" stroke-dasharray="3 14"/></g>'+
+  '<g transform="translate(8,2) scale(0.46)">'+
+    '<path class="entv-vstroke entv-draw" style="--l:1300" d="M 176 70 C 128 74 96 112 92 162 C 90 196 100 218 116 234 C 128 246 138 252 150 258 C 172 282 208 300 248 296 C 256 284 252 268 260 256 C 264 250 260 244 264 238 C 268 232 276 230 286 226 C 298 221 305 217 300 209 C 294 203 280 201 268 200 C 262 198 259 193 257 184 C 251 150 242 112 218 90 C 204 76 194 70 176 70 Z"/>'+
+    '<path class="entv-vstroke entv-draw" style="--l:140;animation-delay:.3s" d="M 152 206 C 140 202 128 209 130 223 C 132 236 144 242 156 237"/>'+
+  '</g>'+
+  '<circle cx="75" cy="103" r="6" fill="#2dd4bf" class="entv-pulse"/>'+
+  '<circle cx="139" cy="100" r="6" fill="#34d399" class="entv-pulse2"/>'+
+  '<circle cx="106" cy="134" r="6" fill="#60a5fa" class="entv-pulse3"/>'+
+'</svg>';
+var V_ARCS='<svg viewBox="0 0 200 200">'+
+  '<g class="entv-spin"><circle cx="100" cy="100" r="80" class="entv-vstroke" stroke-dasharray="60 30" style="opacity:.5"/></g>'+
+  '<g class="entv-spin-rev"><circle cx="100" cy="100" r="58" class="entv-vstroke" stroke="#2dd4bf" stroke-dasharray="30 22" style="opacity:.75"/></g>'+
+  '<g class="entv-spin"><circle cx="100" cy="100" r="36" class="entv-vstroke" stroke="#60a5fa" stroke-dasharray="14 14" style="opacity:.75"/></g>'+
+  '<circle cx="100" cy="100" r="10" fill="#a78bfa" class="entv-pulse"/>'+
+'</svg>';
+var V_EKG='<svg viewBox="0 0 200 200">'+
+  '<circle cx="100" cy="100" r="88" class="entv-vstroke" style="opacity:.16"/>'+
+  '<polyline class="entv-vstroke entv-ekg" stroke="#34d399" stroke-width="3" points="20,100 62,100 74,100 82,62 92,138 102,100 128,100 142,100 150,80 160,116 170,100 180,100"/>'+
+  '<circle cx="100" cy="100" r="5" fill="#34d399" class="entv-pulse2"/>'+
+'</svg>';
+var V_RINGS='<svg viewBox="0 0 200 200">'+
+  '<g class="entv-spin"><circle cx="100" cy="100" r="78" class="entv-vstroke" stroke-dasharray="2 16" style="opacity:.5"/></g>'+
+  '<circle cx="100" cy="100" r="56" class="entv-vstroke" style="opacity:.32"/>'+
+  '<g class="entv-float"><line x1="100" y1="44" x2="100" y2="156" class="entv-vstroke" style="opacity:.4"/>'+
+  '<line x1="44" y1="100" x2="156" y2="100" class="entv-vstroke" style="opacity:.4"/></g>'+
+  '<circle cx="100" cy="100" r="9" fill="#60a5fa" class="entv-pulse"/>'+
+'</svg>';
+var V_PEARL='<svg viewBox="0 0 200 200">'+
+  '<g class="entv-spin" style="opacity:.5"><circle cx="100" cy="100" r="72" class="entv-vstroke" stroke-dasharray="3 14"/></g>'+
+  '<g class="entv-pulse"><path class="entv-vstroke" stroke="#fbbf24" stroke-width="3" fill="rgba(251,191,36,.15)" d="M100 54 L109 91 L146 100 L109 109 L100 146 L91 109 L54 100 L91 91 Z"/></g>'+
+'</svg>';
+function entvVisual(si,sc){
+  var eb=(sc.eyebrow||'').toLowerCase();
+  if(si===0) return V_HEAD;
+  if(/pearl/.test(eb)) return V_PEARL;
+  var motifs=[V_ARCS,V_EKG,V_RINGS];
+  return motifs[si % motifs.length];
 }
 function updateCaption(step){
   var sc=ENTV.scenes[step.sceneIdx]; var m=speakerMeta(step.line.speaker);
