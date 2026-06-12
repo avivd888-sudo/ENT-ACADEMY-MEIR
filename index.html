@@ -12720,27 +12720,72 @@ function renderDashboard() {
         </div>
       </div>
       <div class="home-hero-art" aria-hidden="true">
-        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <radialGradient id="hheroGlow" cx="50%" cy="50%" r="55%">
-              <stop offset="0%" stop-color="#fff" stop-opacity="0.5"/>
-              <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
-            </radialGradient>
-          </defs>
-          <circle cx="200" cy="195" r="180" fill="url(#hheroGlow)" />
-          <g fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-            <!-- Clean anatomical profile (ENT) — cranium, brow, nose, lips, chin, jaw, ear -->
-            <path d="M 176 70 C 128 74 96 112 92 162 C 90 196 100 218 116 234 C 128 246 138 252 150 258 C 172 282 208 300 248 296 C 256 284 252 268 260 256 C 264 250 260 244 264 238 C 268 232 276 230 286 226 C 298 221 305 217 300 209 C 294 203 280 201 268 200 C 262 198 259 193 257 184 C 251 150 242 112 218 90 C 204 76 194 70 176 70 Z"/>
-            <path d="M 152 206 C 140 202 128 209 130 223 C 132 236 144 242 156 237"/>
-            <path d="M 150 215 C 144 214 140 219 143 226 C 146 231 152 229 153 224"/>
-            <path d="M 228 162 C 236 157 248 159 254 166"/>
-            <path d="M 274 210 C 280 209 287 211 289 216"/>
-            <path d="M 260 244 C 266 246 272 245 276 242"/>
-          </g>
-          <circle cx="146" cy="220" r="6.5" fill="#2dd4bf"/>
-          <circle cx="284" cy="214" r="6.5" fill="#34d399"/>
-          <circle cx="214" cy="286" r="6.5" fill="#60a5fa"/>
-        </svg>
+        <svg viewBox="0 0 440 440" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="hheroGlow" cx="50%" cy="46%" r="56%"><stop offset="0%" stop-color="#fff" stop-opacity="0.28"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient></defs><circle cx="220" cy="215" r="200" fill="url(#hheroGlow)"/>
+<g fill="none" stroke="rgba(255,255,255,0.62)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round">
+  <!-- OUTER PROFILE: crown -> forehead -> nose -> lips -> chin -> throat -> neck -> occiput -> crown -->
+  <path stroke-width="3.4" d="M 232 64
+    C 168 66 120 104 112 168 C 108 196 110 214 104 232 C 100 244 92 250 92 258
+    C 92 266 104 270 116 272 C 119 279 117 288 122 296 C 128 305 137 309 147 311
+    C 148 324 150 338 158 350 C 162 366 168 388 176 410
+    L 298 410 C 304 380 300 344 308 318 C 330 300 348 268 352 228
+    C 358 168 330 96 268 72 C 256 67 246 64 232 64 Z"/>
+</g>
+<!-- accent fills (behind line work) -->
+<g stroke="none">
+  <path fill="rgba(240,231,210,0.55)" d="M 126 312 C 132 294 154 284 176 294 C 188 300 188 312 182 316 C 164 318 144 318 126 318 Z"/>
+  <rect x="240" y="332" width="40" height="26" rx="6" fill="rgba(240,231,210,0.55)"/>
+  <path fill="#2dd4bf" opacity="0.85" d="M 190 286 C 197 302 197 322 192 342 L 184 340 C 188 322 188 302 182 288 Z"/>
+  <circle cx="224" cy="206" r="11" fill="#60a5fa" opacity="0.8"/>
+  <path fill="#2dd4bf" opacity="0.7" d="M 214 224 C 211 250 210 274 212 294 L 224 294 C 226 272 226 248 226 224 Z"/>
+  <rect x="236" y="300" width="40" height="6" fill="#2dd4bf" opacity="0.7"/>
+  <rect x="244" y="364" width="40" height="6" fill="#2dd4bf" opacity="0.7"/>
+</g>
+<g fill="none" stroke="rgba(255,255,255,0.62)" stroke-width="3.0" stroke-linecap="round" stroke-linejoin="round">
+  <!-- CEREBRUM -->
+  <path d="M 150 150 C 150 116 196 96 244 100 C 296 104 330 132 330 176
+    C 330 212 320 236 286 244 C 250 252 210 250 184 240 C 160 230 150 200 150 150 Z"/>
+  <path stroke-width="2.3" d="M 168 138 C 178 128 190 128 198 138"/>
+  <path stroke-width="2.3" d="M 206 124 C 218 114 232 114 242 126"/>
+  <path stroke-width="2.3" d="M 252 122 C 266 114 282 118 290 130"/>
+  <path stroke-width="2.3" d="M 298 142 C 310 140 318 150 314 162"/>
+  <path stroke-width="2.3" d="M 300 184 C 312 184 318 194 311 204"/>
+  <path stroke-width="2.3" d="M 168 176 C 178 170 190 174 194 184"/>
+  <!-- CORPUS CALLOSUM -->
+  <path stroke-width="2.8" d="M 196 210 C 188 188 200 168 226 164 C 252 160 276 170 284 188
+    C 276 182 256 178 240 184 C 220 192 210 204 208 216 Z"/>
+  <!-- thalamus -->
+  <circle cx="224" cy="206" r="12" stroke-width="2.4"/>
+  <!-- BRAINSTEM -->
+  <path stroke-width="2.8" d="M 214 222 C 210 250 208 274 210 296 C 211 306 219 308 224 300 C 230 280 230 250 228 224"/>
+  <!-- CEREBELLUM -->
+  <path stroke-width="2.6" d="M 300 226 c 14 -6 26 4 24 18 c 10 -2 16 10 8 20 c 6 8 -2 20 -12 18
+    c -4 10 -18 10 -22 0 c -12 4 -22 -8 -16 -18 c -8 -8 -2 -22 8 -22 c 0 -10 8 -18 10 -16 Z"/>
+  <!-- FRONTAL SINUS -->
+  <path stroke-width="2.2" d="M 120 196 C 116 188 122 182 130 184 C 134 190 132 198 126 200 Z"/>
+  <!-- NASAL TURBINATES -->
+  <path stroke-width="2.1" d="M 112 222 C 126 220 134 224 132 232"/>
+  <path stroke-width="2.1" d="M 110 236 C 126 234 136 238 132 246"/>
+  <path stroke-width="2.1" d="M 112 250 C 126 248 134 252 130 258"/>
+  <!-- HARD PALATE -->
+  <path stroke-width="2.6" d="M 106 270 L 166 269"/>
+  <!-- mouth line + teeth -->
+  <path stroke-width="2.2" d="M 98 280 C 108 282 116 282 122 280"/>
+  <path stroke-width="2.0" d="M 110 273 L 110 281 M 119 273 L 119 281"/>
+  <!-- TONGUE outline -->
+  <path stroke-width="2.6" d="M 126 312 C 132 294 154 284 176 294 C 188 300 188 312 182 316 C 164 318 144 318 126 318"/>
+  <!-- EPIGLOTTIS / airway -->
+  <path stroke-width="2.4" d="M 190 286 C 196 302 196 322 192 342"/>
+  <!-- VERTEBRAL BODIES -->
+  <rect x="236" y="300" width="40" height="26" rx="6" stroke-width="2.6"/>
+  <rect x="240" y="332" width="40" height="26" rx="6" stroke-width="2.6"/>
+  <rect x="244" y="364" width="40" height="26" rx="6" stroke-width="2.6"/>
+  <!-- SPINOUS PROCESSES -->
+  <path stroke-width="2.4" d="M 286 308 C 300 306 312 312 316 322 C 308 320 296 320 286 322"/>
+  <path stroke-width="2.4" d="M 290 340 C 304 338 316 344 320 354 C 312 352 300 352 290 354"/>
+  <path stroke-width="2.4" d="M 294 372 C 308 370 320 376 324 386 C 316 384 304 384 294 386"/>
+  <!-- SPINAL CORD -->
+  <path stroke-width="2.2" d="M 224 300 C 226 330 228 360 230 392"/>
+</g></svg>
       </div>
     </div>`;
 
@@ -21005,11 +21050,22 @@ function renderStudyTrackerWidget() {
 }
 
 /* ---------------- BOOT ----------------
-   loadStored() is cheap; the first render() builds a large DOM tree in one synchronous
-   task. We yield two animation frames first so the boot-loader animation gets a clean
-   initial paint before that one heavy task runs — eliminating the early stutter. */
+   The first render() builds a large DOM tree in ONE synchronous task (~150-300ms). SVG
+   stroke-dashoffset drawing is NOT GPU-composited, so if that task runs while the pencil
+   is drawing, the drawing stutters. The boot loader is shown for ~4.3s regardless, so we
+   defer the heavy render until AFTER the pencil-draw + lettering finish (~2.7s). The
+   drawing then animates on a completely idle main thread = perfectly smooth, at zero cost
+   to perceived speed. loadStored() is cheap (reads localStorage) and stays immediate so
+   the loader picks up the saved light/dark theme. */
 loadStored();
-requestAnimationFrame(function(){ requestAnimationFrame(render); });
+(function(){
+  var run = false;
+  function go(){ if (run) return; run = true; render(); }
+  // Primary: fire right after the drawing animation completes.
+  setTimeout(go, 2700);
+  // Safety net: if the tab was backgrounded (timers throttled), render on first interaction.
+  window.addEventListener('pointerdown', go, { once: true });
+})();
 </script>
 
 <!-- =================================================================== -->
