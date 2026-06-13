@@ -12851,6 +12851,8 @@ function renderDashboard() {
     ${heroHTML}
     ${statRowHTML}
 
+    ${typeof renderDailyReviewWidget==='function'?renderDailyReviewWidget():''}
+
     ${resumeHTML}
     ${challengeHTML}
 
@@ -17795,28 +17797,39 @@ function smartSearchIndex(q) {
    style filter. Tracks history of last 10 sessions. */
 
 function gatherAllQuestions(opts) {
+  opts = opts || {};
   const out = [];
-  Object.keys(CONTENT).forEach(k => {
-    const wn = Number(k);
-    const c = CONTENT[k];
-    const w = getWeek(wn);
-    if (!w || !c || !c.quiz) return;
-    // Source filter
-    if (opts && opts.source === 'completed') {
-      const p = getProgress(wn);
-      if (!p.completed) return;
-    }
-    c.quiz.forEach((q, qi) => {
-      if (!q || !q.stem || !q.options || !q.options.length) return;
-      // Style heuristic
-      const stem = (q.stem || '').toLowerCase();
-      const isUSMLE = /year[\- ]?old|presents with|patient/i.test(stem);
-      const isRecall = !isUSMLE && stem.length < 220;
-      if (opts && opts.style === 'usmle' && !isUSMLE) return;
-      if (opts && opts.style === 'recall' && !isRecall) return;
-      out.push({ wn, qi, q, chapterTitle: w.title, chapterNum: w.chapter });
+  const wantSource = opts.source || 'all';   // 'all' | 'cummings' | 'exam' | 'completed'
+  // ---- Cummings textbook questions ----
+  if (wantSource !== 'exam') {
+    Object.keys(CONTENT).forEach(k => {
+      const wn = Number(k);
+      const c = CONTENT[k];
+      const w = getWeek(wn);
+      if (!w || !c || !c.quiz) return;
+      if (wantSource === 'completed') {
+        const p = getProgress(wn);
+        if (!p.completed) return;
+      }
+      c.quiz.forEach((q, qi) => {
+        if (!q || !q.stem || !q.options || !q.options.length) return;
+        const stem = (q.stem || '').toLowerCase();
+        const isUSMLE = /year[\- ]?old|presents with|patient/i.test(stem);
+        const isRecall = !isUSMLE && stem.length < 220;
+        if (opts.style === 'usmle' && !isUSMLE) return;
+        if (opts.style === 'recall' && !isRecall) return;
+        out.push({ wn, qi, q: Object.assign({ source: 'cummings' }, q), chapterTitle: w.title, chapterNum: w.chapter, source: 'cummings' });
+      });
     });
-  });
+  }
+  // ---- Past-exam reconstruction questions (שחזורים) ----
+  if ((wantSource === 'all' || wantSource === 'exam') && typeof window !== 'undefined' && Array.isArray(window.EXAM_QUESTIONS)) {
+    window.EXAM_QUESTIONS.forEach((q, ei) => {
+      if (!q || !q.stem || !q.options || !q.options.length) return;
+      if (opts.style === 'usmle') return; // recalls are not USMLE-vignette style
+      out.push({ wn: 'exam', qi: ei, q: Object.assign({ source: 'exam' }, q), chapterTitle: q.exam || 'Past exam', chapterNum: null, source: 'exam' });
+    });
+  }
   return out;
 }
 
@@ -18387,7 +18400,9 @@ function renderPractice() {
       <div style="margin-bottom:14px;">
         <div style="font-size:12px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Question source</div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          <button class="${cfg.source === 'all' ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-source" data-source="all">All chapters (${allCount} qs)</button>
+          <button class="${cfg.source === 'all' ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-source" data-source="all">All (${allCount} qs)</button>
+          <button class="${cfg.source === 'cummings' ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-source" data-source="cummings">📘 Cummings (${gatherAllQuestions({source:'cummings'}).length} qs)</button>
+          <button class="${cfg.source === 'exam' ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-source" data-source="exam">📝 שחזורי מבחן (${gatherAllQuestions({source:'exam'}).length} qs)</button>
           <button class="${cfg.source === 'completed' ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-source" data-source="completed">Completed only (${completedCount} qs)</button>
         </div>
       </div>
@@ -18451,7 +18466,7 @@ function renderPracticeSession(session) {
           <span>Question ${idx + 1} of ${questions.length}</span>
         </div>
         <h1 class="page-title">Practice session</h1>
-        <p class="page-sub">${q.chapterTitle} (Ch. ${q.chapterNum || '?'})</p>
+        <p class="page-sub">${q.q.source === 'exam' ? escapeHTML(q.chapterTitle) : escapeHTML(q.chapterTitle) + (q.chapterNum ? ' (Ch. ' + q.chapterNum + ')' : '')}</p>
       </div>
       <div class="toolbar-actions">
         <button class="btn btn-ghost" data-action="practice-exit">Exit</button>
@@ -18461,7 +18476,12 @@ function renderPracticeSession(session) {
     <div class="progress" style="margin-bottom:18px;"><div class="progress-fill" style="width:${Math.round(((idx) / questions.length) * 100)}%;"></div></div>
 
     <div class="card">
-      <div style="font-size:11px;color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Question ${idx + 1} / ${questions.length} · Ch. ${q.chapterNum}</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">
+        ${q.q.source === 'exam'
+          ? '<span class="qsrc qsrc-exam">📝 שחזור מבחן · Past exam</span>'
+          : '<span class="qsrc qsrc-cummings">📘 Cummings</span>'}
+        <span style="font-size:11px;color:var(--text-soft);font-weight:700;letter-spacing:1px;text-transform:uppercase;">Question ${idx + 1} / ${questions.length}</span>
+      </div>
       <p style="font-size:16px;line-height:1.6;color:var(--text);margin:0 0 20px;">${q.q.stem}</p>
       <div style="display:flex;flex-direction:column;gap:8px;">
         ${q.q.options.map((opt, oi) => {
@@ -22403,5 +22423,166 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 window.openAskOE=open;
 })();
 </script>
+<!-- =================================================================== -->
+<!-- EXAM QUESTIONS (שחזורים) + DAILY REVIEW (spaced repetition)          -->
+<!-- =================================================================== -->
+<style id="srs-css">
+.qsrc{font-size:11px;font-weight:800;padding:3px 9px;border-radius:7px;letter-spacing:.3px;}
+.qsrc-cummings{background:rgba(37,99,235,.14);color:#2563eb;}
+.qsrc-exam{background:rgba(217,119,6,.16);color:#b45309;}
+.dr-widget{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:linear-gradient(135deg,#0f766e 0%,#0ea5e9 100%);color:#fff;border-radius:16px;padding:18px 22px;margin:0 0 18px;box-shadow:0 12px 30px rgba(14,165,233,.28);}
+.dr-widget .dr-ico{width:52px;height:52px;border-radius:14px;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:26px;flex-shrink:0;}
+.dr-widget .dr-body{flex:1;min-width:200px;}
+.dr-widget .dr-title{font-family:var(--font-serif);font-size:19px;font-weight:600;}
+.dr-widget .dr-sub{font-size:12.5px;color:rgba(255,255,255,.9);margin-top:2px;}
+.dr-widget .dr-cta{background:#fff;color:#0f766e;border:none;border-radius:12px;padding:12px 22px;font-weight:700;font-size:14.5px;cursor:pointer;flex-shrink:0;}
+.dr-widget .dr-cta:active{transform:scale(.97);}
+.dr-overlay{position:fixed;inset:0;z-index:3500;background:radial-gradient(120% 120% at 30% 0%,#0e2a3f,#071019);display:flex;flex-direction:column;color:#eef4fb;animation:oeFade .25s ease;}
+.dr-top{display:flex;align-items:center;gap:12px;padding:calc(14px + env(safe-area-inset-top)) 18px 6px;}
+.dr-prog{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;}
+.dr-prog-bar{height:100%;background:linear-gradient(90deg,#2dd4bf,#60a5fa);transition:width .3s;}
+.dr-close{width:40px;height:40px;border:none;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:18px;cursor:pointer;}
+.dr-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px clamp(18px,6vw,80px);text-align:center;min-height:0;overflow:auto;}
+.dr-meta{font-size:12px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#7fb0d8;margin-bottom:14px;}
+.dr-q{font-family:var(--font-serif);font-size:clamp(20px,4.5vw,30px);line-height:1.3;max-width:760px;}
+.dr-a{margin-top:20px;font-size:clamp(15px,3.4vw,19px);line-height:1.6;color:#cfe0f2;max-width:760px;border-top:1px solid rgba(255,255,255,.14);padding-top:18px;animation:oeFade .25s ease;}
+.dr-controls{padding:14px 18px calc(18px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.dr-show{background:linear-gradient(135deg,#2dd4bf,#0ea5e9);color:#062a36;border:none;border-radius:12px;padding:14px 40px;font-weight:800;font-size:15px;cursor:pointer;}
+.dr-rate{border:none;border-radius:12px;padding:13px 18px;font-weight:700;font-size:14px;cursor:pointer;color:#fff;min-width:84px;}
+.dr-again{background:#ef4444;} .dr-hard{background:#f59e0b;} .dr-good{background:#10b981;} .dr-easy{background:#3b82f6;}
+.dr-rate small{display:block;font-size:10.5px;opacity:.85;font-weight:600;margin-top:2px;}
+.dr-done{text-align:center;}
+.dr-done h2{font-family:var(--font-serif);font-size:30px;margin:0 0 8px;}
+</style>
+<script id="srs-module">
+(function(){
+"use strict";
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c];});}
+
+/* ---- Verified starter batch of past-exam (שחזור) questions ---- */
+window.EXAM_QUESTIONS = [
+ {exam:"רינולוגיה · נוב׳ 2019", topic:"rhinology", stem:"הטריאדה הקלאסית ב-Wegener (GPA) כוללת מעורבות של:", options:["ריאות, מערכת עיכול, כליות","דרכי נשימה עליונות, כליות, ריאות","CNS, כליות, דרכי נשימה עליונות","דרכי נשימה עליונות, מערכת עיכול, ריאות"], correct:1, explanation:"GPA — הטריאדה הקלאסית: דרכי נשימה עליונות + תחתונות (ריאות) + גלומרולונפריטיס."},
+ {exam:"רינולוגיה · נוב׳ 2019", topic:"rhinology", stem:"מה מאפיין NK/T-cell lymphoma של האף מבחינה היסטולוגית?", options:["Ki-67 גבוה ונמק מרכזי","צביעה חזקה ל-CD4/MPO","הגידול עוטף וחודר לכלי דם (angioinvasion)","פלישה לכלי לימפה וגרורות בלוטתיות"], correct:2, explanation:"Angioinvasion/angiocentricity אופייני ל-extranodal NK/T-cell lymphoma."},
+ {exam:"רינולוגיה · נוב׳ 2019", topic:"rhinology", stem:"מהי הביקורת החיובית (positive control) במבחן Prick לאלרגיה?", options:["סיילין","אדרנלין","היסטמין","תערובת דשאים"], correct:2, explanation:"היסטמין = ביקורת חיובית; סיילין = ביקורת שלילית."},
+ {exam:"רינולוגיה · נוב׳ 2019", topic:"rhinology", stem:"מהו טיפול הבחירה ב-NARES (non-allergic rhinitis with eosinophilia)?", options:["אנטיהיסטמין פומי","אנטיכולינרגי","מאקרוליד","סטרואיד אפי בתרסיס"], correct:3},
+ {exam:"רינולוגיה · נוב׳ 2019", topic:"rhinology", stem:"מה העיקרון שמאחורי Vidian neurectomy?", options:["הורדת פעילות פאראסימפטטית (אנטי-אדרנרגית)","הורדת פעילות פאראסימפטטית (כולינרגית)","הורדת פעילות סימפטטית (אדרנרגית)","הורדת פעילות סימפטטית (אנטי-כולינרגית)"], correct:1, explanation:"חיתוך ה-Vidian מפחית את האות הפאראסימפטטי-כולינרגי לרירית האף → פחות נזלת."},
+ {exam:"רינולוגיה · נוב׳ 2019", topic:"rhinology", stem:"מה מאפיין Mucor בצביעה היסטולוגית?", options:["תגובה לימפוציטרית דלה","מרכזי נבט גדולים סביב הפטרייה","גדילה מהירה בסביבה בסיסית","חדירה לכלי דם וסתימתם עד איסכמיה (angioinvasion)"], correct:3},
+ {exam:"רינולוגיה · נוב׳ 2019", topic:"rhinology", stem:"מהו הסימן האופייני ל-JNA בהדמיית CT?", options:["Double ring sign","Mercury sign","Holman-Miller sign","Anterior displacement sign"], correct:2, explanation:"Holman-Miller — קימור קדמי של הדופן האחורית של הסינוס המקסילרי."},
+ {exam:"רינולוגיה · נוב׳ 2019", topic:"head & neck", stem:"מהו האשכול הראשון (first echelon) של גרורות בקרצינומה של הנזופארינקס?", options:["Level V","Retropharyngeal nodes","Level III","Level II"], correct:1},
+ {exam:"רינולוגיה · נוב׳ 2019", topic:"facial plastics", stem:"Nasion הוא הנקודה האנטומית המשיקה ל:", options:["Frontonasal suture","Maxillonasal suture","המעבר בין עצמות האף ל-ULC","Internasal suture"], correct:0},
+ {exam:"אנטומיה · 2018", topic:"laryngology", stem:"איזה שריר אחראי על abduction של מיתרי הקול?", options:["Lateral cricoarytenoid","Vocalis","Cricothyroid","Posterior cricoarytenoid"], correct:3, explanation:"PCA הוא השריר היחיד שמבצע abduction (פתיחת) מיתרי הקול."},
+ {exam:"אנטומיה · 2018", topic:"anatomy", stem:"מהיכן מקבל ה-Genioglossus את עיקר עצבובו?", options:["Hypoglossal nerve (XII)","Glossopharyngeal (IX)","Ansa cervicalis","Pharyngeal plexus"], correct:0},
+ {exam:"אנטומיה · 2018", topic:"anatomy", stem:"איזה עצב קרניאלי הוא תחושתי (sensory) טהור?", options:["CN IV","CN II","CN V","CN VII"], correct:1},
+ {exam:"אנטומיה · 2018", topic:"anatomy", stem:"איזה עצב נותן תחושה כללית ל-2/3 הקדמיים של הלשון?", options:["Lingual nerve","Vagus","Chorda tympani","Glossopharyngeal"], correct:0, explanation:"תחושה כללית — Lingual (V3). טעם — Chorda tympani (VII)."},
+ {exam:"אנטומיה · 2018", topic:"anatomy", stem:"חוסר יכולת לייצר דמעות מעיד על פגיעה באיזה עצב קרניאלי?", options:["Optic","Oculomotor","Facial (VII)","Glossopharyngeal"], correct:2, explanation:"העצבוב הפאראסימפטטי לבלוטת הדמעות עובר ב-CN VII (greater petrosal)."},
+ {exam:"אנטומיה · 2018", topic:"embryology", stem:"עצבוב הקשתות העובריות (pharyngeal arches) — מהי האמירה הלא נכונה?", options:["1st arch — trigeminal (V3)","2nd arch — vestibulocochlear (VIII)","3rd arch — glossopharyngeal (IX)","4th arch — superior laryngeal (X)"], correct:1, explanation:"הקשת השנייה מעוצבבת ע\"י עצב הפנים (VII), לא VIII."},
+ {exam:"אנטומיה · 2018", topic:"anatomy", stem:"מה אינו מעוצבב ע\"י עצב הפנים?", options:["Posterior belly of digastric","Submandibular gland","Risorius","Masseter"], correct:3, explanation:"ה-Masseter מעוצבב ע\"י העצב הטריגמינלי (V3)."}
+];
+
+/* ---- DAILY REVIEW (uses the app's existing SM-2-lite srs engine) ---- */
+var DR={queue:null,i:0,shown:false};
+function buildQueue(){
+  var due=[], fresh=[];
+  Object.keys(CONTENT).forEach(function(k){
+    var wn=Number(k); var c=CONTENT[k]; if(!c||!c.flashcards||!c.flashcards.length) return;
+    c.flashcards.forEach(function(fc,i){
+      if(!fc||!fc.q) return;
+      var card=srsCard(wn,i);
+      if(card.reps>0){ if(new Date(card.due).getTime()<=Date.now()) due.push({wn:wn,i:i,fc:fc}); }
+      else fresh.push({wn:wn,i:i,fc:fc});
+    });
+  });
+  // shuffle each group lightly
+  function sh(a){ for(var j=a.length-1;j>0;j--){var r=Math.floor(Math.random()*(j+1));var t=a[j];a[j]=a[r];a[r]=t;} return a; }
+  return { due:sh(due), fresh:sh(fresh) };
+}
+window.dailyReviewCounts=function(){
+  var q=buildQueue(); return { due:q.due.length, fresh:q.fresh.length };
+};
+window.renderDailyReviewWidget=function(){
+  var c=window.dailyReviewCounts(); var NEW=15;
+  var newToday=Math.min(NEW, c.fresh);
+  var total=c.due+newToday;
+  if(total===0){
+    return '<div class="dr-widget" style="background:linear-gradient(135deg,#334155,#475569);">'+
+      '<div class="dr-ico">✅</div><div class="dr-body"><div class="dr-title">All reviews done for today</div>'+
+      '<div class="dr-sub">Spaced-repetition keeps the high-yield facts in long-term memory. Come back tomorrow.</div></div></div>';
+  }
+  return '<div class="dr-widget">'+
+    '<div class="dr-ico">🧠</div>'+
+    '<div class="dr-body"><div class="dr-title">Daily review · '+total+' card'+(total===1?'':'s')+' ready</div>'+
+    '<div class="dr-sub">'+c.due+' due for review'+(newToday?(' · '+newToday+' new'):'')+' — clear them to lock material into long-term memory.</div></div>'+
+    '<button class="dr-cta" data-dr-action="open">Start review →</button></div>';
+};
+
+function open(){
+  var q=buildQueue(); var NEW=15;
+  DR.queue=q.due.concat(q.fresh.slice(0,NEW));
+  if(!DR.queue.length){ return; }
+  DR.i=0; DR.shown=false;
+  var ov=document.createElement('div'); ov.className='dr-overlay'; ov.id='dr-overlay';
+  ov.innerHTML='<div class="dr-top"><div class="dr-prog"><div class="dr-prog-bar" id="dr-bar"></div></div>'+
+      '<button class="dr-close" id="dr-close" aria-label="Close">✕</button></div>'+
+    '<div class="dr-stage" id="dr-stage"></div>'+
+    '<div class="dr-controls" id="dr-controls"></div>';
+  document.body.appendChild(ov); document.body.style.overflow='hidden';
+  document.getElementById('dr-close').addEventListener('click', close);
+  document.addEventListener('keydown', key);
+  renderCard();
+}
+function close(){ var o=document.getElementById('dr-overlay'); if(o)o.remove(); document.body.style.overflow=''; document.removeEventListener('keydown',key);
+  if(typeof setState==='function') setState({}); }
+function key(e){
+  if(e.key==='Escape') return close();
+  if(!DR.shown && (e.key===' '||e.key==='Enter')){ e.preventDefault(); reveal(); return; }
+  if(DR.shown && ['1','2','3','4'].indexOf(e.key)>-1){ e.preventDefault(); rate([0,1,2,3][+e.key-1]); }
+}
+function renderCard(){
+  var item=DR.queue[DR.i];
+  var stage=document.getElementById('dr-stage'); var ctrl=document.getElementById('dr-controls');
+  var bar=document.getElementById('dr-bar'); if(bar) bar.style.width=((DR.i)/DR.queue.length*100)+'%';
+  if(!item){ // done
+    stage.innerHTML='<div class="dr-done"><div style="font-size:54px;">🎉</div><h2>Review complete</h2>'+
+      '<div style="color:#cfe0f2;">'+DR.queue.length+' cards reviewed. See you tomorrow.</div></div>';
+    ctrl.innerHTML='<button class="dr-show" id="dr-finish">Done</button>';
+    document.getElementById('dr-finish').addEventListener('click', close);
+    if(bar) bar.style.width='100%';
+    return;
+  }
+  var wkObj=(typeof getWeek==='function')?getWeek(item.wn):null;
+  DR.shown=false;
+  stage.innerHTML='<div class="dr-meta">'+esc(wkObj?('Ch. '+(wkObj.chapter||item.wn)+' · '+wkObj.title):('Card'))+'</div>'+
+    '<div class="dr-q">'+esc(item.fc.q)+'</div>';
+  ctrl.innerHTML='<button class="dr-show" id="dr-reveal">Show answer</button>';
+  document.getElementById('dr-reveal').addEventListener('click', reveal);
+}
+function reveal(){
+  var item=DR.queue[DR.i]; if(!item) return;
+  DR.shown=true;
+  document.getElementById('dr-stage').insertAdjacentHTML('beforeend','<div class="dr-a">'+esc(item.fc.a)+'</div>');
+  document.getElementById('dr-controls').innerHTML=
+    '<button class="dr-rate dr-again" data-r="0">Again<small>1</small></button>'+
+    '<button class="dr-rate dr-hard" data-r="1">Hard<small>2</small></button>'+
+    '<button class="dr-rate dr-good" data-r="2">Good<small>3</small></button>'+
+    '<button class="dr-rate dr-easy" data-r="3">Easy<small>4</small></button>';
+  Array.prototype.forEach.call(document.querySelectorAll('#dr-controls .dr-rate'), function(b){
+    b.addEventListener('click', function(){ rate(+b.getAttribute('data-r')); });
+  });
+}
+function rate(r){
+  var item=DR.queue[DR.i]; if(!item) return;
+  try{ srsRate(item.wn, item.i, r); }catch(e){}
+  // "Again" → requeue near the end of this session
+  if(r===0){ DR.queue.push(item); }
+  DR.i++; renderCard();
+}
+document.addEventListener('click', function(e){
+  var el=e.target.closest&&e.target.closest('[data-dr-action]');
+  if(el && el.getAttribute('data-dr-action')==='open'){ e.preventDefault(); open(); }
+});
+window.openDailyReview=open;
+})();
+</script>
+
 </body>
 </html>
