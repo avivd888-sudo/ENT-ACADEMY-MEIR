@@ -1,7 +1,7 @@
 /* ENT Academy service worker — offline-first app shell.
    Lets the app open instantly on any network (hospital Wi-Fi, weak cellular,
    or fully offline) after the first successful load. Bump CACHE on each release. */
-const CACHE = 'ent-academy-v3';
+const CACHE = 'ent-academy-v4';
 const SHELL = [
   './',
   './index.html',
@@ -9,6 +9,7 @@ const SHELL = [
   './icon_512.png',
   './apple_touch_180.png',
   './logo_transparent.png',
+  './hero_anatomy.webp',
   'https://unpkg.com/three@0.160.0/build/three.min.js'
 ];
 
