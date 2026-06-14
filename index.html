@@ -22361,7 +22361,11 @@ document.addEventListener('click',function(e){
 .oe-ask:active{transform:scale(.98);}
 .oe-alt{display:flex;gap:6px;}
 .oe-chip{background:var(--bg-mute);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;color:var(--text-soft);cursor:pointer;}
-.oe-foot{font-size:11px;color:var(--text-faint);margin-top:10px;line-height:1.5;}
+.oe-or{display:flex;align-items:center;gap:10px;margin:14px 0 10px;color:var(--text-faint);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+.oe-or::before,.oe-or::after{content:"";flex:1;height:1px;background:var(--border);}
+.oe-open-direct{width:100%;box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--card-soft);border:1.5px solid var(--accent);color:var(--accent);border-radius:12px;padding:13px 16px;font-weight:700;font-size:14px;cursor:pointer;}
+.oe-open-direct:active{transform:scale(.98);}
+.oe-foot{font-size:11px;color:var(--text-faint);margin-top:12px;line-height:1.5;}
 .oe-toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,16px);z-index:2000;max-width:90vw;
   background:#0f766e;color:#fff;font-size:13.5px;font-weight:600;line-height:1.45;padding:12px 18px;border-radius:14px;
   box-shadow:0 12px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .25s ease, transform .25s ease;text-align:center;pointer-events:none;}
@@ -22432,7 +22436,9 @@ function open(){
       '<button class="oe-ask" id="oe-ask-go">'+SEARCH+' Ask OpenEvidence</button>'+
       '<div class="oe-alt"><button class="oe-chip" id="oe-utd">UpToDate</button><button class="oe-chip" id="oe-pubmed">PubMed</button></div>'+
     '</div>'+
-    '<div class="oe-foot">Tip: highlight any term in a chapter, then tap this button — your selection is filled in automatically. Opens in a new tab.</div>'+
+    '<div class="oe-or">or</div>'+
+    '<button class="oe-open-direct" id="oe-open-direct">↗ Open OpenEvidence — type your question there</button>'+
+    '<div class="oe-foot">Highlight any term in a chapter, then tap “Ask OpenEvidence” — it’s filled in for you. If OpenEvidence shows an empty box, your question is already copied: just paste &amp; press Enter. Or use the button above to type directly in OpenEvidence (no double typing).</div>'+
   '</div>';
   ov.addEventListener('click', close);
   document.body.appendChild(ov);
@@ -22442,6 +22448,11 @@ function open(){
   document.getElementById('oe-ask-go').addEventListener('click', function(){ ask(); });
   document.getElementById('oe-utd').addEventListener('click', function(){ ask('utd'); });
   document.getElementById('oe-pubmed').addEventListener('click', function(){ ask('pubmed'); });
+  document.getElementById('oe-open-direct').addEventListener('click', function(){
+    // Open a clean OpenEvidence search box so the user types once, directly there.
+    window.open('https://www.openevidence.com/', '_blank', 'noopener');
+    close();
+  });
 }
 function mount(){
   if(document.getElementById('oe-fab'))return;
