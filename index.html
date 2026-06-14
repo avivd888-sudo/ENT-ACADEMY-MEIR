@@ -12355,7 +12355,7 @@ function renderMobileMore() {
   ];
   return `
     <div class="mm-overlay" data-mm-action="close">
-      <div class="mm-sheet" onclick="event.stopPropagation()">
+      <div class="mm-sheet">
         <div class="mm-grip"></div>
         <div class="mm-title">All sections</div>
         <div class="mm-grid">
@@ -22322,7 +22322,7 @@ document.addEventListener('click',function(e){
   if(!el)return;
   var a=el.getAttribute('data-mm-action');
   if(a==='toggle'){ state.mmOpen=!state.mmOpen; setState({}); }
-  else if(a==='close'){ state.mmOpen=false; setState({}); }
+  else if(a==='close'){ if(e.target===el){ state.mmOpen=false; setState({}); } }
   else if(a==='nav'){ var v=el.getAttribute('data-view'); state.mmOpen=false; state.view=v;
     try{ if(v!=='projects'){ state.activeProjectId=null; } }catch(_){}
     setState({}); try{ window.scrollTo(0,0); }catch(_){ } }
