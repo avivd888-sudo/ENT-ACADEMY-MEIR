@@ -12032,7 +12032,7 @@ function showApiKeyPrompt() {
       </p>
       ${storageWorks ? '' : `
         <div style="background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;padding:10px 12px;border-radius:10px;font-size:12.5px;margin-bottom:14px;">
-          ⚠️ <strong>Warning:</strong> This browser is blocking persistent storage. If you're in Private Browsing, disable it. If you opened the app from a home-screen icon (PWA), remove it and re-add via Share → "Add to Home Screen".
+          ⚠️ <strong>Warning:</strong> This browser is blocking persistent storage. If you're in Private Browsing mode, disable it so your key and progress can be saved.
         </div>
       `}
       <label style="display:block;font-size:11.5px;font-weight:700;color:var(--text-soft,#475569);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px;">ElevenLabs API key</label>
@@ -12370,95 +12370,9 @@ function renderMobileMore() {
 }
 
 function renderInstallModal() {
-  return `
-    <div class="install-modal" data-action="close-install">
-      <div class="install-card" onclick="event.stopPropagation()">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
-          <div style="width:42px;height:42px;border-radius:11px;background:linear-gradient(135deg,var(--blue-500),var(--teal-500));display:grid;place-items:center;color:white;font-family:var(--font-serif);font-weight:700;font-size:18px;">E</div>
-          <div>
-            <h3 style="margin:0;font-family:var(--font-serif);font-size:20px;color:var(--navy-900);">Get a permanent URL for your phone</h3>
-            <div style="font-size:12px;color:var(--text-soft);">Three free options — pick the easiest one for you.</div>
-          </div>
-        </div>
-        <hr class="soft" />
-
-        <div style="background:#fef3c7;border:1px solid #fde68a;color:#92400e;padding:10px 12px;border-radius:8px;font-size:12.5px;margin-bottom:14px;">
-          ⚠ <strong>Important:</strong> Netlify Drop alone gives only a <em>temporary</em> URL that expires in 24h. To make it permanent, you must create a free account (any option below).
-        </div>
-
-        <!-- OPTION 1: GitHub Pages — most reliable, fully permanent, no account expiry -->
-        <div class="install-option">
-          <div class="install-option-head">
-            <div class="install-option-badge" style="background:#1f2328;color:#fff;">1</div>
-            <div>
-              <strong style="color:var(--navy-900);font-size:15px;">GitHub Pages</strong>
-              <div style="font-size:12px;color:var(--text-soft);">Most reliable · permanent forever · ~5 minutes</div>
-            </div>
-            <span style="margin-left:auto;font-size:11px;color:var(--emerald-500);font-weight:700;">✓ RECOMMENDED</span>
-          </div>
-          <ol class="install-option-steps">
-            <li>Sign up at <a href="https://github.com/signup" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600;">github.com/signup</a> (free, takes 30 seconds — pick any username)</li>
-            <li>Click <strong>+ New repository</strong>. Name it <code>ent-academy</code>. Make it <strong>Public</strong>. Check "Add a README". Click <strong>Create repository</strong>.</li>
-            <li>Click <strong>Add file → Upload files</strong>. Drag <code>ENT_Academy.html</code> in. Rename it to <code>index.html</code> in the upload box. Click <strong>Commit changes</strong>.</li>
-            <li>Go to <strong>Settings → Pages</strong> (left sidebar). Under "Source", pick branch <code>main</code>, folder <code>/ (root)</code>. Click Save.</li>
-            <li>Wait ~1 minute. Your permanent URL appears at the top: <code style="background:var(--bg-mute);padding:2px 6px;border-radius:4px;">https://YOURNAME.github.io/ent-academy/</code></li>
-          </ol>
-        </div>
-
-        <!-- OPTION 2: Netlify with free account -->
-        <div class="install-option">
-          <div class="install-option-head">
-            <div class="install-option-badge" style="background:#00ad9f;color:#fff;">2</div>
-            <div>
-              <strong style="color:var(--navy-900);font-size:15px;">Netlify (free account)</strong>
-              <div style="font-size:12px;color:var(--text-soft);">Drag-and-drop · permanent with account · ~3 minutes</div>
-            </div>
-          </div>
-          <ol class="install-option-steps">
-            <li>Sign up at <a href="https://app.netlify.com/signup" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600;">app.netlify.com/signup</a> (free, sign in with Google or email)</li>
-            <li>Once logged in, go to <a href="https://app.netlify.com/drop" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600;">app.netlify.com/drop</a></li>
-            <li>Drag <code>ENT_Academy.html</code> onto the page. <strong>Important:</strong> rename it to <code>index.html</code> in the file dialog first, OR upload a folder containing it as <code>index.html</code>.</li>
-            <li>Netlify gives you a permanent URL like <code style="background:var(--bg-mute);padding:2px 6px;border-radius:4px;">amazing-curie-123.netlify.app</code></li>
-            <li>In <strong>Site settings → Change site name</strong>, rename to e.g. <code>ent-academy-aviv</code> for an easier URL.</li>
-          </ol>
-        </div>
-
-        <!-- OPTION 3: Cloudflare Pages -->
-        <div class="install-option">
-          <div class="install-option-head">
-            <div class="install-option-badge" style="background:#f48120;color:#fff;">3</div>
-            <div>
-              <strong style="color:var(--navy-900);font-size:15px;">Cloudflare Pages</strong>
-              <div style="font-size:12px;color:var(--text-soft);">Fastest CDN · permanent · ~5 minutes</div>
-            </div>
-          </div>
-          <ol class="install-option-steps">
-            <li>Sign up at <a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600;">dash.cloudflare.com/sign-up</a></li>
-            <li>From the dashboard: <strong>Workers &amp; Pages → Create application → Pages → Upload assets</strong></li>
-            <li>Name the project (e.g. <code>ent-academy</code>). Drag the HTML file (renamed to <code>index.html</code>) into the upload area.</li>
-            <li>Click Deploy. URL: <code style="background:var(--bg-mute);padding:2px 6px;border-radius:4px;">ent-academy.pages.dev</code></li>
-          </ol>
-        </div>
-
-        <hr class="soft" />
-        <h4 style="margin:14px 0 8px;color:var(--navy-900);font-size:15px;">Then install on iPhone</h4>
-        <div class="install-step"><div class="install-num">1</div><div style="font-size:14px;line-height:1.55;">Open the URL above in <strong>Safari</strong> on iPhone.</div></div>
-        <div class="install-step"><div class="install-num">2</div><div style="font-size:14px;line-height:1.55;">Tap <strong>Share</strong> (square with arrow up) → <strong>Add to Home Screen</strong> → <strong>Add</strong>.</div></div>
-        <div class="install-step"><div class="install-num">3</div><div style="font-size:14px;line-height:1.55;">Tap the new icon — opens full-screen. Works on Wi-Fi, cellular, anywhere.</div></div>
-
-        <div style="background:var(--bg-mute);border:1px solid var(--border);padding:10px 12px;border-radius:8px;font-size:12.5px;color:var(--text-soft);margin-top:14px;">
-          <strong style="color:var(--navy-900);">Note about PDFs:</strong> The Cummings chapter PDFs are stored on your computer. They won\'t open in the hosted version unless you re-host them too. Everything else (summaries, flashcards, quiz, SRS, projects, podcasts, research digest, chapter chat) works fully online.
-        </div>
-
-        <div style="display:flex;justify-content:flex-end;margin-top:14px;gap:8px;flex-wrap:wrap;">
-          <a class="btn btn-ghost" href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages ↗</a>
-          <button class="btn btn-primary" data-action="close-install">${I.check} Got it</button>
-        </div>
-      </div>
-    </div>
-  `;
+  // Install/hosting guide removed per request — kept as a no-op so any stale call is safe.
+  return '';
 }
-
 function renderSidebar() {
   // 6-item nav. Home is the landing; Research is the Monthly Academic Update.
   // Study items (Flashcards, Quiz, Podcast, etc.) are still
@@ -12876,16 +12790,6 @@ function renderDashboard() {
 
 
     ${renderStudyTrackerWidget()}
-
-    ${showInstall ? `
-      <div class="ios-install-banner">
-        <div class="icon-box">${I.cube}</div>
-        <div class="body">
-          <strong>Use ENT Academy anywhere on your phone</strong> — host the app on a free public URL (Netlify Drop) and install it to your iPhone home screen. Works on Wi-Fi or cellular, wherever you are.
-        </div>
-        <button data-action="open-install">Setup guide</button>
-      </div>
-    ` : ''}
 
     <div class="quick-search-card">
       <div class="quick-search-head">
@@ -14940,14 +14844,6 @@ function renderResources() {
           ${I.arrow}
         </a>
       `).join('')}
-    </div>
-
-    <div class="card" style="margin-top:18px;">
-      <h3>About this app</h3>
-      <p style="color:var(--text);font-size:14px;line-height:1.7;">
-        ENT Academy is a structured study companion for otolaryngology residents. Curriculum content is original — written from primary literature and major otolaryngology references — and links into your own licensed copy of <em>Cummings Otolaryngology, 8th edition</em>. No textbook content is reproduced or redistributed.
-      </p>
-      <p style="color:var(--text-soft);font-size:13px;">Progress is stored locally in your browser. To carry it across devices, export by inspecting <code>localStorage['${STORE_KEY}']</code>.</p>
     </div>
   `;
 }

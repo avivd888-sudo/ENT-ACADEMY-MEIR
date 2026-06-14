@@ -1,7 +1,7 @@
 /* ENT Academy service worker — offline-first app shell.
    Lets the app open instantly on any network (hospital Wi-Fi, weak cellular,
    or fully offline) after the first successful load. Bump CACHE on each release. */
-const CACHE = 'ent-academy-v6';
+const CACHE = 'ent-academy-v7';
 const SHELL = [
   './',
   './index.html',
