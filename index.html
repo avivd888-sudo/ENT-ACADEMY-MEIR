@@ -16,14 +16,14 @@
 <meta name="theme-color" content="#0b1e36">
 <meta name="format-detection" content="telephone=no">
 <!-- iOS home-screen icon — user's sagittal head-neck illustration (PNG). Shown as 180×180 with "ENT" label set by apple-mobile-web-app-title above. -->
-<link rel="apple-touch-icon" sizes="180x180" href="apple_touch_180.png">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon_32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon_16.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon_192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple_touch_180.png?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon_32.png?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon_16.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="icon_192.png?v=2">
 <!-- PWA manifest for installable home-screen icon labeled "ENT" -->
 <!-- display: "browser" (not "standalone") so the iOS home-screen icon launches in Safari
      context — same localStorage as regular browsing, so the API key persists once entered. -->
-<link rel="manifest" href='data:application/manifest+json;utf8,{"name":"ENT Academy","short_name":"ENT","display":"browser","start_url":".","theme_color":"#0b1e36","background_color":"#f5f0e6","orientation":"any","icons":[{"src":"icon_192.png","sizes":"192x192","type":"image/png"},{"src":"icon_512.png","sizes":"512x512","type":"image/png"}]}'>
+<link rel="manifest" href='data:application/manifest+json;utf8,{"name":"ENT Academy","short_name":"ENT","display":"browser","start_url":".","theme_color":"#0b1e36","background_color":"#f5f0e6","orientation":"any","icons":[{"src":"icon_192.png?v=2","sizes":"192x192","type":"image/png"},{"src":"icon_512.png?v=2","sizes":"512x512","type":"image/png"}]}'>
 <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
 <style>
   :root {
@@ -3531,6 +3531,15 @@
 .bl-academy{animation-delay:.95s !important;} .bl-sub{animation-delay:1.4s !important;}
 .brand-logo{background:#0e1d33 !important;border-color:rgba(120,160,210,.3) !important;}
 @media (prefers-reduced-motion: reduce){ .bl-orb{animation:none !important;} }
+</style>
+<style id="mobile-fix-css">
+  html, body { background: var(--bg); }
+  @media (max-width:720px){
+    /* bottom bar fully opaque so no white shows through / in the safe area */
+    .mobile-tabbar { background:#0b1e36 !important; backdrop-filter:none !important; -webkit-backdrop-filter:none !important; }
+    /* OE button moved to the LEFT so it never collides with the More tab on the right */
+    .oe-fab { left:14px !important; right:auto !important; bottom:94px !important; }
+  }
 </style>
 </head>
 <body>
