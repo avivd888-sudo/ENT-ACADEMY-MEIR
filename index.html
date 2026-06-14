@@ -22362,6 +22362,11 @@ document.addEventListener('click',function(e){
 .oe-alt{display:flex;gap:6px;}
 .oe-chip{background:var(--bg-mute);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;color:var(--text-soft);cursor:pointer;}
 .oe-foot{font-size:11px;color:var(--text-faint);margin-top:10px;line-height:1.5;}
+.oe-toast{position:fixed;left:50%;bottom:96px;transform:translate(-50%,16px);z-index:2000;max-width:90vw;
+  background:#0f766e;color:#fff;font-size:13.5px;font-weight:600;line-height:1.45;padding:12px 18px;border-radius:14px;
+  box-shadow:0 12px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .25s ease, transform .25s ease;text-align:center;pointer-events:none;}
+.oe-toast.show{opacity:1;transform:translate(-50%,0);}
+@media (max-width:720px){ .oe-toast{bottom:150px;} }
 </style>
 <script id="oe-fab-js">
 (function(){
@@ -22384,16 +22389,35 @@ function currentContext(){
   }catch(e){}
   return {text:'',scope:''};
 }
+function oeToast(msg){
+  var t=document.getElementById('oe-toast'); if(t) t.remove();
+  t=document.createElement('div'); t.id='oe-toast'; t.className='oe-toast'; t.textContent=msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(function(){ t.classList.add('show'); });
+  setTimeout(function(){ t.classList.remove('show'); }, 3400);
+  setTimeout(function(){ if(t&&t.parentNode) t.remove(); }, 3900);
+}
 function ask(extra){
   var ta=document.getElementById('oe-ask-input');
   var q=(ta?ta.value:'').trim();
   var scope=ta?ta.getAttribute('data-scope')||'':'';
   if(!q){ if(ta){ta.focus();} return; }
   var full = scope ? (q+' — '+scope) : q;
-  var url = extra==='utd' ? 'https://www.uptodate.com/contents/search?search='+encodeURIComponent(full)
-          : extra==='pubmed' ? 'https://pubmed.ncbi.nlm.nih.gov/?term='+encodeURIComponent(full)
-          : 'https://www.openevidence.com/ask?q='+encodeURIComponent(full);
-  window.open(url,'_blank','noopener');
+  // UpToDate & PubMed expose real GET search endpoints — these auto-run.
+  if(extra==='utd'){ window.open('https://www.uptodate.com/contents/search?search='+encodeURIComponent(full),'_blank','noopener'); close(); return; }
+  if(extra==='pubmed'){ window.open('https://pubmed.ncbi.nlm.nih.gov/?term='+encodeURIComponent(full),'_blank','noopener'); close(); return; }
+  // OpenEvidence has NO query URL (its /ask?q= redirects to a non-existent conversation) and
+  // is POST-only + login-gated. Best we can do: copy the question and open a fresh search box,
+  // so it's a single paste + Enter in a brand-new conversation.
+  function go(ok){
+    window.open('https://www.openevidence.com/','_blank','noopener');
+    close();
+    oeToast(ok ? '✓ Question copied — in OpenEvidence: tap the box, paste (long-press → Paste / ⌘V), press Enter'
+               : 'Opening OpenEvidence — type or paste your question into the box');
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(full).then(function(){go(true);}, function(){go(false);});
+  } else { go(false); }
 }
 function close(){ var o=document.getElementById('oe-pop-overlay'); if(o)o.remove(); document.removeEventListener('keydown',key); }
 function key(e){ if(e.key==='Escape')close(); }
