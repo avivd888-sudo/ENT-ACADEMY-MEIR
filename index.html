@@ -15266,15 +15266,32 @@ async function elevenLabsTtsBlobUrl(speakerId, text) {
 }
 
 // Unified TTS wrapper — picks the best available provider
+let LAST_TTS_ERROR = '';
 async function bestTtsBlobUrl(speakerId, text) {
+  let elevenErr = '';
   if (state.elevenLabsKey) {
-    try { return await elevenLabsTtsBlobUrl(speakerId, text); }
-    catch (e) { console.warn('ElevenLabs failed, falling back:', e); }
+    try { const u = await elevenLabsTtsBlobUrl(speakerId, text); LAST_TTS_ERROR = ''; return u; }
+    catch (e) { elevenErr = (e && e.message) || String(e); LAST_TTS_ERROR = elevenErr; console.warn('ElevenLabs failed, falling back:', e); }
   }
   if (state.openaiKey) {
-    return await openaiTtsBlobUrl(speakerId, text);
+    try { const u = await openaiTtsBlobUrl(speakerId, text); LAST_TTS_ERROR = ''; return u; }
+    catch (e2) { LAST_TTS_ERROR = (e2 && e2.message) || String(e2); throw new Error(LAST_TTS_ERROR); }
   }
-  throw new Error('No HD TTS key configured');
+  throw new Error(elevenErr || 'No HD TTS key configured');
+}
+/* Turn a raw TTS error into a plain-English reason + fix, so the user isn't left
+   wondering why a podcast suddenly sounds robotic / ignores their chosen voices. */
+function explainTtsError(msg) {
+  const m = String(msg || '');
+  if (/\b401\b|invalid api key|unauthorized|invalid_api_key/i.test(m))
+    return 'your ElevenLabs API key was rejected — re-check it in Settings.';
+  if (/\b429\b|quota|credit|limit|exceeded|insufficient/i.test(m))
+    return 'your ElevenLabs monthly character quota is used up — Deep Dive episodes are long, so the free tier runs out fast. Add credits, or paste an OpenAI key in Settings for HD voices.';
+  if (/\b403\b/i.test(m))
+    return 'ElevenLabs blocked this request (plan/permission) — check your account.';
+  if (/No HD TTS key/i.test(m))
+    return 'no HD voice key is set — add an ElevenLabs or OpenAI key in Settings.';
+  return 'the HD voice service did not respond. Check your key/quota in Settings.';
 }
 
 /* ---------- EXTENDED DEEP DIVE PODCAST GENERATOR ----------
@@ -15505,6 +15522,13 @@ const TTS = {
         updatePodcastDOM();
         updateFloatingPlayer();
         console.warn('[TTS] HD playback failed, falling back to browser:', e && e.message);
+        // Tell the user WHY the premium voice didn't play (once per playback) — otherwise the
+        // robotic device voice looks like "my chosen voices were ignored / quality dropped".
+        if (!window.__ttsFallbackNotified) {
+          window.__ttsFallbackNotified = true;
+          const reason = explainTtsError(LAST_TTS_ERROR || (e && e.message));
+          if (typeof appToast === 'function') appToast('⚠️ Premium voice unavailable — ' + reason + ' (Playing with the basic device voice meanwhile.)');
+        }
         // fall through to browser TTS
       }
     }
@@ -15551,6 +15575,8 @@ const TTS = {
       updateFloatingPlayer();
       return;
     }
+    // Fresh playback → allow one premium-voice-status notice again.
+    window.__ttsFallbackNotified = false;
     state.podcastStatus = 'playing';
     const start = (state.podcastTurn >= 0) ? state.podcastTurn : 0;
     this.speakTurn(start);
@@ -18868,9 +18894,10 @@ function renderVoiceStudio() {
           <div class="voice-grid">${VOICE_STUDIO_VOICES.filter(v=>v.gender==='male').map(v => voiceCard(v, 'cohost')).join('')}</div>
         </div>
       </div>
-      <div style="margin-top:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.15);padding-top:16px;">
+      <div style="margin-top:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.15);padding-top:16px;">
         <button class="btn btn-primary" data-action="vs-save" style="font-size:14.5px;padding:12px 22px;">💾 Save hosts &amp; refresh</button>
-        <span style="color:#c4d4ee;font-size:12.5px;flex:1;min-width:180px;">Applies your chosen host &amp; cohost everywhere and clears cached audio, so each podcast regenerates with the new voices the next time you play it.</span>
+        <button class="btn btn-light" data-action="vs-test" style="font-size:14px;padding:12px 18px;">🎧 Test my hosts</button>
+        <span style="color:#c4d4ee;font-size:12.5px;flex:1;min-width:160px;">Save applies your host &amp; cohost everywhere and clears cached audio. Test plays a short line through the exact podcast voice engine — if it fails, you'll see the real reason (quota / key).</span>
       </div>
     </div>
   `;
@@ -20109,7 +20136,28 @@ function attachListeners() {
           setState({});
           break;
         }
+        case 'vs-test': {
+          if (!state.elevenLabsKey && !state.openaiKey) { appToast('Add an ElevenLabs or OpenAI key first.'); return; }
+          const btn = el; const old = btn.textContent;
+          btn.disabled = true; btn.textContent = '⏳ Testing…';
+          (async () => {
+            try {
+              // Same engine the podcast uses — proves whether your saved voices actually play.
+              const url = await bestTtsBlobUrl('host', "This is your selected podcast host voice. If you hear me clearly in HD, your voices are working.");
+              const a = new Audio(url);
+              await a.play();
+              btn.textContent = '🔊 Playing your host…';
+              a.onended = () => { btn.textContent = old; btn.disabled = false; };
+              a.onerror = () => { btn.textContent = old; btn.disabled = false; };
+            } catch (e) {
+              btn.textContent = old; btn.disabled = false;
+              appToast('⚠️ HD voice test failed — ' + explainTtsError((e && e.message) || LAST_TTS_ERROR));
+            }
+          })();
+          break;
+        }
         case 'vs-save': {
+          window.__ttsFallbackNotified = false; // let the next play re-report voice status
           // Commit chosen hosts and apply across the WHOLE app immediately.
           // 1) Stop any podcast currently playing/loaded so it can't keep old audio.
           try { if (typeof TTS !== 'undefined') { if (TTS.audio) { try { TTS.audio.pause(); } catch(_){} TTS.audio = null; } } } catch(e){}
