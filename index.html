@@ -15213,8 +15213,12 @@ function preprocessTtsText(text) {
 }
 
 // Single call helper — used twice (once for v3, once for fallback)
-async function _elevenLabsCall(voiceId, modelId, inputText) {
-  const outputFormat = 'mp3_44100_192';
+// NOTE: output_format defaults to mp3_44100_128. The higher mp3_44100_192 is gated to
+// ElevenLabs Creator tier and above — on the entry paid (Starter) tier it is rejected,
+// which previously made the podcast silently fall back to the robotic browser voice while
+// the Settings Preview (which already used 128) worked. 128 kbps @ 44.1 kHz is excellent for speech.
+async function _elevenLabsCall(voiceId, modelId, inputText, outputFormat) {
+  outputFormat = outputFormat || 'mp3_44100_128';
   return fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '?output_format=' + outputFormat, {
     method: 'POST',
     headers: {
@@ -15241,8 +15245,8 @@ async function _elevenLabsCall(voiceId, modelId, inputText) {
 }
 
 async function elevenLabsTtsBlobUrl(speakerId, text) {
-  // v5 cache key — bumped: reverted to multilingual_v2 default + warmer tuning (stab 0.40 / sim 0.85 / style 0.50)
-  const cacheKey = 'eleven|v5|' + speakerId + '|' + text;
+  // v6 cache key — bumped: output format moved to mp3_44100_128 (works on all paid tiers)
+  const cacheKey = 'eleven|v6|' + speakerId + '|' + text;
   if (TTS_CACHE.has(cacheKey)) return TTS_CACHE.get(cacheKey);
   const voiceId = (state.elevenLabsVoices && state.elevenLabsVoices[speakerId]) || ELEVENLABS_VOICES[speakerId] || ELEVENLABS_VOICES.host;
   const inputText = preprocessTtsText(text);
@@ -15250,10 +15254,17 @@ async function elevenLabsTtsBlobUrl(speakerId, text) {
   // eleven_v3 (alpha) had inconsistent character variation that some users dislike.
   // User can opt into v3 explicitly via state.elevenLabsModel.
   const modelId = state.elevenLabsModel || 'eleven_multilingual_v2';
-  let resp = await _elevenLabsCall(voiceId, modelId, inputText);
+  // 128 kbps works on every paid tier (matches the Settings Preview that already works).
+  const fmt = state.elevenLabsFormat || 'mp3_44100_128';
+  let resp = await _elevenLabsCall(voiceId, modelId, inputText, fmt);
   if (!resp.ok && modelId !== 'eleven_multilingual_v2' && (resp.status === 400 || resp.status === 403 || resp.status === 422 || resp.status === 404)) {
     console.warn('[TTS] ' + modelId + ' unavailable (' + resp.status + '), falling back to eleven_multilingual_v2');
-    resp = await _elevenLabsCall(voiceId, 'eleven_multilingual_v2', inputText);
+    resp = await _elevenLabsCall(voiceId, 'eleven_multilingual_v2', inputText, fmt);
+  }
+  // Safety net: if the chosen output format is rejected (tier-gated), retry once at the universal 128 kbps.
+  if (!resp.ok && fmt !== 'mp3_44100_128' && (resp.status === 400 || resp.status === 403 || resp.status === 422)) {
+    console.warn('[TTS] output_format ' + fmt + ' rejected (' + resp.status + '), retrying at mp3_44100_128');
+    resp = await _elevenLabsCall(voiceId, 'eleven_multilingual_v2', inputText, 'mp3_44100_128');
   }
   if (!resp.ok) {
     const err = await resp.text();
