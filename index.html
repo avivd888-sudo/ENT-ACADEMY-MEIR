@@ -22413,7 +22413,9 @@ function ask(extra){
   try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(full); } catch(e){}
   window.open(oeUrl, '_blank', 'noopener');
   close();
-  oeToast('🔎 Searching OpenEvidence…');
+  // OpenEvidence auto-runs ?q= only sometimes; the question is on the clipboard so the
+  // user can paste in one step if it opens an empty box.
+  oeToast('🔎 OpenEvidence opened · question copied — if the box is empty, paste it & press Enter');
 }
 function close(){ var o=document.getElementById('oe-pop-overlay'); if(o)o.remove(); document.removeEventListener('keydown',key); }
 function key(e){ if(e.key==='Escape')close(); }
