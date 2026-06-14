@@ -22406,18 +22406,14 @@ function ask(extra){
   // UpToDate & PubMed expose real GET search endpoints — these auto-run.
   if(extra==='utd'){ window.open('https://www.uptodate.com/contents/search?search='+encodeURIComponent(full),'_blank','noopener'); close(); return; }
   if(extra==='pubmed'){ window.open('https://pubmed.ncbi.nlm.nih.gov/?term='+encodeURIComponent(full),'_blank','noopener'); close(); return; }
-  // OpenEvidence has NO query URL (its /ask?q= redirects to a non-existent conversation) and
-  // is POST-only + login-gated. Best we can do: copy the question and open a fresh search box,
-  // so it's a single paste + Enter in a brand-new conversation.
-  function go(ok){
-    window.open('https://www.openevidence.com/','_blank','noopener');
-    close();
-    oeToast(ok ? '✓ Question copied — in OpenEvidence: tap the box, paste (long-press → Paste / ⌘V), press Enter'
-               : 'Opening OpenEvidence — type or paste your question into the box');
-  }
-  if(navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(full).then(function(){go(true);}, function(){go(false);});
-  } else { go(false); }
+  // OpenEvidence: the ROOT "/?q=" URL auto-runs the query in a brand-new conversation
+  // (when signed in). We also copy the query silently as a fallback in case the user is
+  // signed out and lands on the login/home screen.
+  var oeUrl = 'https://www.openevidence.com/?q=' + encodeURIComponent(full);
+  try { if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(full); } catch(e){}
+  window.open(oeUrl, '_blank', 'noopener');
+  close();
+  oeToast('🔎 Searching OpenEvidence…');
 }
 function close(){ var o=document.getElementById('oe-pop-overlay'); if(o)o.remove(); document.removeEventListener('keydown',key); }
 function key(e){ if(e.key==='Escape')close(); }
