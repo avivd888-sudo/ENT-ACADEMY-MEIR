@@ -11872,6 +11872,21 @@ function setState(patch) {
   }
 }
 
+/* Lightweight non-blocking toast used for confirmations (e.g. saving voices). */
+function appToast(msg) {
+  try {
+    const old = document.getElementById('app-toast'); if (old) old.remove();
+    const t = document.createElement('div');
+    t.id = 'app-toast';
+    t.textContent = msg;
+    t.style.cssText = 'position:fixed;left:50%;bottom:96px;transform:translate(-50%,16px);z-index:99999;max-width:90vw;background:#0f766e;color:#fff;font-size:13.5px;font-weight:600;line-height:1.45;padding:12px 18px;border-radius:14px;box-shadow:0 12px 30px rgba(0,0,0,.3);opacity:0;transition:opacity .25s ease,transform .25s ease;text-align:center;pointer-events:none;';
+    document.body.appendChild(t);
+    requestAnimationFrame(() => { t.style.opacity = '1'; t.style.transform = 'translate(-50%,0)'; });
+    setTimeout(() => { t.style.opacity = '0'; t.style.transform = 'translate(-50%,16px)'; }, 3400);
+    setTimeout(() => { if (t && t.parentNode) t.remove(); }, 3900);
+  } catch (e) {}
+}
+
 function getSection(id) { return SECTIONS.find(s => s.id === id); }
 function getWeek(n) { return CURRICULUM.find(w => w.week === n); }
 function hasContent(n) { return Boolean(CONTENT[n]); }
@@ -18842,7 +18857,7 @@ function renderVoiceStudio() {
   return `
     <div style="border-top:1px solid rgba(255,255,255,.15);margin-top:18px;padding-top:18px;">
       <h3 style="margin:0 0 8px;color:#fff;">🎚️ Voice Studio</h3>
-      <p style="margin:0 0 14px;color:#c4d4ee;font-size:13px;">Preview 12 premium ElevenLabs voices and pick your favorite for the podcast host (female lead) and cohost (male lead). The podcast cache is cleared automatically when you change a voice.</p>
+      <p style="margin:0 0 14px;color:#c4d4ee;font-size:13px;">Preview 12 premium ElevenLabs voices and pick your host (female lead) and cohost (male lead). After choosing, press <strong>Save hosts</strong> below — the whole app refreshes and every podcast immediately uses your new voices.</p>
       <div style="display:flex;gap:14px;flex-direction:column;">
         <div>
           <h4 style="margin:0 0 8px;color:#fff;font-size:14px;">Host (female lead)</h4>
@@ -18852,6 +18867,10 @@ function renderVoiceStudio() {
           <h4 style="margin:14px 0 8px;color:#fff;font-size:14px;">Cohost (male lead)</h4>
           <div class="voice-grid">${VOICE_STUDIO_VOICES.filter(v=>v.gender==='male').map(v => voiceCard(v, 'cohost')).join('')}</div>
         </div>
+      </div>
+      <div style="margin-top:18px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.15);padding-top:16px;">
+        <button class="btn btn-primary" data-action="vs-save" style="font-size:14.5px;padding:12px 22px;">💾 Save hosts &amp; refresh</button>
+        <span style="color:#c4d4ee;font-size:12.5px;flex:1;min-width:180px;">Applies your chosen host &amp; cohost everywhere and clears cached audio, so each podcast regenerates with the new voices the next time you play it.</span>
       </div>
     </div>
   `;
@@ -20088,6 +20107,26 @@ function attachListeners() {
           try { if (typeof TTS_CACHE !== 'undefined' && TTS_CACHE.clear) TTS_CACHE.clear(); } catch(e){}
           persist();
           setState({});
+          break;
+        }
+        case 'vs-save': {
+          // Commit chosen hosts and apply across the WHOLE app immediately.
+          // 1) Stop any podcast currently playing/loaded so it can't keep old audio.
+          try { if (typeof TTS !== 'undefined') { if (TTS.audio) { try { TTS.audio.pause(); } catch(_){} TTS.audio = null; } } } catch(e){}
+          try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch(e){}
+          state.podcastStatus = 'stopped';
+          state.podcastTurn = -1;
+          state.podcastLoading = false;
+          // 2) Revoke + clear every cached audio blob so new voices take effect everywhere.
+          try { if (typeof TTS_CACHE !== 'undefined') { TTS_CACHE.forEach(u => { try { URL.revokeObjectURL(u); } catch(_){} }); TTS_CACHE.clear(); } } catch(e){}
+          // 3) Persist the selection, refresh the floating player, and re-render the whole app.
+          persist();
+          if (typeof updateFloatingPlayer === 'function') updateFloatingPlayer();
+          setState({});
+          const cur = state.elevenLabsVoices || {};
+          const nm = id => { const v = (typeof VOICE_STUDIO_VOICES !== 'undefined') && VOICE_STUDIO_VOICES.find(x => x.id === id); return v ? v.name : null; };
+          const h = nm(cur.host), co = nm(cur.cohost);
+          appToast('✓ Hosts saved' + (h || co ? ' — ' + [h && ('host: ' + h), co && ('cohost: ' + co)].filter(Boolean).join(', ') : '') + '. Every podcast now uses your new voices.');
           break;
         }
         case 'batch-premium-10': {
