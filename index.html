@@ -12322,7 +12322,7 @@ function renderMobileTabbar() {
   ];
   const moreIcon = '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
   // "More" surfaces every other section so nothing is unreachable on phones.
-  const moreViews = ['tumor-board','my-research','research','notebook','projects','smart-search','resources'];
+  const moreViews = ['tumor-board','my-research','research','notebook','projects','resources'];
   const moreActive = moreViews.indexOf(state.view) > -1 || state.mmOpen;
   return `
     <div class="mobile-tabbar">
@@ -12350,7 +12350,6 @@ function renderMobileMore() {
     { id: 'my-research',label: 'My Research',  emoji: '🧪' },
     { id: 'notebook',   label: 'My Notes',     emoji: '📓' },
     { id: 'projects',   label: 'Projects',     emoji: '🗂️' },
-    { id: 'smart-search', label: 'Smart Search', emoji: '🔍' },
     { id: 'resources',  label: 'Settings',     emoji: '⚙️' }
   ];
   return `
@@ -12473,7 +12472,6 @@ function renderSidebar() {
     { id: 'my-research', label: 'My Research 🧪',    icon: I.book },
     { id: 'notebook',   label: 'My Notes 📓',        icon: I.book },
     { id: 'projects',   label: 'Projects 🧪',         icon: I.book },
-    { id: 'smart-search', label: 'Smart Search 🔍',   icon: I.search },
     { id: 'resources',  label: 'Settings ⚙️',         icon: I.gear || I.book }
   ];
   // Show "Recent project" shortcut if one exists
@@ -12492,8 +12490,7 @@ function renderSidebar() {
     `;
   }
   const navHTML = items.map(it => {
-    const isActive = (it.id === 'smart-search' && state.view === 'smart-search')
-                    || (it.id === 'projects' && state.view === 'projects' && !state.activeProjectId)
+    const isActive = (it.id === 'projects' && state.view === 'projects' && !state.activeProjectId)
                     || (state.view === it.id);
     return `
       <div class="nav-item ${isActive ? 'active' : ''}" data-action="nav" data-view="${it.id}">
@@ -13014,6 +13011,8 @@ function renderCurriculum() {
     weeks: CURRICULUM.filter(w => w.section === sec.id)
   }));
   const prog = overallProgress();
+  const sq = (state.smartSearchQuery || '');
+  const searching = sq.trim().length >= 2;
   return `
     <div class="page-header">
       <div>
@@ -13027,6 +13026,24 @@ function renderCurriculum() {
       </div>
     </div>
 
+    <!-- Search across all chapters & curated content -->
+    <div class="quick-search-card" style="margin-bottom:18px;">
+      <div class="quick-search-head">
+        <div class="quick-search-icon">${I.search}</div>
+        <div>
+          <h3 style="margin:0;color:var(--navy-900);font-size:15px;">Search chapters</h3>
+          <div style="font-size:12px;color:var(--text-soft);margin-top:2px;">Find a chapter or anything you've curated — titles, summaries, flashcards, quizzes, signs, pearls</div>
+        </div>
+      </div>
+      <input id="smart-search-input" type="search"
+        placeholder="e.g. cholesteatoma, sudden hearing loss, Bell palsy, Mallampati…"
+        value="${escapeAttr(sq)}"
+        oninput="window.__smartSearchInput(this.value)"
+        style="width:100%;padding:14px 18px;border:1px solid var(--border);border-radius:10px;font-size:15.5px;background:var(--card);color:var(--text);outline:none;" />
+      ${searching ? `<div style="margin-top:10px;font-size:12.5px;color:var(--text-soft);">Showing matches for "<strong>${escapeHTML(sq)}</strong>" — clear the box to see the full curriculum.</div>` : ''}
+    </div>
+
+    ${searching ? smartResultsHTML(sq) : `
     <!-- Status legend -->
     <div class="curriculum-legend">
       <div class="legend-item"><span class="legend-swatch swatch-done"></span> <strong>Completed</strong> · marked done</div>
@@ -13075,6 +13092,7 @@ function renderCurriculum() {
         </div>
       </div>
     `).join('')}
+  `}
   `;
 }
 
@@ -18583,9 +18601,10 @@ function renderPracticeResults(session) {
   `;
 }
 
-function renderSmartSearch() {
-  const q = state.smartSearchQuery || '';
-  const results = q.trim().length >= 2 ? smartSearchIndex(q) : [];
+/* Results block for the in-Curriculum search. Returns grouped, highlighted
+   matches across chapters + all curated content + projects. */
+function smartResultsHTML(q) {
+  const results = (q || '').trim().length >= 2 ? smartSearchIndex(q) : [];
   const groupedByKind = {};
   results.forEach(r => { (groupedByKind[r.kind] = groupedByKind[r.kind] || []).push(r); });
   const kindLabel = { unit: '📘 Chapter titles', summary: '📚 Chapter summaries', flashcard: '🧠 Flashcards', quiz: '🎯 Quiz questions', sign: '🔍 Classic signs', pearl: '💎 Clinical pearls', keypoint: '⚡ Key points', project: '🧪 Projects' };
@@ -18596,36 +18615,13 @@ function renderSmartSearch() {
     return escapeHTML(text).replace(re, '<mark style="background:#fef3c7;color:#92400e;padding:0 2px;border-radius:2px;">$1</mark>');
   }
   return `
-    <div class="page-header">
-      <div>
-        <div class="breadcrumb"><span>Smart Search 🔍</span></div>
-        <h1 class="page-title">Search across all your content</h1>
-        <p class="page-sub">Chapter titles · summaries · flashcards · quizzes · signs · pearls · key points · projects</p>
-      </div>
-    </div>
-    <div class="quick-search-card" style="margin-bottom:18px;">
-      <div class="quick-search-head">
-        <div class="quick-search-icon">${I.search}</div>
-        <div>
-          <h3 style="margin:0;color:var(--navy-900);font-size:15px;">Smart Search</h3>
-          <div style="font-size:12px;color:var(--text-soft);margin-top:2px;">Finds anything you've curated or generated in the app</div>
-        </div>
-      </div>
-      <input id="smart-search-input" type="search"
-        placeholder="e.g. trigeminal neuralgia, Mallampati, malignant otitis externa, CICO…"
-        value="${escapeAttr(q)}"
-        oninput="window.__smartSearchInput(this.value)"
-        autofocus
-        style="width:100%;padding:14px 18px;border:1px solid var(--border);border-radius:10px;font-size:15.5px;background:var(--card);color:var(--text);outline:none;" />
-      ${q.trim().length >= 2 ? `<div style="margin-top:10px;font-size:12.5px;color:var(--text-soft);">${results.length} ${results.length === 1 ? 'result' : 'results'} for "<strong>${escapeHTML(q)}</strong>"</div>` : `<div style="margin-top:10px;font-size:12.5px;color:var(--text-soft);">Type at least 2 characters to start searching.</div>`}
-    </div>
-    ${q.trim().length >= 2 && results.length === 0 ? `
+    ${results.length === 0 ? `
       <div class="card-soft placeholder">
         <div class="placeholder-icon">🔍</div>
         <h3>No matches found</h3>
-        <p>Try different keywords or shorter terms. Searches all curated content + flashcards + quiz + projects.</p>
+        <p>Try different keywords or shorter terms. Searches chapter titles + curated content + flashcards + quiz + projects.</p>
       </div>
-    ` : ''}
+    ` : `<div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">${results.length} ${results.length === 1 ? 'result' : 'results'}</div>`}
     ${kindOrder.filter(k => groupedByKind[k]).map(kind => `
       <div class="card" style="margin-bottom:14px;">
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px;">
@@ -18652,6 +18648,9 @@ function renderSmartSearch() {
     `).join('')}
   `;
 }
+/* Legacy standalone view — now folded into Curriculum. Kept as a safe redirect
+   in case any old deep-link or saved state points at 'smart-search'. */
+function renderSmartSearch() { return renderCurriculum(); }
 
 function renderEvidence() {
   const query = (state.evidenceQuery || '').trim();
@@ -19616,6 +19615,7 @@ function attachListeners() {
             state.lastSessionStart = Date.now();
             markStudyActivity(0);
           }
+          state.smartSearchQuery = '';  // start each Curriculum visit with a clean search box
           setState({ view: el.dataset.view, weekTab: 'overview', flashcardIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
           safeScrollTo(0);  // Navigating to a new page → start at top
           break;
@@ -22454,15 +22454,19 @@ function open(){
     close();
   });
 }
+// Direct open: no popover, no textarea — tapping the button takes the user
+// straight to OpenEvidence where they type their question once.
+function openOE(){ window.open('https://www.openevidence.com/', '_blank', 'noopener'); }
 function mount(){
   if(document.getElementById('oe-fab'))return;
-  var b=document.createElement('button'); b.id='oe-fab'; b.className='oe-fab'; b.setAttribute('aria-label','Ask OpenEvidence');
+  var b=document.createElement('button'); b.id='oe-fab'; b.className='oe-fab'; b.setAttribute('aria-label','Open OpenEvidence');
+  b.title='Open OpenEvidence — evidence-based AI answers (free for verified clinicians)';
   b.innerHTML=SEARCH+'<span class="oe-fab-label">Ask OE</span>';
-  b.addEventListener('click', open);
+  b.addEventListener('click', openOE);
   document.body.appendChild(b);
 }
 if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', mount); else mount();
-window.openAskOE=open;
+window.openAskOE=openOE;
 })();
 </script>
 <!-- =================================================================== -->
