@@ -14845,6 +14845,21 @@ function renderResources() {
       ${renderApiSetup()}
     </div>
 
+    <!-- ====== BACKUP & RESTORE — never lose study progress ====== -->
+    <div class="card" style="margin-bottom:20px;border:1px solid var(--border);">
+      <h2 style="margin:0 0 6px;font-family:var(--font-serif);font-size:20px;color:var(--navy-900);">💾 Backup &amp; restore your progress</h2>
+      <p style="margin:0 0 6px;font-size:13.5px;color:var(--text-soft);line-height:1.6;">Your progress (completed chapters, spaced-repetition cards, notes, practice history, projects, keys) is saved automatically on <strong>this</strong> browser. App updates do <strong>not</strong> erase it. The one thing that gives you a fresh, empty app is opening a <strong>different web address</strong> — each address keeps its own separate storage.</p>
+      <p style="margin:0 0 14px;font-size:13.5px;color:var(--text-soft);line-height:1.6;">To be fully safe, download a backup file. You can restore it after any update, on a new phone, or in a different browser — so you never lose a thing.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-primary" data-action="backup-progress">⬇️ Download backup</button>
+        <label class="btn btn-light" style="cursor:pointer;margin:0;">⬆️ Restore from backup<input type="file" accept="application/json,.json" style="display:none;" onchange="window.__importProgress(this)"></label>
+        <span id="backup-status" style="font-size:12.5px;color:var(--text-soft);"></span>
+      </div>
+      <div style="margin-top:12px;background:var(--bg-mute);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--text-soft);line-height:1.55;">
+        💡 <strong>Tip:</strong> pick <em>one</em> web address and always open the app from it (or add it to your home screen). Then your progress is continuous across every future update.
+      </div>
+    </div>
+
     <h2 style="font-family:var(--font-serif);font-size:20px;color:var(--navy-900);margin:24px 0 12px;">📚 External resources</h2>
     <div class="card">
       ${links.map(l => `
@@ -18101,6 +18116,55 @@ function renderNotebook() {
   `;
 }
 
+/* ---------- BACKUP & RESTORE (full study state) ----------
+   Downloads / restores exactly what the app persists to localStorage, so a user can carry
+   their progress across app updates, web addresses, browsers, and devices. */
+function exportProgress() {
+  try {
+    persist(); // make sure the very latest state is written before we read it
+    const raw = localStorage.getItem(STORE_KEY) || '{}';
+    const blob = new Blob([raw], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0, 10);
+    a.href = url;
+    a.download = 'ent-academy-backup-' + stamp + '.json';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => { try { URL.revokeObjectURL(url); } catch (e) {} }, 2000);
+    const kb = Math.max(1, Math.round(raw.length / 1024));
+    if (typeof appToast === 'function') appToast('✓ Backup downloaded (' + kb + ' KB) — keep this file; restore it anytime to recover your progress.');
+  } catch (e) {
+    alert('Backup failed: ' + (e && e.message ? e.message : e));
+  }
+}
+window.__importProgress = function (input) {
+  const f = input && input.files && input.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const data = JSON.parse(String(e.target.result || '{}'));
+      if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('This is not a valid ENT Academy backup file.');
+      const chapters = data.progress ? Object.keys(data.progress).length : 0;
+      if (!confirm('Restore this backup?\n\nIt contains ' + chapters + ' chapter records and will replace the current progress on this device.')) {
+        input.value = ''; return;
+      }
+      localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      loadStored();
+      setState({ view: 'dashboard' });
+      safeScrollTo(0);
+      if (typeof appToast === 'function') appToast('✓ Progress restored from your backup.');
+    } catch (err) {
+      alert('Could not restore: ' + (err && err.message ? err.message : err));
+    }
+    input.value = '';
+  };
+  reader.onerror = function () { alert('Could not read that file.'); };
+  reader.readAsText(f);
+};
+
 function exportAllNotes(format) {
   const userKey = state.userName || 'guest';
   const notesByWeek = (state.personalNotes && state.personalNotes[userKey]) || {};
@@ -20091,6 +20155,7 @@ function attachListeners() {
             setState({});
           }
           break;
+        case 'backup-progress': { exportProgress(); break; }
         case 'notes-export': {
           const fmt = el.dataset.format || 'txt';
           exportAllNotes(fmt);
