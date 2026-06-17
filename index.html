@@ -11537,6 +11537,7 @@ let state = {
   userName: '',              // resident's display name (client only)
   managerPasscode: '',       // set by manager on first run
   managerName: '',           // set by manager on first run (display name)
+  managerCredId: null,       // base64 WebAuthn credential id when Face ID / Touch ID is enabled
   showAuthScreen: false,     // when true, force show the picker
   authError: '',
   // Per-user progress (managerProgress is shared content / settings;
@@ -11714,6 +11715,7 @@ function loadStored() {
       state.userMode = parsed.userMode || null;
       state.userName = parsed.userName || '';
       state.managerPasscode = parsed.managerPasscode || '';
+      state.managerCredId = parsed.managerCredId || null;
       state.managerName = parsed.managerName || '';
       state.clientProgress = cp;
       state.weekMedia = parsed.weekMedia || {};
@@ -11765,6 +11767,7 @@ function persist() {
       userMode: state.userMode,
       userName: state.userName,
       managerPasscode: state.managerPasscode,
+      managerCredId: state.managerCredId,
       managerName: state.managerName,
       clientProgress: state.clientProgress,
       weekMedia: state.weekMedia,
@@ -11793,6 +11796,19 @@ function persist() {
   } catch (e) { /* ignore */ }
 }
 
+/* Actions that edit/author the app's content — blocked for doctors (study mode). */
+const MANAGER_ONLY_ACTIONS = {
+  'page-edit':1, 'page-save':1, 'page-reset':1,
+  'gen-extended-podcast':1, 'reset-extended-podcast':1, 'batch-premium-10':1,
+  'onepager-make':1, 'onepager-delete':1,
+  'project-new':1, 'project-delete':1, 'project-output-delete':1, 'project-source-delete':1,
+  'project-source-save':1, 'project-source-kind':1, 'project-pin-curriculum':1, 'project-run':1,
+  'project-add-source-toggle':1,
+  'research-new':1, 'research-edit':1, 'research-delete':1, 'research-save':1,
+  'save-media':1, 'clear-media':1,
+  'mgr-remove-client':1
+};
+
 /* ---------------- AUTH / USER ROLES ---------------- */
 function isManager() { return state.userMode === 'manager'; }
 function isClient()  { return state.userMode === 'client'; }
@@ -11812,6 +11828,58 @@ function bindProgressForUser() {
     const bucket = getClientBucket(state.userName);
     state.progress = bucket.progress;
   }
+}
+
+/* ---------------- Face ID / Touch ID (WebAuthn) for manager sign-in ----------------
+   Uses the platform authenticator (Face ID / Touch ID / Windows Hello). The credential is
+   created and stored on THIS device only; there is no server, so this acts as a strong local
+   gate (the OS verifies the biometric and that the registered credential exists). The 4–6 digit
+   passcode set at first run always remains as a fallback. */
+function webauthnSupported() {
+  try { return !!(window.PublicKeyCredential && navigator.credentials && navigator.credentials.create); }
+  catch (e) { return false; }
+}
+function _b64FromBuf(buf) {
+  const bytes = new Uint8Array(buf); let s = '';
+  for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+  return btoa(s);
+}
+function _bufFromB64(b64) {
+  const s = atob(b64); const bytes = new Uint8Array(s.length);
+  for (let i = 0; i < s.length; i++) bytes[i] = s.charCodeAt(i);
+  return bytes.buffer;
+}
+function _randChallenge() { const a = new Uint8Array(32); (window.crypto || {}).getRandomValues && window.crypto.getRandomValues(a); return a.buffer; }
+async function registerManagerBiometric() {
+  if (!webauthnSupported()) throw new Error('This device/browser does not support Face ID / Touch ID sign-in.');
+  const userId = new Uint8Array(16); window.crypto.getRandomValues(userId);
+  const cred = await navigator.credentials.create({
+    publicKey: {
+      challenge: _randChallenge(),
+      rp: { name: 'ENT Academy' },
+      user: { id: userId, name: (state.managerName || 'manager'), displayName: (state.managerName || 'Manager') },
+      pubKeyCredParams: [{ type: 'public-key', alg: -7 }, { type: 'public-key', alg: -257 }],
+      authenticatorSelection: { authenticatorAttachment: 'platform', userVerification: 'required', residentKey: 'preferred' },
+      timeout: 60000,
+      attestation: 'none'
+    }
+  });
+  if (!cred || !cred.rawId) throw new Error('Registration was cancelled.');
+  return _b64FromBuf(cred.rawId);
+}
+async function managerBiometricSignin() {
+  if (!webauthnSupported()) throw new Error('Face ID / Touch ID is not available on this device.');
+  if (!state.managerCredId) throw new Error('Face ID is not set up yet — sign in with your passcode first, then enable it in Settings.');
+  const assertion = await navigator.credentials.get({
+    publicKey: {
+      challenge: _randChallenge(),
+      allowCredentials: [{ id: _bufFromB64(state.managerCredId), type: 'public-key' }],
+      userVerification: 'required',
+      timeout: 60000
+    }
+  });
+  if (!assertion) throw new Error('Sign-in was cancelled.');
+  return true;
 }
 
 /* ---------------- ANTHROPIC API ---------------- */
@@ -11911,15 +11979,20 @@ function applyTheme() {
 }
 function render() {
   applyTheme();
-  // Open-access mode: anyone can use the app without a passcode.
-  // Auto-grant manager privileges if not yet set, so the user gets full access.
-  if (!isAuthed()) {
-    state.userMode = 'manager';
-    state.userName = state.userName || 'Resident';
-    state.showAuthScreen = false;
+  // Access control: managers (you) get full edit access; doctors get a read-only study profile.
+  // Show the entry screen when nobody is signed in, OR when a legacy "manager" session exists
+  // without a passcode (older open-access builds) — so the manager completes a proper setup.
+  if (!isAuthed() || (state.userMode === 'manager' && !state.managerPasscode)) {
+    const appEl = document.getElementById('app');
+    if (appEl) appEl.innerHTML = renderAuthScreen();
+    attachListeners();
+    if (!window.__bootLoaderHidden) {
+      window.__bootLoaderHidden = true;
+      const elapsed = Date.now() - (window.__bootStart || Date.now());
+      setTimeout(() => { if (typeof hideBootLoader === 'function') hideBootLoader(); }, Math.max(0, 3000 - elapsed));
+    }
+    return;
   }
-  // Legacy: if showAuthScreen was somehow set, ignore it
-  if (state.showAuthScreen) state.showAuthScreen = false;
   document.getElementById('app').innerHTML = `
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="layout">
@@ -12225,44 +12298,49 @@ function renderAuthScreen() {
           </div>
         </div>
         ${err ? `<div style="background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:14px;">${escapeHTML(err)}</div>` : ''}
-        ${isFirstRun ? `
-          <h3 style="font-family:var(--font-serif);font-size:18px;color:var(--navy-900);margin:8px 0 6px;">Welcome — first-time setup</h3>
-          <p style="font-size:14px;color:var(--text-soft);line-height:1.55;margin:0 0 18px;">You're the manager of this app. Set your name and a 4–6 digit passcode that only you'll know — residents will only be able to view content, not edit it.</p>
-          <label style="display:block;font-size:11.5px;color:var(--text-soft);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:6px;">Your name</label>
-          <input id="setup-name" type="text" placeholder="Display name" autocomplete="name" style="width:100%;padding:12px 16px;border:1px solid var(--border);border-radius:12px;font-size:15px;background:var(--card-soft);outline:none;margin-bottom:14px;" />
-          <label style="display:block;font-size:11.5px;color:var(--text-soft);text-transform:uppercase;letter-spacing:1.2px;font-weight:700;margin-bottom:6px;">Manager passcode</label>
-          <input id="setup-passcode" type="password" inputmode="numeric" maxlength="8" placeholder="••••" style="width:100%;padding:14px 16px;border:1px solid var(--border);border-radius:12px;font-size:18px;font-family:var(--font-mono);text-align:center;letter-spacing:6px;background:var(--card-soft);outline:none;" />
-          <button class="btn btn-primary" data-action="auth-setup-manager" style="margin-top:14px;width:100%;justify-content:center;padding:14px;font-size:14.5px;">${I.check} Create manager profile</button>
-          <p style="font-size:12px;color:var(--text-soft);margin-top:18px;text-align:center;">Stored only on this device. Forgotten passcodes can be reset by editing localStorage.</p>
-        ` : `
-          <h3 style="font-family:var(--font-serif);font-size:18px;color:var(--navy-900);margin:8px 0 18px;">Sign in</h3>
 
-          <div style="border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;background:linear-gradient(135deg,#fef3c7 0%,#fff 60%);">
-            <div style="font-weight:700;color:var(--navy-900);font-size:14.5px;margin-bottom:6px;">${I.key} Manager</div>
-            <div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">Full access — activate chapters, calibrate, set keys.</div>
+        <h3 style="font-family:var(--font-serif);font-size:18px;color:var(--navy-900);margin:8px 0 16px;">${isFirstRun ? 'Welcome' : 'Sign in'}</h3>
+
+        <!-- DOCTOR (study mode) — always available, the path for colleagues -->
+        <div style="border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;background:linear-gradient(135deg,#dbeafe 0%,#fff 60%);">
+          <div style="font-weight:700;color:var(--navy-900);font-size:14.5px;margin-bottom:6px;">${I.advisor} I'm a doctor — study mode</div>
+          <div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">Read chapters, listen to podcasts, do flashcards, quizzes &amp; daily review. Your progress is saved under your name on this device. Read-only — you can't change the app's content.</div>
+          <div style="display:flex;gap:8px;">
+            <input id="auth-name" type="text" placeholder="Your name (e.g. Dr. Cohen)" autocomplete="name"
+              style="flex:1;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;" />
+            <button class="btn btn-light" data-action="auth-client-signin" style="background:var(--accent);color:#fff;">Start studying</button>
+          </div>
+          ${Object.keys(state.clientProgress || {}).length ? `
+            <div style="margin-top:12px;font-size:12px;color:var(--text-soft);">
+              Returning:
+              ${Object.keys(state.clientProgress).map(n => `<span data-action="auth-client-quick" data-name="${escapeAttr(n)}" style="display:inline-block;padding:4px 10px;background:var(--card-soft);border:1px solid var(--border);border-radius:999px;margin:4px 4px 0 0;cursor:pointer;font-weight:600;color:var(--navy-700);">${escapeHTML(n)}</span>`).join('')}
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- MANAGER — setup on first run (your device), sign-in afterwards -->
+        ${isFirstRun ? `
+          <div style="border:1px solid var(--border);border-radius:14px;padding:16px;background:linear-gradient(135deg,#fef3c7 0%,#fff 60%);">
+            <div style="font-weight:700;color:var(--navy-900);font-size:14.5px;margin-bottom:6px;">${I.key} Set up manager (app owner)</div>
+            <div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">Only the owner does this. Choose a name and a 4–6 digit passcode — you'll be able to edit everything, and can enable Face ID / Touch ID afterwards in Settings.</div>
+            <input id="setup-name" type="text" placeholder="Your name" autocomplete="name" style="width:100%;box-sizing:border-box;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:8px;" />
+            <input id="setup-passcode" type="password" inputmode="numeric" maxlength="8" placeholder="Choose a passcode (4–6 digits)" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:16px;font-family:var(--font-mono);text-align:center;letter-spacing:5px;margin-bottom:10px;" />
+            <button class="btn btn-primary" data-action="auth-setup-manager" style="width:100%;justify-content:center;padding:12px;">${I.check} Create manager profile</button>
+          </div>
+        ` : `
+          <div style="border:1px solid var(--border);border-radius:14px;padding:16px;background:linear-gradient(135deg,#fef3c7 0%,#fff 60%);">
+            <div style="font-weight:700;color:var(--navy-900);font-size:14.5px;margin-bottom:6px;">${I.key} Manager (app owner)</div>
+            <div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">Full access — edit everything, set keys, calibrate.</div>
+            ${(state.managerCredId && webauthnSupported()) ? `
+              <button class="btn btn-primary" data-action="auth-manager-biometric" style="width:100%;justify-content:center;padding:12px;margin-bottom:8px;">🔓 Sign in with Face ID / Touch ID</button>
+              <div style="text-align:center;font-size:11.5px;color:var(--text-soft);margin-bottom:8px;">or use your passcode</div>
+            ` : ''}
             <div style="display:flex;gap:8px;">
               <input id="auth-passcode" type="password" inputmode="numeric" maxlength="8" placeholder="Manager passcode"
                 style="flex:1;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-family:var(--font-mono);font-size:15px;letter-spacing:3px;text-align:center;" />
               <button class="btn btn-primary" data-action="auth-manager-signin">Sign in</button>
             </div>
           </div>
-
-          <div style="border:1px solid var(--border);border-radius:14px;padding:16px;background:linear-gradient(135deg,#dbeafe 0%,#fff 60%);">
-            <div style="font-weight:700;color:var(--navy-900);font-size:14.5px;margin-bottom:6px;">${I.advisor} I'm a resident</div>
-            <div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">Read-only mode. Listen, study, take quizzes — your progress is saved under your name.</div>
-            <div style="display:flex;gap:8px;">
-              <input id="auth-name" type="text" placeholder="Your name (e.g. Sarah, R2)" autocomplete="name"
-                style="flex:1;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;" />
-              <button class="btn btn-light" data-action="auth-client-signin" style="background:var(--accent);color:#fff;">Open</button>
-            </div>
-          </div>
-
-          ${Object.keys(state.clientProgress || {}).length ? `
-            <div style="margin-top:14px;font-size:12px;color:var(--text-soft);">
-              Returning residents:
-              ${Object.keys(state.clientProgress).map(n => `<span data-action="auth-client-quick" data-name="${escapeAttr(n)}" style="display:inline-block;padding:4px 10px;background:var(--card-soft);border:1px solid var(--border);border-radius:999px;margin:4px 4px 0 0;cursor:pointer;font-weight:600;color:var(--navy-700);">${escapeHTML(n)}</span>`).join('')}
-            </div>
-          ` : ''}
         `}
       </div>
     </div>
@@ -12362,11 +12440,11 @@ function renderMobileMore() {
     { id: 'tumor-board',label: 'Tumor Board',  emoji: '🎗️' },
     { id: 'practice',   label: 'Practice',     emoji: '🎯' },
     { id: 'research',   label: 'Research update', emoji: '🔬' },
-    { id: 'my-research',label: 'My Research',  emoji: '🧪' },
+    { id: 'my-research',label: 'My Research',  emoji: '🧪', mgr: true },
     { id: 'notebook',   label: 'My Notes',     emoji: '📓' },
-    { id: 'projects',   label: 'Projects',     emoji: '🗂️' },
+    { id: 'projects',   label: 'Projects',     emoji: '🗂️', mgr: true },
     { id: 'resources',  label: 'Settings',     emoji: '⚙️' }
-  ];
+  ].filter(it => isManager() || !it.mgr);
   return `
     <div class="mm-overlay" data-mm-action="close">
       <div class="mm-sheet">
@@ -12398,11 +12476,11 @@ function renderSidebar() {
     { id: 'tumor-board', label: 'Tumor Board 🎗️',     icon: I.book },
     { id: 'practice',   label: 'Practice 🎯',         icon: I.quiz },
     { id: 'research',   label: 'Research 🔬',         icon: I.book },
-    { id: 'my-research', label: 'My Research 🧪',    icon: I.book },
+    { id: 'my-research', label: 'My Research 🧪',    icon: I.book, mgr: true },
     { id: 'notebook',   label: 'My Notes 📓',        icon: I.book },
-    { id: 'projects',   label: 'Projects 🧪',         icon: I.book },
+    { id: 'projects',   label: 'Projects 🧪',         icon: I.book, mgr: true },
     { id: 'resources',  label: 'Settings ⚙️',         icon: I.gear || I.book }
-  ];
+  ].filter(it => isManager() || !it.mgr);
   // Show "Recent project" shortcut if one exists
   let recentProjectHTML = '';
   const sortedProjects = (state.projects || []).slice().sort((a,b) =>
@@ -12482,11 +12560,11 @@ function renderView() {
     case 'anatomy':    return renderAnatomy();
     case 'evidence':      return renderEvidence();
     case 'research':      return renderResearch();
-    case 'projects':      return state.activeProjectId ? renderProjectDetail() : renderProjectsList();
+    case 'projects':      return !isManager() ? renderDashboard() : (state.activeProjectId ? renderProjectDetail() : renderProjectsList());
     case 'smart-search':  return renderSmartSearch();
     case 'practice':      return renderPractice();
     case 'tumor-board':   return renderTumorBoard();
-    case 'my-research':    return renderMyResearch();
+    case 'my-research':    return !isManager() ? renderDashboard() : renderMyResearch();
     case 'notebook':       return renderNotebook();
     case 'achievements':  return renderAchievements();
     case 'resources':     return renderResources();
@@ -13110,7 +13188,9 @@ function renderWeek() {
   const isOverridden = !!(state.pageOverrides && state.pageOverrides[w.week]);
   const isCalibrating = state.calibratingWeek === w.week;
 
-  const pageBlock = isCalibrating ? `
+  const pageBlock = !isManager() ? `
+    <span class="btn btn-ghost btn-sm" style="cursor:default;">p. ${currentPage}</span>
+  ` : isCalibrating ? `
     <div style="display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--accent);border-radius:10px;padding:6px 10px;">
       <span style="font-size:11px;color:var(--text-soft);text-transform:uppercase;letter-spacing:.5px;font-weight:700;">Page</span>
       <input id="page-cal-${w.week}" type="number" min="1" value="${currentPage}" style="width:80px;padding:4px 6px;border:1px solid var(--border);border-radius:6px;font-family:inherit;font-size:13px;" />
@@ -13684,7 +13764,9 @@ function renderWeekTeaching(w, c) {
   const presentationSection = `<div id="teach-slides">${presentationHTML}</div>`;
   // Extended Deep Dive control — Claude-generated 15-20 min, board-exam-focused dialogue.
   const _hasAnthro = !!state.apiKey;
-  const _extRow = (state.extendedPodcastGenerating === w.week)
+  // Deep Dive generation controls are manager-only. Doctors still hear an extended episode if one
+  // exists (the player picks it automatically) — they just don't see the generate/regenerate UI.
+  const _extRow = !isManager() ? '' : (state.extendedPodcastGenerating === w.week)
     ? `<div style="margin-bottom:10px;padding:12px 14px;background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;font-size:13px;color:#92400e;font-weight:600;">
          ⏳ Generating extended Deep Dive (15–20 min, ~60 turns)… this can take 30–60 seconds. Don't navigate away.
        </div>`
@@ -14835,6 +14917,36 @@ function renderResources() {
         <h1 class="page-title">Settings ⚙️</h1>
         <p class="page-sub">API keys for podcast voices, plus reference links.</p>
       </div>
+    </div>
+
+    <!-- ====== ACCOUNT / ROLE ====== -->
+    <div class="card" style="margin-bottom:20px;border:1px solid var(--border);">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div style="width:44px;height:44px;border-radius:12px;background:${isManager() ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'linear-gradient(135deg,#2563eb,#0ea5e9)'};display:grid;place-items:center;color:#fff;font-weight:700;font-size:18px;">${isManager() ? '🛡️' : '🩺'}</div>
+        <div style="flex:1;min-width:160px;">
+          <div style="font-weight:800;color:var(--navy-900);font-size:15px;">${escapeHTML(state.userName || (isManager() ? 'Manager' : 'Doctor'))}</div>
+          <div style="font-size:12.5px;color:var(--text-soft);">${isManager() ? 'Manager — full access (edit everything)' : 'Doctor — study mode (read-only)'}</div>
+        </div>
+        <button class="btn btn-light" data-action="sign-out">Sign out</button>
+      </div>
+      ${isManager() ? `
+        <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
+          <div style="font-weight:700;color:var(--navy-900);font-size:14px;margin-bottom:6px;">🔐 Face ID / Touch ID sign-in</div>
+          ${webauthnSupported() ? (
+            state.managerCredId
+              ? `<div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">Enabled on this device — you can sign in with one tap. (Each device needs to be enabled separately.)</div>
+                 <button class="btn btn-light" data-action="disable-manager-biometric">Turn off Face ID / Touch ID</button>`
+              : `<div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">Turn on biometric sign-in so you unlock manager mode with Face ID / Touch ID instead of typing the passcode. Set up per device.</div>
+                 <button class="btn btn-primary" data-action="enable-manager-biometric">Enable Face ID / Touch ID</button>`
+          ) : `<div style="font-size:12.5px;color:var(--text-soft);">This device/browser doesn't support biometric sign-in. Your passcode still works everywhere.</div>`}
+        </div>
+        <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
+          <div style="font-weight:700;color:var(--navy-900);font-size:14px;margin-bottom:6px;">👥 Share with doctors</div>
+          <div style="font-size:12.5px;color:var(--text-soft);line-height:1.6;">Send colleagues the app link. On the sign-in screen they tap <strong>"I'm a doctor — study mode"</strong>, enter their name, and study. They can't edit content or see manager settings. Each doctor's progress is saved on their own device.</div>
+        </div>
+      ` : `
+        <div style="margin-top:12px;font-size:12.5px;color:var(--text-soft);line-height:1.6;">You're in <strong>study mode</strong> — read, listen, and practice freely; your progress is saved under your name on this device. Editing the app's content is reserved for the manager.</div>
+      `}
     </div>
 
     <!-- ====== TOP: API KEYS — this is what most users come here for ====== -->
@@ -19610,6 +19722,13 @@ function attachListeners() {
     const a = el.dataset.action;
     if (!a) return;
     el.addEventListener('click', (e) => {
+      // Read-only protection: doctors (study mode) can read, listen, practice, take notes and
+      // keep their own progress — but cannot edit/author the app's content. Block those actions.
+      if (!isManager() && MANAGER_ONLY_ACTIONS[a]) {
+        if (typeof appToast === 'function') appToast('🔒 Study mode is read-only — editing is reserved for the manager.');
+        try { e.preventDefault(); } catch(_){}
+        return;
+      }
       switch (a) {
         case 'nav': {
           // If leaving the chapter view, credit the elapsed minutes
@@ -20515,6 +20634,46 @@ function attachListeners() {
           state.showAuthScreen = false;
           // Manager always uses the global state.progress (the canonical record)
           setState({});
+          break;
+        }
+        case 'auth-manager-biometric': {
+          (async () => {
+            try {
+              await managerBiometricSignin();
+              state.userMode = 'manager';
+              state.userName = state.managerName || 'Manager';
+              state.authError = '';
+              state.showAuthScreen = false;
+              setState({});
+            } catch (e) {
+              state.authError = (e && e.message) || 'Face ID sign-in failed. Use your passcode.';
+              setState({});
+            }
+          })();
+          break;
+        }
+        case 'enable-manager-biometric': {
+          if (!isManager()) return;
+          (async () => {
+            try {
+              const id = await registerManagerBiometric();
+              state.managerCredId = id;
+              persist();
+              setState({});
+              appToast('✓ Face ID / Touch ID enabled for manager sign-in on this device.');
+            } catch (e) {
+              alert('Could not enable Face ID / Touch ID: ' + ((e && e.message) || e));
+            }
+          })();
+          break;
+        }
+        case 'disable-manager-biometric': {
+          if (!isManager()) return;
+          if (!confirm('Turn off Face ID / Touch ID sign-in? You will sign in with your passcode.')) return;
+          state.managerCredId = null;
+          persist();
+          setState({});
+          appToast('Face ID / Touch ID sign-in turned off.');
           break;
         }
         case 'auth-client-signin': {
