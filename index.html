@@ -759,6 +759,18 @@
   .status-current { background: #dbeafe; color: var(--accent); }
   .status-done    { background: #d1fae5; color: #047857; }
   .status-ready   { background: #dbeafe; color: var(--accent); }
+  /* One-tap "mark done" toggle on each curriculum card */
+  .wc-done {
+    position: absolute; bottom: 12px; right: 14px;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--card);
+    color: transparent; font-size: 15px; font-weight: 800; line-height: 1;
+    display: grid; place-items: center; cursor: pointer; transition: all .15s ease; padding: 0;
+  }
+  .wc-done:hover { border-color: #10b981; color: rgba(16,185,129,.45); transform: scale(1.08); }
+  .wc-done.is-done { background: #10b981; border-color: #10b981; color: #fff; }
+  .wc-done:active { transform: scale(.9); }
+  @media (max-width:720px){ .wc-done { width: 34px; height: 34px; bottom: 10px; right: 12px; } }
   .status-empty   { background: var(--bg-mute); color: var(--text-soft); }
   /* 3-state card visuals */
   .week-card.state-done {
@@ -11492,7 +11504,9 @@ let state = {
   flashcardFlipped: false,
   quizAnswers: {},
   quizSubmitted: false,
-  progress: {}, // { weekNum: { completed: bool, quizScore: number, lastVisited: ISO } }
+  progress: {}, // active progress (points at manager record OR the signed-in doctor's bucket)
+  managerProgress: {}, // the manager's canonical progress — never overwritten by a doctor session
+  chapterPdfs: {}, // { chapterNum: filename } — which chapters have a source PDF saved (blob in IndexedDB)
   pageOverrides: {}, // { weekNum: pageNumber } — user's PDF calibration
   calibratingWeek: null, // when set, show inline editor
   // Podcast
@@ -11694,7 +11708,11 @@ function loadStored() {
     const raw = localStorage.getItem(STORE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      state.progress = migrateProgress(parsed.progress || {});
+      // Manager's canonical record. Legacy builds saved it under `progress`; recover that so older
+      // marks are NOT lost. A doctor's progress lives separately in clientProgress and can never
+      // overwrite this.
+      state.managerProgress = migrateProgress(parsed.managerProgress || parsed.progress || {});
+      state.progress = state.managerProgress; // default; rebound to the doctor's bucket below if client
       // Migrate per-client progress too
       const cp = parsed.clientProgress || {};
       Object.keys(cp).forEach(name => {
@@ -11738,6 +11756,7 @@ function loadStored() {
       state.researchProjects = Array.isArray(parsed.researchProjects) ? parsed.researchProjects : [];
       state.tumorPatients = Array.isArray(parsed.tumorPatients) ? parsed.tumorPatients : [];
       state.nccnDismissedMonth = parsed.nccnDismissedMonth || null;
+      state.chapterPdfs = parsed.chapterPdfs || {};
       state.extendedPodcasts = (parsed.extendedPodcasts && typeof parsed.extendedPodcasts === 'object') ? parsed.extendedPodcasts : {};
       // Reset daily counter if a new day
       const today = new Date().toISOString().slice(0,10);
@@ -11751,8 +11770,21 @@ function loadStored() {
 }
 function persist() {
   try {
+    // Keep the two records cleanly separate so a doctor session never wipes the manager's marks.
+    if (typeof isClient === 'function' && isClient()) {
+      // A doctor's active progress belongs to their own bucket only.
+      const key = state.userName || 'guest';
+      if (!state.clientProgress) state.clientProgress = {};
+      if (!state.clientProgress[key]) state.clientProgress[key] = { progress: {}, quizScores: {} };
+      state.clientProgress[key].progress = state.progress;
+    } else {
+      // Manager (or signed-out) edits the canonical record.
+      state.managerProgress = state.progress;
+    }
     localStorage.setItem(STORE_KEY, JSON.stringify({
-      progress: state.progress,
+      // Top-level `progress` always mirrors the MANAGER record (backward-compat + canonical).
+      progress: state.managerProgress || {},
+      managerProgress: state.managerProgress || {},
       lastWeek: state.selectedWeek,
       pageOverrides: state.pageOverrides,
       apiKey: state.apiKey,
@@ -11791,7 +11823,8 @@ function persist() {
       researchProjects: state.researchProjects,
       tumorPatients: state.tumorPatients,
       nccnDismissedMonth: state.nccnDismissedMonth,
-      extendedPodcasts: state.extendedPodcasts
+      extendedPodcasts: state.extendedPodcasts,
+      chapterPdfs: state.chapterPdfs
     }));
   } catch (e) { /* ignore */ }
 }
@@ -12356,59 +12389,81 @@ function renderAuthScreen() {
 
 function renderChapterModal() {
   const num = state.viewingChapter;
-  const c = CHAPTER_FILES[num];
-  if (!c) return '';
-  const search = (state.pdfSearch || '').trim();
-  // PDF.js / Chrome built-in viewer support #search=query and #page=N
-  const url = uploadUrl(c.file) + (search ? '#search=' + encodeURIComponent(search) : '');
-  const onIOS = isIOS();
-  // Hosted https deployment can't read file:// URLs. Detect and show in-app fallback.
+  if (num == null) return '';
+  const c = CHAPTER_FILES[num] || { title: ((typeof CURRICULUM !== 'undefined' && CURRICULUM.find(w => w.chapter === num)) || {}).title || ('Chapter ' + num), file: null };
   const onHttp = (typeof location !== 'undefined' && /^https?:$/.test(location.protocol));
+  const haveSaved = !!(state.chapterPdfs && state.chapterPdfs[num]);
+  const blobReady = state.chapterPdfUrl && state.chapterPdfNum === num;
+
+  // Local file:// usage (running the HTML directly) — keep the original native iframe.
+  if (!onHttp) {
+    const search = (state.pdfSearch || '').trim();
+    const url = uploadUrl(c.file) + (search ? '#search=' + encodeURIComponent(search) : '');
+    return `
+      <div class="pdf-modal">
+        <div class="pdf-modal-bar">
+          <span class="meta">Cummings Ch.${num}</span>
+          <span class="title">${escapeHTML(c.title)}</span>
+          <input id="pdf-search-input" type="search" placeholder="Search this PDF…" value="${escapeAttr(search)}"
+            style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:8px;padding:7px 12px;font-size:12.5px;font-family:inherit;outline:none;min-width:160px;"
+            onkeydown="if(event.key==='Enter'){event.preventDefault();document.querySelector('[data-action=\\'pdf-search-go\\']').click();}" />
+          <button data-action="pdf-search-go">Search</button>
+          <button data-action="close-chapter-modal">Close ✕</button>
+        </div>
+        <iframe class="pdf-modal-frame" src="${url}" title="${escapeHTML(c.title)}" allow="fullscreen"></iframe>
+      </div>
+    `;
+  }
+
+  // Hosted: the user opens THEIR OWN copy of the chapter PDF. It's saved on their device
+  // (IndexedDB) and shown in the browser's built-in PDF viewer — which has search, zoom and
+  // page navigation. Nothing is uploaded anywhere; copyright stays with the user's own file.
+  const fileInput = `<input id="chapter-pdf-input" type="file" accept="application/pdf,.pdf" style="display:none;" onchange="window.__pickChapterPdf(this)">`;
+
+  if (blobReady) {
+    return `
+      <div class="pdf-modal">
+        <div class="pdf-modal-bar">
+          <span class="meta">Cummings Ch.${num}</span>
+          <span class="title">${escapeHTML(c.title)}</span>
+          <span style="font-size:11.5px;color:rgba(255,255,255,.7);">🔎 search with Ctrl/⌘+F or the viewer toolbar</span>
+          <button onclick="try{window.open(state.chapterPdfUrl,'_blank');}catch(e){}">Open in new tab ↗</button>
+          <button data-action="chapter-pdf-replace" data-chapter="${num}">Replace</button>
+          <button data-action="close-chapter-modal">Close ✕</button>
+        </div>
+        ${fileInput}
+        <iframe class="pdf-modal-frame" src="${state.chapterPdfUrl}#search=" title="${escapeHTML(c.title)}" allow="fullscreen"></iframe>
+      </div>
+    `;
+  }
+
+  // No PDF opened yet for this chapter → offer to open one (or show the in-app study fallback).
   return `
     <div class="pdf-modal">
       <div class="pdf-modal-bar">
         <span class="meta">Cummings Ch.${num}</span>
         <span class="title">${escapeHTML(c.title)}</span>
-        ${!onHttp ? `
-          <input id="pdf-search-input" type="search" placeholder="Search this PDF…" value="${escapeAttr(search)}"
-            style="background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:8px;padding:7px 12px;font-size:12.5px;font-family:inherit;outline:none;min-width:160px;"
-            onkeydown="if(event.key==='Enter'){event.preventDefault();document.querySelector('[data-action=\\'pdf-search-go\\']').click();}" />
-          <button data-action="pdf-search-go">Search</button>
-        ` : ''}
         <button data-action="close-chapter-modal">Close ✕</button>
       </div>
-      ${onHttp ? `
-        <div class="pdf-modal-fallback">
-          <div style="max-width:640px;background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 24px rgba(0,0,0,.06);">
-            <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
-              <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#f59e0b,#d97706);display:grid;place-items:center;color:white;font-size:24px;">📄</div>
-              <div>
-                <div style="font-size:11px;color:var(--text-soft);text-transform:uppercase;letter-spacing:1.2px;font-weight:600;">Source · Cummings 8th edition</div>
-                <h3 style="font-family:var(--font-serif);font-size:22px;margin:2px 0 0;color:var(--navy-900);">Chapter ${num} · ${escapeHTML(c.title)}</h3>
-              </div>
-            </div>
-            <div style="background:#fef3c7;border:1px solid #fde68a;color:#92400e;padding:14px 16px;border-radius:10px;font-size:13.5px;line-height:1.6;margin-bottom:18px;">
-              <strong>The original chapter PDF is stored on your personal device</strong> — the hosted web app cannot serve copyrighted content. To read it alongside the curated study materials, open your local copy of <em>Cummings Otolaryngology – Head and Neck Surgery, 8e</em> on your computer, then return here for the active learning tools.
-            </div>
-            <h4 style="margin:0 0 10px;color:var(--navy-900);font-size:14px;text-transform:uppercase;letter-spacing:.8px;">Use the in-app study materials instead</h4>
-            <p style="color:var(--text-soft);margin:0 0 14px;line-height:1.6;font-size:13.5px;">All key teaching content from this chapter is available inside ENT Academy — summary, Deep Dive podcast, slide deck, flashcards, USMLE-style quiz, anatomy diagrams, and personal notes.</p>
-            <div style="display:flex;gap:10px;flex-wrap:wrap;">
-              <button class="btn btn-primary" data-action="goto-chapter-from-modal" data-chapter="${num}">📖 Open Ch.${num} in-app study materials</button>
-              <button class="btn btn-light" data-action="close-chapter-modal">Close</button>
+      <div class="pdf-modal-fallback">
+        ${fileInput}
+        <div style="max-width:640px;background:#fff;border-radius:16px;padding:32px;box-shadow:0 4px 24px rgba(0,0,0,.06);">
+          <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+            <div style="width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#2563eb,#0ea5e9);display:grid;place-items:center;color:white;font-size:24px;">📄</div>
+            <div>
+              <div style="font-size:11px;color:var(--text-soft);text-transform:uppercase;letter-spacing:1.2px;font-weight:600;">Read from source · Cummings 8e</div>
+              <h3 style="font-family:var(--font-serif);font-size:22px;margin:2px 0 0;color:var(--navy-900);">Chapter ${num} · ${escapeHTML(c.title)}</h3>
             </div>
           </div>
-        </div>
-      ` : onIOS ? `
-        <div class="pdf-modal-fallback">
-          <div style="max-width:480px;">
-            <h3 style="font-family:var(--font-serif);font-size:22px;margin:0 0 8px;">In-app PDF view is limited on iOS</h3>
-            <p style="opacity:.85;line-height:1.55;">iOS Safari sandboxes file:// access. Tap the button below to open the chapter in the iOS Books / Files app${search ? ` and search for <strong>"${escapeHTML(search)}"</strong> there` : ''}, then come back when you're ready.</p>
-            <button class="btn btn-primary" data-action="open-chapter-external" data-chapter="${num}" style="margin-top:14px;">${I.pdf} Open chapter PDF</button>
+          <p style="color:var(--text);margin:0 0 14px;line-height:1.6;font-size:13.5px;">Open your own copy of this chapter's PDF to read and verify alongside the study materials. It's stored privately on <strong>this device</strong> (never uploaded), and opens in the built-in PDF reader with full <strong>search</strong>. You only pick it once per chapter — next time it opens instantly.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <button class="btn btn-primary" onclick="document.getElementById('chapter-pdf-input').click()">📄 ${haveSaved ? 'Re-open' : 'Open'} chapter PDF</button>
+            <button class="btn btn-light" data-action="goto-chapter-from-modal" data-chapter="${num}">📖 In-app study materials</button>
+            <button class="btn btn-light" data-action="close-chapter-modal">Close</button>
           </div>
+          ${haveSaved ? `<p style="font-size:12px;color:var(--text-soft);margin-top:12px;">Saved file: ${escapeHTML(state.chapterPdfs[num])}</p>` : `<p style="font-size:12px;color:var(--text-soft);margin-top:12px;">Tip: you can also keep your full Cummings PDF and open the right page here.</p>`}
         </div>
-      ` : `
-        <iframe class="pdf-modal-frame" src="${url}" title="${escapeHTML(c.title)}" allow="fullscreen"></iframe>
-      `}
+      </div>
     </div>
   `;
 }
@@ -13092,6 +13147,8 @@ function renderCurriculum() {
                   <div class="week-meta">${w.chapters} · ${sub}</div>
                 </div>
                 ${statusBadge}
+                <button class="wc-done ${p.completed ? 'is-done' : ''}" data-action="toggle-complete" data-week="${w.week}"
+                  title="${p.completed ? 'Marked done — tap to undo' : 'Mark this chapter done'}" aria-label="${p.completed ? 'Mark not done' : 'Mark done'}">${p.completed ? '✓' : '✓'}</button>
               </div>
             `;
           }).join('')}
@@ -20170,6 +20227,7 @@ function attachListeners() {
           break;
         }
         case 'toggle-complete': {
+          e.stopPropagation(); // so tapping the toggle on a curriculum card doesn't also open the chapter
           const wn = Number(el.dataset.week);
           const cur = !!getProgress(wn).completed;
           markCompleted(wn, !cur);
@@ -20741,10 +20799,22 @@ function attachListeners() {
           videoSummaryStop();
           break;
         case 'view-chapter':
-          state.viewingChapter = Number(el.dataset.chapter);
-          setState({});
+          openChapterPdf(Number(el.dataset.chapter));
           break;
+        case 'chapter-pdf-replace': {
+          const num = Number(el.dataset.chapter);
+          try { if (typeof idbDel === 'function') idbDel('chapterpdf-' + num); } catch(e){}
+          if (state.chapterPdfs) delete state.chapterPdfs[num];
+          if (state.chapterPdfUrl) { try { URL.revokeObjectURL(state.chapterPdfUrl); } catch(e){} }
+          state.chapterPdfUrl = null; state.chapterPdfNum = null;
+          persist();
+          setState({});
+          setTimeout(() => { const inp = document.getElementById('chapter-pdf-input'); if (inp) inp.click(); }, 60);
+          break;
+        }
         case 'close-chapter-modal':
+          if (state.chapterPdfUrl) { try { URL.revokeObjectURL(state.chapterPdfUrl); } catch(e){} }
+          state.chapterPdfUrl = null; state.chapterPdfNum = null;
           state.viewingChapter = null;
           state.pdfFallbackNotice = false;
           setState({});
@@ -21096,6 +21166,41 @@ window.__smartSearchInput = (function(){
     }, 220);
   };
 })();
+/* Open a chapter's source PDF. Loads the user's saved copy from IndexedDB (per device) and
+   shows it in the built-in PDF viewer (search/zoom/pages). If none saved yet, the modal offers
+   a file picker. Available to managers and doctors — reading from source is core to studying. */
+function openChapterPdf(num) {
+  if (state.chapterPdfUrl) { try { URL.revokeObjectURL(state.chapterPdfUrl); } catch(e){} }
+  state.viewingChapter = num;
+  state.chapterPdfUrl = null;
+  state.chapterPdfNum = num;
+  setState({});
+  if (typeof idbGet === 'function') {
+    idbGet('chapterpdf-' + num).then(function(blob) {
+      if (blob && state.viewingChapter === num) {
+        state.chapterPdfUrl = URL.createObjectURL(blob);
+        state.chapterPdfNum = num;
+        setState({});
+      }
+    }).catch(function(){});
+  }
+}
+window.__pickChapterPdf = function(input) {
+  const f = input && input.files && input.files[0];
+  if (!f) return;
+  const num = state.viewingChapter;
+  const isPdf = (f.type === 'application/pdf') || /\.pdf$/i.test(f.name || '');
+  if (!isPdf) { alert('Please choose a PDF file.'); input.value = ''; return; }
+  try { if (typeof idbPut === 'function') idbPut('chapterpdf-' + num, f).catch(function(){}); } catch(e){}
+  state.chapterPdfs = state.chapterPdfs || {};
+  state.chapterPdfs[num] = f.name || ('chapter-' + num + '.pdf');
+  if (state.chapterPdfUrl) { try { URL.revokeObjectURL(state.chapterPdfUrl); } catch(e){} }
+  state.chapterPdfUrl = URL.createObjectURL(f);
+  state.chapterPdfNum = num;
+  persist();
+  setState({});
+  input.value = '';
+};
 window.__projectRenameInput = function(v) { const p = activeProject(); if (p) p.name = v || 'Untitled project'; };
 window.__projectRenameCommit = function() { const p = activeProject(); if (p) { p.updatedAt = new Date().toISOString(); persist(); } };
 window.__newSourceTitle = function(v) { state.newSourceTitle = v || ''; };
