@@ -11814,7 +11814,13 @@ function isManager() { return state.userMode === 'manager'; }
 function isClient()  { return state.userMode === 'client'; }
 function isAuthed()  { return state.userMode === 'manager' || state.userMode === 'client'; }
 function currentDisplayName() {
-  return state.userName || (isManager() ? 'Manager' : 'Resident');
+  return state.userName || (isManager() ? 'Manager' : 'Doctor');
+}
+/* Format a person's name as "Dr. <name>" without doubling an existing "Dr." prefix. */
+function drName(name) {
+  const n = (name || '').trim();
+  if (!n) return 'Doctor';
+  return /^(dr\.?|prof\.?|ד"?ר|פרופ)/i.test(n) ? n : ('Dr. ' + n);
 }
 /* Per-client progress namespacing. Manager uses the global state.progress. */
 function getClientBucket(name) {
@@ -12088,7 +12094,8 @@ async function verifyElevenLabsKey(key) {
 function maybeShowApiKeyPrompt() {
   // Already shown this session — don't nag again
   if (window.__apiKeyPromptShown) return;
-  if (state.elevenLabsKey || state.openaiKey) return; // user has at least one key
+  if (isClient()) return; // doctors are evaluating — never nag them for a key (Settings still has it)
+  if (state.elevenLabsKey || state.openaiKey) return; // a key is already saved — never ask again
   if (state.apiKeyPromptDismissed === todayKey()) return; // explicitly dismissed today
   showApiKeyPrompt();
 }
@@ -12443,6 +12450,7 @@ function renderMobileMore() {
     { id: 'my-research',label: 'My Research',  emoji: '🧪', mgr: true },
     { id: 'notebook',   label: 'My Notes',     emoji: '📓' },
     { id: 'projects',   label: 'Projects',     emoji: '🗂️', mgr: true },
+    { id: 'dashboard-mgr', label: 'Doctors',   emoji: '👥', mgr: true },
     { id: 'resources',  label: 'Settings',     emoji: '⚙️' }
   ].filter(it => isManager() || !it.mgr);
   return `
@@ -12479,6 +12487,7 @@ function renderSidebar() {
     { id: 'my-research', label: 'My Research 🧪',    icon: I.book, mgr: true },
     { id: 'notebook',   label: 'My Notes 📓',        icon: I.book },
     { id: 'projects',   label: 'Projects 🧪',         icon: I.book, mgr: true },
+    { id: 'dashboard-mgr', label: 'Doctors 👥',       icon: I.book, mgr: true },
     { id: 'resources',  label: 'Settings ⚙️',         icon: I.gear || I.book }
   ].filter(it => isManager() || !it.mgr);
   // Show "Recent project" shortcut if one exists
@@ -12846,7 +12855,7 @@ function renderDashboard() {
     <div class="home-hero">
       <div class="home-hero-text">
         <div class="home-hero-eyebrow">Cummings Otolaryngology · 8th edition</div>
-        <h1 class="home-hero-title">${state.userName ? 'Welcome back, Dr. ' + escapeHTML(state.userName) : 'Welcome back, Dr. Resident'}</h1>
+        <h1 class="home-hero-title">Welcome back, ${escapeHTML(drName(state.userName))}</h1>
         <p class="home-hero-sub">${prog.done > 0 ? `${prog.done} of ${prog.total} chapters complete · ${prog.pct}% of the way through residency` : 'Your structured year through head & neck surgery starts here.'}</p>
         <div class="home-hero-progress">
           <div class="home-hero-progress-track">
@@ -14924,7 +14933,7 @@ function renderResources() {
       <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
         <div style="width:44px;height:44px;border-radius:12px;background:${isManager() ? 'linear-gradient(135deg,#f59e0b,#d97706)' : 'linear-gradient(135deg,#2563eb,#0ea5e9)'};display:grid;place-items:center;color:#fff;font-weight:700;font-size:18px;">${isManager() ? '🛡️' : '🩺'}</div>
         <div style="flex:1;min-width:160px;">
-          <div style="font-weight:800;color:var(--navy-900);font-size:15px;">${escapeHTML(state.userName || (isManager() ? 'Manager' : 'Doctor'))}</div>
+          <div style="font-weight:800;color:var(--navy-900);font-size:15px;">${escapeHTML(drName(state.userName))}</div>
           <div style="font-size:12.5px;color:var(--text-soft);">${isManager() ? 'Manager — full access (edit everything)' : 'Doctor — study mode (read-only)'}</div>
         </div>
         <button class="btn btn-light" data-action="sign-out">Sign out</button>
@@ -21366,6 +21375,8 @@ function renderStudyTrackerWidget() {
    to perceived speed. loadStored() is cheap (reads localStorage) and stays immediate so
    the loader picks up the saved light/dark theme. */
 loadStored();
+// A returning doctor stays signed in (no re-login) and sees THEIR own saved progress.
+if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser === 'function') bindProgressForUser();
 (function(){
   var run = false;
   function go(){ if (run) return; run = true; render(); }
