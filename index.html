@@ -162,6 +162,13 @@
   a { color: var(--accent); text-decoration: none; }
   a:hover { text-decoration: underline; }
   button { font-family: inherit; cursor: pointer; border: none; background: transparent; color: inherit; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  /* Snappy, reliable taps on mobile — removes the 300ms delay and stray zoom-gesture conflicts
+     that can make buttons feel unresponsive, and gives a clear tap highlight. */
+  button, a, label, input, select, textarea, [data-action], [data-mm-action], .week-card, .mobile-tab, .nav-item, .mm-item, .chapter-pill, .resource-item, .teach-tile {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(37,99,235,.18);
+  }
 
   /* Layout */
   .layout {
@@ -3669,13 +3676,22 @@ function showBootLoader(msg, looping) {
   }
   el.classList.toggle('looping', !!looping);
   el.classList.remove('hidden');
+  el.style.display = '';
   el.style.visibility = 'visible';
   el.style.opacity = '1';
+  el.style.pointerEvents = '';
 }
 function hideBootLoader() {
   const el = document.getElementById('boot-loader');
   if (!el) return;
+  window.__bootLoaderHidden = true;
   el.classList.add('hidden');
+  // Clear any inline styles a previous showBootLoader() set (inline beats the .hidden class),
+  // then fully remove it from the layer so it can NEVER intercept taps on mobile.
+  el.style.opacity = '0';
+  el.style.visibility = 'hidden';
+  el.style.pointerEvents = 'none';
+  setTimeout(function(){ try { el.style.display = 'none'; } catch(e){} }, 450);
 }
 
 const PDF_PATH_RAW = '/Users/AvivD2/Documents/רפואה/התמחות/Cummings Otolaryngology 8th Edition .pdf';
@@ -12024,6 +12040,7 @@ function render() {
   if (!isAuthed() || (state.userMode === 'manager' && !state.managerPasscode)) {
     const appEl = document.getElementById('app');
     if (appEl) appEl.innerHTML = renderAuthScreen();
+    try { const _fab = document.getElementById('oe-fab'); if (_fab) _fab.style.display = 'none'; } catch(e){}
     attachListeners();
     if (!window.__bootLoaderHidden) {
       window.__bootLoaderHidden = true;
@@ -12032,17 +12049,27 @@ function render() {
     }
     return;
   }
+  let _viewHTML;
+  try { _viewHTML = renderView(); }
+  catch (verr) {
+    try { console.error('renderView failed:', verr); } catch(e){}
+    _viewHTML = '<div style="padding:40px;text-align:center;"><div style="font-size:34px;">⚠️</div>'
+      + '<h3 style="color:var(--navy-900);margin:8px 0;">This section hit a snag</h3>'
+      + '<p style="color:var(--text-soft);">Try another section from the menu, or reload.</p>'
+      + '<button class="btn btn-primary" data-action="nav" data-view="dashboard" style="margin-top:10px;">Go to Home</button></div>';
+  }
   document.getElementById('app').innerHTML = `
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <div class="layout">
       ${renderSidebar()}
-      <main class="main" id="main-content" tabindex="-1">${renderView()}</main>
+      <main class="main" id="main-content" tabindex="-1">${_viewHTML}</main>
     </div>
     ${renderMobileTabbar()}
     ${state.showInstallModal ? renderInstallModal() : ''}
     ${state.viewingChapter ? renderChapterModal() : ''}
   `;
   attachListeners();
+  try { const _fab = document.getElementById('oe-fab'); if (_fab) _fab.style.display = ''; } catch(e){}
   // Refresh the persistent floating mini-player (lives outside #app so it survives renders)
   if (typeof updateFloatingPlayer === 'function') updateFloatingPlayer();
   // Start the quiz timer ticker if needed
@@ -12323,8 +12350,8 @@ function renderAuthScreen() {
   const isFirstRun = !hasManager;
   const err = state.authError;
   return `
-    <div style="min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#0b1e36,#102a4c 60%,#1f4d85);padding:24px;">
-      <div style="max-width:520px;width:100%;background:var(--card);border-radius:22px;padding:36px 36px 32px;box-shadow:0 30px 80px rgba(0,0,0,.45);">
+    <div style="min-height:100vh;min-height:100dvh;display:flex;background:linear-gradient(135deg,#0b1e36,#102a4c 60%,#1f4d85);padding:20px 16px;overflow-y:auto;-webkit-overflow-scrolling:touch;box-sizing:border-box;">
+      <div style="max-width:520px;width:100%;margin:auto;background:var(--card);border-radius:22px;padding:28px 22px 24px;box-shadow:0 30px 80px rgba(0,0,0,.45);">
         <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
           <div style="width:48px;height:48px;border-radius:13px;background:linear-gradient(135deg,var(--blue-500),var(--teal-500));display:grid;place-items:center;color:#fff;">
             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24">
@@ -12347,7 +12374,7 @@ function renderAuthScreen() {
           <div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">Read chapters, listen to podcasts, do flashcards, quizzes &amp; daily review. Your progress is saved under your name on this device. Read-only — you can't change the app's content.</div>
           <div style="display:flex;gap:8px;">
             <input id="auth-name" type="text" placeholder="Your name (e.g. Dr. Cohen)" autocomplete="name"
-              style="flex:1;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;" />
+              style="flex:1;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:16px;" />
             <button class="btn btn-light" data-action="auth-client-signin" style="background:var(--accent);color:#fff;">Start studying</button>
           </div>
           ${Object.keys(state.clientProgress || {}).length ? `
@@ -12363,7 +12390,7 @@ function renderAuthScreen() {
           <div style="border:1px solid var(--border);border-radius:14px;padding:16px;background:linear-gradient(135deg,#fef3c7 0%,#fff 60%);">
             <div style="font-weight:700;color:var(--navy-900);font-size:14.5px;margin-bottom:6px;">${I.key} Set up manager (app owner)</div>
             <div style="font-size:12.5px;color:var(--text-soft);margin-bottom:10px;">Only the owner does this. Choose a name and a 4–6 digit passcode — you'll be able to edit everything, and can enable Face ID / Touch ID afterwards in Settings.</div>
-            <input id="setup-name" type="text" placeholder="Your name" autocomplete="name" style="width:100%;box-sizing:border-box;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:14px;margin-bottom:8px;" />
+            <input id="setup-name" type="text" placeholder="Your name" autocomplete="name" style="width:100%;box-sizing:border-box;padding:11px 14px;border:1px solid var(--border);border-radius:10px;font-size:16px;margin-bottom:8px;" />
             <input id="setup-passcode" type="password" inputmode="numeric" maxlength="8" placeholder="Choose a passcode (4–6 digits)" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:16px;font-family:var(--font-mono);text-align:center;letter-spacing:5px;margin-bottom:10px;" />
             <button class="btn btn-primary" data-action="auth-setup-manager" style="width:100%;justify-content:center;padding:12px;">${I.check} Create manager profile</button>
           </div>
@@ -21484,14 +21511,29 @@ loadStored();
 if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser === 'function') bindProgressForUser();
 (function(){
   var run = false;
-  function go(){ if (run) return; run = true; render(); }
-  // Render EARLY, behind the loader. The loader is now a static image + GPU-composited
-  // orbiting particles, so the one heavy render task no longer stutters it. Rendering up
-  // front means the app is fully painted and settled by the time the loader fades —
-  // eliminating the end-of-loader freeze and the reveal artifact.
+  function go(){
+    if (run) return; run = true;
+    try { render(); }  // render() schedules the loader fade itself (~3s intro)
+    catch (err) {
+      // Never leave the user stuck on a blank/frozen screen — show a recover option + drop the loader.
+      try { console.error('Initial render failed:', err); } catch(e){}
+      try {
+        var app = document.getElementById('app');
+        if (app) app.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:30px;text-align:center;font-family:system-ui,sans-serif;">'
+          + '<div><div style="font-size:40px;margin-bottom:10px;">⚠️</div>'
+          + '<div style="font-size:17px;font-weight:700;color:#0b1e36;margin-bottom:6px;">Something didn’t load right</div>'
+          + '<div style="font-size:14px;color:#475569;margin-bottom:16px;line-height:1.5;">Tap reload — your progress is safe.</div>'
+          + '<button onclick="location.reload()" style="background:#2563eb;color:#fff;border:none;border-radius:10px;padding:12px 22px;font-size:15px;font-weight:600;">Reload</button>'
+          + '</div></div>';
+      } catch(e){}
+      try { if (typeof hideBootLoader === 'function') hideBootLoader(); } catch(e){}
+    }
+  }
   requestAnimationFrame(function(){ requestAnimationFrame(go); });
   setTimeout(go, 800);                 // safety net
   window.addEventListener('pointerdown', go, { once: true });
+  // HARD SAFETY: no matter what, never let the loading overlay block the screen forever.
+  setTimeout(function(){ try { if (typeof hideBootLoader === 'function') hideBootLoader(); } catch(e){} }, 6000);
 })();
 </script>
 
