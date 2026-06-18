@@ -15666,6 +15666,8 @@ async function generateExtendedPodcast(weekNum) {
 }
 
 /* ---------- TTS ENGINE ---------- */
+// Tiny silent WAV used only to unlock/prime the audio element inside a user gesture (iOS Safari).
+const SILENT_AUDIO = 'data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
 const TTS = {
   utterance: null,
   audio: null,           // HTMLAudioElement for OpenAI/ElevenLabs playback
@@ -15724,11 +15726,16 @@ const TTS = {
         const url = await bestTtsBlobUrl(turn.speaker, turn.text);
         state.podcastLoading = false;
         if (state.podcastStatus !== 'playing') return;
-        const audio = new Audio(url);
+        // Reuse the element that was unlocked during the user's tap (iOS Safari blocks audio that
+        // is created/played only AFTER an await — outside the gesture). Reusing the primed element
+        // lets HD playback start even though the audio was fetched asynchronously.
+        const audio = this.audio || (this.audio = new Audio());
+        try { audio.pause(); } catch(e){}
+        audio.src = url;
+        audio.muted = false;
         audio.playbackRate = state.playbackSpeed || 1.0;
         audio.volume = 1.0;
         audio.preload = 'auto';
-        this.audio = audio;
         let advanced = false;
         const advance = () => {
           if (advanced) return;
@@ -15793,6 +15800,26 @@ const TTS = {
     this.utterance = u;
     window.speechSynthesis.speak(u);
   },
+  // iOS Safari only allows audio that is started inside a user gesture. Our clips are fetched
+  // asynchronously, so we "prime" a single reusable <audio> element (and speech synth) right here
+  // in the tap — afterwards the same element may be played programmatically.
+  unlockAudio() {
+    try {
+      if (!this.audio) { this.audio = new Audio(); this.audio.preload = 'auto'; }
+      const a = this.audio;
+      a.muted = true;
+      a.src = SILENT_AUDIO;
+      const p = a.play();
+      if (p && p.catch) p.catch(function(){});
+    } catch (e) {}
+    try {
+      if ('speechSynthesis' in window) {
+        const u = new SpeechSynthesisUtterance(' ');
+        u.volume = 0;
+        window.speechSynthesis.speak(u);
+      }
+    } catch (e) {}
+  },
   play() {
     // Mark the podcast tile as visited for the chapter the user just hit play on
     try {
@@ -15814,6 +15841,7 @@ const TTS = {
     }
     // Fresh playback → allow one premium-voice-status notice again.
     window.__ttsFallbackNotified = false;
+    this.unlockAudio(); // MUST run synchronously inside the tap (before the async fetch) for iOS
     state.podcastStatus = 'playing';
     const start = (state.podcastTurn >= 0) ? state.podcastTurn : 0;
     this.speakTurn(start);
