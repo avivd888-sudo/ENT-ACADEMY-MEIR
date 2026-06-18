@@ -3368,19 +3368,25 @@
   .pdf-modal-bar {
     background: var(--navy-900);
     color: #fff;
-    padding: 10px 16px;
+    padding: 10px 14px;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
+    flex-wrap: wrap; /* so buttons (incl. Close) wrap to a 2nd row on a phone instead of going off-screen */
     border-bottom: 1px solid rgba(255,255,255,.08);
   }
-  .pdf-modal-bar .title { font-weight: 700; font-size: 14px; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .pdf-modal-bar .meta { font-size: 12px; color: #9bb1d4; margin-right: 8px; }
+  .pdf-modal-bar .title { font-weight: 700; font-size: 14px; flex: 1 1 120px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pdf-modal-bar .meta { font-size: 12px; color: #9bb1d4; }
   .pdf-modal-bar button {
     background: rgba(255,255,255,.12); color: #fff;
     border: 1px solid rgba(255,255,255,.18); border-radius: 8px;
-    padding: 7px 12px; font-size: 12.5px; font-weight: 600;
+    padding: 9px 13px; font-size: 12.5px; font-weight: 600; min-height: 38px;
     cursor: pointer;
+  }
+  @media (max-width: 720px){
+    .pdf-modal-bar .pdf-hint { display: none; }      /* drop the long hint on phones */
+    .pdf-modal-bar { gap: 6px; }
+    .pdf-modal-bar button { flex: 1 1 auto; }
   }
   .pdf-modal-bar button:hover { background: rgba(255,255,255,.22); }
   .pdf-modal-frame {
@@ -3391,12 +3397,14 @@
   }
   .pdf-modal-fallback {
     flex: 1;
-    display: grid;
-    place-items: center;
+    display: flex;            /* center the card but allow scrolling when it's taller than the screen */
     color: #fff;
     text-align: center;
-    padding: 30px 24px;
+    padding: 20px 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
+  .pdf-modal-fallback > div { margin: auto; }
 
   /* Speed control pills */
   .speed-pill {
@@ -12453,7 +12461,7 @@ function renderChapterModal() {
         <div class="pdf-modal-bar">
           <span class="meta">Cummings Ch.${num}</span>
           <span class="title">${escapeHTML(c.title)}</span>
-          <span style="font-size:11.5px;color:rgba(255,255,255,.7);">🔎 search with Ctrl/⌘+F or the viewer toolbar</span>
+          <span class="pdf-hint" style="font-size:11.5px;color:rgba(255,255,255,.7);">🔎 search with Ctrl/⌘+F or the viewer toolbar</span>
           <button onclick="try{window.open(state.chapterPdfUrl,'_blank');}catch(e){}">Open in new tab ↗</button>
           <button data-action="chapter-pdf-replace" data-chapter="${num}">Replace</button>
           <button data-action="close-chapter-modal">Close ✕</button>
