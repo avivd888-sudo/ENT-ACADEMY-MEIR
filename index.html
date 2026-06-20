@@ -4181,8 +4181,14 @@ function mediaUrl(filename) {
   return uploadUrl(filename);
 }
 function chaptersForWeek(wn) {
-  const ids = WEEK_TO_CHAPTERS[wn] || [];
-  return ids.map(id => Object.assign({ num: id }, CHAPTER_FILES[id])).filter(c => c.file);
+  let ids = WEEK_TO_CHAPTERS[wn] || [];
+  // Fall back to the unit's own Cummings chapter so EVERY chapter has a "Open PDF" entry,
+  // even if no PDF was bundled — the user opens their own copy in the in-app reader (with search).
+  if (!ids.length) {
+    const w = (typeof CURRICULUM !== 'undefined') && CURRICULUM.find(x => x.week === wn);
+    if (w && w.chapter) ids = [w.chapter];
+  }
+  return ids.map(id => Object.assign({ num: id, title: 'Chapter ' + id }, CHAPTER_FILES[id] || {}));
 }
 /* General-purpose chapters that don't map to a specific week — always
    available in the sidebar "Reference Chapters" section. */
@@ -17072,13 +17078,28 @@ function renderStructureDetail(s) {
 }
 
 /* ---------- UNIFIED SEARCH (Cummings chapters + OpenEvidence + literature) ---------- */
+/* Approximate publication date from year + issue month, for "last 12 months" filtering. */
+function articleDate(a) {
+  const M = { jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11 };
+  const key = String(a && a.issue || '').trim().slice(0,3).toLowerCase();
+  const m = (key in M) ? M[key] : 6; // assume mid-year when month unknown
+  return new Date((a && a.year) || 2000, m, 1).getTime();
+}
+/* Only the most recent ~12 months of literature appears in the app (keeps "latest research" truly current). */
+function recentResearchArticles() {
+  const cutoff = Date.now() - 380 * 24 * 60 * 60 * 1000; // ~12.5 months back
+  const list = RESEARCH_ARTICLES.filter(a => articleDate(a) >= cutoff);
+  return list.length ? list : RESEARCH_ARTICLES.slice().sort((a,b) => articleDate(b) - articleDate(a)).slice(0, 12);
+}
 /* ---------- RESEARCH DIGEST 🔬 ---------- */
 function renderResearch() {
   const now = new Date();
   const filter = state.researchFilter || 'all'; // subspecialty filter ('all' or subspecialty id)
   const q = (state.researchQuery || '').trim().toLowerCase();
+  // Only the last 12 months of literature.
+  const RECENT = recentResearchArticles();
   // Filter articles
-  let articles = RESEARCH_ARTICLES.slice();
+  let articles = RECENT.slice();
   if (filter !== 'all') articles = articles.filter(a => a.subspecialty === filter);
   if (q) articles = articles.filter(a =>
     a.title.toLowerCase().includes(q) ||
@@ -17117,15 +17138,15 @@ function renderResearch() {
         <div class="research-banner-target">Updated monthly · Next refresh: first of next month</div>
       </div>
       <div class="research-banner-meta">
-        <div><strong>${RESEARCH_ARTICLES.length}</strong> curated articles · <strong>${totalNew}</strong> new this month</div>
+        <div><strong>${RECENT.length}</strong> articles · last 12 months · <strong>${totalNew}</strong> new this month</div>
       </div>
     </div>
 
     <!-- Subspecialty filter pills -->
     <div class="research-filters">
-      <button class="research-filter-pill ${filter==='all' ? 'active' : ''}" data-action="research-filter" data-filter="all">📚 All subspecialties · ${RESEARCH_ARTICLES.length}</button>
+      <button class="research-filter-pill ${filter==='all' ? 'active' : ''}" data-action="research-filter" data-filter="all">📚 All subspecialties · ${RECENT.length}</button>
       ${SUBSPECIALTIES.map(s => {
-        const n = RESEARCH_ARTICLES.filter(a => a.subspecialty === s.id).length;
+        const n = RECENT.filter(a => a.subspecialty === s.id).length;
         return `<button class="research-filter-pill ${filter===s.id ? 'active' : ''}" data-action="research-filter" data-filter="${s.id}">${s.icon} ${escapeHTML(s.name)} · ${n}</button>`;
       }).join('')}
       <input id="research-search" type="search"
