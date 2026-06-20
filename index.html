@@ -13397,14 +13397,14 @@ function renderWeekOverview(w, c) {
   const podScript = getPodcastScript(c, w.title);
   const hasPod = podScript && podScript.length;
   const podCta = hasPod ? `
-    <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#f1f5f9;border-radius:14px;padding:18px 22px;margin-bottom:18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;cursor:pointer;" data-action="open-week-tab" data-tab="teaching" role="button" tabindex="0" aria-label="Switch to Teaching tab and play podcast">
+    <div style="background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);color:#f1f5f9;border-radius:14px;padding:18px 22px;margin-bottom:18px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;cursor:pointer;" data-action="open-week-section" data-week="${w.week}" data-tab="teaching" data-section="teach-podcast" role="button" tabindex="0" aria-label="Go to the podcast">
       <div style="width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,#818cf8,#6366f1);display:grid;place-items:center;font-size:24px;flex-shrink:0;">🎙️</div>
       <div style="flex:1;min-width:200px;">
         <div style="font-size:11px;font-weight:700;color:#a5b4fc;text-transform:uppercase;letter-spacing:1.2px;">Available · ${podScript.length} turns · ${c.podcastDuration || '~15 min'}</div>
         <div style="font-family:var(--font-serif);font-size:17px;color:#fff;margin:2px 0;">${escapeHTML(c.podcastTitle || ('Deep Dive · ' + w.title))}</div>
-        <div style="font-size:12.5px;color:#cbd5e1;">A two-host NotebookLM-style conversation. Tap Teaching tab to listen.</div>
+        <div style="font-size:12.5px;color:#cbd5e1;">A two-host NotebookLM-style conversation. Tap to jump to the player.</div>
       </div>
-      <button class="btn btn-primary" data-action="open-week-tab" data-tab="teaching" style="background:#818cf8;color:#0f172a;font-weight:700;flex-shrink:0;">🎧 Open podcast →</button>
+      <button class="btn btn-primary" data-action="open-week-section" data-week="${w.week}" data-tab="teaching" data-section="teach-podcast" style="background:#818cf8;color:#0f172a;font-weight:700;flex-shrink:0;">🎧 Open podcast →</button>
     </div>
   ` : '';
   return `
@@ -14093,58 +14093,75 @@ function getKeyPoints(c) {
   return autoKeyPointsFromSummary(c && c.summary);
 }
 
-/* Auto-generate a two-host podcast script from the summary HTML by alternating
-   between host (Marchetti) framing each section and cohost (Chen) elaborating.
-   Used as a fallback for chapters without a curated script. */
-function autoPodcastFromSummary(summaryHTML, titleHint) {
-  if (!summaryHTML) return [];
+/* Build a flowing two-host conversation from a chapter's curated material — summary sections,
+   plus the chapter's real pearls, classic signs and key points. This is the baseline episode for
+   every chapter; the manager can replace it with a longer Claude-written "Extended Deep Dive".
+   We deliberately do NOT invent patient cases here (fabricated specifics could be wrong) — real
+   vignettes come from the Extended Deep Dive, which is grounded in the chapter. */
+function autoPodcastFromSummary(c, titleHint) {
+  // Back-compat: accept either a content object or a raw summary HTML string.
+  if (typeof c === 'string') c = { summary: c };
+  c = c || {};
+  const title = titleHint || 'this chapter';
+  const turns = [];
+  const H = (t) => { if (t && String(t).trim()) turns.push({ speaker: 'host',   text: String(t).trim() }); };
+  const C = (t) => { if (t && String(t).trim()) turns.push({ speaker: 'cohost', text: String(t).trim() }); };
+  const clip = (s, n) => { s = String(s || '').trim(); return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, '') + '…' : s; };
+
+  // Cold open
+  H("Welcome back to ENT Academy — I'm Elena.");
+  C("And I'm Marcus. Today we're doing a deep dive on " + title + ".");
+  H("This is a high-yield topic for the boards, so let's make it really stick.");
+
+  // Walk the summary section by section, as a back-and-forth
   const tmp = document.createElement('div');
-  tmp.innerHTML = summaryHTML;
-  const headings = tmp.querySelectorAll('h4');
-  if (!headings.length) return [];
-  const turns = [
-    { speaker: 'host',   text: "Welcome back to ENT Academy. I'm Elena." },
-    { speaker: 'cohost', text: "And I'm Marcus. Today we're doing a deep dive on " + (titleHint || 'this chapter') + "." }
-  ];
-  // For each section, host opens with the section topic, cohost expands using the content
+  tmp.innerHTML = c.summary || '';
+  const headings = [...tmp.querySelectorAll('h4')];
+  const openers = ["Let's start with", "Let's move on to", "Next up,", "Now,", "Let's talk about", "Switching gears —", "Then there's"];
+  const followUps = ["What's the high-yield point there?", "Why does that matter clinically?", "What's the must-not-miss?", "How do we use that at the bedside?", "What's the board favorite here?", "And the bottom line?"];
   headings.forEach((h, i) => {
     const topic = (h.textContent || '').replace(/^\d+\.\s*/, '').trim();
-    // Gather text content from elements after this heading until the next h4
-    let body = '';
-    let n = h.nextElementSibling;
-    while (n && n.tagName !== 'H4') {
-      const t = (n.textContent || '').trim();
-      if (t) body += (body ? ' ' : '') + t;
-      n = n.nextElementSibling;
-    }
-    if (!body) return;
-    // Split body into 2 chunks for back-and-forth
-    const sentences = body.split(/(?<=[.?!])\s+/);
-    const halfPoint = Math.max(1, Math.floor(sentences.length / 2));
-    const part1 = sentences.slice(0, halfPoint).join(' ').trim();
-    const part2 = sentences.slice(halfPoint).join(' ').trim();
-    // Host frames the topic
-    turns.push({ speaker: 'host', text: (i === 0 ? "Let's start with " : "Now — ") + topic.toLowerCase() + "." });
-    // Cohost gives the first half
-    if (part1 && part1.length > 20) {
-      turns.push({ speaker: 'cohost', text: part1.length > 400 ? part1.slice(0, 400).replace(/\s+\S*$/, '') + '…' : part1 });
-    }
-    // Host asks a follow-up
-    if (part2 && part2.length > 20) {
-      const followUps = ["What's the key takeaway?", "Anything else to add?", "And the bottom line?", "What should we remember?"];
-      turns.push({ speaker: 'host', text: followUps[i % followUps.length] });
-      turns.push({ speaker: 'cohost', text: part2.length > 400 ? part2.slice(0, 400).replace(/\s+\S*$/, '') + '…' : part2 });
-    }
+    if (!topic) return;
+    let body = ''; let n = h.nextElementSibling;
+    while (n && n.tagName !== 'H4') { const t = (n.textContent || '').trim(); if (t) body += (body ? ' ' : '') + t; n = n.nextElementSibling; }
+    H(openers[i % openers.length] + ' ' + topic.toLowerCase() + '.');
+    if (!body) { C("Right — this is one of those areas where the details really matter."); return; }
+    const sentences = body.split(/(?<=[.?!])\s+/).filter(s => s.trim().length > 0);
+    let idx = 0;
+    const take = (k) => { const part = sentences.slice(idx, idx + k).join(' ').trim(); idx += k; return part; };
+    C(clip(take(2), 360));
+    if (idx < sentences.length) { H(followUps[i % followUps.length]); C(clip(take(2), 360)); }
+    if (idx < sentences.length) { C(clip(take(3), 420)); }
   });
-  // Closing
-  turns.push({ speaker: 'host',   text: "So those are the key takeaways from " + (titleHint || 'this chapter') + "." });
-  turns.push({ speaker: 'cohost', text: "Until next time." });
+
+  // Exam pearls (real curated content)
+  const pearls = (Array.isArray(c.pearls) ? c.pearls : []).map(p => String(p || '').trim()).filter(Boolean);
+  if (pearls.length) {
+    H("Before we wrap, let's rapid-fire a few exam pearls.");
+    pearls.slice(0, 6).forEach((p, i) => { (i % 2 === 0 ? C : H)("Here's one — " + p); });
+  }
+
+  // Classic signs
+  const signs = (Array.isArray(c.signs) ? c.signs : []).filter(s => s && (s.name || s.description || s.implication));
+  if (signs.length) {
+    H("Any classic signs or eponyms worth knowing?");
+    signs.slice(0, 4).forEach(s => { C((s.name ? s.name + ' — ' : '') + clip(s.description || s.implication || '', 300)); });
+  }
+
+  // "Three things to remember" from key points
+  const kps = [];
+  (Array.isArray(c.keyPoints) ? c.keyPoints : []).forEach(cat => { (cat && Array.isArray(cat.items) ? cat.items : []).forEach(it => { const t = String(it || '').trim(); if (t) kps.push(t); }); });
+  H("If you remember nothing else from " + title + ", what are the top things?");
+  if (kps.length) { kps.slice(0, 3).forEach((k, i) => C("Number " + (i + 1) + " — " + clip(k, 300))); }
+  else { C("Lock in the diagnosis, the workup, and the first-line management — that's what gets tested."); }
+  C("That's our deep dive on " + title + ". Keep it high-yield, and we'll see you next time.");
+
   return turns;
 }
 
 function getPodcastScript(c, titleHint) {
   if (c && c.podcastScript && c.podcastScript.length) return c.podcastScript;
-  return autoPodcastFromSummary(c && c.summary, titleHint);
+  return autoPodcastFromSummary(c, titleHint);
 }
 
 function renderSlideStage(slides) {
@@ -15737,9 +15754,19 @@ const TTS = {
         try { audio.pause(); } catch(e){}
         audio.src = url;
         audio.muted = false;
-        audio.playbackRate = state.playbackSpeed || 1.0;
         audio.volume = 1.0;
         audio.preload = 'auto';
+        // Keep the voice natural at non-1× speeds, and force a clean reset of the reused element
+        // so each clip starts cleanly (fixes the "starts too fast/slow then settles" glitch).
+        try { audio.preservesPitch = true; audio.mozPreservesPitch = true; audio.webkitPreservesPitch = true; } catch(e){}
+        const desiredRate = state.playbackSpeed || 1.0;
+        const applyRate = () => { try { if (audio.playbackRate !== desiredRate) audio.playbackRate = desiredRate; } catch(e){} };
+        try { audio.load(); } catch(e){}
+        // Apply the rate only once the clip is actually decoding/playing — setting it before the
+        // reused element has loaded the new source is what caused the brief speed glitch.
+        audio.onloadedmetadata = applyRate;
+        audio.oncanplay = applyRate;
+        audio.onplaying = applyRate;
         let advanced = false;
         const advance = () => {
           if (advanced) return;
@@ -15755,6 +15782,7 @@ const TTS = {
         // audio.play() returns a Promise; if blocked or fails we need explicit handling
         try {
           await audio.play();
+          applyRate();
         } catch (playErr) {
           console.error('[TTS] audio.play() rejected:', playErr && playErr.message);
           throw playErr; // fall through to browser TTS
@@ -15993,6 +16021,18 @@ function updateMediaSession() {
   } catch(e) { console.warn('Media Session update failed:', e); }
 }
 
+/* Progress across the WHOLE podcast (all turns), not just the current speaker's clip:
+   (completed turns + fraction of the current clip) / total turns. */
+function podcastOverallPct() {
+  const c = (state.podcastWeek != null) ? CONTENT[state.podcastWeek] : null;
+  const total = c && c.podcastScript ? c.podcastScript.length : 0;
+  if (!total || state.podcastTurn < 0) return 0;
+  let frac = 0;
+  if (TTS.audio && TTS.audio.duration && isFinite(TTS.audio.duration)) {
+    frac = Math.min(1, (TTS.audio.currentTime || 0) / TTS.audio.duration);
+  }
+  return Math.min(100, ((state.podcastTurn + frac) / total) * 100);
+}
 /* ---------- Floating mini-player ---------- */
 function updateFloatingPlayer() {
   const el = document.getElementById('floating-player');
@@ -16017,10 +16057,8 @@ function updateFloatingPlayer() {
   const speakerName = isHost ? 'Elena (Host)' : 'Marcus (Co-host)';
   const total = c.podcastScript.length;
   const pct = Math.min(100, Math.round((turnIdx + 1) / total * 100));
-  // Progress bar reflects position WITHIN the current turn's audio (live, click-to-seek)
-  const audioPct = (TTS.audio && TTS.audio.duration)
-    ? Math.min(100, (TTS.audio.currentTime / TTS.audio.duration) * 100)
-    : 0;
+  // Progress bar reflects position across the WHOLE podcast (all turns), not just this clip.
+  const audioPct = podcastOverallPct();
   const title = c.podcastTitle || ('Week ' + week + ' Podcast');
   const isPlaying = status === 'playing';
   const isLoading = !!state.podcastLoading;
@@ -16042,26 +16080,20 @@ function updateFloatingPlayer() {
       <button class="fp-btn" data-action="fp-next" title="Next turn" aria-label="Next turn">⏭</button>
       <button class="fp-btn" data-action="fp-stop" title="Stop and close" aria-label="Stop podcast">✕</button>
     </div>
-    <div class="fp-progress" data-action="fp-seek-bar" role="slider" aria-label="Seek within current turn" tabindex="0">
+    <div class="fp-progress" data-action="fp-seek-bar" role="slider" aria-label="Podcast progress" tabindex="0">
       <div class="fp-progress-fill" style="width:${audioPct}%"></div>
     </div>
   `;
-  // Wire up live progress within the current audio turn (so the bar moves smoothly)
+  // Wire up live progress across the whole podcast (so the bar advances over the full episode)
   if (TTS.audio && !TTS._progressBound) {
     TTS._progressBound = true;
     TTS.audio.addEventListener('timeupdate', () => {
       try {
+        const p = podcastOverallPct();
         const fill = document.querySelector('#floating-player .fp-progress-fill');
-        if (fill && TTS.audio && TTS.audio.duration) {
-          const p = Math.min(100, (TTS.audio.currentTime / TTS.audio.duration) * 100);
-          fill.style.width = p + '%';
-        }
-        // Mirror to Listen Mode if open
+        if (fill) fill.style.width = p + '%';
         const lmFill = document.querySelector('#listen-mode .lm-progress-fill');
-        if (lmFill && TTS.audio && TTS.audio.duration) {
-          const p = Math.min(100, (TTS.audio.currentTime / TTS.audio.duration) * 100);
-          lmFill.style.width = p + '%';
-        }
+        if (lmFill) lmFill.style.width = p + '%';
       } catch(e){}
     });
   }
@@ -16101,9 +16133,7 @@ function updateListenMode() {
   const speakerRole = isHost ? 'Host' : 'Co-host';
   const total = c.podcastScript.length;
   const pct = Math.min(100, Math.round((turnIdx + 1) / total * 100));
-  const audioPct = (TTS.audio && TTS.audio.duration)
-    ? Math.min(100, (TTS.audio.currentTime / TTS.audio.duration) * 100)
-    : 0;
+  const audioPct = podcastOverallPct(); // whole-podcast progress, not just this clip
   const isPlaying = state.podcastStatus === 'playing';
   const isLoading = !!state.podcastLoading;
   el.classList.remove('lm-hidden');
