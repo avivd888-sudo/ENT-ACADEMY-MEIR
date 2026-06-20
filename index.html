@@ -13565,7 +13565,11 @@ function renderWeekMediaPanel(w) {
     </details>
   `;
 
-  return media + managerPanel;
+  // The manager media-attach panel was confusing in the study flow and is non-functional on the
+  // hosted app (it references files in a local "uploads" folder). Keep the Teaching tab clean and
+  // focused on studying — show only actual attached media (if any).
+  void managerPanel;
+  return media;
 }
 
 /* ---------- TEACHING TAB (real media + script + slides + summary) ---------- */
