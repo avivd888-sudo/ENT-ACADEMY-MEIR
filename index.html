@@ -13620,8 +13620,8 @@ function renderWeekTeaching(w, c) {
   ` : `
     <div class="card-soft placeholder" style="margin-top:18px;">
       <div class="placeholder-icon">${I.film}</div>
-      <h3>No slide deck yet for this week</h3>
-      <p>Activate this chapter (Overview tab) and slides will be generated alongside the podcast.</p>
+      <h3>No slide deck for this chapter yet</h3>
+      <p>Use the summary, key points, podcast, flashcards and quiz on the other tabs to study this chapter.</p>
     </div>
   `;
 
@@ -13702,8 +13702,8 @@ function renderWeekTeaching(w, c) {
   ` : `
     <div class="card-soft placeholder" style="margin-top:18px;">
       <div class="placeholder-icon">${I.podcast}</div>
-      <h3>Podcast not generated yet</h3>
-      <p>Activate this chapter to produce the two-host conversational episode.</p>
+      <h3>Podcast not available for this chapter yet</h3>
+      <p>This chapter doesn't have a recorded episode. Use the summary, flashcards and quiz to study it.</p>
     </div>
   `;
 
@@ -13816,8 +13816,8 @@ function renderWeekTeaching(w, c) {
   ` : '';
 
   // 4. Deep Dive Podcast (existing podHTML) — moved AFTER presentation
-  // 6. Per-chapter chat — "Ask this chapter"
-  const chatHTML = renderChapterChat(w, c);
+  // "Ask this chapter" AI chat removed (it required an Anthropic key, which we no longer use).
+  const chatHTML = '';
 
   // === LANDING-GRID NAV ===
   // Always-visible grid of cards at the TOP — every option in the chapter at a glance.
@@ -13834,7 +13834,6 @@ function renderWeekTeaching(w, c) {
     { id: 'tile-pod',      icon: '🎙️', title: 'Deep Dive podcast',     stat: (hasScript ? c.podcastScript.length + ' turns · ' + (c.podcastDuration || '~15 min') : 'not available'), color: '#6366f1', target: 'teach-podcast', present: hasScript, done: !!activity['teach-podcast'] },
     { id: 'tile-video',    icon: '🎬', title: 'Summary video',         stat: 'narrated recap', color: '#ec4899', entv: true, present: (typeof entvHasVideo === 'function' && entvHasVideo(c)), done: false },
     { id: 'tile-flash',    icon: '🧠', title: 'Flashcards',            stat: (c.flashcards||[]).length + ' cards', color: '#10b981', target: '', action: { type: 'nav', view: 'flashcards' }, present: (c.flashcards||[]).length > 0, done: !!(state.srsHistory && state.srsHistory[wn]) },
-    { id: 'tile-chat',     icon: '💬', title: 'Ask this chapter',      stat: 'AI Q&A',                            color: '#7c3aed', target: 'teach-chat',        present: true, done: !!(state.chapterChats && state.chapterChats[wn] && state.chapterChats[wn].length) },
     { id: 'tile-quiz',     icon: '✅', title: 'Take the quiz',          stat: quizDone ? `Score: ${wProg.quizScore}/${wProg.quizTotal}` : ((c.quiz||[]).length + ' questions'),  color: '#dc2626', target: '', action: { type: 'tab', tab: 'quiz' }, present: (c.quiz||[]).length > 0, done: quizDone }
   ].filter(t => t.present);
   const completedCount = tilesData.filter(t => t.done).length;
@@ -13867,32 +13866,8 @@ function renderWeekTeaching(w, c) {
   const summarySection      = `<div id="teach-summary">${summaryAndKPHTML}</div>`;
   const factsSection        = `<div id="teach-facts">${factsHTML}</div>`;
   const presentationSection = `<div id="teach-slides">${presentationHTML}</div>`;
-  // Extended Deep Dive control — Claude-generated 15-20 min, board-exam-focused dialogue.
-  const _hasAnthro = !!state.apiKey;
-  // Deep Dive generation controls are manager-only. Doctors still hear an extended episode if one
-  // exists (the player picks it automatically) — they just don't see the generate/regenerate UI.
-  const _extRow = !isManager() ? '' : (state.extendedPodcastGenerating === w.week)
-    ? `<div style="margin-bottom:10px;padding:12px 14px;background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;font-size:13px;color:#92400e;font-weight:600;">
-         ⏳ Generating extended Deep Dive (15–20 min, ~60 turns)… this can take 30–60 seconds. Don't navigate away.
-       </div>`
-    : (state.extendedPodcasts && state.extendedPodcasts[w.week])
-      ? `<div style="margin-bottom:10px;padding:10px 14px;background:#e0f2fe;border:1px solid #7dd3fc;border-radius:10px;font-size:13px;color:#075985;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-           <span style="font-weight:700;">✨ Extended Deep Dive active</span>
-           <span style="color:#475569;font-size:12px;">${(state.extendedPodcasts[w.week].script || []).length} turns · generated ${new Date(state.extendedPodcasts[w.week].generatedAt || Date.now()).toLocaleDateString()}</span>
-           <button class="btn btn-sm btn-ghost" data-action="gen-extended-podcast" data-week="${w.week}" style="margin-left:auto;">🔄 Regenerate</button>
-           <button class="btn btn-sm btn-ghost" data-action="reset-extended-podcast" data-week="${w.week}">↩ Use original</button>
-         </div>`
-      : _hasAnthro
-        ? `<div style="margin-bottom:10px;padding:12px 14px;background:linear-gradient(135deg,#dbeafe,#ede9fe);border:1px solid #c4b5fd;border-radius:12px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-             <div style="flex:1;min-width:200px;">
-               <div style="font-size:14px;font-weight:700;color:#4c1d95;">🎙️ Generate Extended Deep Dive (15–20 min)</div>
-               <div style="font-size:12px;color:#5b21b6;margin-top:2px;">Claude AI builds a richer dialogue: ~60 turns, fact-by-fact, board-exam style (Stage A & B). Saved per chapter — one-time generation.</div>
-             </div>
-             <button class="btn btn-primary" data-action="gen-extended-podcast" data-week="${w.week}" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);">⚡ Generate</button>
-           </div>`
-        : `<div style="margin-bottom:10px;padding:10px 14px;background:#fef9c3;border:1px solid #fde047;border-radius:10px;font-size:12.5px;color:#854d0e;">
-             💡 To unlock <strong>Extended Deep Dives</strong> (15–20 min, board-exam tailored) — add your Anthropic Claude key in Settings ⚙️.
-           </div>`;
+  // Deep Dive AI generation removed (no Anthropic dependency) — the built-in podcast plays directly.
+  const _extRow = '';
   // ElevenLabs / OpenAI / Browser status — small chip so user can SEE which engine will play
   const _hasEleven = !!state.elevenLabsKey;
   const _hasOpenAI = !!state.openaiKey;
@@ -19145,17 +19120,10 @@ function renderChatMsg(m) {
 function renderApiSetup() {
   return `
     <div class="api-setup-card">
-      <h3>${I.key} Anthropic API key (required for Advisor &amp; Activate)</h3>
-      <p>The AI Advisor and the per-week <strong>Activate</strong> button call Claude. Get a key at <a href="https://console.anthropic.com/" target="_blank" rel="noopener">console.anthropic.com</a> (≈ $0.01 per question with Haiku). Stored only on this device.</p>
-      <div class="input-row">
-        <input id="api-key-input" type="password" placeholder="sk-ant-api03-…" />
-        <button class="btn btn-light" data-action="api-save">${I.check} Save</button>
-        ${state.apiKey ? `<button class="btn btn-light" data-action="api-clear">Clear</button>` : ''}
-      </div>
-      ${state.apiKey ? `<p style="margin-top:10px;font-size:12px;color:#a5e8b3;">✓ Anthropic key saved.</p>` : ''}
+      <p style="margin:0 0 4px;color:#e0e7ff;font-size:13.5px;line-height:1.55;">Add a voice key once to hear the chapter podcasts in a natural human voice. You only need <strong>one</strong> — ElevenLabs (best) or OpenAI. Stored only on this device, sent only to the provider.</p>
 
-      <div style="border-top:1px solid rgba(255,255,255,.15);margin-top:18px;padding-top:14px;">
-        <h3 style="margin:0 0 6px;color:#fff;">${I.podcast} OpenAI key — gpt-4o-mini-tts (recommended)</h3>
+      <div style="margin-top:14px;">
+        <h3 style="margin:0 0 6px;color:#fff;">${I.podcast} OpenAI key — gpt-4o-mini-tts</h3>
         <p style="margin:0 0 10px;">Now uses <strong>gpt-4o-mini-tts</strong> — OpenAI's newest model with voice-style instructions. Voices: <strong>"ballad"</strong> (warm female host) + <strong>"ash"</strong> (grounded male cohost). Much more natural than legacy tts-1-hd. ~$0.015 per minute. Auto-falls back to tts-1-hd if model unavailable.</p>
         <p style="margin:0 0 10px;font-size:12px;color:#c4d4ee;">Get a key at <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener" style="color:#9bd1ff;">platform.openai.com/api-keys</a> · add $5 of credits → ~300 podcasts.</p>
         <div class="input-row">
