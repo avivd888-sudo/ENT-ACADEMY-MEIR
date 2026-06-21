@@ -11537,6 +11537,8 @@ let state = {
   progress: {}, // active progress (points at manager record OR the signed-in doctor's bucket)
   managerProgress: {}, // the manager's canonical progress — never overwritten by a doctor session
   chapterPdfs: {}, // { chapterNum: filename } — which chapters have a source PDF saved (blob in IndexedDB)
+  hasFullCummings: false, // manager uploaded the full licensed Cummings PDF once (stored in IndexedDB on this device)
+  fullCummingsName: '',   // filename of the uploaded full book
   pageOverrides: {}, // { weekNum: pageNumber } — user's PDF calibration
   calibratingWeek: null, // when set, show inline editor
   // Podcast
@@ -11787,6 +11789,8 @@ function loadStored() {
       state.tumorPatients = Array.isArray(parsed.tumorPatients) ? parsed.tumorPatients : [];
       state.nccnDismissedMonth = parsed.nccnDismissedMonth || null;
       state.chapterPdfs = parsed.chapterPdfs || {};
+      state.hasFullCummings = !!parsed.hasFullCummings;
+      state.fullCummingsName = parsed.fullCummingsName || '';
       state.extendedPodcasts = (parsed.extendedPodcasts && typeof parsed.extendedPodcasts === 'object') ? parsed.extendedPodcasts : {};
       // Reset daily counter if a new day
       const today = new Date().toISOString().slice(0,10);
@@ -11854,7 +11858,9 @@ function persist() {
       tumorPatients: state.tumorPatients,
       nccnDismissedMonth: state.nccnDismissedMonth,
       extendedPodcasts: state.extendedPodcasts,
-      chapterPdfs: state.chapterPdfs
+      chapterPdfs: state.chapterPdfs,
+      hasFullCummings: state.hasFullCummings,
+      fullCummingsName: state.fullCummingsName
     }));
   } catch (e) { /* ignore */ }
 }
@@ -12465,15 +12471,15 @@ function renderChapterModal() {
     return `
       <div class="pdf-modal">
         <div class="pdf-modal-bar">
-          <span class="meta">Cummings Ch.${num}</span>
+          <span class="meta">Cummings Ch.${num}${state.chapterPdfFromBook && pageForChapter(num) ? ' · p.' + pageForChapter(num) : ''}</span>
           <span class="title">${escapeHTML(c.title)}</span>
           <span class="pdf-hint" style="font-size:11.5px;color:rgba(255,255,255,.7);">🔎 search with Ctrl/⌘+F or the viewer toolbar</span>
           <button onclick="try{window.open(state.chapterPdfUrl,'_blank');}catch(e){}">Open in new tab ↗</button>
-          <button data-action="chapter-pdf-replace" data-chapter="${num}">Replace</button>
+          <button data-action="chapter-pdf-replace" data-chapter="${num}">${state.chapterPdfFromBook ? 'Use a per-chapter PDF' : 'Replace'}</button>
           <button data-action="close-chapter-modal">Close ✕</button>
         </div>
         ${fileInput}
-        <iframe class="pdf-modal-frame" src="${state.chapterPdfUrl}#search=" title="${escapeHTML(c.title)}" allow="fullscreen"></iframe>
+        <iframe class="pdf-modal-frame" src="${state.chapterPdfUrl}${/#/.test(state.chapterPdfUrl) ? '' : '#search='}" title="${escapeHTML(c.title)}" allow="fullscreen"></iframe>
       </div>
     `;
   }
@@ -15044,8 +15050,19 @@ function renderResources() {
           ) : `<div style="font-size:12.5px;color:var(--text-soft);">This device/browser doesn't support biometric sign-in. Your passcode still works everywhere.</div>`}
         </div>
         <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
+          <div style="font-weight:700;color:var(--navy-900);font-size:14px;margin-bottom:6px;">📕 My Cummings textbook (open every chapter at the right page)</div>
+          <div style="font-size:12.5px;color:var(--text-soft);line-height:1.6;margin-bottom:10px;">Upload your <strong>licensed</strong> full Cummings PDF <strong>once</strong>. It's stored privately on <strong>this device only</strong> (never uploaded anywhere, never shared with doctors). After that, every chapter's <strong>"Open PDF"</strong> opens your book jumped to that chapter's page — search inside with the reader (Ctrl/⌘+F).</div>
+          <input id="full-cummings-input" type="file" accept="application/pdf,.pdf" style="display:none;" onchange="window.__uploadFullCummings(this)">
+          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+            <button class="btn btn-primary" onclick="document.getElementById('full-cummings-input').click()">${state.hasFullCummings ? 'Replace book PDF' : '📕 Upload Cummings PDF (once)'}</button>
+            ${state.hasFullCummings ? `<button class="btn btn-light" data-action="remove-full-cummings">Remove</button>` : ''}
+            <span id="full-cummings-status" style="font-size:12px;color:var(--text-soft);">${state.hasFullCummings ? ('✓ Saved: ' + escapeHTML(state.fullCummingsName || 'Cummings.pdf')) : ''}</span>
+          </div>
+          <div style="font-size:11.5px;color:var(--text-soft);margin-top:8px;line-height:1.5;">Tip: if a chapter opens a page that's slightly off, open that chapter and tap the page chip to calibrate — it remembers per chapter. (Big files may not fit on an iPhone — there it's best done on a computer, or use per-chapter PDFs.)</div>
+        </div>
+        <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:14px;">
           <div style="font-weight:700;color:var(--navy-900);font-size:14px;margin-bottom:6px;">👥 Share with doctors</div>
-          <div style="font-size:12.5px;color:var(--text-soft);line-height:1.6;">Send colleagues the app link. On the sign-in screen they tap <strong>"I'm a doctor — study mode"</strong>, enter their name, and study. They can't edit content or see manager settings. Each doctor's progress is saved on their own device.</div>
+          <div style="font-size:12.5px;color:var(--text-soft);line-height:1.6;">Send colleagues the app link. On the sign-in screen they tap <strong>"I'm a doctor — study mode"</strong>, enter their name, and study. They can't edit content or see manager settings. Each doctor's progress is saved on their own device. (Your Cummings PDF stays only on your device — it is never shared.)</div>
         </div>
       ` : `
         <div style="margin-top:12px;font-size:12.5px;color:var(--text-soft);line-height:1.6;">You're in <strong>study mode</strong> — read, listen, and practice freely; your progress is saved under your name on this device. Editing the app's content is reserved for the manager.</div>
@@ -20428,6 +20445,15 @@ function attachListeners() {
           }
           break;
         case 'backup-progress': { exportProgress(); break; }
+        case 'remove-full-cummings': {
+          if (!isManager()) return;
+          if (!confirm('Remove the Cummings PDF from this device? Chapters will fall back to per-chapter PDFs.')) return;
+          try { if (typeof idbDel === 'function') idbDel('cummings-full'); } catch(e){}
+          state.hasFullCummings = false; state.fullCummingsName = '';
+          persist(); setState({});
+          if (typeof appToast === 'function') appToast('Cummings PDF removed from this device.');
+          break;
+        }
         case 'notes-export': {
           const fmt = el.dataset.format || 'txt';
           exportAllNotes(fmt);
@@ -21255,21 +21281,38 @@ window.__smartSearchInput = (function(){
 /* Open a chapter's source PDF. Loads the user's saved copy from IndexedDB (per device) and
    shows it in the built-in PDF viewer (search/zoom/pages). If none saved yet, the modal offers
    a file picker. Available to managers and doctors — reading from source is core to studying. */
+/* The page in the user's full Cummings PDF where a given chapter starts. */
+function pageForChapter(chNum) {
+  const w = (typeof CURRICULUM !== 'undefined') && CURRICULUM.find(x => x.chapter === chNum);
+  if (!w) return null;
+  return (typeof pageForWeek === 'function') ? pageForWeek(w.week) : (w.page || null);
+}
 function openChapterPdf(num) {
   if (state.chapterPdfUrl) { try { URL.revokeObjectURL(state.chapterPdfUrl); } catch(e){} }
   state.viewingChapter = num;
   state.chapterPdfUrl = null;
   state.chapterPdfNum = num;
+  state.chapterPdfFromBook = false;
   setState({});
-  if (typeof idbGet === 'function') {
-    idbGet('chapterpdf-' + num).then(function(blob) {
-      if (blob && state.viewingChapter === num) {
-        state.chapterPdfUrl = URL.createObjectURL(blob);
-        state.chapterPdfNum = num;
-        setState({});
-      }
-    }).catch(function(){});
-  }
+  if (typeof idbGet !== 'function') return;
+  // 1) A PDF saved for THIS chapter wins.
+  idbGet('chapterpdf-' + num).then(function(blob) {
+    if (blob) { if (state.viewingChapter === num) { state.chapterPdfUrl = URL.createObjectURL(blob); state.chapterPdfNum = num; setState({}); } return; }
+    // 2) Otherwise, if the full Cummings book was uploaded, open it AT this chapter's page.
+    if (state.hasFullCummings) {
+      idbGet('cummings-full').then(function(book) {
+        if (book && state.viewingChapter === num) {
+          const pg = pageForChapter(num);
+          let url = URL.createObjectURL(book);
+          if (pg) url += '#page=' + pg;       // native viewer jumps to the chapter page
+          state.chapterPdfUrl = url;
+          state.chapterPdfNum = num;
+          state.chapterPdfFromBook = true;
+          setState({});
+        }
+      }).catch(function(){});
+    }
+  }).catch(function(){});
 }
 window.__pickChapterPdf = function(input) {
   const f = input && input.files && input.files[0];
@@ -21285,6 +21328,31 @@ window.__pickChapterPdf = function(input) {
   state.chapterPdfNum = num;
   persist();
   setState({});
+  input.value = '';
+};
+/* Upload the full licensed Cummings PDF once (manager, this device). Stored privately in
+   IndexedDB — never uploaded anywhere. Each chapter then opens it at the right page with search. */
+window.__uploadFullCummings = function(input) {
+  const f = input && input.files && input.files[0];
+  if (!f) return;
+  const isPdf = (f.type === 'application/pdf') || /\.pdf$/i.test(f.name || '');
+  if (!isPdf) { alert('Please choose the Cummings PDF file.'); input.value = ''; return; }
+  const mb = Math.round(f.size / (1024*1024));
+  const btn = document.getElementById('full-cummings-status');
+  if (btn) btn.textContent = 'Saving ' + mb + ' MB… keep this tab open.';
+  Promise.resolve()
+    .then(function(){ if (typeof idbPut === 'function') return idbPut('cummings-full', f); throw new Error('storage unavailable'); })
+    .then(function(){
+      state.hasFullCummings = true;
+      state.fullCummingsName = f.name || 'Cummings.pdf';
+      persist();
+      setState({});
+      if (typeof appToast === 'function') appToast('✓ Cummings saved on this device (' + mb + ' MB). Every chapter now opens it at the right page.');
+    })
+    .catch(function(e){
+      alert('Could not save the PDF on this device' + (mb>400?(' — it may be too large for this browser ('+mb+' MB). On iPhone, storage is limited; try a smaller/compressed copy, or use the per-chapter PDF option.'):'') + '.\n\n' + ((e&&e.message)||e));
+      if (btn) btn.textContent = '';
+    });
   input.value = '';
 };
 window.__projectRenameInput = function(v) { const p = activeProject(); if (p) p.name = v || 'Untitled project'; };
