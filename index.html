@@ -7413,6 +7413,17 @@ const CONTENT = {
       { speaker: 'host',   text: "Cuffed versus uncuffed. Fenestrated versus non-fenestrated. Inner cannula versus single lumen. For long-term, cuffed tubes are needed if mechanical ventilation continues. Uncuffed allows more airflow around the tube for phonation. Fenestrations allow voice production but increase granulation tissue formation." },
       { speaker: 'cohost', text: "Late complications to watch?" },
       { speaker: 'host',   text: "Tracheal stenosis at the stoma or cuff site, one to eight percent. Tracheomalacia from cuff pressure. Tracheoesophageal fistula — rare but devastating. Persistent stoma after decannulation. Hypertrophic stomal scar. All preventable by attention to cuff pressure, tube size selection, and meticulous technique." },
+      { speaker: 'cohost', text: "Before the takeaways — can we put the whole thing together with one case?" },
+      { speaker: 'host',   text: "Let's do it. A 62-year-old, ventilated twelve days after severe pneumonia, failing to wean. We place a tracheotomy to cut sedation and drive the weaning. Now walk the complications by timeframe — time zero, days one to fourteen, and beyond — then the path to decannulation." },
+      { speaker: 'cohost', text: "Time zero — intra-op and immediate recovery?" },
+      { speaker: 'host',   text: "The immediate killers: loss of the airway and a false passage if the tube goes anterior to the trachea, plus hemorrhage. Also pneumothorax, pneumomediastinum, and subcutaneous emphysema — worse if you pack the wound tightly around a positive-pressure leak. Confirm placement with capnography and bilateral breath sounds before you commit." },
+      { speaker: 'cohost', text: "Days one to fourteen — the early window?" },
+      { speaker: 'host',   text: "Two emergencies dominate. Tube obstruction from a mucus plug — humidify, suction, remove or change the inner cannula. And accidental decannulation before the tract matures, around day five to seven: the tract isn't formed, so blind reinsertion makes a false passage. If you can't reinsert safely, secure the airway from above with an oral tube — don't force the trach in. Add stomal infection, minor bleeds, displacement, and aspiration — and respect any bleed as a possible herald." },
+      { speaker: 'cohost', text: "And beyond two weeks — the common and the dangerous?" },
+      { speaker: 'host',   text: "The dangerous one is the tracheo-innominate artery fistula — three days to six weeks out, often after a sentinel bleed. Massive bleeding: hyperinflate the cuff to tamponade, then the Utley maneuver — a finger through the stoma compressing the innominate against the back of the sternum — and rush to sternotomy. The common ones: tracheal stenosis at the stoma or cuff site, tracheomalacia, granulation tissue, and rarely a tracheoesophageal fistula." },
+      { speaker: 'cohost', text: "He recovers and weans — cannula change, capping, decannulation, and the stoma?" },
+      { speaker: 'host',   text: "First tube change waits for a mature tract, about day five to seven, so reinsertion is safe. To decannulate: the original indication is resolved, the upper airway is patent, and he clears secretions and coughs well. Then downsize, deflate the cuff, and run a capping trial — plug the tube so he breathes around it through the upper airway; tolerate roughly twenty-four hours and decannulate. Cover the stoma with an occlusive dressing — most close in days to a couple of weeks. If a tracheocutaneous fistula persists, especially after a long-standing trach, close it surgically: excise the tract and close in layers." },
+      { speaker: 'cohost', text: "That's the whole arc in one patient. Now the takeaways." },
       { speaker: 'cohost', text: "Three takeaways?" },
       { speaker: 'host',   text: "First — tracheal window between rings two and three. Preserve the cricoid. This single rule prevents most subglottic stenosis." },
       { speaker: 'cohost', text: "Second?" },
@@ -14138,6 +14149,14 @@ function autoPodcastFromSummary(c, titleHint) {
   // "Three things to remember" from key points
   const kps = [];
   (Array.isArray(c.keyPoints) ? c.keyPoints : []).forEach(cat => { (cat && Array.isArray(cat.items) ? cat.items : []).forEach(it => { const t = String(it || '').trim(); if (t) kps.push(t); }); });
+  // Optional curated closing clinical case for this chapter (a worked example to tie it together).
+  if (Array.isArray(c.closingCase) && c.closingCase.length) {
+    H("Before the takeaways, let's put it together with a clinical case.");
+    c.closingCase.forEach(function(t) {
+      if (t && t.text) turns.push({ speaker: (t.speaker === 'cohost' ? 'cohost' : 'host'), text: String(t.text).trim() });
+    });
+  }
+
   H("If you remember nothing else from " + title + ", what are the top things?");
   if (kps.length) { kps.slice(0, 3).forEach((k, i) => C("Number " + (i + 1) + " — " + clip(k, 300))); }
   else { C("Lock in the diagnosis, the workup, and the first-line management — that's what gets tested."); }
@@ -21772,6 +21791,20 @@ if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser =
   .pdf-modal,.install-modal{padding:10px;}
   .entv-overlay{font-size:16px;}
   .mobile-tab{font-size:10px;}
+  /* CRITICAL: nothing may extend past the screen edge — there is no horizontal scroll, so any
+     content wider than the viewport would be CUT OFF. Force everything to wrap/shrink to fit. */
+  .main{max-width:100vw;overflow-x:hidden;}
+  .main *{max-width:100%;}
+  .main p,.main li,.main h1,.main h2,.main h3,.main h4,.main span,.main div,.main a,.main strong,.main em,
+  .week-title,.week-meta,.teach-tile,.turn,.summary,.key-point,.pearl,.sign-card{
+    overflow-wrap:break-word;word-break:break-word;white-space:normal;
+  }
+  .oe-quick-bar{flex-wrap:wrap;}
+  .oe-quick-bar input{min-width:0 !important;flex:1 1 100%;}
+  .main img,.main video,.main iframe,.main svg{max-width:100%;height:auto;}
+  .main pre,.main code{white-space:pre-wrap !important;word-break:break-word;}
+  .main table{display:block;width:100%;max-width:100%;overflow-x:auto;}
+  .slide-stage,.slide-stage *{max-width:100%;}
 }
 </style>
 <script id="entv-upgrade">
