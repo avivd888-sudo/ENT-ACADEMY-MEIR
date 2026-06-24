@@ -14176,6 +14176,167 @@ function getPodcastScript(c, titleHint) {
   return autoPodcastFromSummary(c, titleHint);
 }
 
+/* Capstone clinical cases — a flowing two-expert discussion that closes each episode with a worked
+   case and the high-yield numbers. Keyed by curriculum week. Inserted into the episode at boot. */
+const CLOSING_CASES = {
+  2: [ // History, Physical Exam & Preoperative Evaluation
+    { speaker:'host',   text:"Let's close with a case. A 58-year-old smoker comes in with three months of hoarseness and a lump in the right neck. Walk me through the focused work-up." },
+    { speaker:'cohost', text:"Hoarseness beyond two to three weeks in a smoker is a scope-it red flag — full flexible laryngoscopy, no exceptions. I'm also asking about the other danger signs: dysphagia, odynophagia, unilateral otalgia — which is referred pain through the ninth and tenth nerves — weight loss, and how long the neck mass has been there." },
+    { speaker:'host',   text:"And the neck mass itself?" },
+    { speaker:'cohost', text:"A firm neck mass over two weeks in an adult is malignancy until proven otherwise. The right next step is fine-needle aspiration — never an open excisional biopsy of a node, because that can seed the field and worsen outcomes if it's metastatic squamous cell carcinoma." },
+    { speaker:'host',   text:"What does the exam need to cover?" },
+    { speaker:'cohost', text:"A complete head and neck exam: the scope for the larynx and pharynx, bimanual oral cavity exam, all cranial nerves, and systematic palpation of the neck by levels one through five. Document the primary site and the nodal level — that drives staging." },
+    { speaker:'host',   text:"Preop, before any surgery?" },
+    { speaker:'cohost', text:"Airway assessment — Mallampati, mouth opening, neck extension, prior radiation — plus cardiac and anesthesia risk, and a clear anticoagulation plan. For the cancer work-up: contrast CT of the neck, then panendoscopy with biopsy of the primary. That's the arc — recognize the red flag, scope, FNA the node, image, biopsy." }
+  ],
+  3: [ // Anesthesia & the Difficult Airway
+    { speaker:'host',   text:"Case to tie it together: a patient with prior neck radiation and new stridor needs urgent surgery. How do you approach the airway?" },
+    { speaker:'cohost', text:"This screams predicted difficult airway. Radiation gives you fibrosis, restricted mouth opening, distorted anatomy and friable mucosa. I'm predicting difficulty up front — think LEMON: Look, Evaluate the 3-3-2, Mallampati, Obstruction, Neck mobility." },
+    { speaker:'host',   text:"So what's the plan?" },
+    { speaker:'cohost', text:"Awake fiberoptic intubation under local, keeping spontaneous ventilation, with a surgeon and a tracheostomy tray in the room. The cardinal sin is inducing and paralyzing a patient you can't then mask-ventilate or rescue." },
+    { speaker:'host',   text:"And if you lose the airway — can't intubate, can't oxygenate?" },
+    { speaker:'cohost', text:"Declare CICO and go to front-of-neck access without delay: a scalpel-bougie cricothyrotomy through the cricothyroid membrane — vertical skin incision, horizontal stab, bougie, rail-road a six-oh tube. Convert to a formal tracheostomy within seventy-two hours once stable, because prolonged cricothyrotomy raises subglottic stenosis risk." },
+    { speaker:'host',   text:"Bottom line?" },
+    { speaker:'cohost', text:"Predict difficulty, keep them breathing with an awake technique, and never burn bridges. The whole difficult-airway algorithm exists to keep you from the CICO corner." }
+  ],
+  5: [ // Diagnostic Imaging of the Head and Neck
+    { speaker:'host',   text:"Closing case on choosing the right scan: an adult with a firm lateral neck mass. What do you order, and why?" },
+    { speaker:'cohost', text:"First-line is a contrast CT of the neck — fast, great for nodal architecture, necrosis, and bony invasion, and it covers the chest if you extend it. Pair it with ultrasound-guided FNA of the node for tissue." },
+    { speaker:'host',   text:"When do you reach for MRI instead?" },
+    { speaker:'cohost', text:"MRI wins for soft-tissue detail, perineural spread, and skull-base or intracranial extension — think adenoid cystic tracking along a nerve, or a parotid deep-lobe tumor. CT is your friend for bone, calcification and nodes; MRI for soft tissue and perineural." },
+    { speaker:'host',   text:"And PET-CT?" },
+    { speaker:'cohost', text:"Reserve it for staging known cancers and for the unknown primary — the metabolically active focus can point you to the tonsil or tongue base. Remember the pitfalls: inflammation and recent surgery light up and cause false positives." },
+    { speaker:'host',   text:"One practical pearl?" },
+    { speaker:'cohost', text:"Always give contrast unless there's a real contraindication — a non-contrast neck CT for a mass is a wasted study. Match the modality to the question: bone and nodes, CT; perineural and skull base, MRI; whole-body staging, PET." }
+  ],
+  6: [ // Deep Neck and Odontogenic Infections
+    { speaker:'host',   text:"Let's work a case. A diabetic patient with a rotten lower molar, two days of trismus, floor-of-mouth swelling and a muffled voice. What's the priority?" },
+    { speaker:'cohost', text:"Airway, airway, airway. Bilateral floor-of-mouth and submandibular swelling with a raised tongue is Ludwig's angina — secure the airway early, ideally awake, before it becomes impossible. Don't lie them flat." },
+    { speaker:'host',   text:"Then the work-up?" },
+    { speaker:'cohost', text:"Contrast CT of the neck to map the spaces and look for a drainable collection, plus IV antibiotics covering oral flora — anaerobes and strep — something like ampicillin-sulbactam, or add clindamycin. Glucose control matters here." },
+    { speaker:'host',   text:"And the dangerous extensions to watch?" },
+    { speaker:'cohost', text:"Descending necrotizing mediastinitis — infection tracking down the retropharyngeal and 'danger' space into the chest, with a high mortality. And Lemierre's syndrome — septic thrombophlebitis of the internal jugular from Fusobacterium, with septic pulmonary emboli. Both need aggressive surgical drainage and imaging of the chest." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Secure the airway, image with contrast, drain any abscess, cover oral anaerobes, and respect the routes of spread to the mediastinum and the IJ." }
+  ],
+  7: [ // Head & Neck in the Immunocompromised Host
+    { speaker:'host',   text:"Closing case: a neutropenic leukemia patient develops facial pain, nasal congestion and a black crust on the turbinate. What are you thinking?" },
+    { speaker:'cohost', text:"Acute invasive fungal sinusitis until proven otherwise — most often mucormycosis or aspergillus. The black eschar is necrosis from angioinvasion. This is a true emergency." },
+    { speaker:'host',   text:"What do you do?" },
+    { speaker:'cohost', text:"Urgent endoscopy and biopsy at the bedside — look for insensate, non-bleeding mucosa — start systemic antifungals immediately, liposomal amphotericin B for mucor, and take them for surgical debridement. And you must reverse the immunosuppression: correct neutropenia and control diabetes/ketoacidosis." },
+    { speaker:'host',   text:"Other lesions this population shows?" },
+    { speaker:'cohost', text:"Oral hairy leukoplakia from EBV on the lateral tongue, candidiasis, Kaposi sarcoma from HHV-8, and CMV ulcers. But the one that kills in days is invasive fungal disease." },
+    { speaker:'host',   text:"Bottom line?" },
+    { speaker:'cohost', text:"In an immunocompromised host, new sinonasal pain plus necrotic mucosa is invasive fungal sinusitis — biopsy now, amphotericin now, debride now, and fix the underlying immune deficit." }
+  ],
+  8: [ // Upper Aerodigestive Manifestations of Systemic Disease
+    { speaker:'host',   text:"Case: a 40-year-old with months of nasal crusting, recurrent epistaxis, and a developing saddle-nose deformity, plus some hemoptysis. What's on top of your list?" },
+    { speaker:'cohost', text:"Granulomatosis with polyangiitis — formerly Wegener's. The triad is upper airway, lungs and kidneys; the nose shows crusting, septal perforation and saddle-nose collapse. Send c-ANCA against PR3, check renal function and urinalysis, and biopsy." },
+    { speaker:'host',   text:"What else lives in this differential?" },
+    { speaker:'cohost', text:"Sarcoidosis — think non-caseating granulomas and classically subglottic stenosis; relapsing polychondritis with a floppy, inflamed pinna and saddle nose; amyloid; and the mucosal blistering diseases, pemphigus and pemphigoid. Tissue plus serology sorts them out." },
+    { speaker:'host',   text:"How does that change management?" },
+    { speaker:'cohost', text:"These are medical diseases first — immunosuppression, often steroids plus rituximab for GPA — and you avoid aggressive surgery on active inflammation. Airway lesions like subglottic stenosis get conservative dilation, not resection, while the disease is active." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Crusting nose plus saddle deformity plus systemic signs equals GPA until your ANCA and biopsy say otherwise — and the head and neck is often where these systemic diseases announce themselves." }
+  ],
+  9: [ // Otolaryngology in Older Adults
+    { speaker:'host',   text:"Case: an 80-year-old with gradual hearing loss, a breathy weak voice, and some coughing at meals. Walk the geriatric lens." },
+    { speaker:'cohost', text:"Start with presbycusis — symmetric, high-frequency sensorineural loss with poor speech discrimination in noise. Hearing aids help, and untreated hearing loss is now a major modifiable dementia risk factor, so we treat it actively." },
+    { speaker:'host',   text:"The voice and the coughing?" },
+    { speaker:'cohost', text:"Presbylarynx — vocal fold atrophy with bowing gives that breathy, weak voice and a glottic gap; voice therapy first, injection medialization if needed. The coughing at meals is presbyphagia with aspiration risk — get a swallow evaluation, because aspiration pneumonia is a real killer in this group." },
+    { speaker:'host',   text:"Anything that ties it together for the surgeon?" },
+    { speaker:'cohost', text:"Polypharmacy and ototoxic or anticoagulant drugs, plus frailty assessment before any operation — chronological age matters less than physiologic reserve. Optimize hearing, swallow, and medications before you reach for the scalpel." },
+    { speaker:'host',   text:"Bottom line?" },
+    { speaker:'cohost', text:"Treat hearing loss aggressively, protect the swallow, and assess frailty — small interventions buy big quality-of-life gains in older patients." }
+  ],
+  10: [ // Pain Management in the Head and Neck Patient
+    { speaker:'host',   text:"Case: a patient three days after tonsillectomy with severe throat pain, and separately a head-and-neck cancer patient with chronic pain. What's the framework?" },
+    { speaker:'cohost', text:"Multimodal analgesia is the backbone — scheduled acetaminophen and an NSAID dramatically cut opioid need, with opioids reserved for breakthrough. For post-tonsillectomy, good hydration and around-the-clock non-opioids are what actually keep them comfortable." },
+    { speaker:'host',   text:"And the cancer pain?" },
+    { speaker:'cohost', text:"Often mixed nociceptive and neuropathic — layer in gabapentinoids or a TCA for the neuropathic component, consider regional blocks, and follow the WHO ladder with opioid stewardship and a bowel regimen." },
+    { speaker:'host',   text:"One pearl that's a board favorite?" },
+    { speaker:'cohost', text:"Referred otalgia — ear pain with a completely normal ear exam. The ear shares innervation with the throat through the ninth and tenth nerves, so unexplained otalgia in a smoker means you scope for a tongue-base or hypopharyngeal cancer before you call it neuralgia." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Multimodal, opioid-sparing analgesia for everyone — and never dismiss otalgia with a normal ear until you've ruled out a hidden primary." }
+  ],
+  11: [ // Sleep Apnea and Sleep Disorders
+    { speaker:'host',   text:"Case: a 45-year-old man, BMI 34, loud snoring, witnessed apneas, and falling asleep at red lights. Work it up." },
+    { speaker:'cohost', text:"Screen with STOP-BANG, then confirm with polysomnography. We diagnose obstructive sleep apnea at an AHI of five or more with symptoms, or fifteen or more regardless; severe is an AHI over thirty. His daytime sleepiness and cardiovascular risk make treatment urgent." },
+    { speaker:'host',   text:"First-line treatment?" },
+    { speaker:'cohost', text:"CPAP — it's the gold standard and reverses the cardiovascular and metabolic risk if he uses it. Weight loss and positional therapy help. The whole game with CPAP is adherence." },
+    { speaker:'host',   text:"When does surgery enter?" },
+    { speaker:'cohost', text:"For CPAP intolerance. Options depend on the site of collapse, which we map with drug-induced sleep endoscopy: UPPP for the palate, hypoglossal nerve stimulation for selected patients with an AHI roughly fifteen to sixty-five and a BMI under thirty-two without complete concentric collapse, and maxillomandibular advancement, which is the most effective skeletal surgery." },
+    { speaker:'host',   text:"Bottom line?" },
+    { speaker:'cohost', text:"Diagnose by PSG, treat first with CPAP, and when that fails, localize the collapse with sleep endoscopy and tailor the surgery — there's no one-size-fits-all operation." }
+  ],
+  34: [ // Imaging of the Nose and Sinuses
+    { speaker:'host',   text:"Pre-op case: chronic rhinosinusitis failing medical therapy, going for endoscopic sinus surgery. What does the CT have to tell you?" },
+    { speaker:'cohost', text:"Two jobs: grade the disease and map the danger. I score severity with Lund-Mackay, but the surgical safety read is everything — I want the cribriform plate depth by the Keros classification, because a deep Keros type three olfactory fossa is where you tear the skull base and cause a CSF leak." },
+    { speaker:'host',   text:"What other landmarks are you hunting for?" },
+    { speaker:'cohost', text:"The anterior ethmoid artery and whether it hangs in a mesentery below the skull base, an Onodi cell draping the optic nerve, the position of the internal carotid and optic nerve in the sphenoid, and any dehiscence of the lamina papyracea or skull base. That's the pre-op checklist that keeps the orbit and brain safe." },
+    { speaker:'host',   text:"When do you add MRI?" },
+    { speaker:'cohost', text:"When you suspect a tumor, fungal disease, or an intracranial or orbital complication — MRI separates inspissated secretions and tumor from simple mucosal disease and shows soft-tissue and dural extension." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Read every sinus CT as a surgical roadmap — Keros, the ethmoid artery, Onodi, the carotid and optic nerve — before you ever pick up the instruments." }
+  ],
+  36: [ // Acute Rhinosinusitis — complications
+    { speaker:'host',   text:"Case: a seven-year-old with acute sinusitis now has a swollen, red eye and is starting to look unwell. What's happening and what do you do?" },
+    { speaker:'cohost', text:"Orbital complication of sinusitis, almost always from the ethmoids. Use the Chandler classification: preseptal cellulitis, then orbital (postseptal) cellulitis, subperiosteal abscess, orbital abscess, and finally cavernous sinus thrombosis. The pivot point is whether it's pre- or post-septal." },
+    { speaker:'host',   text:"How do you tell, and when do you image?" },
+    { speaker:'cohost', text:"Postseptal signs are the alarms: proptosis, painful or restricted eye movement, decreased acuity, or an afferent pupillary defect. Any of those, or failure to improve on IV antibiotics, gets a contrast CT of the orbits and sinuses." },
+    { speaker:'host',   text:"And management?" },
+    { speaker:'cohost', text:"Preseptal cellulitis is IV antibiotics and close monitoring. Postseptal disease with an abscess, vision change, or no improvement in twenty-four to forty-eight hours needs surgical drainage — endoscopic, with the ophthalmologist involved. Don't forget the intracranial complications: Pott's puffy tumor from frontal sinusitis, epidural or subdural empyema, and cavernous sinus thrombosis." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Vision and eye movement are the triage tools — postseptal signs mean image now and drain early, because the orbit and brain are millimeters away." }
+  ],
+  43: [ // Epistaxis
+    { speaker:'host',   text:"Case: a 72-year-old on apixaban with brisk bleeding from the back of the throat that won't stop with pressure. Anterior or posterior, and what's your ladder?" },
+    { speaker:'cohost', text:"Bleeding into the pharynx, hard to see an anterior source, on an anticoagulant — that's a posterior bleed, usually from the sphenopalatine artery, versus the ninety percent of nosebleeds that are anterior from Little's area at Kiesselbach's plexus." },
+    { speaker:'host',   text:"Walk the stepwise management." },
+    { speaker:'cohost', text:"Resuscitate and protect the airway first. Then firm sustained pressure, a topical vasoconstrictor like oxymetazoline, and good light and suction to find a point to cauterize. If that fails, anterior packing; for a posterior bleed, a posterior pack or a dual balloon — and admit them." },
+    { speaker:'host',   text:"And if packing fails?" },
+    { speaker:'cohost', text:"Endoscopic sphenopalatine artery ligation or angiographic embolization. In parallel, reverse the coagulopathy as the clinical picture allows. And in a young man with recurrent unilateral epistaxis and a nasal mass, think juvenile angiofibroma — biopsy is contraindicated." },
+    { speaker:'host',   text:"One more pattern?" },
+    { speaker:'cohost', text:"Recurrent bleeds with mucocutaneous telangiectasias and a family history is hereditary hemorrhagic telangiectasia — Osler-Weber-Rendu. Bottom line: localize anterior versus posterior, climb the ladder, fix the clotting, and don't miss the angiofibroma." }
+  ],
+  125: [ // Anatomy of the Temporal Bone, External and Middle Ear
+    { speaker:'host',   text:"Surgical-anatomy case: you're doing a mastoidectomy and need to stay off the facial nerve. Walk the landmarks." },
+    { speaker:'cohost', text:"Know the three intratemporal segments — labyrinthine, tympanic, and mastoid. In the middle ear the tympanic segment runs above the oval window, and the cochleariform process and the second genu are your guides. In the mastoid, the nerve descends from the lateral semicircular canal toward the digastric ridge, which points right at the stylomastoid foramen." },
+    { speaker:'host',   text:"Where do people get into trouble?" },
+    { speaker:'cohost', text:"The tympanic segment is the most commonly dehiscent — bone over the nerve is missing in a meaningful minority of people — so a prolapsing nerve over the oval window is a classic injury during ear surgery. And the lateral semicircular canal is the constant landmark; the nerve is just deep and anterior to it at the second genu." },
+    { speaker:'host',   text:"The ossicles and sound path?" },
+    { speaker:'cohost', text:"Malleus, incus, stapes — the stapes footplate sits in the oval window, and the incudostapedial joint is the most common spot for erosion, for example from cholesteatoma. The round window is the pressure-release point of the cochlea." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Use the fixed landmarks — lateral canal, cochleariform process, digastric ridge — to track the facial nerve, and respect that the tympanic segment is often dehiscent." }
+  ],
+  144: [ // Sudden Sensorineural Hearing Loss
+    { speaker:'host',   text:"Case that you cannot miss: a patient wakes up with hearing loss and fullness in one ear, and a sense of being off-balance. What's the diagnosis and the clock?" },
+    { speaker:'cohost', text:"Sudden sensorineural hearing loss — defined as a drop of at least thirty decibels over three contiguous frequencies within seventy-two hours. The single most important step is to separate sensorineural from conductive: a Weber that lateralizes away from the bad ear and an abnormal Rinne point to sensorineural. Confirm with an urgent audiogram." },
+    { speaker:'host',   text:"What has to be ruled out?" },
+    { speaker:'cohost', text:"A retrocochlear lesion — get an MRI to exclude a vestibular schwannoma; up to a few percent of these present this way. And don't be fooled: a tuning fork that looks conductive could be impacted wax, so examine the canal." },
+    { speaker:'host',   text:"And treatment — what's the evidence?" },
+    { speaker:'cohost', text:"Time is hearing. Start oral corticosteroids early — prednisone roughly one milligram per kilogram — ideally within two weeks, and offer intratympanic steroid injections as primary or salvage therapy, which is great for diabetics who can't take systemic steroids. Counsel that a meaningful fraction recover, better with early treatment and less severe loss." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Sudden one-sided hearing loss is a steroid emergency — confirm it's sensorineural, image to rule out a schwannoma, and treat within two weeks." }
+  ]
+};
+/* Splice each capstone case into its episode (once), just before the closing sign-off turns. */
+function applyClosingCases() {
+  try {
+    Object.keys(CLOSING_CASES).forEach(function(k) {
+      var c = CONTENT[k];
+      if (!c || c.__caseInserted) return;
+      if (!Array.isArray(c.podcastScript) || !c.podcastScript.length) return;
+      var turns = CLOSING_CASES[k].map(function(t) { return { speaker: (t.speaker === 'cohost' ? 'cohost' : 'host'), text: String(t.text || '').trim() }; }).filter(function(t) { return t.text; });
+      if (!turns.length) return;
+      var intro = { speaker: 'host', text: "Before we wrap, let's put it together with a clinical case." };
+      var insertAt = Math.max(0, c.podcastScript.length - 2); // before the closing two turns
+      c.podcastScript.splice.apply(c.podcastScript, [insertAt, 0, intro].concat(turns));
+      c.__caseInserted = true;
+    });
+  } catch (e) { try { console.warn('applyClosingCases failed', e); } catch(_){} }
+}
+
 function renderSlideStage(slides) {
   const idx = Math.max(0, Math.min(state.slideIndex || 0, slides.length - 1));
   const s = slides[idx];
@@ -21684,6 +21845,8 @@ function renderStudyTrackerWidget() {
    to perceived speed. loadStored() is cheap (reads localStorage) and stays immediate so
    the loader picks up the saved light/dark theme. */
 loadStored();
+// Append the capstone clinical case to each episode (once).
+if (typeof applyClosingCases === 'function') applyClosingCases();
 // A returning doctor stays signed in (no re-login) and sees THEIR own saved progress.
 if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser === 'function') bindProgressForUser();
 (function(){
