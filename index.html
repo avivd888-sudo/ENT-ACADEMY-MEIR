@@ -11548,6 +11548,7 @@ let state = {
   progress: {}, // active progress (points at manager record OR the signed-in doctor's bucket)
   managerProgress: {}, // the manager's canonical progress — never overwritten by a doctor session
   chapterPdfs: {}, // { chapterNum: filename } — which chapters have a source PDF saved (blob in IndexedDB)
+  lastLocation: null,     // { week, tab } — exact last study spot, for one-tap resume
   hasFullCummings: false, // manager uploaded the full licensed Cummings PDF once (stored in IndexedDB on this device)
   fullCummingsName: '',   // filename of the uploaded full book
   pageOverrides: {}, // { weekNum: pageNumber } — user's PDF calibration
@@ -11802,6 +11803,7 @@ function loadStored() {
       state.chapterPdfs = parsed.chapterPdfs || {};
       state.hasFullCummings = !!parsed.hasFullCummings;
       state.fullCummingsName = parsed.fullCummingsName || '';
+      state.lastLocation = parsed.lastLocation || null;
       state.extendedPodcasts = (parsed.extendedPodcasts && typeof parsed.extendedPodcasts === 'object') ? parsed.extendedPodcasts : {};
       // Reset daily counter if a new day
       const today = new Date().toISOString().slice(0,10);
@@ -11871,7 +11873,8 @@ function persist() {
       extendedPodcasts: state.extendedPodcasts,
       chapterPdfs: state.chapterPdfs,
       hasFullCummings: state.hasFullCummings,
-      fullCummingsName: state.fullCummingsName
+      fullCummingsName: state.fullCummingsName,
+      lastLocation: state.lastLocation
     }));
   } catch (e) { /* ignore */ }
 }
@@ -12892,15 +12895,18 @@ function renderDashboard() {
   const resumeProg = lastEntry ? lastEntry[1] : null;
   const resumeTime = resumeProg && resumeProg.lastVisited ? new Date(resumeProg.lastVisited) : null;
   const resumeAgo = resumeTime ? humanTimeAgo(resumeTime) : '';
+  // Resume to the EXACT spot: the tab + section the user was last reading in this chapter.
+  const resumeTab = (state.lastLocation && state.lastLocation.week === (resumeWeek && resumeWeek.week) && state.lastLocation.tab) || 'teaching';
+  const resumeSection = (state.lastTeachingSection && resumeWeek && state.lastTeachingSection[resumeWeek.week]) || '';
   const resumeHTML = resumeWeek ? `
-    <div class="resume-card" data-action="open-week" data-week="${resumeWeek.week}" role="button" tabindex="0" aria-label="Resume Chapter ${resumeWeek.chapter || resumeWeek.week} — ${escapeAttr(resumeWeek.title)}">
+    <div class="resume-card" data-action="open-week-section" data-week="${resumeWeek.week}" data-tab="${resumeTab}" data-section="${resumeSection}" role="button" tabindex="0" aria-label="Resume Chapter ${resumeWeek.chapter || resumeWeek.week} — ${escapeAttr(resumeWeek.title)}">
       <div class="resume-card-art" aria-hidden="true">▶</div>
       <div class="resume-card-body">
         <div class="resume-card-eyebrow">Pick up where you left off · ${resumeAgo}</div>
         <div class="resume-card-title">Ch.${resumeWeek.chapter || resumeWeek.week} · ${escapeHTML(resumeWeek.title)}</div>
         <div class="resume-card-sub">${getSection(resumeWeek.section).name}${resumeProg.completed ? ' · ✓ marked complete' : resumeProg.quizScore !== undefined ? ' · Quiz ' + resumeProg.quizScore + '/' + resumeProg.quizTotal : ' · In progress'}</div>
       </div>
-      <button class="btn btn-primary" data-action="open-week" data-week="${resumeWeek.week}" aria-label="Continue chapter">Continue →</button>
+      <button class="btn btn-primary" data-action="open-week-section" data-week="${resumeWeek.week}" data-tab="${resumeTab}" data-section="${resumeSection}" aria-label="Continue chapter">Continue →</button>
     </div>
   ` : '';
 
@@ -15554,6 +15560,17 @@ async function bestTtsBlobUrl(speakerId, text) {
   }
   throw new Error(elevenErr || 'No HD TTS key configured');
 }
+/* Synchronous lookup of an already-fetched (prefetched) clip — lets the next turn start with NO
+   network await, which keeps the audio session alive so playback can continue in the background
+   on iOS / when you switch apps, instead of stopping between clips. */
+function cachedTtsUrl(speakerId, text) {
+  try {
+    if (typeof TTS_CACHE === 'undefined') return null;
+    if (state.elevenLabsKey) { const k = 'eleven|v6|' + speakerId + '|' + text; if (TTS_CACHE.has(k)) return TTS_CACHE.get(k); }
+    if (state.openaiKey)     { const k = 'openai|v2|' + speakerId + '|' + text; if (TTS_CACHE.has(k)) return TTS_CACHE.get(k); }
+  } catch (e) {}
+  return null;
+}
 /* Turn a raw TTS error into a plain-English reason + fix, so the user isn't left
    wondering why a podcast suddenly sounds robotic / ignores their chosen voices. */
 function explainTtsError(msg) {
@@ -15758,16 +15775,22 @@ const TTS = {
     if (this.useHdTts()) {
       try {
         // Show loading indicator immediately so user knows we're generating audio
-        state.podcastLoading = true;
-        updatePodcastDOM();
-        updateFloatingPlayer();
-        const url = await bestTtsBlobUrl(turn.speaker, turn.text);
-        state.podcastLoading = false;
+        // Fast path: if this clip was already prefetched, play it with NO network await — this keeps
+        // the audio session alive so playback continues in the background / when switching apps.
+        let url = cachedTtsUrl(turn.speaker, turn.text);
+        if (!url) {
+          state.podcastLoading = true;
+          updatePodcastDOM();
+          updateFloatingPlayer();
+          url = await bestTtsBlobUrl(turn.speaker, turn.text);
+          state.podcastLoading = false;
+        }
         if (state.podcastStatus !== 'playing') return;
         // Reuse the element that was unlocked during the user's tap (iOS Safari blocks audio that
         // is created/played only AFTER an await — outside the gesture). Reusing the primed element
         // lets HD playback start even though the audio was fetched asynchronously.
         const audio = this.audio || (this.audio = new Audio());
+        try { audio.setAttribute('playsinline', ''); } catch(e){}
         try { audio.pause(); } catch(e){}
         audio.src = url;
         audio.muted = false;
@@ -15804,10 +15827,11 @@ const TTS = {
           console.error('[TTS] audio.play() rejected:', playErr && playErr.message);
           throw playErr; // fall through to browser TTS
         }
-        // Prefetch the next 2 turns so playback feels seamless
-        for (let lookahead = 1; lookahead <= 2; lookahead++) {
+        // Prefetch the next few turns so they're cached — the fast-path can then start each one
+        // with no network gap, which is what lets playback keep going in the background.
+        for (let lookahead = 1; lookahead <= 4; lookahead++) {
           const next = c.podcastScript[turnIndex + lookahead];
-          if (next) bestTtsBlobUrl(next.speaker, next.text).catch(() => {});
+          if (next && !cachedTtsUrl(next.speaker, next.text)) bestTtsBlobUrl(next.speaker, next.text).catch(() => {});
         }
         return;
       } catch (e) {
@@ -19883,6 +19907,19 @@ function safeScrollTo(targetY) {
     try { window.scrollTo(0, targetY); } catch(e2){}
   }
 }
+/* Scroll to a section by id, RETRYING as the (image-heavy) tab finishes laying out — a single
+   scroll fires before layout settles and lands short, which is why "Open podcast" missed it. */
+function scrollToSectionWhenReady(id, opts) {
+  opts = opts || {};
+  let tries = 0;
+  const go = () => {
+    const el = document.getElementById(id);
+    if (el) { try { safeScrollIntoView(el, { block: 'start', offset: opts.offset ?? -6 }); } catch(e){ try { el.scrollIntoView(); } catch(_){} } }
+    tries++;
+    if (tries < 5) setTimeout(go, 130); // re-aim a few times over ~650ms as content settles
+  };
+  requestAnimationFrame(() => requestAnimationFrame(go));
+}
 function safeScrollIntoView(el, opts = {}) {
   if (!el) return;
   try {
@@ -19938,6 +19975,7 @@ function attachListeners() {
         case 'open-week': {
           const wn = Number(el.dataset.week);
           state.progress[wn] = { ...(state.progress[wn]||{}), lastVisited: new Date().toISOString() };
+          state.lastLocation = { week: wn, tab: 'overview' };
           state.lastSessionStart = Date.now();
           markStudyActivity(0);
           setState({ view: 'week', selectedWeek: wn, weekTab: 'overview', flashcardIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
@@ -19953,29 +19991,22 @@ function attachListeners() {
           state.progress[wn] = { ...(state.progress[wn]||{}), lastVisited: new Date().toISOString() };
           state.lastSessionStart = Date.now();
           markStudyActivity(0);
+          state.lastLocation = { week: wn, tab: tab };
           setState({ view: 'week', selectedWeek: wn, weekTab: tab, flashcardIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
-          // After render, scroll to the section anchor inside the new tab.
-          if (section) {
-            requestAnimationFrame(() => {
-              const target = document.getElementById(section);
-              if (target) safeScrollIntoView(target, { block: 'start', offset: -8 });
-              else safeScrollTo(0);
-            });
-          } else {
-            safeScrollTo(0);
-          }
+          // After render, reliably scroll to the section anchor inside the new tab (retries as it lays out).
+          if (section) scrollToSectionWhenReady(section);
+          else safeScrollTo(0);
           break;
         }
         case 'week-tab':
         case 'open-week-tab':
+          state.lastLocation = { week: state.selectedWeek, tab: el.dataset.tab };
           setState({ weekTab: el.dataset.tab, flashcardFlipped: false });
           // Scroll to top so user sees the new tab immediately (animated, falls back to instant)
           safeScrollTo(0, { duration: 350 });
           break;
         case 'scroll-to-section': {
-          const id = el.dataset.target;
-          const target = document.getElementById(id);
-          if (target) safeScrollIntoView(target, { block: 'start', offset: -8, duration: 400 });
+          scrollToSectionWhenReady(el.dataset.target);
           break;
         }
         case 'flip-card':
