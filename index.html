@@ -2154,6 +2154,63 @@
     .srs-rate small { font-size: 10px; }
   }
 
+  /* ---- Daily practice popup 🎯 ---- */
+  .daily-backdrop {
+    position: fixed; inset: 0; z-index: 9000;
+    background: rgba(8, 18, 36, .55); backdrop-filter: blur(3px);
+    display: flex; align-items: center; justify-content: center; padding: 16px;
+    animation: dailyFade .18s ease;
+  }
+  @keyframes dailyFade { from { opacity: 0; } to { opacity: 1; } }
+  .daily-card {
+    width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto;
+    background: var(--card, #fff); border: 1px solid var(--border, #e2e8f0);
+    border-radius: 18px; box-shadow: 0 24px 60px rgba(8,18,36,.34);
+    padding: 18px 18px 20px; animation: dailyPop .2s ease;
+  }
+  @keyframes dailyPop { from { transform: translateY(10px) scale(.98); opacity: .6; } to { transform: none; opacity: 1; } }
+  .daily-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+  .daily-kicker { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent, #2563eb); }
+  .daily-x { background: none; border: none; font-size: 18px; color: var(--text-soft, #64748b); cursor: pointer; line-height: 1; padding: 4px; border-radius: 8px; }
+  .daily-x:hover { background: var(--bg-mute, #f1f5f9); }
+  .daily-progress { height: 5px; border-radius: 4px; background: var(--bg-mute, #eef2f7); overflow: hidden; margin-bottom: 12px; }
+  .daily-progress > span { display: block; height: 100%; background: var(--accent, #2563eb); border-radius: 4px; transition: width .25s ease; }
+  .daily-chip { display: inline-block; font-size: 11.5px; font-weight: 700; color: var(--accent, #2563eb); background: var(--accent-soft, #eff6ff); border-radius: 999px; padding: 4px 11px; margin-bottom: 10px; }
+  .daily-stem { font-size: 15.5px; line-height: 1.5; font-weight: 600; color: var(--text, #0f172a); margin-bottom: 14px; }
+  .daily-opts { display: flex; flex-direction: column; gap: 8px; }
+  .daily-opt {
+    display: flex; align-items: center; gap: 10px; text-align: left; width: 100%;
+    padding: 12px 13px; border-radius: 12px; border: 1.5px solid var(--border, #e2e8f0);
+    background: var(--card-soft, #f8fafc); color: var(--text, #0f172a); font-size: 14px; font-family: inherit;
+    cursor: pointer; transition: border-color .12s, background .12s;
+  }
+  .daily-opt:hover:not(:disabled) { border-color: var(--accent, #2563eb); }
+  .daily-opt:disabled { cursor: default; }
+  .daily-opt-letter {
+    flex: 0 0 24px; height: 24px; border-radius: 7px; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12.5px; font-weight: 800; background: var(--bg-mute, #eef2f7); color: var(--text-soft, #475569);
+  }
+  .daily-opt-sel { border-color: var(--accent, #2563eb); background: var(--accent-soft, #eff6ff); }
+  .daily-opt-correct { border-color: #10b981; background: #ecfdf5; color: #065f46; }
+  .daily-opt-correct .daily-opt-letter { background: #10b981; color: #fff; }
+  .daily-opt-wrong { border-color: #f43f5e; background: #fef2f2; color: #9f1239; }
+  .daily-opt-wrong .daily-opt-letter { background: #f43f5e; color: #fff; }
+  .daily-opt-dim { opacity: .6; }
+  [data-theme="dark"] .daily-opt-correct { background: rgba(16,185,129,.16); color: #6ee7b7; }
+  [data-theme="dark"] .daily-opt-wrong { background: rgba(244,63,94,.16); color: #fca5a5; }
+  .daily-explain { margin-top: 13px; font-size: 13.5px; line-height: 1.55; color: var(--text-soft, #475569); background: var(--bg-mute, #f8fafc); border-radius: 10px; padding: 11px 13px; }
+  .daily-rate-label { margin-top: 15px; margin-bottom: 7px; font-size: 12.5px; font-weight: 700; color: var(--text-soft, #64748b); text-align: center; }
+  .daily-size-row { margin-top: 16px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12.5px; color: var(--text-soft, #64748b); justify-content: center; }
+  .daily-size { width: 30px; height: 30px; border-radius: 8px; border: 1.5px solid var(--border, #e2e8f0); background: var(--card-soft, #f8fafc); color: var(--text, #0f172a); font-weight: 700; cursor: pointer; }
+  .daily-size-on { border-color: var(--accent, #2563eb); background: var(--accent, #2563eb); color: #fff; }
+  .daily-empty { text-align: center; padding: 14px 6px 6px; }
+  .daily-empty h3 { margin: 6px 0; color: var(--text, #0f172a); font-size: 18px; }
+  .daily-empty p { color: var(--text-soft, #475569); font-size: 14px; line-height: 1.55; margin-bottom: 14px; }
+  @media (max-width: 720px) {
+    .daily-card { max-width: 100%; border-radius: 16px; padding: 16px 14px 18px; }
+    .daily-stem { font-size: 15px; }
+  }
+
   /* ---- Research Digest 🔬 ---- */
   .research-banner {
     background: linear-gradient(135deg, #f0fdf4 0%, #ecfeff 50%, #fdf4ff 100%);
@@ -11631,6 +11688,13 @@ let state = {
   srsShowAnswer: false,
   srsCurrentKey: null,        // currently-shown card key (for stability across renders)
   srsStats: { reviewedToday: 0, lastDay: '' },
+  // Daily practice popup — 1-5 questions/day drawn ONLY from already-studied chapters,
+  // each rated for difficulty (Again/Hard/Good/Easy) and scheduled with spaced repetition.
+  // Quiz SRS lives in state.srs under keys prefixed 'q' (distinct from flashcard keys).
+  showDailyPractice: false,
+  dailySession: null,         // { items:[{wn,qi,q}], idx, selected, answered, mode:'daily'|'review', results:[] }
+  dailySize: 5,               // how many questions the daily popup serves (1..5)
+  dailyMeta: { lastDay: '', doneDay: '' }, // lastDay = last day auto-shown; doneDay = last day completed
   // Research Digest
   researchFilter: 'all',      // 'all' | 'jama' | 'laryngoscope' | 'oto'
   researchQuery: '',
@@ -11785,6 +11849,8 @@ function loadStored() {
       state.theme = parsed.theme || 'light';
       state.srs = parsed.srs || {};
       state.srsStats = parsed.srsStats || { reviewedToday: 0, lastDay: '' };
+      if (typeof parsed.dailySize === 'number') state.dailySize = Math.min(5, Math.max(1, parsed.dailySize));
+      state.dailyMeta = parsed.dailyMeta || { lastDay: '', doneDay: '' };
       state.projects = Array.isArray(parsed.projects) ? parsed.projects : [];
       state.chapterChats = parsed.chapterChats || {};
       state.practiceHistory = parsed.practiceHistory || [];
@@ -11855,6 +11921,8 @@ function persist() {
       progressMigrated: true,
       srs: state.srs,
       srsStats: state.srsStats,
+      dailySize: state.dailySize,
+      dailyMeta: state.dailyMeta,
       projects: state.projects,
       chapterChats: state.chapterChats,
       practiceHistory: state.practiceHistory,
@@ -12101,6 +12169,7 @@ function render() {
     ${renderMobileTabbar()}
     ${state.showInstallModal ? renderInstallModal() : ''}
     ${state.viewingChapter ? renderChapterModal() : ''}
+    ${state.showDailyPractice ? renderDailyPractice() : ''}
   `;
   attachListeners();
   try { const _fab = document.getElementById('oe-fab'); if (_fab) _fab.style.display = ''; } catch(e){}
@@ -12992,6 +13061,7 @@ function renderDashboard() {
     ${heroHTML}
     ${statRowHTML}
 
+    ${typeof renderDailyPracticeWidget==='function'?renderDailyPracticeWidget():''}
     ${typeof renderDailyReviewWidget==='function'?renderDailyReviewWidget():''}
 
     ${resumeHTML}
@@ -14309,6 +14379,96 @@ const CLOSING_CASES = {
     { speaker:'host',   text:"Takeaway?" },
     { speaker:'cohost', text:"Use the fixed landmarks — lateral canal, cochleariform process, digastric ridge — to track the facial nerve, and respect that the tympanic segment is often dehiscent." }
   ],
+  12: [ // Aesthetic Facial Analysis
+    { speaker:'host',   text:"Let's apply the analysis. A 32-year-old comes in unhappy with her profile, feeling her chin is weak and her nose looks big. How do you read the face?" },
+    { speaker:'cohost', text:"Systematically, in thirds and fifths. Vertically the face splits into equal thirds — trichion to glabella, glabella to subnasale, subnasale to menton — and the lower third again into one-third upper lip and two-thirds lower lip and chin. Horizontally, five equal eye-widths; the intercanthal distance should equal one eye-width, around thirty to thirty-three millimeters." },
+    { speaker:'host',   text:"So is it really the nose?" },
+    { speaker:'cohost', text:"Often the chin is the culprit. I drop a vertical from the vermilion or use Gonzalez-Ulloa's zero meridian — the pogonion should sit near it. A retruded chin makes the nose look larger and the nasolabial angle read wrong, so a chin implant may do more than a rhinoplasty. The ideal nasolabial angle is about ninety to ninety-five degrees in men, ninety-five to a hundred and five in women." },
+    { speaker:'host',   text:"What else anchors the nasal analysis?" },
+    { speaker:'cohost', text:"The nasofrontal angle, around a hundred fifteen to a hundred thirty degrees; nasal projection by the Goode ratio — alar-to-tip over nasion-to-tip should be about zero-point-five-five to zero-point-six; and the dorsal aesthetic lines. You analyze the whole face before you touch one feature." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Measure before you cut. Thirds, fifths, the zero meridian and the key angles tell you the dominant disproportion — and it's frequently not the feature the patient blames." }
+  ],
+  13: [ // Recognition and Treatment of Skin Lesions
+    { speaker:'host',   text:"Case: a 70-year-old farmer with a pearly, rolled-border papule with central ulceration and a few telangiectasias on the nasal ala. What is it and how do you manage it?" },
+    { speaker:'cohost', text:"Classic nodular basal cell carcinoma — the most common skin cancer, sun-exposed sites, locally invasive but rarely metastatic. On the nose, an H-zone high-risk area, the right answer is Mohs micrographic surgery for maximal margin control with tissue sparing." },
+    { speaker:'host',   text:"How would the approach change if the biopsy showed squamous cell carcinoma?" },
+    { speaker:'cohost', text:"SCC carries real metastatic potential — higher with size over two centimeters, depth beyond six millimeters, perineural invasion, poor differentiation, or immunosuppression. Standard excision uses four-to-six-millimeter margins; high-risk lesions get Mohs and you examine the nodal basin." },
+    { speaker:'host',   text:"And the melanoma you must never miss?" },
+    { speaker:'cohost', text:"Use ABCDE — asymmetry, irregular border, color variation, diameter over six millimeters, evolution. Breslow depth drives everything: margins run from five millimeters for in-situ up to two centimeters, and sentinel node biopsy is considered once thickness exceeds about zero-point-eight millimeters." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Pearly and rolled is BCC, scaly and indurated is SCC, pigmented and changing is melanoma — biopsy to confirm, and on the face think Mohs to spare tissue while clearing margins." }
+  ],
+  14: [ // Scar Revision and Keloid Scar Management
+    { speaker:'host',   text:"Case: a young patient with a dark skin type has a thick, itchy scar over the earlobe after piercing that has grown beyond the original wound. Keloid or hypertrophic?" },
+    { speaker:'cohost', text:"Growing beyond the original borders means keloid — hypertrophic scars stay within the wound and often regress. Keloids are more common in darker skin and in high-tension or earlobe sites, and they recur aggressively if you simply excise them." },
+    { speaker:'host',   text:"So how do you treat it?" },
+    { speaker:'cohost', text:"Multimodal. First-line is intralesional triamcinolone, often with the recurrence-lowering combination of surgical excision plus adjuvant therapy. For earlobe keloids, excision followed by pressure earrings and steroid injections, and selective use of adjuvant radiation in stubborn cases. Silicone sheeting and time help too." },
+    { speaker:'host',   text:"And for a plain mismatched facial scar, the revision principles?" },
+    { speaker:'cohost', text:"Reorient the scar into the relaxed skin tension lines, break up a straight line with a Z-plasty — which also lengthens a contracture and gains about seventy-five percent length at sixty-degree limbs — or a W-plasty or geometric broken line for camouflage. And wait for scar maturation, roughly a year, before revising unless it is functionally limiting." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Keloids need combination therapy and never excision alone; routine scar revision is about tension lines, Z-plasty geometry, and patience for maturation." }
+  ],
+  15: [ // Facial Trauma — Soft Tissue Lacerations and Burns
+    { speaker:'host',   text:"Case: a cyclist arrives with a deep cheek laceration and gravel embedded in the wound. Walk the repair priorities." },
+    { speaker:'cohost', text:"First, the structures under the laceration. A deep cheek wound threatens the parotid duct and the facial nerve buccal branch — test facial movement before you anesthetize, and probe or cannulate Stensen's duct if the laceration crosses a line from the tragus to the mid-upper lip. Missed duct injury gives a sialocele or fistula." },
+    { speaker:'host',   text:"And the gravel?" },
+    { speaker:'cohost', text:"Meticulous irrigation and debridement within ideally the first several hours — retained dirt causes traumatic tattooing that is far harder to fix later. Copious saline, scrub out particulate, and only then close in layers, aligning landmarks like the vermilion border to within a millimeter." },
+    { speaker:'host',   text:"What about a facial burn instead?" },
+    { speaker:'cohost', text:"Assess depth and airway — singed nasal hairs, soot, or stridor means early intubation before edema closes the airway. The face is cosmetically and functionally critical, so most facial burns are managed to preserve tissue, with early specialist involvement; the eyelids and oral commissure are high-stakes zones." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Rule out nerve and duct injury and tattooing before you close, align landmarks precisely, and for burns the airway comes first." }
+  ],
+  16: [ // Craniomaxillofacial Trauma
+    { speaker:'host',   text:"Case: an assault victim with midface mobility, malocclusion, and periorbital bruising. How do you classify and work it up?" },
+    { speaker:'cohost', text:"Midface fractures follow Le Fort patterns, all of which cross the pterygoid plates. Le Fort I is a floating palate, the transverse maxillary fracture; Le Fort II is the pyramidal fracture through the nasofrontal region and infraorbital rims; Le Fort III is craniofacial disjunction separating the face from the skull base. Imaging is a fine-cut maxillofacial CT." },
+    { speaker:'host',   text:"What's the can't-miss eye finding?" },
+    { speaker:'cohost', text:"An orbital floor blowout with entrapment — restricted upgaze, diplopia, and the trapdoor sign in children, which can come with the oculocardiac reflex of bradycardia and nausea. Entrapment with the reflex is a surgical emergency; otherwise you repair for enophthalmos or large defects, generally within roughly two weeks." },
+    { speaker:'host',   text:"And the principle for fixing the rest?" },
+    { speaker:'cohost', text:"Re-establish occlusion first — that's the keystone — then restore the vertical and horizontal buttresses with rigid fixation, and reduce from stable to unstable. A mandible fracture similarly is reduced into occlusion, often with MMR or plating, and don't forget antibiotics for fractures through tooth-bearing segments." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Le Fort lines all hit the pterygoids, occlusion guides the whole repair, and an entrapped orbital floor with bradycardia goes to the OR now." }
+  ],
+  17: [ // Reconstruction of Facial Defects
+    { speaker:'host',   text:"Case: after Mohs for a basal cell, you're left with a one-and-a-half-centimeter full-thickness defect of the nasal ala. How do you reconstruct?" },
+    { speaker:'cohost', text:"Think the reconstructive ladder and the subunit principle — but on the face we often leap to flaps to match color and texture. The ala is a convex subunit prone to free-margin notching, so a local flap beats a graft. A classic answer is a nasolabial interpolation flap or, for larger nasal defects, a paramedian forehead flap based on the supratrochlear artery." },
+    { speaker:'host',   text:"Why not just graft it?" },
+    { speaker:'cohost', text:"A skin graft on the nose tends to look like a patch — poor color and contour match — and full-thickness alar loss needs lining, support, and cover, the three layers. You may add a cartilage graft for structural support to prevent collapse and notching." },
+    { speaker:'host',   text:"What's the subunit principle in one line?" },
+    { speaker:'cohost', text:"If more than about half a subunit is missing, resurface the entire subunit so the scars fall in the natural borders. And respect the angiosomes — design flaps on reliable named pedicles like the supratrochlear, facial, or angular vessels." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Match like with like: replace lining, support, and cover; resurface whole subunits; and for the nose reach for forehead and nasolabial flaps over grafts." }
+  ],
+  18: [ // Hair Restoration — Medical and Surgical Techniques
+    { speaker:'host',   text:"Case: a 35-year-old man with a receding hairline and thinning crown but a dense occipital fringe wants options. Where do you start?" },
+    { speaker:'cohost', text:"This is androgenetic alopecia — pattern hair loss from dihydrotestosterone acting on genetically susceptible follicles, graded by Norwood-Hamilton. Start medical: topical minoxidil, and oral finasteride, a five-alpha-reductase inhibitor that lowers DHT and stabilizes or regrows hair in most men, with the counseling point about sexual side effects in a small percentage." },
+    { speaker:'host',   text:"And the surgical option?" },
+    { speaker:'cohost', text:"Transplantation exploits donor dominance — occipital follicles are DHT-resistant and keep their character when moved. Two techniques: follicular unit transplantation, a strip harvest, versus follicular unit extraction, which harvests individual grafts with no linear scar. You design a natural, age-appropriate hairline with irregular single-hair follicular units in front." },
+    { speaker:'host',   text:"Any pitfall to counsel?" },
+    { speaker:'cohost', text:"Donor supply is finite, and operating too aggressively on a young patient whose loss will progress can leave an unnatural island. Medical therapy first preserves the native hair you still have — surgery doesn't stop ongoing miniaturization." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Minoxidil plus finasteride first to hold the line, then transplant DHT-resistant occipital donor hair with a conservative, natural hairline." }
+  ],
+  19: [ // Management of Aging Skin
+    { speaker:'host',   text:"Case: a 55-year-old with fine lines, brown dyschromia, and crepey texture wants non-surgical rejuvenation. Frame the toolbox." },
+    { speaker:'cohost', text:"Aging skin is photoaging — UV-driven collagen loss, elastosis, and pigment change layered on intrinsic aging. Foundation is prevention and a medical regimen: daily broad-spectrum sunscreen and a topical retinoid, which is the best-evidenced agent for increasing collagen and smoothing texture, plus antioxidants." },
+    { speaker:'host',   text:"When do you resurface, and how do you choose depth?" },
+    { speaker:'cohost', text:"Match the modality to the problem and the Fitzpatrick type. Chemical peels run superficial — glycolic or Jessner's — to medium-depth TCA, to deep phenol-croton oil for severe rhytids. Lasers split into ablative, the CO2 and erbium that vaporize for the biggest lift but longer downtime, versus non-ablative and fractional with quicker recovery and lower risk." },
+    { speaker:'host',   text:"What's the key safety variable?" },
+    { speaker:'cohost', text:"Skin type. Darker Fitzpatrick types — four through six — carry a real risk of post-inflammatory hyperpigmentation, so you pretreat, go more superficial, and are cautious with ablative lasers. And deep phenol peels carry cardiac arrhythmia risk, so they're cardiac-monitored and done in segments." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Sunscreen and retinoids are the backbone; escalate to peels and lasers chosen by depth needed and Fitzpatrick type, always weighing the pigmentation risk." }
+  ],
+  20: [ // Rhytidectomy and Facial Liposuction
+    { speaker:'host',   text:"Case: a 60-year-old bothered by jowls and a sagging neck is considering a facelift. What's the anatomy that makes a result last?" },
+    { speaker:'cohost', text:"The SMAS — the superficial musculoaponeurotic system. A skin-only facelift relaxes and recurs; durable lifts reposition the SMAS, whether by SMAS plication, imbrication, or a deep-plane technique that releases the retaining ligaments. That's what restores the jawline and midface rather than just pulling skin tight." },
+    { speaker:'host',   text:"What's the nerve you most fear?" },
+    { speaker:'cohost', text:"The great auricular nerve is the most commonly injured — it lies on the sternocleidomastoid about six-and-a-half centimeters below the external auditory canal, McKinney's point — giving earlobe numbness. The most feared motor injury is the temporal or marginal mandibular branch of the facial nerve, causing brow or lower-lip weakness." },
+    { speaker:'host',   text:"And the dangerous early complication?" },
+    { speaker:'cohost', text:"Hematoma — the most common acute complication, higher in men and with uncontrolled hypertension. An expanding hematoma with pain and tightness needs urgent evacuation. So you control blood pressure perioperatively. For the neck, submental liposuction helps a patient with good skin elasticity, but loose skin needs a platysmaplasty, not just fat removal." },
+    { speaker:'host',   text:"Takeaway?" },
+    { speaker:'cohost', text:"Address the SMAS for longevity, protect the great auricular and facial nerve branches, and watch the blood pressure to prevent the hematoma that can undo the result." }
+  ],
   144: [ // Sudden Sensorineural Hearing Loss
     { speaker:'host',   text:"Case that you cannot miss: a patient wakes up with hearing loss and fullness in one ear, and a sense of being off-balance. What's the diagnosis and the clock?" },
     { speaker:'cohost', text:"Sudden sensorineural hearing loss — defined as a drop of at least thirty decibels over three contiguous frequencies within seventy-two hours. The single most important step is to separate sensorineural from conductive: a Weber that lateralizes away from the bad ear and an abnormal Rinne point to sensorineural. Confirm with an urgent audiogram." },
@@ -14326,15 +14486,113 @@ function applyClosingCases() {
     Object.keys(CLOSING_CASES).forEach(function(k) {
       var c = CONTENT[k];
       if (!c || c.__caseInserted) return;
-      if (!Array.isArray(c.podcastScript) || !c.podcastScript.length) return;
       var turns = CLOSING_CASES[k].map(function(t) { return { speaker: (t.speaker === 'cohost' ? 'cohost' : 'host'), text: String(t.text || '').trim() }; }).filter(function(t) { return t.text; });
       if (!turns.length) return;
-      var intro = { speaker: 'host', text: "Before we wrap, let's put it together with a clinical case." };
-      var insertAt = Math.max(0, c.podcastScript.length - 2); // before the closing two turns
-      c.podcastScript.splice.apply(c.podcastScript, [insertAt, 0, intro].concat(turns));
+      if (Array.isArray(c.podcastScript) && c.podcastScript.length) {
+        // Curated episode — splice the case in just before the closing two turns.
+        var intro = { speaker: 'host', text: "Before we wrap, let's put it together with a clinical case." };
+        var insertAt = Math.max(0, c.podcastScript.length - 2);
+        c.podcastScript.splice.apply(c.podcastScript, [insertAt, 0, intro].concat(turns));
+      } else {
+        // Generator episode (built from the summary) — the generator weaves c.closingCase
+        // into the conversation before the takeaways.
+        if (!Array.isArray(c.closingCase) || !c.closingCase.length) c.closingCase = turns;
+      }
       c.__caseInserted = true;
     });
   } catch (e) { try { console.warn('applyClosingCases failed', e); } catch(_){} }
+}
+
+/* Additional board-style questions for the first-20 facial-plastics chapters (weeks 12-20),
+   which shipped with only a few items. Appended to each chapter's quiz at boot, so the daily
+   practice and chapter quizzes have a deep, uniform bank. {stem, options, correct, explain}. */
+const EXTRA_QUIZ = {
+  12: [
+    { stem:"On frontal facial analysis using the rule of fifths, the normal intercanthal distance in an adult approximates:", options:["One eye-width (~30-33 mm)","Half an eye-width","Two eye-widths","The full alar base plus one eye-width"], correct:0, explain:"The face divides into five equal eye-widths; the intercanthal distance equals one eye-width (~30-33 mm). Greater than ~35 mm suggests telecanthus." },
+    { stem:"The standardized head position for reproducible facial photography and cephalometric analysis is:", options:["Frankfort horizontal plane","Camper's plane","Reid's baseline","The occlusal plane"], correct:0, explain:"The Frankfort horizontal plane (infraorbital rim to superior external auditory canal, parallel to the floor) standardizes head tilt so serial photos and angle measurements are comparable." },
+    { stem:"An ideal nasolabial angle in a female patient is closest to:", options:["60-70°","75-85°","95-105°","120-130°"], correct:2, explain:"The nasolabial angle is ~90-95° in men and ~95-105° in women. An acute angle indicates an under-rotated/ptotic tip; an obtuse angle an over-rotated tip." },
+    { stem:"Tip projection is commonly assessed with the Goode ratio, where the ideal alar-to-tip / nasion-to-tip ratio is about:", options:["0.28","0.40","0.55-0.60","0.85"], correct:2, explain:"The Goode method considers a ratio of ~0.55-0.60 ideal; values below this indicate under-projection." },
+    { stem:"In the vertical thirds, the lower third of the face is normally subdivided so that the lower lip-to-chin segment occupies:", options:["One-third of the lower third","Half of the lower third","Two-thirds of the lower third","The entire lower third"], correct:2, explain:"The lower third splits into one-third upper lip and two-thirds lower lip + chin. A short lower third suggests chin retrusion or maxillary hypoplasia." },
+    { stem:"A patient's pogonion sits well posterior to the Gonzalez-Ulloa zero meridian dropped from the nasion. This indicates:", options:["Macrogenia","Microgenia (chin retrusion)","Maxillary protrusion","Normal chin projection"], correct:1, explain:"The pogonion should lie near the zero meridian; a retruded pogonion indicates microgenia, which can make the nose appear larger and may warrant genioplasty/implant." }
+  ],
+  13: [
+    { stem:"A pearly papule with rolled borders, central ulceration, and telangiectasias on the nose is most consistent with:", options:["Squamous cell carcinoma","Nodular basal cell carcinoma","Keratoacanthoma","Amelanotic melanoma"], correct:1, explain:"Pearly, rolled borders with telangiectasias and central ulceration is classic nodular BCC — the most common skin cancer, locally invasive but rarely metastatic." },
+    { stem:"The single most important histologic prognostic factor in cutaneous melanoma is:", options:["Clark level","Breslow depth","Lesion diameter","Presence of ulceration alone"], correct:1, explain:"Breslow depth (tumor thickness in mm) is the dominant prognostic factor and drives excision margins and sentinel-node decisions." },
+    { stem:"Sentinel lymph node biopsy is generally considered in melanoma once Breslow thickness exceeds approximately:", options:["0.8 mm","2.0 mm","4.0 mm","6.0 mm"], correct:0, explain:"SLNB is offered for melanomas >0.8 mm (or thinner with high-risk features such as ulceration), to stage the regional basin." },
+    { stem:"Which feature most increases the metastatic risk of a cutaneous SCC?", options:["Location on the trunk","Diameter <1 cm","Perineural invasion","Well-differentiated histology"], correct:2, explain:"High-risk SCC features include perineural invasion, depth >6 mm, size >2 cm, poor differentiation, and immunosuppression — these favor Mohs and nodal evaluation." },
+    { stem:"Mohs micrographic surgery is especially indicated for facial tumors because it:", options:["Avoids any margin assessment","Provides complete margin control while sparing tissue","Is faster than standard excision","Eliminates the need for reconstruction"], correct:1, explain:"Mohs gives near-complete histologic margin assessment with maximal normal-tissue preservation — ideal in the cosmetically and functionally sensitive H-zone of the face." },
+    { stem:"A rough, scaly, erythematous macule on sun-damaged skin that is considered a premalignant precursor to SCC is:", options:["Seborrheic keratosis","Actinic keratosis","Dermatofibroma","Sebaceous hyperplasia"], correct:1, explain:"Actinic keratosis is a premalignant lesion that can progress to SCC; treatment ranges from cryotherapy to topical field therapy." }
+  ],
+  14: [
+    { stem:"A scar that grows beyond the boundaries of the original wound and rarely regresses is best classified as a:", options:["Hypertrophic scar","Keloid","Atrophic scar","Contracture"], correct:1, explain:"Keloids extend beyond the original wound margins and seldom regress; hypertrophic scars stay within the wound and often improve over time." },
+    { stem:"First-line treatment for a small keloid is:", options:["Wide surgical excision alone","Intralesional corticosteroid injection","Observation only","Immediate radiation"], correct:1, explain:"Intralesional triamcinolone is first-line. Excision alone has high recurrence; surgery is combined with adjuvant steroid, pressure, or selective radiation." },
+    { stem:"A 60-degree Z-plasty theoretically lengthens the central limb by approximately:", options:["25%","50%","75%","100%"], correct:2, explain:"A Z-plasty with 60° limbs gives ~75% theoretical length gain and reorients the scar — useful for releasing linear contractures." },
+    { stem:"The primary goal of orienting an elective incision along relaxed skin tension lines is to:", options:["Increase wound tension","Minimize scar visibility and widening","Speed epithelialization","Reduce the need for sutures"], correct:1, explain:"Incisions placed within/parallel to RSTLs heal under less tension, producing finer, less conspicuous scars." },
+    { stem:"Elective revision of an immature facial scar is generally deferred until maturation, typically about:", options:["2 weeks","6 weeks","3 months","12 months"], correct:3, explain:"Scars are usually allowed ~6-12 months to mature before elective revision, unless functionally limiting, because many improve substantially on their own." },
+    { stem:"Which adjuvant most reduces recurrence after excision of a stubborn keloid?", options:["Topical antibiotics","Adjuvant radiation or intralesional steroid","Vitamin E cream","Simple pressure dressing for 24 h"], correct:1, explain:"Excision plus adjuvant therapy (intralesional steroid, pressure, or radiation) markedly lowers keloid recurrence compared with excision alone." }
+  ],
+  15: [
+    { stem:"A deep cheek laceration crossing a line from the tragus to the mid-upper lip should prompt evaluation of the:", options:["Submandibular gland","Parotid (Stensen's) duct and facial nerve buccal branch","Lingual nerve","Internal maxillary artery"], correct:1, explain:"Stensen's duct and the buccal branch of the facial nerve run along this line; missed duct injury causes sialocele/fistula, so test nerve function and probe the duct before repair." },
+    { stem:"To prevent traumatic tattooing of a road-rash facial wound, the key early step is:", options:["Immediate primary closure without irrigation","Thorough irrigation and debridement of embedded particulate","Application of silver sulfadiazine only","Delayed closure at 1 week"], correct:1, explain:"Embedded dirt must be irrigated and scrubbed out early; retained particulate causes permanent traumatic tattoo that is far harder to correct later." },
+    { stem:"When repairing a through-and-through lip laceration, the most critical alignment landmark is the:", options:["Wet-dry vermilion line","Vermilion border (white roll)","Philtral dimple","Modiolus"], correct:1, explain:"Even a 1-mm step-off at the vermilion border is conspicuous; align the white roll first before closing the rest in layers." },
+    { stem:"A patient with facial flame burns, singed nasal vibrissae, and soot in the oropharynx should be managed first by:", options:["Topical burn dressing and discharge","Early airway assessment and likely intubation","Oral antibiotics","Delayed reassessment in 24 h"], correct:1, explain:"Signs of inhalation/airway burn predict rapid edema; secure the airway early before swelling makes intubation impossible." },
+    { stem:"Compared with most body sites, primary closure of facial bite wounds is:", options:["Always contraindicated","Often acceptable after copious irrigation due to excellent facial vascularity","Only allowed after 72 hours","Replaced by routine grafting"], correct:1, explain:"The face's rich blood supply allows primary closure of many bite wounds after thorough irrigation/debridement, usually with antibiotic coverage." },
+    { stem:"Loss of forehead wrinkling and brow elevation after a forehead laceration suggests injury to the:", options:["Temporal (frontal) branch of the facial nerve","Supraorbital nerve","Zygomatic branch","Auriculotemporal nerve"], correct:0, explain:"The temporal/frontal branch innervates the frontalis; injury causes brow ptosis and loss of forehead wrinkling — a motor deficit to document before repair." }
+  ],
+  16: [
+    { stem:"A feature common to all Le Fort fracture patterns is involvement of the:", options:["Frontal sinus","Pterygoid plates","Mandibular condyle","Zygomatic arch only"], correct:1, explain:"All Le Fort fractures cross the pterygoid plates. Le Fort I = floating palate, II = pyramidal, III = craniofacial disjunction." },
+    { stem:"A child with an orbital floor 'trapdoor' fracture develops bradycardia and nausea on attempted upgaze. This is:", options:["A benign vasovagal response","The oculocardiac reflex — a surgical emergency","Expected and observed for 2 weeks","An indication for steroids only"], correct:1, explain:"Entrapment triggering the oculocardiac reflex (bradycardia, nausea) is a surgical emergency requiring prompt release, especially with the pediatric trapdoor pattern." },
+    { stem:"In repairing panfacial fractures, the keystone that guides reduction is re-establishing:", options:["Nasal projection","Dental occlusion","Malar height first","Orbital volume first"], correct:1, explain:"Occlusion is restored first and anchors the rest of the reconstruction; buttresses are then rigidly fixed from stable to unstable segments." },
+    { stem:"A blow to the cheek causing flattening of the malar eminence, trismus, and infraorbital numbness suggests a:", options:["Nasal bone fracture","Zygomaticomaxillary complex (tetrapod) fracture","Le Fort III","Isolated arch fracture"], correct:1, explain:"The ZMC fracture disrupts its articulations producing malar flattening, trismus (impingement on the coronoid), and V2 (infraorbital) hypesthesia." },
+    { stem:"Traumatic telecanthus with a widened intercanthal distance after midface trauma points to a:", options:["Naso-orbito-ethmoid (NOE) fracture","Le Fort I","Mandibular symphysis fracture","Frontal bar fracture"], correct:0, explain:"NOE fractures disrupt the medial canthal tendon attachment, producing telecanthus; repair requires medial canthopexy/restoration of the attachment." },
+    { stem:"The most commonly fractured region of the mandible overall is the:", options:["Symphysis","Condyle/subcondylar region","Coronoid","Ramus"], correct:1, explain:"The condylar/subcondylar region is the most frequently fractured site; management balances closed reduction with MMF versus open fixation depending on displacement and occlusion." }
+  ],
+  17: [
+    { stem:"By the subunit principle, if more than ~50% of a convex nasal subunit is missing, the best result usually comes from:", options:["Partial-thickness graft only","Resurfacing the entire subunit","Healing by secondary intention","Leaving it and revising later"], correct:1, explain:"Resurfacing the whole subunit places scars in natural borders and avoids a patched, pin-cushioned appearance over convex subunits like the ala." },
+    { stem:"The paramedian forehead flap used for large nasal defects is based on the:", options:["Supratrochlear artery","Facial artery","Angular artery","Superficial temporal artery"], correct:0, explain:"The workhorse paramedian forehead flap is an axial flap based on the supratrochlear artery, providing excellent color/texture match for nasal cover." },
+    { stem:"The reconstructive ladder progresses from simplest to most complex as:", options:["Free flap → graft → primary closure","Primary closure → grafts → local flaps → regional/free flaps","Graft → primary closure → free flap","Local flap → primary closure → graft"], correct:1, explain:"Classic ladder: secondary intention/primary closure, then skin grafts, then local flaps, then regional and free tissue transfer — though on the face we often 'leap' for better match." },
+    { stem:"A full-thickness lower-lip defect involving less than about one-third of the lip is best reconstructed by:", options:["Primary (wedge) closure","Karapandzic flap","Free radial forearm flap","Abbe flap"], correct:0, explain:"Defects <~1/3 of the lip can usually be closed primarily as a wedge; larger defects need Karapandzic, Abbe/Estlander, or free-tissue techniques." },
+    { stem:"Full-thickness alar reconstruction must replace three layers, which are:", options:["Skin, fat, muscle","Cover, support (cartilage), and lining","Mucosa, periosteum, skin","Epidermis, dermis, fascia"], correct:1, explain:"The nose needs external cover, structural support (cartilage graft to prevent notching/collapse), and internal lining — all three for full-thickness defects." },
+    { stem:"A skin graft on the nasal tip frequently gives a poor result mainly because of:", options:["Excessive bleeding","Color and contour mismatch ('patch' appearance)","Graft rejection","Inability to take on cartilage"], correct:1, explain:"Grafts on the nose tend to mismatch surrounding skin color/texture and contour, so local/regional flaps are preferred for visible nasal subunits." }
+  ],
+  18: [
+    { stem:"Finasteride treats androgenetic alopecia by:", options:["Directly dilating follicular vessels","Inhibiting 5-alpha-reductase and lowering DHT","Blocking androgen receptors","Stimulating telogen-to-anagen conversion via minoxidil's pathway"], correct:1, explain:"Finasteride is a 5-alpha-reductase inhibitor that lowers dihydrotestosterone (DHT), the androgen driving follicular miniaturization in AGA." },
+    { stem:"The principle that transplanted occipital follicles retain their DHT-resistance after relocation is called:", options:["Recipient dominance","Donor dominance","Follicular neogenesis","Anagen capture"], correct:1, explain:"Donor dominance: occipital (DHT-resistant) follicles keep their resistant character when moved to balding recipient areas — the basis of hair transplantation." },
+    { stem:"Male pattern hair loss is staged using the:", options:["Norwood-Hamilton scale","Ludwig scale","Fitzpatrick scale","Savin scale"], correct:0, explain:"Norwood-Hamilton classifies male pattern baldness; the Ludwig scale is used for female pattern hair loss." },
+    { stem:"Compared with strip harvesting (FUT), follicular unit extraction (FUE) primarily offers:", options:["A linear donor scar","No linear scar but more dispersed donor harvesting","Guaranteed higher graft survival","Elimination of donor-dominance limits"], correct:1, explain:"FUE harvests individual units leaving no linear scar (vs the FUT strip scar), at the cost of more dispersed harvesting and time." },
+    { stem:"Topical minoxidil promotes hair growth mainly by:", options:["Lowering DHT","Prolonging the anagen phase and increasing follicular blood flow","Blocking androgen receptors","Inhibiting 5-alpha-reductase"], correct:1, explain:"Minoxidil is a vasodilator/potassium-channel opener that prolongs anagen and increases follicle size and perfusion; it does not affect DHT." },
+    { stem:"Diffuse shedding 2-3 months after a major surgery or illness, with preserved hairline, most likely represents:", options:["Androgenetic alopecia","Telogen effluvium","Alopecia areata","Scarring alopecia"], correct:1, explain:"Telogen effluvium is reversible diffuse shedding triggered by physiologic stress, distinct from the patterned recession of AGA." }
+  ],
+  19: [
+    { stem:"The best-evidenced topical agent for increasing dermal collagen and improving photoaged skin texture is a:", options:["Topical retinoid (e.g., tretinoin)","Topical antibiotic","High-potency steroid","Topical antifungal"], correct:0, explain:"Retinoids have the strongest evidence for reversing photoaging — stimulating collagen, normalizing keratinization, and improving dyschromia and fine lines." },
+    { stem:"Which patients are at highest risk of post-inflammatory hyperpigmentation after resurfacing?", options:["Fitzpatrick I-II","Fitzpatrick IV-VI","Only patients over 70","Only smokers"], correct:1, explain:"Darker skin types (Fitzpatrick IV-VI) carry greater PIH risk; pretreatment, more superficial techniques, and caution with ablative lasers are advised." },
+    { stem:"Deep phenol-croton oil peels require cardiac monitoring because phenol can cause:", options:["Hypertension","Cardiac arrhythmias","Hyperkalemia","Bronchospasm"], correct:1, explain:"Systemically absorbed phenol is cardiotoxic and can induce arrhythmias, so deep phenol peels are cardiac-monitored, hydrated, and applied in timed segments." },
+    { stem:"Compared with ablative CO2 resurfacing, non-ablative fractional lasers generally provide:", options:["Greater single-session improvement with longer downtime","Less downtime and lower risk but more modest results","No collagen remodeling","Higher PIH risk in light skin"], correct:1, explain:"Non-ablative/fractional devices spare the epidermis, giving quicker recovery and lower risk at the expense of smaller per-session gains than ablative CO2/erbium." },
+    { stem:"The dominant driver of extrinsic skin aging (photoaging) is:", options:["Gravity","Chronic ultraviolet exposure","Repeated facial expression alone","Dietary fat"], correct:1, explain:"UV radiation drives collagen degradation, elastosis, and dyschromia; daily broad-spectrum sunscreen is the foundation of prevention." },
+    { stem:"The most important daily measure to prevent further photoaging is:", options:["Broad-spectrum sunscreen","Weekly exfoliation","Facial massage","Oral vitamin E"], correct:0, explain:"Daily broad-spectrum SPF is the single most effective preventive measure and underpins any rejuvenation regimen." }
+  ],
+  20: [
+    { stem:"A durable facelift result depends primarily on repositioning the:", options:["Skin alone","Superficial musculoaponeurotic system (SMAS)","Platysma only","Periosteum"], correct:1, explain:"Skin-only lifts relapse; addressing the SMAS (plication, imbrication, or deep-plane release of retaining ligaments) restores the jawline and gives lasting results." },
+    { stem:"The most commonly injured nerve during rhytidectomy, causing earlobe numbness, is the:", options:["Great auricular nerve","Marginal mandibular branch","Temporal branch","Lesser occipital nerve"], correct:0, explain:"The great auricular nerve, lying ~6.5 cm below the EAC on the SCM (McKinney's point), is the most frequently injured nerve, producing earlobe/inferior auricular numbness." },
+    { stem:"The most common acute complication after facelift, more frequent in hypertensive men, is:", options:["Flap necrosis","Hematoma","Facial nerve transection","Hypertrophic scarring"], correct:1, explain:"Hematoma is the most common early complication; risk rises with male sex and uncontrolled hypertension, so perioperative BP control is essential and expanding hematomas need urgent evacuation." },
+    { stem:"Injury to the marginal mandibular branch of the facial nerve during a facelift produces:", options:["Brow ptosis","Asymmetric smile / lower-lip depressor weakness","Eyelid closure failure","Earlobe numbness"], correct:1, explain:"The marginal mandibular branch supplies lower-lip depressors; injury causes lower-lip asymmetry. The temporal branch injury instead causes brow ptosis." },
+    { stem:"For a patient with a poor cervicomental angle due to platysmal banding and lax skin, submental liposuction alone is inadequate because it does not address the:", options:["Subplatysmal fat and platysma","Hyoid position","Skin pigmentation","Mandibular border"], correct:0, explain:"Liposuction helps patients with good skin tone and pre-platysmal fat; banding and laxity require platysmaplasty (and skin redraping), not fat removal alone." },
+    { stem:"Compared with SMAS plication, the deep-plane facelift achieves repositioning by:", options:["Removing more skin","Releasing the facial retaining ligaments and lifting a composite flap","Avoiding the SMAS entirely","Tightening only the platysma"], correct:1, explain:"The deep-plane technique releases retaining ligaments and elevates a composite skin-SMAS flap, allowing tension-free midface/jawline repositioning." }
+  ]
+};
+function applyExtraQuiz() {
+  try {
+    Object.keys(EXTRA_QUIZ).forEach(function(k) {
+      var c = CONTENT[k];
+      if (!c || c.__extraQuizAdded) return;
+      if (!Array.isArray(c.quiz)) c.quiz = [];
+      // Skip any item whose stem already exists, so re-runs never duplicate.
+      var have = {};
+      c.quiz.forEach(function(q) { if (q && q.stem) have[q.stem.slice(0, 40)] = true; });
+      EXTRA_QUIZ[k].forEach(function(q) { if (q && q.stem && !have[q.stem.slice(0, 40)]) c.quiz.push(q); });
+      c.__extraQuizAdded = true;
+    });
+  } catch (e) { try { console.warn('applyExtraQuiz failed', e); } catch(_){} }
 }
 
 function renderSlideStage(slides) {
@@ -14910,6 +15168,215 @@ function srsAllDueCards() {
     });
   });
   return out;
+}
+
+/* ---------- DAILY PRACTICE (spaced-repetition quiz) ----------
+   1-5 questions a day, drawn ONLY from chapters already studied. Each answered question is
+   rated for difficulty (Again/Hard/Good/Easy) and rescheduled. A separate "Review due" mode
+   runs through every quiz card that's come due, so old material keeps coming back.
+   Quiz SRS records live in state.srs under keys prefixed 'q' (e.g. "q12.3") so they never
+   collide with the flashcard SRS keys ("12.3"). */
+function qsrsKey(wn, qi) { return 'q' + wn + '.' + qi; }
+function qsrsCard(wn, qi) {
+  const k = qsrsKey(wn, qi);
+  return state.srs[k] || null;
+}
+function qsrsIsDue(wn, qi) {
+  const rec = qsrsCard(wn, qi);
+  if (!rec) return true; // never practised → always available
+  return new Date(rec.due).getTime() <= Date.now();
+}
+function qsrsRate(wn, qi, rating) {
+  // rating: 0=again, 1=hard, 2=good, 3=easy — same SM-2-lite math as the flashcard engine.
+  const k = qsrsKey(wn, qi);
+  const prev = state.srs[k] || Object.assign({}, SRS_DEFAULTS, { due: new Date().toISOString() });
+  let ease = prev.ease, interval = prev.interval, reps = prev.reps;
+  if (rating === 0) {
+    ease = Math.max(1.3, ease - 0.20); interval = 0; reps = 0;
+  } else {
+    if (rating === 1) ease = Math.max(1.3, ease - 0.15);
+    if (rating === 3) ease = ease + 0.15;
+    if (reps === 0)      interval = (rating === 1) ? 1 : (rating === 3) ? 3 : 1;
+    else if (reps === 1) interval = (rating === 1) ? 3 : (rating === 3) ? 7 : 4;
+    else                 interval = Math.round(interval * (rating === 1 ? 1.2 : rating === 3 ? ease * 1.3 : ease));
+    reps += 1;
+  }
+  if (interval === 0) {
+    state.srs[k] = { ease, interval, reps, due: new Date(Date.now() + 10*60*1000).toISOString(), lastReview: new Date().toISOString() };
+  } else {
+    state.srs[k] = { ease, interval, reps, due: new Date(Date.now() + Math.max(1, interval) * 86400000).toISOString(), lastReview: new Date().toISOString() };
+  }
+  const today = new Date().toISOString().slice(0,10);
+  if (!state.srsStats || state.srsStats.lastDay !== today) state.srsStats = { reviewedToday: 0, lastDay: today };
+  state.srsStats.reviewedToday += 1;
+  persist();
+}
+/* Which chapters count as "studied" — completed first; if nothing's marked done yet, fall back
+   to any chapter the user has opened, so the popup still has material early on. */
+function dailyStudiedWeeks() {
+  const prog = state.progress || {};
+  let weeks = Object.keys(prog).filter(wn => prog[wn] && prog[wn].completed && CONTENT[wn] && (CONTENT[wn].quiz||[]).length);
+  if (!weeks.length) {
+    weeks = Object.keys(prog).filter(wn => prog[wn] && (prog[wn].lastVisited || prog[wn].quizTotal) && CONTENT[wn] && (CONTENT[wn].quiz||[]).length);
+  }
+  return weeks.map(Number);
+}
+/* All quiz questions from studied chapters, tagged due/new. */
+function dailyPool() {
+  const out = [];
+  dailyStudiedWeeks().forEach(wn => {
+    const c = CONTENT[wn]; if (!c || !c.quiz) return;
+    c.quiz.forEach((q, qi) => { out.push({ wn, qi, q, due: qsrsIsDue(wn, qi), seen: !!qsrsCard(wn, qi) }); });
+  });
+  return out;
+}
+function dailyDueCount() { return dailyPool().filter(x => x.due).length; }
+function _shuffle(a) { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+/* Build the question queue. mode 'daily' caps at state.dailySize; 'review' runs all due (cap 25). */
+function dailyBuildQueue(mode) {
+  const pool = dailyPool();
+  const cap = mode === 'review' ? 25 : Math.min(5, Math.max(1, state.dailySize || 5));
+  // Prioritise cards that are due and previously seen (true review), then fresh, then the rest.
+  const dueSeen = _shuffle(pool.filter(x => x.due && x.seen));
+  const fresh   = _shuffle(pool.filter(x => x.due && !x.seen));
+  const ordered = mode === 'review' ? dueSeen.concat(fresh) : dueSeen.concat(fresh);
+  return ordered.slice(0, cap).map(x => ({ wn: x.wn, qi: x.qi, q: x.q }));
+}
+function startDailyPractice(mode) {
+  const items = dailyBuildQueue(mode || 'daily');
+  if (!items.length) { setState({ showDailyPractice: true, dailySession: { items: [], idx: 0, selected: null, answered: false, mode: mode || 'daily', results: [] } }); return; }
+  setState({ showDailyPractice: true, dailySession: { items, idx: 0, selected: null, answered: false, mode: mode || 'daily', results: [] } });
+}
+/* Decide whether to auto-pop the daily card (once per day, only with material to study). */
+function maybeShowDailyPractice() {
+  try {
+    if (!isAuthed()) return;
+    if (state.showAuthScreen) return;
+    const today = new Date().toISOString().slice(0,10);
+    const meta = state.dailyMeta || { lastDay: '', doneDay: '' };
+    if (meta.lastDay === today || meta.doneDay === today) return; // already shown/done today
+    if (!dailyPool().length) return;                              // nothing studied yet
+    state.dailyMeta = Object.assign({}, meta, { lastDay: today });
+    persist();
+    startDailyPractice('daily');
+  } catch (e) {}
+}
+/* Dashboard card: surfaces the daily QUESTION set + spaced-repetition review.
+   (Distinct from the flashcard 'Daily review' widget — this one serves quiz questions.) */
+function renderDailyPracticeWidget() {
+  const pool = dailyPool();
+  if (!pool.length) return ''; // nothing studied yet — keep the dashboard clean
+  const due = pool.filter(x => x.due).length;
+  const today = new Date().toISOString().slice(0,10);
+  const doneToday = (state.dailyMeta && state.dailyMeta.doneDay === today);
+  const reviewedToday = (state.srsStats && state.srsStats.lastDay === today) ? state.srsStats.reviewedToday : 0;
+  const n = Math.min(5, Math.max(1, state.dailySize || 5));
+  return `
+    <div class="challenge-card" style="background:linear-gradient(135deg,#eef2ff 0%,#ecfeff 100%);">
+      <div class="challenge-head">
+        <div class="challenge-icon" aria-hidden="true">🎯</div>
+        <div>
+          <div class="challenge-eyebrow">Daily practice · spaced repetition</div>
+          <div class="challenge-title">${doneToday ? "Today's set is done — " + reviewedToday + ' reviewed' : n + ' question' + (n===1?'':'s') + ' from chapters you have studied'}</div>
+        </div>
+        ${due > 0 ? `<span class="challenge-done" style="background:#dbeafe;color:#1d4ed8;">${due} due</span>` : `<span class="challenge-done">✓ caught up</span>`}
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+        <button class="btn btn-primary" data-action="open-daily-practice">${doneToday ? 'Practise again' : 'Start today’s questions'}</button>
+        ${due > 0 ? `<button class="btn btn-outline" data-action="open-daily-review">Review all due (${due})</button>` : ''}
+      </div>
+    </div>`;
+}
+function renderDailyPractice() {
+  const s = state.dailySession;
+  if (!s) return '';
+  const isReview = s.mode === 'review';
+  const titleTxt = isReview ? 'Review session' : 'Daily practice';
+  // Empty / nothing studied yet.
+  if (!s.items.length) {
+    return `
+      <div class="daily-backdrop" data-action="daily-close">
+        <div class="daily-card" onclick="event.stopPropagation()">
+          <div class="daily-head"><span class="daily-kicker">${titleTxt}</span>
+            <button class="daily-x" data-action="daily-close" aria-label="Close">✕</button></div>
+          <div class="daily-empty">
+            <div style="font-size:34px;">✅</div>
+            <h3>Nothing due right now</h3>
+            <p>Daily questions are drawn from chapters you've already studied. Mark a chapter as done (or finish its quiz), then check back tomorrow.</p>
+            <button class="btn btn-primary" data-action="daily-close">Got it</button>
+          </div>
+        </div>
+      </div>`;
+  }
+  // Finished — summary.
+  if (s.idx >= s.items.length) {
+    const correct = s.results.filter(r => r.correct).length;
+    const total = s.results.length;
+    const due = dailyDueCount();
+    return `
+      <div class="daily-backdrop" data-action="daily-close">
+        <div class="daily-card" onclick="event.stopPropagation()">
+          <div class="daily-head"><span class="daily-kicker">${titleTxt} · done</span>
+            <button class="daily-x" data-action="daily-close" aria-label="Close">✕</button></div>
+          <div class="daily-empty">
+            <div style="font-size:34px;">${correct === total ? '🏆' : '📈'}</div>
+            <h3>${correct} / ${total} correct</h3>
+            <p>Each answer was scheduled by how you rated it. ${due > 0 ? '<strong>' + due + '</strong> question' + (due===1?'':'s') + ' still due — keep the streak going.' : "You're all caught up for today."}</p>
+            <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:6px;">
+              ${due > 0 ? '<button class="btn btn-primary" data-action="daily-review">Review the rest</button>' : ''}
+              <button class="btn btn-outline" data-action="daily-close">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>`;
+  }
+  const item = s.items[s.idx];
+  const c = CONTENT[item.wn];
+  const wkTitle = ((CURRICULUM.find(x => x.week === item.wn) || {}).title) || ('Unit ' + item.wn);
+  const q = item.q;
+  const explain = q.explain || q.explanation || '';
+  const correctIdx = (typeof q.correct === 'number') ? q.correct : 0;
+  const optsHTML = (q.options || []).map((opt, oi) => {
+    let cls = 'daily-opt';
+    if (s.answered) {
+      if (oi === correctIdx) cls += ' daily-opt-correct';
+      else if (oi === s.selected) cls += ' daily-opt-wrong';
+      else cls += ' daily-opt-dim';
+    } else if (oi === s.selected) cls += ' daily-opt-sel';
+    const letter = String.fromCharCode(65 + oi);
+    return `<button class="${cls}" data-action="daily-answer" data-opt="${oi}" ${s.answered ? 'disabled' : ''}>
+      <span class="daily-opt-letter">${letter}</span><span>${escapeHTML(opt)}</span></button>`;
+  }).join('');
+  const rec = qsrsCard(item.wn, item.qi);
+  const previewBase = rec || Object.assign({}, SRS_DEFAULTS);
+  const rateRow = s.answered ? `
+    <div class="daily-rate-label">How hard was that? (sets when it comes back)</div>
+    <div class="srs-rate-row">
+      <button class="srs-rate srs-rate-again" data-action="daily-rate" data-rating="0">Again<small>&lt;10 min</small></button>
+      <button class="srs-rate srs-rate-hard"  data-action="daily-rate" data-rating="1">Hard<small>${srsPreviewInterval(previewBase, 1)}</small></button>
+      <button class="srs-rate srs-rate-good"  data-action="daily-rate" data-rating="2">Good<small>${srsPreviewInterval(previewBase, 2)}</small></button>
+      <button class="srs-rate srs-rate-easy"  data-action="daily-rate" data-rating="3">Easy<small>${srsPreviewInterval(previewBase, 3)}</small></button>
+    </div>` : '';
+  const sizeRow = (!isReview && s.idx === 0 && !s.answered) ? `
+    <div class="daily-size-row">Questions today:
+      ${[1,2,3,4,5].map(n => `<button class="daily-size ${(state.dailySize||5)===n?'daily-size-on':''}" data-action="daily-set-size" data-n="${n}">${n}</button>`).join('')}
+    </div>` : '';
+  return `
+    <div class="daily-backdrop" data-action="daily-close">
+      <div class="daily-card" onclick="event.stopPropagation()">
+        <div class="daily-head">
+          <span class="daily-kicker">${titleTxt} · ${s.idx + 1}/${s.items.length}</span>
+          <button class="daily-x" data-action="daily-close" aria-label="Close">✕</button>
+        </div>
+        <div class="daily-progress"><span style="width:${Math.round((s.idx/s.items.length)*100)}%"></span></div>
+        <div class="daily-chip">${escapeHTML(wkTitle)}</div>
+        <div class="daily-stem">${escapeHTML(q.stem || q.q || '')}</div>
+        <div class="daily-opts">${optsHTML}</div>
+        ${s.answered && explain ? `<div class="daily-explain"><strong>${s.selected === correctIdx ? '✅ Correct' : '✕ Not quite'} —</strong> ${escapeHTML(explain)}</div>` : ''}
+        ${rateRow}
+        ${sizeRow}
+      </div>
+    </div>`;
 }
 
 /* ---------- FLASHCARDS ---------- */
@@ -20207,6 +20674,49 @@ function attachListeners() {
           setState({ flashcardIndex: (state.flashcardIndex + 1) % c.flashcards.length, srsShowAnswer: false });
           break;
         }
+        case 'open-daily-practice':
+          startDailyPractice('daily');
+          break;
+        case 'daily-review':
+        case 'open-daily-review':
+          startDailyPractice('review');
+          break;
+        case 'daily-answer': {
+          const s = state.dailySession; if (!s || s.answered) break;
+          const opt = Number(el.dataset.opt);
+          const item = s.items[s.idx];
+          const correctIdx = (typeof item.q.correct === 'number') ? item.q.correct : 0;
+          s.selected = opt; s.answered = true;
+          s.results.push({ wn: item.wn, qi: item.qi, correct: opt === correctIdx });
+          setState({ dailySession: s });
+          break;
+        }
+        case 'daily-rate': {
+          const s = state.dailySession; if (!s || !s.answered) break;
+          const rating = Number(el.dataset.rating);
+          const item = s.items[s.idx];
+          qsrsRate(item.wn, item.qi, rating);
+          s.idx += 1; s.selected = null; s.answered = false;
+          if (s.idx >= s.items.length) {
+            const today = new Date().toISOString().slice(0,10);
+            state.dailyMeta = Object.assign({}, state.dailyMeta || {}, { doneDay: today });
+            persist();
+          }
+          setState({ dailySession: s });
+          break;
+        }
+        case 'daily-set-size': {
+          const n = Math.min(5, Math.max(1, Number(el.dataset.n)));
+          state.dailySize = n;
+          // Rebuild the queue at the new size (only valid before answering the first card).
+          const items = dailyBuildQueue('daily');
+          persist();
+          setState({ dailySession: { items, idx: 0, selected: null, answered: false, mode: 'daily', results: [] } });
+          break;
+        }
+        case 'daily-close':
+          setState({ showDailyPractice: false, dailySession: null });
+          break;
         case 'srs-browse-prev': {
           const c = CONTENT[state.selectedWeek];
           if (!c) return;
@@ -21847,12 +22357,14 @@ function renderStudyTrackerWidget() {
 loadStored();
 // Append the capstone clinical case to each episode (once).
 if (typeof applyClosingCases === 'function') applyClosingCases();
+if (typeof applyExtraQuiz === 'function') applyExtraQuiz();
 // A returning doctor stays signed in (no re-login) and sees THEIR own saved progress.
 if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser === 'function') bindProgressForUser();
 (function(){
   var run = false;
   function go(){
     if (run) return; run = true;
+    try { setTimeout(function(){ if (typeof maybeShowDailyPractice === 'function') maybeShowDailyPractice(); }, 3400); } catch(e){}
     try { render(); }  // render() schedules the loader fade itself (~3s intro)
     catch (err) {
       // Never leave the user stuck on a blank/frozen screen — show a recover option + drop the loader.
@@ -22551,6 +23063,12 @@ function buildRich(c,title){
   if(pearls.length){
     turns.push({speaker:'host',text:"Before we wrap, hit me with the clinical pearls."});
     pearls.slice(0,5).forEach(function(p,pi){ turns.push({speaker:pi%2?'host':'cohost',text:p}); });
+  }
+
+  // Curated closing clinical case — a flowing worked example before the takeaways.
+  if(c&&Array.isArray(c.closingCase)&&c.closingCase.length){
+    turns.push({speaker:'host',text:"Before the takeaways, let's put it together with a clinical case."});
+    c.closingCase.forEach(function(t){ if(t&&t.text) turns.push({speaker:(t.speaker==='cohost'?'cohost':'host'),text:txt(t.text)}); });
   }
 
   // Three takeaways — prefer a "Memorize"/"High-yield" group, else first group
