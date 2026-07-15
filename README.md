@@ -30,4 +30,4 @@ deploy the whole folder (keep the PNGs and the NCCN PDF alongside `index.html`).
 - Anthropic key -> AI chapter Q&A and the research assistant.
 - OpenAI / ElevenLabs key -> HD narration for podcasts and the summary video.
 Without keys, narration uses the device's built-in voice.
-  x
+  
