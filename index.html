@@ -5376,105 +5376,294 @@ const CONTENT = {
       { stem: "A 50-year-old has symmetric bilateral parotid enlargement. Best initial imaging?", options: ["CT non-contrast", "Ultrasound (characterizes parenchyma, ducts, lesions; consider Sjogren syndrome)", "Plain film", "MRI immediately"], correct: 1, explain: "Ultrasound is first-line for parotid evaluation — characterizes parenchymal heterogeneity (suggestive of Sjögren, sarcoidosis, HIV-associated), focal lesions, and ductal anatomy." },
       { stem: "Best imaging modality for diagnosis of CSF rhinorrhea (suspect skull base defect)?", options: ["Plain X-ray", "High-resolution CT of sinuses/skull base + sometimes MR cisternography or intrathecal radionuclide cisternography", "Ultrasound", "MRI alone"], correct: 1, explain: "Thin-slice CT identifies bony defect (most common: cribriform plate, lateral lamella). Intermittent leaks may need confirmation with beta-2 transferrin testing or intrathecal contrast/radionuclide cisternography." }
     ],
-    podcastTitle: 'Deep Dive · Imaging the Head and Neck',
-    podcastDuration: '~32 min',
+    podcastTitle: 'Deep Dive - Diagnostic Imaging of the Head & Neck',
+    podcastDuration: '~21 min - deep dive',
     podcastScript: [
-      { speaker: 'host',   text: "Hey everyone, welcome back to ENT Academy. I'm Elena." },
-      { speaker: 'cohost', text: "And I'm Marcus — and today we're doing something every single ENT resident wishes someone had sat them down for: imaging." },
-      { speaker: 'host',   text: "Yeah. Because here's the painful truth — most of us learn imaging by accident. You order what your senior ordered, the radiologist's report comes back, you skim it, you don't actually look at the films, and you move on." },
-      { speaker: 'cohost', text: "And then on call at three in the morning, someone hands you a head CT and goes 'tell me if this needs the OR'." },
-      { speaker: 'host',   text: "Right. So today's mission — by the end of this episode, you should be able to look at a film, know the anatomy, know what the radiologist is going to miss, and most importantly, know what to ORDER in the first place." },
-      { speaker: 'cohost', text: "Because the most important imaging decision is made before the patient enters the scanner." },
-      { speaker: 'host',   text: "Exactly. So let's start there. The single question you must answer before every order: what am I asking the imaging to tell me?" },
-      { speaker: 'cohost', text: "Not 'I want a scan.' What clinical question changes based on this scan?" },
-      { speaker: 'host',   text: "If you can't articulate that, don't order it. Because the radiologist has nothing to focus on, the protocol is generic, and you're going to get a useless 'clinical correlation recommended' read." },
-      { speaker: 'cohost', text: "OK, ground rules. CT versus MRI — the cleanest possible mental model." },
-      { speaker: 'host',   text: "CT is for bone, air, calcium, acute blood, and patients who can't lie still or who have a pacemaker. MRI is for soft tissue, marrow, brain, perineural spread, and the inner ear." },
-      { speaker: 'cohost', text: "And if both work?" },
-      { speaker: 'host',   text: "Pick the one your radiologist reads better. Honestly. The best modality is the one read by someone who looks at twenty of them a week." },
-      { speaker: 'cohost', text: "Let's hit the basics quickly. Hounsfield units." },
-      { speaker: 'host',   text: "Air is around minus one thousand. Fat is around minus one hundred. Water is zero. Soft tissue is plus thirty to plus seventy. Acute blood is plus fifty to plus seventy-five. Bone is plus four hundred and up. Calcium plus three hundred and up." },
-      { speaker: 'cohost', text: "Why do you need to know that?" },
-      { speaker: 'host',   text: "Because when you see a 'cystic' lesion in the neck on a written report, you want to confirm it's fluid density and not a solid tumor that's hypodense. Measure it with the cursor." },
-      { speaker: 'cohost', text: "MRI basics. T1 versus T2." },
-      { speaker: 'host',   text: "T1 — fat is bright, water is dark, anatomy looks 'normal.' T2 — water is bright, fat is intermediate to dark. Pathology is usually bright on T2 because it's edematous." },
-      { speaker: 'cohost', text: "Common gotchas." },
-      { speaker: 'host',   text: "T1 bright differential — fat, methemoglobin (subacute blood), proteinaceous fluid, melanin, gadolinium enhancement. So if you see a T1 bright lesion that's not fat-suppressed, ask what it is." },
-      { speaker: 'cohost', text: "And gadolinium." },
-      { speaker: 'host',   text: "Gadolinium leaks where the blood-brain barrier is broken. So tumor, inflammation, and meninges all enhance. Useful for any extra-axial lesion." },
-      { speaker: 'cohost', text: "Contraindications?" },
-      { speaker: 'host',   text: "Severe renal impairment — eGFR under thirty — because of nephrogenic systemic fibrosis with older agents. Newer macrocyclic agents are safer but still cautious." },
-      { speaker: 'cohost', text: "OK let's go region by region. Sinuses first." },
-      { speaker: 'host',   text: "Sinus CT non-contrast is the workhorse. You scan in axial and reformat coronal and sagittal. Coronal is the most useful view." },
-      { speaker: 'cohost', text: "Why coronal?" },
-      { speaker: 'host',   text: "Because it shows you the OMC — the osteomeatal complex — face on. Maxillary ostium, infundibulum, hiatus semilunaris, ethmoid bulla, uncinate, middle meatus. Block any of that and you get chronic sinusitis." },
-      { speaker: 'cohost', text: "Lamellae?" },
-      { speaker: 'host',   text: "Four lamellae of the lateral nasal wall — uncinate, ethmoid bulla, basal lamella of the middle turbinate, superior turbinate. The basal lamella is the divider between anterior and posterior ethmoid cells. Surgeons live and die by that landmark." },
-      { speaker: 'cohost', text: "What's the must-not-miss before FESS?" },
-      { speaker: 'host',   text: "Two things. One — Onodi cell. A posterior ethmoid cell that's pneumatized lateral or superior to the sphenoid, and the optic nerve runs through it or along its wall. If your endoscopist doesn't know it's there, they can blind the patient. Two — Keros classification of the olfactory fossa." },
-      { speaker: 'cohost', text: "Refresh us on Keros." },
-      { speaker: 'host',   text: "Depth of lateral lamella from the cribriform plate. Keros one is one to three millimeters — shallow. Keros two is four to seven. Keros three is eight to sixteen — deep, with a paper-thin lateral lamella that's the number one site of CSF leak during ethmoidectomy. Always report Keros depth bilaterally." },
-      { speaker: 'cohost', text: "Other pre-FESS hazards?" },
-      { speaker: 'host',   text: "Carotid dehiscence in the lateral wall of the sphenoid. Asymmetric ethmoid roof. Septal deviation that limits the surgical corridor. Concha bullosa. And in revision cases — neo-osteogenesis and lost surgical landmarks." },
-      { speaker: 'cohost', text: "What about Lund-Mackay scoring?" },
-      { speaker: 'host',   text: "Each side scored zero to twenty-four — five sinuses times zero to two, plus OMC zero or two. Total maximum bilateral is forty-eight. It's the standardized way to communicate CRS severity in trials, and it's part of the AAO-HNS criteria for surgical decision-making." },
-      { speaker: 'cohost', text: "Pivot to temporal bone CT." },
-      { speaker: 'host',   text: "Thin sub-millimeter slices, axial and coronal reformats. Look in this order — external canal, scutum, ossicles, oval window, round window, cochlea, vestibule, lateral semicircular canal, facial nerve canal, tegmen, jugular bulb." },
-      { speaker: 'cohost', text: "Scutum?" },
-      { speaker: 'host',   text: "The sharp triangular bony spur at the lateral attic, between the bony external canal and the pars flaccida. Blunting of the scutum is the earliest CT sign of pars flaccida cholesteatoma." },
-      { speaker: 'cohost', text: "Other temporal bone red flags." },
-      { speaker: 'host',   text: "Lateral semicircular canal fistula — erosion of the bony rim, dehiscence into the middle ear cavity. Tegmen dehiscence — risk of CSF leak and encephalocele. Facial nerve canal dehiscence — most common in the tympanic segment, just above the oval window. Jugular bulb high-riding into the hypotympanum." },
-      { speaker: 'cohost', text: "Ice cream cone sign?" },
-      { speaker: 'host',   text: "Axial view of the malleus head — the cone — articulating with the body of the incus — the scoop. Normal ossicular alignment. Lose that relationship and you suspect ossicular discontinuity or cholesteatoma displacing them." },
-      { speaker: 'cohost', text: "Now MRI for the inner ear and IAC." },
-      { speaker: 'host',   text: "Heavily T2-weighted sequences — CISS or FIESTA depending on the scanner — show the cochlear and vestibular fluid as bright, against the dark nerves and bone. The cochlear nerve should be visible as a black line." },
-      { speaker: 'cohost', text: "Vestibular schwannoma workup." },
-      { speaker: 'host',   text: "Thin T2 plus post-gadolinium T1 with fat suppression. Even tiny intracanalicular tumors enhance and stand out from the suppressed surrounding fat. Don't use CT — it's blind to small schwannomas." },
-      { speaker: 'cohost', text: "DWI for cholesteatoma — talk about that." },
-      { speaker: 'host',   text: "Diffusion-weighted MRI — specifically non-EPI DWI — is the game-changer. Cholesteatoma restricts diffusion. It lights up bright on DWI, dark on the ADC map. Specificity is over ninety percent. Many centers now use post-op MRI instead of second-look surgery to detect residual or recurrent cholesteatoma." },
-      { speaker: 'cohost', text: "Big deal. Move on to head and neck cancer staging." },
-      { speaker: 'host',   text: "First principle — any new neck mass in an adult smoker, or any cervical lymph node larger than one and a half centimeters that doesn't resolve, deserves imaging." },
-      { speaker: 'cohost', text: "Which scan?" },
-      { speaker: 'host',   text: "Contrast-enhanced CT of the neck with thin slices is your default. Add an MRI if you suspect oral tongue cancer, perineural spread, or skull base involvement. Add PET-CT if it's an unknown primary or you're looking for distant mets." },
-      { speaker: 'cohost', text: "Laryngeal cancer." },
-      { speaker: 'host',   text: "Contrast CT, thin slices through the larynx, breath-hold quiet respiration. Look at thyroid cartilage for sclerosis or erosion, cricoid involvement, pre-epiglottic space, paraglottic space, and subglottic extension. Cartilage invasion changes T-stage and changes management." },
-      { speaker: 'cohost', text: "Oral tongue and oropharyngeal cancer." },
-      { speaker: 'host',   text: "MRI gives you the best view of tongue muscle infiltration and depth of invasion, which is now a critical staging parameter in AJCC 8. Don't forget to look at the mandible — cortical erosion on CT plus T1 marrow replacement on MRI confirms invasion and pushes you toward segmental resection." },
-      { speaker: 'cohost', text: "Perineural spread — talk to us." },
-      { speaker: 'host',   text: "Adenoid cystic, cutaneous SCC, and lymphoma love to crawl along nerves. On T1 you lose the normal fat around the nerve. On T1 fat-suppressed post-gadolinium, you see abnormal nerve enhancement extending toward and through the skull base. Asymmetric foramen ovale or foramen rotundum widening in a cancer patient is perineural until proven otherwise." },
-      { speaker: 'cohost', text: "Unknown primary in neck mass." },
-      { speaker: 'host',   text: "After panendoscopy and tonsillectomy with directed biopsies, PET-CT before any planned surgical workup. It finds the hidden primary in roughly a third of cases, usually base of tongue or tonsil." },
-      { speaker: 'cohost', text: "PET-CT timing for recurrence surveillance." },
-      { speaker: 'host',   text: "Wait at least twelve weeks post-treatment, otherwise post-radiation inflammation gives you false positives all over. Look at SUV max, but more importantly, look at the pattern — focal versus diffuse." },
-      { speaker: 'cohost', text: "Salivary glands." },
-      { speaker: 'host',   text: "Parotid mass — ultrasound first because it's quick, characterizes cystic versus solid, and guides FNA. MRI is the staging study — T2 bright with well-defined margins suggests pleomorphic adenoma; ill-defined borders with perineural enhancement raises malignancy concern." },
-      { speaker: 'cohost', text: "Sialolithiasis." },
-      { speaker: 'host',   text: "Non-contrast CT will find calcium ductal stones in both submandibular and parotid. Ultrasound is also useful and avoids radiation, especially in younger patients with recurrent sialadenitis." },
-      { speaker: 'cohost', text: "Pediatric neck masses." },
-      { speaker: 'host',   text: "Ultrasound is the standard first study — no radiation, no sedation. Thyroglossal duct cyst — midline, anterior, elevates with tongue protrusion. Branchial cleft cyst — typically lateral, second cleft anterior to SCM. Lymphatic malformation — trans-spatial, multilocular cystic mass. Confirm thyroid is in normal position before Sistrunk." },
-      { speaker: 'cohost', text: "Pediatric airway." },
-      { speaker: 'host',   text: "Plain lateral neck X-ray — thumbprint sign for epiglottitis, steeple sign for subglottic stenosis or croup. Modern practice — go straight to flexible scope or controlled OR airway if epiglottitis suspected." },
-      { speaker: 'cohost', text: "Vascular masses." },
-      { speaker: 'host',   text: "Paraganglioma — carotid body tumor, glomus jugulare, glomus tympanicum. CT shows enhancement plus splaying of carotids in carotid body tumor — the Lyre sign. MRI shows salt-and-pepper appearance from flow voids. CT angiography or MRA defines feeders for embolization." },
-      { speaker: 'cohost', text: "JNA — juvenile nasopharyngeal angiofibroma." },
-      { speaker: 'host',   text: "Adolescent male with unilateral epistaxis and obstruction. Contrast CT shows widening of pterygopalatine fossa, anterior bowing of the posterior maxillary wall — Holman-Miller sign — and enlargement of the sphenopalatine foramen. Embolize twenty-four to forty-eight hours preoperatively." },
-      { speaker: 'cohost', text: "CSF leak workup." },
-      { speaker: 'host',   text: "Confirm chemically first with beta-2 transferrin. Then high-resolution sinus CT to find the bony defect — usually cribriform, lateral lamella, or tegmen. If intermittent and CT is unrevealing, intrathecal contrast cisternography or radionuclide cisternography." },
-      { speaker: 'cohost', text: "Acute invasive fungal sinusitis." },
-      { speaker: 'host',   text: "Immunocompromised, neutropenic, diabetic ketoacidosis. Contrast CT looks for loss of mucosal enhancement — the black turbinate sign — plus bone destruction at the maxillary or ethmoid walls. MRI adds detail for orbital and intracranial spread. Imaging guides emergent surgical debridement." },
-      { speaker: 'cohost', text: "Orbital complications of sinusitis." },
-      { speaker: 'host',   text: "Chandler classification one through five. Contrast CT identifies subperiosteal abscess at the medial wall, orbital abscess, and cavernous sinus thrombosis. Three or higher with worsening proptosis or visual change is a surgical emergency." },
-      { speaker: 'cohost', text: "OK let's talk about the radiology requisition itself." },
-      { speaker: 'host',   text: "Three things on every requisition. One — what you found on exam. Two — where exactly. Three — what you're worried about. 'Right level two, three centimeter firm fixed node, fifty-pack-year smoker, suspect mucosal primary' gets a completely different read than 'neck mass, please evaluate.'" },
-      { speaker: 'cohost', text: "Pet peeve of radiologists." },
-      { speaker: 'host',   text: "Vague indications. 'Pain.' 'Mass.' 'Rule out.' Be specific. Say what side, what level, what symptoms, what duration, what's been done. A good requisition is fifteen seconds of typing that buys you a much better read." },
-      { speaker: 'cohost', text: "Reading films yourself — your habit?" },
-      { speaker: 'host',   text: "Always. Don't outsource the read entirely. The radiologist is reading dozens of films a day; you have the clinical picture in front of you. Combine those and you get the right answer. A good ENT-radiology relationship is a feedback loop, not a one-way report." },
-      { speaker: 'cohost', text: "Three takeaways before we close." },
-      { speaker: 'host',   text: "One — ask a specific clinical question with every imaging order. Don't scan reflexively. Two — CT for bone, air, calcium, and acute hemorrhage; MRI for soft tissue, marrow, nerve, and inner ear. Three — write the differential on the requisition and look at the films yourself." },
-      { speaker: 'cohost', text: "Next week — deep neck space infections. Where they live, where they spread, and when to drain." },
-      { speaker: 'host',   text: "Thanks for studying with us. See you in seven." }
-    ],
+      {
+            "speaker": "host",
+            "text": "Welcome to E N T Academy Deep Dive. I'm Elena."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And I'm Marcus. Today: diagnostic imaging of the head and neck — how to pick the right test, read the key landmarks, and write a requisition that actually changes the report. Getting imaging right saves operations and catches cancers; getting it wrong delays both. We'll go modality by modality, drop the pearls, and finish with a case."
+      },
+      {
+            "speaker": "host",
+            "text": "Start with the foundational idea: imaging is a clinical decision, not a reflex. You order a study to answer a specific question, and the question determines the modality. So let's define what each one is best at."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Begin with C T."
+      },
+      {
+            "speaker": "host",
+            "text": "Computed tomography is fast, superb for bone, calcification, and acute problems, and it's the workhorse for the sinuses, the temporal bone, trauma, and staging the neck and chest. Its weaknesses are soft-tissue contrast and ionizing radiation. Pearl: if the question is about bone, air, or an acute bleed — sinus walls, ossicles, a facial fracture — C T is your answer."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Now M R I."
+      },
+      {
+            "speaker": "host",
+            "text": "Magnetic resonance imaging wins on soft-tissue detail, marrow, perineural spread, and intracranial extension, with no ionizing radiation. It's the study for the tongue, parotid, nasopharynx, skull base, and the internal auditory canal. Its costs are time, motion sensitivity, and contraindications like some implants. Pearl: soft tissue, nerves, and marrow mean M R I — a tongue-base cancer's true extent and any perineural spread are M R I questions."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Ultrasound is underused in our field."
+      },
+      {
+            "speaker": "host",
+            "text": "Ultrasound is real-time, cheap, radiation-free, and excellent for the thyroid, neck nodes, and salivary glands, and it guides fine-needle aspiration in real time. It's operator-dependent and can't see through bone or air. Pearl: the first imaging test for a thyroid nodule or a superficial neck node is ultrasound, and it's ideal for guiding the needle and for children, who you want to keep off radiation."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And the metabolic study — P E T."
+      },
+      {
+            "speaker": "host",
+            "text": "P E T combined with C T uses F-D-G uptake to find metabolically active tumor. Its roles are staging advanced cancer, hunting an unknown primary behind a metastatic node, surveillance for recurrence, and assessing treatment response. It's limited by cost, false positives from inflammation, and poor spatial detail alone. Pearl: for the metastatic neck node with no obvious primary, P E T-C T is the tool that lights up the hidden tongue-base or tonsil cancer."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Before the region-specific studies, orient us to the cross-sectional anatomy we must read."
+      },
+      {
+            "speaker": "host",
+            "text": "Learn the spaces, because a mass is characterized by which space it's centered in and how it displaces its neighbors. The parapharyngeal space and the fat plane around it, the carotid space with the great vessels and lower cranial nerves, the masticator space, the retropharyngeal space, and the mucosal space of the pharynx. Pearl: the direction a mass displaces the parapharyngeal fat tells you its space of origin — pushed medially means a deep-lobe parotid tumor, pushed laterally means a carotid-space lesion."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Now the sinus C T — a study we order constantly."
+      },
+      {
+            "speaker": "host",
+            "text": "A non-contrast sinus C T in the coronal plane is the map for endoscopic surgery. You read the ostiomeatal complex, the four ethmoid lamellae, and the frontal recess, and you flag the dangerous variants — a low or asymmetric skull base by the Keros classification, an Onodi cell over the optic nerve, a Haller cell at the maxillary ostium, and a dehiscent lamina papyracea. Pearl: the pre-operative sinus C T is a surgical safety checklist — Keros grade, skull-base symmetry, the anterior ethmoid artery, and the Onodi cell, read every single time before you operate."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Temporal bone imaging — C T and M R I play different roles."
+      },
+      {
+            "speaker": "host",
+            "text": "A high-resolution temporal bone C T in a bone algorithm shows the ossicles, the scutum, the tegmen, the facial nerve canal, and the labyrinth — perfect for cholesteatoma erosion, otosclerosis, and trauma. M R I of the internal auditory canals with gadolinium is the study for the cerebellopontine angle. Pearl: an asymmetric sensorineural hearing loss needs an M R I of the internal auditory canals with contrast to exclude a vestibular schwannoma — C T won't show it."
+      },
+      {
+            "speaker": "cohost",
+            "text": "There's a special M R I sequence for cholesteatoma worth knowing."
+      },
+      {
+            "speaker": "host",
+            "text": "Diffusion-weighted imaging — specifically non-echo-planar D W I. Cholesteatoma restricts diffusion and lights up brightly, which lets you detect residual or recurrent cholesteatoma without a second-look operation. Pearl: non-echo-planar diffusion-weighted M R I is how we now follow cholesteatoma and avoid routine second-look surgery — restricted diffusion equals keratin."
+      },
+      {
+            "speaker": "cohost",
+            "text": "The contrast question — when and what are the risks?"
+      },
+      {
+            "speaker": "host",
+            "text": "Iodinated contrast for C T improves soft-tissue and vascular detail but carries risks of allergic-type reactions and contrast-associated kidney injury, so check renal function and allergy history. Gadolinium for M R I defines tumor and perineural spread, and its main caution is nephrogenic systemic fibrosis in severe renal failure, now rare with modern agents. Pearl: check the kidney function before iodinated C T contrast, and be cautious with gadolinium in severe renal impairment — but don't withhold needed contrast reflexively; it often makes or breaks the diagnosis."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Perineural spread is a high-yield concept — where does imaging earn its keep?"
+      },
+      {
+            "speaker": "host",
+            "text": "This is where M R I is irreplaceable. Some cancers — adenoid cystic carcinoma above all, and cutaneous squamous cell carcinoma — track along nerves far from the primary. On M R I you look for nerve enhancement and enlargement, and for widening of the named skull-base foramina — foramen rotundum for the second trigeminal division, foramen ovale for the third. Pearl: adenoid cystic carcinoma is the classic perineural spreader — a facial numbness or a subtle foraminal change on M R I can reveal disease tracking to the skull base, so image the whole nerve course."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Cancer staging and restaging — sketch the workflow."
+      },
+      {
+            "speaker": "host",
+            "text": "For a new head-and-neck cancer, contrast C T of the neck and chest stages the nodes and screens for lung metastasis and a synchronous primary, M R I better defines the primary in the tongue, nasopharynx, or skull base, and P E T-C T is added for advanced disease and unknown primaries. After chemoradiation, a P E T-C T at about twelve weeks assesses response and the need for neck dissection. Pearl: the post-treatment response P E T is done at about twelve weeks — earlier scans have too many inflammatory false positives to trust."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Pediatric imaging — the overriding principle."
+      },
+      {
+            "speaker": "host",
+            "text": "Minimize ionizing radiation. Favor ultrasound and M R I over C T when they answer the question, and when C T is necessary, use low-dose protocols — as low as reasonably achievable. Sedation planning matters for M R I in young children. Pearl: in kids, reach for ultrasound and M R I first — a neck node or a thyroid question rarely needs the radiation of a C T."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And the surgical technology point — image guidance."
+      },
+      {
+            "speaker": "host",
+            "text": "Image-guided navigation registers a pre-operative C T, or a fused C T and M R I, to the patient in the operating room, giving real-time localization near the skull base, orbit, and carotid. It's especially valuable in revision sinus surgery, extensive polyposis, and skull-base cases. Pearl: image guidance doesn't replace anatomic knowledge, but in a distorted revision field it confirms where the skull base and orbit are before you commit."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Finally — the requisition, because the report is only as good as the question."
+      },
+      {
+            "speaker": "host",
+            "text": "Tell the radiologist the specific clinical question, the laterality, the relevant history including prior surgery and radiation, and what you're worried about. A requisition that says evaluate for perineural spread of a right cheek adenoid cystic carcinoma gets a very different, better read than one that says facial pain. Pearl: write the question you want answered — the requisition that names the tumor, the nerve, and the concern changes the radiologist's read and can change the operation."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Before the pearls, let's give people the sequence and window basics so a report makes sense."
+      },
+      {
+            "speaker": "host",
+            "text": "On M R I, T-one images show anatomy well — fat is bright, and normal marrow is bright, so a dark marrow signal on T-one flags tumor infiltration. T-two images make fluid and most tumors and edema bright. Fat-suppressed T-one after gadolinium shows enhancement — tumor, infection, and perineural spread. Pearl: loss of the normal bright marrow fat signal on a T-one image is an early sign of mandible or skull-base invasion — one of the most useful single observations in head-and-neck M R I."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And the C T equivalent — windows."
+      },
+      {
+            "speaker": "host",
+            "text": "The same C T data is viewed in different windows. A bone window shows cortical detail — fractures, ossicles, and erosion. A soft-tissue window shows the muscles, glands, and nodes. Pearl: always look at both windows — an ossicular erosion or a subtle skull-base fracture hides on the soft-tissue window and only appears on bone settings."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Nodal disease is central to head-and-neck cancer — what makes a node look malignant on imaging?"
+      },
+      {
+            "speaker": "host",
+            "text": "Size is the crude criterion — over about one centimeter, or one-and-a-half at level two — but morphology matters more. Suspicious features are a rounded shape with loss of the fatty hilum, central necrosis, and irregular margins with extranodal extension. Pearl: central necrosis in a neck node is metastatic squamous carcinoma until proven otherwise, regardless of size, and extranodal extension on imaging worsens the stage and the prognosis."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Let's make the thyroid nodule concrete, since ultrasound drives it."
+      },
+      {
+            "speaker": "host",
+            "text": "Ultrasound features stratify risk, formalized in systems like T-I-R-A-D-S. The worrying features are marked hypoechogenicity, microcalcifications, a taller-than-wide shape, irregular or lobulated margins, and extrathyroidal extension. Those features, combined with size, decide who needs fine-needle aspiration. Pearl: microcalcifications and a taller-than-wide nodule are the high-risk ultrasound signs — they, not size alone, drive the decision to biopsy."
+      },
+      {
+            "speaker": "cohost",
+            "text": "When do we reach for vascular imaging?"
+      },
+      {
+            "speaker": "host",
+            "text": "When a lesion is pulsatile, vascular, or near the great vessels. C T angiography or M R angiography evaluates a carotid body tumor, a glomus tumor, an aberrant or dehiscent carotid behind the eardrum, and carotid involvement by tumor. A paraganglioma shows an intense blush and the classic salt-and-pepper appearance on M R I. Pearl: never biopsy a pulsatile neck or middle-ear mass until vascular imaging has excluded a paraganglioma or an aberrant carotid — image first, needle later."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And catheter angiography still has a therapeutic role."
+      },
+      {
+            "speaker": "host",
+            "text": "Yes — diagnostic and therapeutic. Angiography with embolization devascularizes a juvenile nasopharyngeal angiofibroma before resection and controls refractory posterior epistaxis in the external carotid territory. Pearl: the adolescent-male angiofibroma is embolized before surgery to cut blood loss — imaging and intervention working together."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Two more practical points — the nasopharynx and the post-treatment neck."
+      },
+      {
+            "speaker": "host",
+            "text": "Nasopharyngeal carcinoma hides at the fossa of Rosenmüller and spreads to the skull base through the foramen lacerum and to retropharyngeal nodes, so M R I of the skull base plus a look at those nodes is essential. And after chemoradiation the neck is edematous and distorted for months, which is exactly why the response P E T waits about twelve weeks and why comparison with the pre-treatment scan matters. Pearl: a unilateral serous effusion plus a nasopharyngeal mass on M R I is nasopharyngeal carcinoma until proven otherwise — trace it to the skull base."
+      },
+      {
+            "speaker": "cohost",
+            "text": "One more caution — the incidental finding."
+      },
+      {
+            "speaker": "host",
+            "text": "P E T and cross-sectional imaging pick up incidentalomas — a focal thyroid uptake on P E T carries a real malignancy risk and deserves an ultrasound, while diffuse thyroid uptake is usually thyroiditis. Pearl: focal F-D-G uptake in the thyroid on a P E T scan needs a dedicated ultrasound — a meaningful fraction are cancers."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Let's drill it with a second quick case. A fifty-year-old woman has a firm one-and-a-half-centimeter thyroid nodule found on exam. What's your first test and what are you looking for?"
+      },
+      {
+            "speaker": "host",
+            "text": "The first test is a thyroid and neck ultrasound — not a C T. I'm assessing the nodule's echogenicity, margins, shape, and calcifications with a T-I-R-A-D-S lens, and I'm surveying the central and lateral neck for suspicious nodes. High-risk features plus size determine fine-needle aspiration."
+      },
+      {
+            "speaker": "cohost",
+            "text": "The ultrasound shows a hypoechoic, taller-than-wide nodule with microcalcifications and a suspicious level-three node. Next?"
+      },
+      {
+            "speaker": "host",
+            "text": "That's a high-risk pattern for papillary thyroid carcinoma with a nodal metastasis. I do an ultrasound-guided fine-needle aspiration of both the nodule and the node, and I wash the node aspirate for thyroglobulin. If C T is later needed for extensive disease, I coordinate iodinated contrast timing with any planned radioactive iodine. Pearl: reach for ultrasound and ultrasound-guided aspiration first in thyroid disease — and remember iodinated C T contrast can delay radioactive iodine, so plan the sequence."
+      },
+      {
+            "speaker": "cohost",
+            "text": "From the vestibular schwannoma to the thyroid nodule — every choice flowed from the clinical question and the right modality."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Rapid-fire key pearls."
+      },
+      {
+            "speaker": "host",
+            "text": "Pearl: bone, air, and acute problems are C T; soft tissue, nerves, and marrow are M R I; the thyroid and superficial nodes are ultrasound; the unknown primary is P E T."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Pearl: asymmetric sensorineural hearing loss needs M R I of the internal auditory canals with gadolinium to exclude a vestibular schwannoma."
+      },
+      {
+            "speaker": "host",
+            "text": "Pearl: non-echo-planar diffusion-weighted M R I detects residual cholesteatoma and can replace second-look surgery."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Pearl: the pre-op sinus C T is a safety checklist — Keros grade, skull-base symmetry, Onodi and Haller cells, and the anterior ethmoid artery."
+      },
+      {
+            "speaker": "host",
+            "text": "Pearl: adenoid cystic carcinoma spreads perineurally — image the whole nerve on M R I and watch the skull-base foramina."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Pearl: the treatment-response P E T is done around twelve weeks to avoid inflammatory false positives."
+      },
+      {
+            "speaker": "host",
+            "text": "Pearl: check renal function before iodinated contrast, and write a requisition that names the specific question."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Let's put it together with a case."
+      },
+      {
+            "speaker": "host",
+            "text": "A forty-year-old woman reports six months of progressive left-sided hearing loss and ringing. An audiogram shows an asymmetric left sensorineural loss with poor word recognition. Marcus — what imaging, and why?"
+      },
+      {
+            "speaker": "cohost",
+            "text": "Asymmetric sensorineural hearing loss with poor discrimination is a retrocochlear red flag — I need to exclude a vestibular schwannoma. The study is an M R I of the internal auditory canals with gadolinium; a C T would miss it, and I want the cerebellopontine angle in detail."
+      },
+      {
+            "speaker": "host",
+            "text": "The M R I shows a two-centimeter enhancing mass in the left internal auditory canal extending into the cerebellopontine angle. Next considerations?"
+      },
+      {
+            "speaker": "cohost",
+            "text": "That's a vestibular schwannoma. Now imaging guides management: I characterize its size and its relationship to the brainstem and facial nerve, and those features drive the choice between observation with serial M R I, stereotactic radiosurgery, or microsurgical resection. I'd also confirm it's not part of neurofibromatosis type two by checking for a contralateral lesion."
+      },
+      {
+            "speaker": "host",
+            "text": "Say she'd instead presented with a metastatic neck node and no visible primary. How does imaging change?"
+      },
+      {
+            "speaker": "cohost",
+            "text": "Then it's the unknown-primary workup: contrast C T of the neck and chest, M R I of the mucosal sites, and a P E T-C T to light up an occult tongue-base or tonsil primary, which then directs biopsy and tonsillectomy. Different question, different algorithm — but in both, the imaging is chosen to answer a precise clinical question."
+      },
+      {
+            "speaker": "host",
+            "text": "Exactly — that's the whole chapter. The modality follows the question, the landmarks keep you safe, and the requisition gets you the answer."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And the through-line: match the test to what you actually need to know, and read the anatomy like the map it is."
+      },
+      {
+            "speaker": "host",
+            "text": "That's diagnostic imaging of the head and neck. I'm Elena."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And I'm Marcus. This has been E N T Academy Deep Dive — see you in the next chapter."
+      }
+],
     keyPoints: [
       { category: 'Modality choice', items: [
         "CT — bone, sinus, temporal bone, trauma, abscess, vascular characterization",
@@ -10936,39 +11125,298 @@ const CONTENT = {
       { name: 'Oral hairy leukoplakia',   category: 'clinical',   description: 'Corrugated white plaque on lateral tongue, does NOT scrape off.', implication: 'EBV-associated, essentially diagnostic of HIV.' },
       { name: 'Violaceous palatal patch', category: 'clinical',   description: 'Purple-red flat or nodular lesion on hard palate.', implication: 'Kaposi sarcoma (HHV-8) — AIDS-defining.' }
     ],
-    podcastTitle: 'The Immunocompromised Host — When Time Is Tissue',
-    podcastDuration: '~13 min',
+    podcastTitle: 'Deep Dive - H&N in the Immunocompromised Host',
+    podcastDuration: '~21 min - deep dive',
     podcastScript: [
-      { speaker: 'host',   text: "Welcome to ENT Academy. I'm Elena." },
-      { speaker: 'cohost', text: "And I'm Marcus. Today: head and neck manifestations in the immunocompromised host. Where the bug menu is different and time matters in hours." },
-      { speaker: 'host',   text: "Five classes of immunocompromise to keep in your head — neutropenia, T-cell defect, humoral defect, complement defect, asplenia." },
-      { speaker: 'cohost', text: "Each class breeds a different organism profile." },
-      { speaker: 'host',   text: "Neutropenia — bacteria plus fungi. The classic A-N-C cutoff for high risk is under five hundred. Mucor and Aspergillus." },
-      { speaker: 'cohost', text: "Let's start with the worst — acute invasive fungal rhinosinusitis." },
-      { speaker: 'host',   text: "AIFR. The patient: neutropenic, or uncontrolled diabetic, often in ketoacidosis. Comes in with facial pain, fever, maybe new diplopia or proptosis." },
-      { speaker: 'cohost', text: "Endoscopy findings?" },
-      { speaker: 'host',   text: "Black eschar on a turbinate. Pale mucosa that doesn't bleed when you probe it. That's tissue ischemia from angio-invasion." },
-      { speaker: 'cohost', text: "What's the rule?" },
-      { speaker: 'host',   text: "AIFR until proven otherwise. Same day to OR for debridement. Start I-V liposomal amphotericin B at five milligrams per kilogram per day. Correct the underlying defect — DKA control, neutrophil recovery." },
-      { speaker: 'cohost', text: "Even with optimal treatment, mortality is fifty percent. Untreated within seventy-two hours, over eighty percent." },
-      { speaker: 'host',   text: "Move on — malignant otitis externa." },
-      { speaker: 'cohost', text: "Elderly diabetic. Severe deep otalgia. Granulation in the E-A-C. Pseudomonas." },
-      { speaker: 'host',   text: "What's the giveaway that it's no longer just OE?" },
-      { speaker: 'cohost', text: "Cranial neuropathy. The Pseudomonas tracks through the fissures of Santorini at the bony-cartilaginous junction, then along the skull base. First CN VII at stylomastoid foramen. Then I-X, X, X-I at jugular foramen. Last X-I-I." },
-      { speaker: 'host',   text: "Treatment is prolonged I-V antipseudomonal therapy, usually ciprofloxacin, six to eight weeks. Get CT first for bone, then M-R-I for soft tissue extent." },
-      { speaker: 'cohost', text: "Solid-organ transplant patients." },
-      { speaker: 'host',   text: "Their biggest H-and-N risk is cutaneous S-C-C — sixty-five to two-hundred-fifty-fold increased rate. More aggressive. Watch the ear, lip, scalp." },
-      { speaker: 'cohost', text: "Surveillance every six months." },
-      { speaker: 'host',   text: "P-T-L-D. Post-transplant lymphoproliferative disorder. E-B-V-driven. Tonsillar or cervical lymphadenopathy that came up fast." },
-      { speaker: 'cohost', text: "First-line treatment is reduction of immunosuppression. Then rituximab. Then chemo if needed. Coordinate with the transplant team." },
-      { speaker: 'host',   text: "Two HIV signs every E-N-T should know." },
-      { speaker: 'cohost', text: "Oral hairy leukoplakia — E-B-V-driven corrugated plaque on the lateral tongue. Does not scrape off. Essentially diagnostic of HIV." },
-      { speaker: 'host',   text: "Kaposi sarcoma — violaceous palatal patch. H-H-V-eight. AIDS-defining." },
-      { speaker: 'cohost', text: "Three takeaways." },
-      { speaker: 'host',   text: "Neutropenic or diabetic with facial pain plus an eschar — AIFR, same-day OR. Elderly diabetic with severe otalgia plus CN VII palsy — malignant otitis externa. Transplant patient with tonsillar enlargement — think P-T-L-D, reduce immunosuppression first." },
-      { speaker: 'cohost', text: "Next week — upper aerodigestive manifestations of systemic disease." },
-      { speaker: 'host',   text: "See you in seven." }
-    ],
+      {
+            "speaker": "host",
+            "text": "Welcome to E N T Academy Deep Dive. I'm Elena."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And I'm Marcus. Today: head-and-neck manifestations in the immunocompromised host — a chapter that hides one of the true E N T emergencies. When the immune system is down, ordinary infections turn deadly and unusual tumors appear. We'll organize it by the type of immune defect, spend real time on the emergency, and finish with a case."
+      },
+      {
+            "speaker": "host",
+            "text": "The first principle is that the type of immune defect predicts the organism. So define the classes. Neutropenia — from chemotherapy or leukemia — invites bacteria and angioinvasive fungi. Impaired cell-mediated immunity — H I V, transplant, and steroids — invites viruses, mycobacteria, and fungi. Diabetes, especially in ketoacidosis, is its own high-risk state. And the newer biologic agents each open specific doors. Pearl: match the bug to the defect — the neutropenic patient gets angioinvasive fungus, the cell-mediated-deficient patient gets viruses and mycobacteria, the ketoacidotic diabetic gets mucormycosis."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Let's go straight to the emergency, because minutes matter."
+      },
+      {
+            "speaker": "host",
+            "text": "Acute invasive fungal rhinosinusitis. In the neutropenic patient or the diabetic in ketoacidosis, Mucor or Aspergillus invades blood vessels, causing thrombosis and tissue infarction that races toward the orbit and brain. The tell on exam is insensate, pale, or black necrotic mucosa on the septum or a turbinate. Pearl: a numb, discolored turbinate that doesn't bleed when probed in an immunocompromised or ketoacidotic patient is invasive fungal sinusitis until proven otherwise — this is a same-hour emergency, not a next-day consult."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Walk the immediate response."
+      },
+      {
+            "speaker": "host",
+            "text": "Bedside nasal endoscopy and biopsy of the insensate area for frozen section, urgent imaging with C T and often M R I to gauge orbital and intracranial extension, start systemic liposomal amphotericin B without waiting for final cultures, take the patient for aggressive surgical debridement of all nonviable tissue, and — the step that most determines survival — reverse the underlying immune deficit: correct the ketoacidosis, and work with the team to recover the neutrophil count. Pearl: survival in invasive fungal sinusitis hinges on three things done together — antifungals, surgical debridement, and reversing the immunosuppression; miss the last and the first two fail."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Contrast that with the chronic, indolent fungal disease so people don't confuse them."
+      },
+      {
+            "speaker": "host",
+            "text": "Right — allergic fungal rhinosinusitis and chronic invasive forms are different entities in different hosts. Allergic fungal disease is a hypersensitivity in the immunocompetent, treated with surgery and steroids, not amphotericin. The acute invasive form is the angioinvasive emergency in the immunocompromised. Pearl: the word fungal isn't a diagnosis — it's the host and the invasiveness that separate a clinic problem from an I C U emergency."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Move to the oral cavity, a common site."
+      },
+      {
+            "speaker": "host",
+            "text": "The mouth is a window on immune status. Candida — thrush — gives removable white plaques and is often the first sign of unrecognized immunosuppression. Herpes simplex causes painful ulcers. Oral hairy leukoplakia, a non-removable white patch on the lateral tongue from Epstein-Barr virus, is a marker of advanced H I V. And large aphthous-type ulcers and C M V ulcers appear in the profoundly immunosuppressed. Pearl: oral hairy leukoplakia on the lateral tongue is an Epstein-Barr-driven marker of advanced H I V — unlike thrush, you can't scrape it off."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And the malignancies that live in the mouth of the immunocompromised?"
+      },
+      {
+            "speaker": "host",
+            "text": "Kaposi sarcoma — human herpesvirus eight — appears as purple palatal or gingival lesions in advanced H I V. And post-transplant patients develop post-transplant lymphoproliferative disorder, an Epstein-Barr-driven lymphoma. Pearl: a purple palatal patch in an H I V patient is Kaposi sarcoma until proven otherwise, and a new mass in a transplant recipient is post-transplant lymphoproliferative disorder until biopsy says otherwise."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Now the ear — there's a classic diabetic emergency here too."
+      },
+      {
+            "speaker": "host",
+            "text": "Malignant, or necrotizing, otitis externa. In an elderly diabetic or immunocompromised patient, Pseudomonas aeruginosa invades from the ear canal into the skull base, causing osteomyelitis. The signs are severe, deep, unremitting ear pain out of proportion to the exam, otorrhea, and granulation tissue at the bony-cartilaginous junction of the canal floor. As it spreads it takes cranial nerves — the facial nerve first at the stylomastoid foramen. Pearl: granulation tissue on the floor of the ear canal in a diabetic with disproportionate otalgia is necrotizing otitis externa — a skull-base osteomyelitis, not a simple swimmer's ear."
+      },
+      {
+            "speaker": "cohost",
+            "text": "How do you diagnose and treat it?"
+      },
+      {
+            "speaker": "host",
+            "text": "C T shows the bony erosion, and M R I shows the soft-tissue and marrow extent; nuclear studies — technetium and gallium scans — help diagnose and monitor. Treatment is primarily medical: prolonged, weeks-long systemic antipseudomonal therapy, classically ciprofloxacin, with control of the diabetes; surgery is limited to debriding granulation and biopsy. Pearl: necrotizing otitis externa is treated with weeks of antipseudomonal antibiotics and glucose control, not with a mastoidectomy — it's an infection to outlast, and a gallium scan tracks resolution."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Other opportunistic infections by site, quickly."
+      },
+      {
+            "speaker": "host",
+            "text": "Cervical mycobacterial lymphadenitis — tuberculous scrofula, or atypical mycobacteria in children — presents as chronic, sometimes draining neck nodes. Cytomegalovirus and fungal esophagitis cause odynophagia. And ordinary bacterial infections behave aggressively and spread fast when the neutrophils are gone. Pearl: a chronic, matted, or draining neck node in an immunosuppressed patient should prompt a workup for mycobacterial disease — culture it, don't just treat with routine antibiotics."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Surgical pitfalls in these patients?"
+      },
+      {
+            "speaker": "host",
+            "text": "Wound healing is impaired, infections are polymicrobial and atypical, and the usual inflammatory signs are blunted, so a serious infection can look deceptively mild. Optimize nutrition and glycemic control, biopsy early and generously, and keep a very low threshold to image and to return to the operating room. Pearl: in the neutropenic patient the classic signs of infection are muted — a low-grade fever and minimal erythema can overlie a life-threatening process, so believe the host, not the exam."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Prevention and the multidisciplinary reality?"
+      },
+      {
+            "speaker": "host",
+            "text": "Vaccination — including pneumococcus and influenza — and prophylaxis where indicated, plus close coordination with hematology, infectious disease, and transplant teams. And the recurring theme: some of these problems can't wait for a tidy workup. Pearl: when invasive fungal disease or necrotizing otitis externa is on the table, you act on suspicion — biopsy, image, and start therapy in parallel, not in sequence."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Before the pearls, let's deepen a few host-specific stories, starting with H I V beyond the mouth."
+      },
+      {
+            "speaker": "host",
+            "text": "H I V touches every E N T region. In the head and neck you see persistent generalized lymphadenopathy, and a very characteristic salivary finding — benign lymphoepithelial cysts causing bilateral, often massive parotid swelling, part of the diffuse infiltrative lymphocytosis syndrome. Pearl: bilateral cystic parotid enlargement in a young adult should prompt an H I V test — benign lymphoepithelial cysts are a classic, sometimes presenting, sign."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And sinus disease in H I V?"
+      },
+      {
+            "speaker": "host",
+            "text": "Sinusitis is more common, more chronic, and more likely to involve unusual organisms — Pseudomonas, Aspergillus, and, at low C-D-four counts, invasive fungal disease. It also responds less reliably to standard therapy. Pearl: recurrent, treatment-resistant sinusitis with atypical organisms can be the first clue to undiagnosed immunosuppression — culture it and check the immune status."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Let's nail the mycobacterial neck, because the management is a trap."
+      },
+      {
+            "speaker": "host",
+            "text": "Two pictures. Tuberculous cervical lymphadenitis — scrofula — is a chronic, matted, sometimes draining nodal mass, usually in adults or the foreign-born, treated with anti-tuberculous drug therapy. Nontuberculous mycobacterial adenitis is a disease of young, otherwise healthy children, giving a violaceous, non-tender node that can fistulize. Pearl: nontuberculous mycobacterial neck disease in a child is treated by complete surgical excision, not incision and drainage — cutting into it creates a chronic draining sinus, and steroids or antibiotics alone often fail."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Neutropenia from chemotherapy brings its own E N T problems."
+      },
+      {
+            "speaker": "host",
+            "text": "Mucositis — painful, diffuse breakdown of the oral and pharyngeal mucosa — is common and a portal for bacteremia. Neutropenic fever with any head-and-neck source is an emergency because the infection can disseminate before it localizes. And that's the setting, again, for angioinvasive fungal sinusitis. Pearl: fever in a neutropenic patient with even mild sinus or ear symptoms earns urgent endoscopy and imaging — the infection can outrun the immune response entirely."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Transplant recipients — organize their risks."
+      },
+      {
+            "speaker": "host",
+            "text": "Over time: early, ordinary and nosocomial infections; then, as cell-mediated immunity is suppressed, viral and fungal disease — cytomegalovirus, and invasive Aspergillus; and later, malignancy, including post-transplant lymphoproliferative disorder and a high rate of cutaneous squamous cell carcinoma. Post-transplant lymphoproliferative disorder is Epstein-Barr-driven, and the first move is often to reduce immunosuppression, sometimes with rituximab. Pearl: a new tonsillar asymmetry or neck mass in a transplant recipient is post-transplant lymphoproliferative disorder until biopsy proves otherwise — and reducing immunosuppression is part of the treatment."
+      },
+      {
+            "speaker": "cohost",
+            "text": "The biologic era changed the risk map — hit the key agents."
+      },
+      {
+            "speaker": "host",
+            "text": "T-N-F-alpha inhibitors reactivate latent tuberculosis, so you screen and treat latent T-B before starting them. Rituximab, which depletes B cells, raises the risk of viral reactivation and pneumocystis. And immune checkpoint inhibitors do the opposite of immunosuppression — they unleash autoimmunity, including thyroiditis and hypophysitis that present with fatigue and thyroid dysfunction. Pearl: screen for latent tuberculosis before a T-N-F inhibitor, and think checkpoint-inhibitor thyroiditis when a cancer patient on immunotherapy develops new thyroid dysfunction."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Come back to necrotizing otitis externa and follow its spread, because the cranial nerves stage it."
+      },
+      {
+            "speaker": "host",
+            "text": "As the skull-base osteomyelitis advances medially, it reaches the stylomastoid foramen and takes the facial nerve first, then the jugular foramen with nerves nine, ten, and eleven, and can reach twelve. Each additional cranial neuropathy signals more extensive disease and a worse prognosis. Pearl: cranial nerve palsies in necrotizing otitis externa mark skull-base progression — a facial palsy is an ominous turn and demands aggressive, prolonged antipseudomonal therapy and imaging surveillance."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And the monitoring detail people forget."
+      },
+      {
+            "speaker": "host",
+            "text": "Inflammatory markers and nuclear imaging guide duration. The gallium scan normalizes as the osteomyelitis resolves, so it, more than symptoms or C T — which lags — tells you when to stop antibiotics. Pearl: follow a gallium scan and the E-S-R to decide when necrotizing otitis externa is cured, because the bony C T changes persist long after the infection is gone."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Let's drill it with a second case. A seventy-year-old diabetic has three weeks of severe left ear pain and drainage that hasn't responded to ear drops, and now the left side of his face is drooping. Marcus?"
+      },
+      {
+            "speaker": "host",
+            "text": "That's necrotizing otitis externa with skull-base osteomyelitis, and the facial droop means it's reached the stylomastoid foramen — a serious progression. I examine for granulation at the bony-cartilaginous junction, take a culture and biopsy to confirm Pseudomonas and exclude malignancy, get C T and M R I of the skull base plus a gallium scan, start weeks of systemic antipseudomonal therapy, and tighten his glucose control."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Why the biopsy if the picture is classic?"
+      },
+      {
+            "speaker": "host",
+            "text": "Because a squamous cell carcinoma of the ear canal can mimic it exactly — pain, granulation, and drainage in an older patient. Pearl: always biopsy the granulation in presumed necrotizing otitis externa — canal squamous cell carcinoma is the great mimic, and missing it is catastrophic."
+      },
+      {
+            "speaker": "cohost",
+            "text": "So the same reflexes recur — suspect early, biopsy, image, and treat the host — across fungus, mycobacteria, and Pseudomonas alike."
+      },
+      {
+            "speaker": "cohost",
+            "text": "One more region before the pearls — the pharynx, larynx, and airway."
+      },
+      {
+            "speaker": "host",
+            "text": "Immunocompromised patients get fungal and viral disease deeper in the aerodigestive tract. Candida can extend from the mouth to the esophagus, causing odynophagia and food sticking, and it can seed the larynx. Herpes and cytomegalovirus cause deep ulcers. And laryngeal tuberculosis, though rare now, mimics laryngeal cancer with hoarseness and mucosal lesions. Pearl: odynophagia with oral thrush in an immunocompromised patient is candidal esophagitis until proven otherwise — treat with systemic, not just topical, antifungals and scope if it doesn't resolve."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And their deep neck infections?"
+      },
+      {
+            "speaker": "host",
+            "text": "They behave worse — faster spread, more necrosis, blunted signs, and a higher rate of descending mediastinitis — so the threshold to image and drain is even lower than usual. Pearl: a deep neck infection in an immunocompromised host is a higher-stakes version of the same disease — image early, drain early, and cover broadly including fungi when the host warrants."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Give us the airway caution."
+      },
+      {
+            "speaker": "host",
+            "text": "A candidal or ulcerative laryngitis, or a rapidly progressive infection, can compromise a marginal airway, and these patients tolerate it poorly. Keep the airway in mind, examine the larynx, and involve the team early. Pearl: never assume a sore throat is trivial in the profoundly immunosuppressed — scope the larynx, because the airway can be the silent problem."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Two closing pearls to lock it in."
+      },
+      {
+            "speaker": "host",
+            "text": "Pearl: candidal disease that reaches the esophagus or larynx needs systemic antifungal therapy and often endoscopy — topical treatment isn't enough once it's descended."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Pearl: across every organ in this chapter, the rule is the same — the immune defect predicts the pathogen, the signs are muted, and acting on suspicion saves lives."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Rapid-fire key pearls."
+      },
+      {
+            "speaker": "host",
+            "text": "Pearl: match the organism to the immune defect — neutropenia brings angioinvasive fungus, cell-mediated deficits bring viruses and mycobacteria, ketoacidosis brings mucor."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Pearl: a black or insensate turbinate in a ketoacidotic or neutropenic patient is invasive fungal sinusitis — biopsy, amphotericin, debride, and reverse the deficit, all at once."
+      },
+      {
+            "speaker": "host",
+            "text": "Pearl: granulation on the ear-canal floor in a diabetic with severe otalgia is necrotizing otitis externa — treat with weeks of antipseudomonal antibiotics, not surgery."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Pearl: oral hairy leukoplakia marks advanced H I V and can't be scraped off; thrush can."
+      },
+      {
+            "speaker": "host",
+            "text": "Pearl: a purple palatal lesion in H I V is Kaposi sarcoma; a new mass in a transplant patient is post-transplant lymphoproliferative disorder."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Pearl: the facial nerve falls first as skull-base osteomyelitis advances — a new facial palsy in necrotizing otitis externa signals spread."
+      },
+      {
+            "speaker": "host",
+            "text": "Pearl: in the immunocompromised, muted signs hide severe disease — biopsy early, image early, and act on suspicion."
+      },
+      {
+            "speaker": "cohost",
+            "text": "Let's put it together with a case."
+      },
+      {
+            "speaker": "host",
+            "text": "A fifty-five-year-old man with poorly controlled diabetes, recently admitted in ketoacidosis, develops right-sided facial pain and numbness over a day, and on exam there's a grayish, insensate patch on the right middle turbinate that doesn't bleed when you touch it. Marcus — first thought and first hour?"
+      },
+      {
+            "speaker": "cohost",
+            "text": "Acute invasive fungal rhinosinusitis — mucormycosis — until proven otherwise. The ketoacidosis, the facial numbness, and the insensate, non-bleeding turbinate are the triad. In the first hour: bedside endoscopic biopsy of that patch for frozen section, urgent C T and M R I of the sinuses, orbit, and brain, start liposomal amphotericin B immediately, consult for emergent surgical debridement, and get the team correcting the ketoacidosis. All in parallel."
+      },
+      {
+            "speaker": "host",
+            "text": "Frozen section shows broad, nonseptate hyphae with vascular invasion. What does that confirm, and what governs his outcome?"
+      },
+      {
+            "speaker": "cohost",
+            "text": "Broad nonseptate angioinvasive hyphae are mucormycosis. His outcome depends on all three arms together — amphotericin, aggressive debridement of every nonviable tissue plane, and, decisively, reversing the immune deficit by correcting the acidosis and restoring immune function. If the orbit is involved with vision loss, orbital exenteration may be required; if it reaches the brain, mortality climbs steeply."
+      },
+      {
+            "speaker": "host",
+            "text": "He's taken for debridement, the acidosis is corrected, and he survives with an orbit-sparing resection. The lesson?"
+      },
+      {
+            "speaker": "cohost",
+            "text": "Speed and suspicion. A numb, discolored turbinate in a ketoacidotic patient is a clock-is-running emergency, and you treat on the frozen section and the picture — antifungals, surgery, and fixing the host — not on waiting for cultures."
+      },
+      {
+            "speaker": "host",
+            "text": "Exactly. In the immunocompromised host, the ordinary becomes lethal and hesitation is the enemy."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And the organizing idea held all the way through — the immune defect told us which catastrophe to fear."
+      },
+      {
+            "speaker": "host",
+            "text": "That's head-and-neck disease in the immunocompromised host. I'm Elena."
+      },
+      {
+            "speaker": "cohost",
+            "text": "And I'm Marcus. This has been E N T Academy Deep Dive — see you in the next chapter."
+      }
+],
     slides: [
       { title: "H&N Manifestations in the Immunocompromised Host", subtitle: "Cummings 8e · Chapter 10", body: "<p>Different bugs. Different urgency. Different rules.</p>" },
       { title: "Five classes of immunocompromise", body: "<ul><li><strong>Neutropenia</strong> → bacteria + fungi (Mucor, Aspergillus)</li><li><strong>T-cell defect</strong> → viruses (HSV, CMV, EBV), Pneumocystis, Cryptococcus</li><li><strong>Humoral / B-cell</strong> → encapsulated bacteria (recurrent sinusitis/AOM)</li><li><strong>Complement defect</strong> → Neisseria</li><li><strong>Asplenia</strong> → OPSI w/ encapsulated organisms</li></ul>" },
@@ -14415,6 +14863,7 @@ let state = {
   openaiKey: '',  // optional — used for natural-voice TTS (gpt-4o-mini-tts)
   elevenLabsKey: '', // optional — premium TTS (most human-sounding on the market)
   elevenLabsVoices: null, // optional override: { host: 'voiceId', cohost: 'voiceId' }
+  openaiVoices: null, // optional override: { host: 'shimmer', cohost: 'echo' }
   advisorMessages: [],   // [{role:'user'|'assistant', content:string, ts:number}]
   advisorInput: '',
   advisorThinking: false,
@@ -14623,6 +15072,7 @@ function loadStored() {
       state.openaiKey = parsed.openaiKey || '';
       state.elevenLabsKey = parsed.elevenLabsKey || '';
       state.elevenLabsVoices = parsed.elevenLabsVoices || null;
+      state.openaiVoices = parsed.openaiVoices || null;
       state.advisorMessages = parsed.advisorMessages || [];
       state.onepagers = parsed.onepagers || [];
       state.generatedContent = parsed.generatedContent || {};
@@ -14684,7 +15134,7 @@ function persist() {
       // Manager (or signed-out) edits the canonical record.
       state.managerProgress = state.progress;
     }
-    localStorage.setItem(STORE_KEY, JSON.stringify({
+    const _payload = JSON.stringify({
       // Top-level `progress` always mirrors the MANAGER record (backward-compat + canonical).
       progress: state.managerProgress || {},
       managerProgress: state.managerProgress || {},
@@ -14694,6 +15144,7 @@ function persist() {
       openaiKey: state.openaiKey,
       elevenLabsKey: state.elevenLabsKey,
       elevenLabsVoices: state.elevenLabsVoices,
+      openaiVoices: state.openaiVoices,
       advisorMessages: state.advisorMessages.slice(-200), // cap history
       onepagers: state.onepagers,
       generatedContent: state.generatedContent,
@@ -14733,8 +15184,31 @@ function persist() {
       hasFullCummings: state.hasFullCummings,
       fullCummingsName: state.fullCummingsName,
       lastLocation: state.lastLocation
-    }));
+    });
+    localStorage.setItem(STORE_KEY, _payload);
+    // Durability mirror: also write the exact same snapshot to IndexedDB. localStorage on some
+    // browsers (esp. Safari / file://) can be evicted after inactivity or storage pressure;
+    // IndexedDB is far more durable. On boot we auto-restore from here if localStorage is empty.
+    // Debounced + fire-and-forget so it never blocks the UI or spams IDB transactions.
+    _scheduleBackupMirror(_payload);
   } catch (e) { /* ignore */ }
+}
+/* True only if this browser actually persists localStorage. False in Private Browsing or when
+   storage is blocked — in which case the user's progress and sign-in won't survive a reload,
+   so we warn them clearly up front. */
+function storagePersists(){
+  try { var k='__ent_probe_'+Math.random(); localStorage.setItem(k,'1'); var ok=localStorage.getItem(k)==='1'; localStorage.removeItem(k); return ok; }
+  catch(e){ return false; }
+}
+var _backupMirrorTimer = null, _backupMirrorPending = null;
+function _scheduleBackupMirror(payload){
+  _backupMirrorPending = payload;
+  if (_backupMirrorTimer) return;
+  _backupMirrorTimer = setTimeout(function(){
+    _backupMirrorTimer = null;
+    var p = _backupMirrorPending; _backupMirrorPending = null;
+    try { if (typeof idbPut === 'function' && p) idbPut('app-state-backup', p).catch(function(){}); } catch (e) {}
+  }, 1200);
 }
 
 /* Actions that edit/author the app's content — blocked for doctors (study mode). */
@@ -15279,6 +15753,7 @@ function renderAuthScreen() {
           </div>
         </div>
         ${err ? `<div style="background:#fef2f2;border:1px solid #fecaca;color:#991b1b;padding:10px 14px;border-radius:10px;font-size:13px;margin-bottom:14px;">${escapeHTML(err)}</div>` : ''}
+        ${(typeof storagePersists === 'function' && !storagePersists()) ? `<div style="background:#fef2f2;border:1px solid #fca5a5;color:#991b1b;padding:10px 14px;border-radius:10px;font-size:12.5px;line-height:1.5;margin-bottom:14px;">⚠️ <strong>This browser isn't saving data.</strong> You may be in Private / Incognito mode — your progress and sign-in won't be kept after you close the tab. Open the app in a normal browser window to save your studies.</div>` : ''}
 
         <h3 style="font-family:var(--font-serif);font-size:18px;color:var(--navy-900);margin:8px 0 16px;">${isFirstRun ? 'Welcome' : 'Sign in'}</h3>
 
@@ -15549,7 +16024,7 @@ function renderSidebar() {
           </div>
         </a>
         <div style="font-size:11px;color:#7185a6;line-height:1.5;">
-          v2.0 · 9 deep-dive podcasts · CarPlay-ready · updated 15 Jul 22:48 · Built for resident training. Original study notes; the PDF remains your licensed copy.
+          v3.2 · quota-frugal prefetch · updated 16 Jul 14:16 · Built for resident training. Original study notes; the PDF remains your licensed copy.
         </div>
       </div>
     </aside>
@@ -16789,9 +17264,9 @@ function renderWeekTeaching(w, c) {
          ElevenLabs HD voice · ${state.elevenLabsModel || 'eleven_v3 → multilingual_v2'} · key configured
        </div>`
     : _hasOpenAI
-    ? `<div style="display:inline-flex;align-items:center;gap:8px;background:#fef3c7;border:1px solid #fcd34d;color:#92400e;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:10px;">
-         <span style="width:8px;height:8px;border-radius:50%;background:#92400e;"></span>
-         OpenAI HD voice · ElevenLabs key not set
+    ? `<div style="display:inline-flex;align-items:center;gap:8px;background:#dcfce7;border:1px solid #86efac;color:#15803d;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:10px;">
+         <span style="width:8px;height:8px;border-radius:50%;background:#15803d;box-shadow:0 0 0 3px rgba(21,128,61,.2);"></span>
+         OpenAI HD voice · gpt-4o-mini-tts · key configured
        </div>`
     : `<div style="display:inline-flex;align-items:center;gap:8px;background:#fee2e2;border:1px solid #fca5a5;color:#991b1b;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;margin-bottom:10px;">
          <span style="width:8px;height:8px;border-radius:50%;background:#991b1b;"></span>
@@ -18575,11 +19050,21 @@ function renderResources() {
 }
 
 /* ---------- PODCAST ---------- */
+window.filterPodLib = function(q){
+  q=(q||'').trim().toLowerCase();
+  var cards=document.querySelectorAll('#pod-lib-grid .pod-lib-card'), shown=0;
+  cards.forEach(function(el){
+    var ch=el.getAttribute('data-ch')||'', title=el.getAttribute('data-title')||'';
+    var match=!q || ch.indexOf(q)===0 || ch===q || title.indexOf(q)>-1;
+    el.style.display=match?'':'none'; if(match)shown++;
+  });
+  var empty=document.getElementById('pod-lib-empty'); if(empty) empty.style.display=shown?'none':'';
+};
 function renderPodcast() {
   const podLibrary = Object.keys(CONTENT).map(Number)
     .filter(k => CONTENT[k] && CONTENT[k].podcastScript && CONTENT[k].podcastScript.length && getWeek(k))
     .map(k => ({ week:k, w:getWeek(k), c:CONTENT[k] }))
-    .sort((a,b)=>a.week-b.week);
+    .sort((a,b)=>((a.w.chapter||a.week)-(b.w.chapter||b.week)));
   let wn = state.podcastWeek || state.selectedWeek;
   if (!CONTENT[wn] || !CONTENT[wn].podcastScript || !CONTENT[wn].podcastScript.length) { wn = (podLibrary[0]||{}).week || wn; }
   state.podcastWeek = wn;
@@ -18588,21 +19073,26 @@ function renderPodcast() {
   const cast = getCast(wn);
   const libraryHTML = `
     <div style="margin:6px 0 18px;">
-      <div style="display:flex;align-items:center;gap:10px;font-family:var(--font-serif);font-size:17px;color:var(--navy-900);font-weight:700;margin-bottom:10px;">🎙️ All podcasts <span class="badge violet">${podLibrary.length} available</span></div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;">
+        <div style="font-family:var(--font-serif);font-size:17px;color:var(--navy-900);font-weight:700;">🎙️ All podcasts <span class="badge violet">${podLibrary.length}</span></div>
+        <input type="search" inputmode="numeric" placeholder="Search by chapter number or name…" oninput="filterPodLib(this.value)" style="flex:1;min-width:170px;max-width:340px;margin-left:auto;padding:8px 12px;border:1px solid var(--border);border-radius:10px;font-size:13px;background:var(--card);color:var(--navy-900);font-family:inherit;">
+      </div>
+      <div id="pod-lib-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px;">
         ${podLibrary.map(p => {
           const active = p.week === wn;
+          const chNum = p.w.chapter || p.week;
           const mins = (p.c.podcastDuration || '~15 min');
           const title = String(p.c.podcastTitle||p.w.title).replace(/^Deep Dive[ .\u00b7-]+/,'');
-          return `<button class="pod-lib-card" data-action="pod-select" data-week="${p.week}" style="display:flex;align-items:center;gap:10px;text-align:left;padding:11px 13px;border-radius:12px;border:1px solid ${active?'var(--accent)':'var(--border)'};background:${active?'var(--accent-soft)':'var(--card)'};cursor:pointer;">
-            <span style="width:30px;height:30px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;display:grid;place-items:center;font-size:12px;">▶</span>
+          return `<button class="pod-lib-card" data-action="pod-select" data-week="${p.week}" data-ch="${chNum}" data-title="${escapeAttr(title.toLowerCase())}" style="display:flex;align-items:center;gap:10px;text-align:left;padding:11px 13px;border-radius:12px;border:1px solid ${active?'var(--accent)':'var(--border)'};background:${active?'var(--accent-soft)':'var(--card)'};cursor:pointer;">
+            <span style="width:36px;height:36px;flex-shrink:0;border-radius:9px;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:800;">${chNum}</span>
             <span style="min-width:0;">
               <span style="display:block;font-weight:700;font-size:13.5px;color:var(--navy-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(title)}</span>
-              <span style="display:block;font-size:11.5px;color:var(--text-soft);">Ch ${p.w.chapter||p.week} · ${escapeHTML(mins)}</span>
+              <span style="display:block;font-size:11.5px;color:var(--text-soft);">Chapter ${chNum} · ${escapeHTML(mins)}</span>
             </span>
           </button>`;
         }).join('')}
       </div>
+      <div id="pod-lib-empty" style="display:none;color:var(--text-soft);font-size:13px;padding:12px 4px;">No chapter matches — try another number or name.</div>
     </div>`;
 
   const castCards = [
@@ -18659,12 +19149,17 @@ function renderPodcast() {
         <div class="script-wrap">${turnsHTML}</div>
       </div>`;
 
+    var _engineHint = state.elevenLabsKey
+      ? 'ElevenLabs HD voices — set your host & cohost in Settings → Voice Studio.'
+      : state.openaiKey
+      ? 'OpenAI HD voices — set your host & cohost in Settings → Voice Studio.'
+      : 'Browser voice (robotic). Add an OpenAI or ElevenLabs key in Settings for HD narration.';
     var heroControls = `
       <div class="pod-controls">
         ${playBtn}
         ${stopBtn}
         ${liveDot}
-        <span style="margin-left:auto;font-size:12px;color:#c4b5fd;">Browser TTS uses different voices per speaker when available.</span>
+        <span style="margin-left:auto;font-size:12px;color:#c4b5fd;">${_engineHint}</span>
       </div>`;
     var heroTitle = c.podcastTitle || w.title;
   }
@@ -18844,9 +19339,13 @@ const ELEVENLABS_VOICES = {
 };
 
 async function openaiTtsBlobUrl(speakerId, text) {
+  const userVoices = state.openaiVoices || {};
+  const voice = userVoices[speakerId] || OPENAI_VOICES[speakerId] || 'ballad';
+  // Cache key intentionally excludes the voice: changing a voice in Voice Studio always
+  // clears TTS_CACHE, so speaker+text is unique enough — and it must match cachedTtsUrl()
+  // exactly so prefetched clips are found synchronously (no re-fetch, no gap).
   const cacheKey = 'openai|v2|' + speakerId + '|' + text;
   if (TTS_CACHE.has(cacheKey)) return TTS_CACHE.get(cacheKey);
-  const voice = OPENAI_VOICES[speakerId] || 'ballad';
   const instructions = OPENAI_STYLE[speakerId] || OPENAI_STYLE.host;
   // Apply same medical-abbreviation preprocessing so OpenAI doesn't say "ent" instead of E-N-T etc.
   const inputText = (typeof preprocessTtsText === 'function') ? preprocessTtsText(text) : text;
@@ -19298,7 +19797,7 @@ const TTS = {
         // with no network gap, which is what lets playback keep going in the background.
         // Prefetch a wide window so that when the phone locks / hands off to CarPlay, the next
         // several clips are already cached blobs and play with no network — keeping the car session alive.
-        for (let lookahead = 1; lookahead <= 12; lookahead++) {
+        for (let lookahead = 1; lookahead <= 2; lookahead++) {
           const next = c.podcastScript[turnIndex + lookahead];
           if (next && !cachedTtsUrl(next.speaker, next.text)) bestTtsBlobUrl(next.speaker, next.text).catch(() => {});
         }
@@ -22697,14 +23196,14 @@ function renderApiSetup() {
 
       <div style="margin-top:14px;">
         <h3 style="margin:0 0 6px;color:#fff;">${I.podcast} OpenAI key — gpt-4o-mini-tts</h3>
-        <p style="margin:0 0 10px;">Now uses <strong>gpt-4o-mini-tts</strong> — OpenAI's newest model with voice-style instructions. Voices: <strong>"ballad"</strong> (warm female host) + <strong>"ash"</strong> (grounded male cohost). Much more natural than legacy tts-1-hd. ~$0.015 per minute. Auto-falls back to tts-1-hd if model unavailable.</p>
+        <p style="margin:0 0 10px;">Now uses <strong>gpt-4o-mini-tts</strong> — OpenAI's newest model with voice-style instructions. Default voices: <strong>Shimmer</strong> (host) + <strong>Echo</strong> (cohost) — change them anytime in the <strong>Voice Studio</strong> below (10 voices, with Preview). Much more natural than legacy tts-1-hd. ~$0.015 per minute. Auto-falls back to tts-1-hd if model unavailable.</p>
         <p style="margin:0 0 10px;font-size:12px;color:#c4d4ee;">Get a key at <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener" style="color:#9bd1ff;">platform.openai.com/api-keys</a> · add $5 of credits → ~300 podcasts.</p>
         <div class="input-row">
           <input id="openai-key-input" type="password" placeholder="sk-…" />
           <button class="btn btn-light" data-action="openai-save">${I.check} Save</button>
           ${state.openaiKey ? `<button class="btn btn-light" data-action="openai-clear">Clear</button>` : ''}
         </div>
-        ${state.openaiKey ? `<p style="margin-top:10px;font-size:12px;color:#a5e8b3;">✓ OpenAI key saved — gpt-4o-mini-tts active.</p>
+        ${state.openaiKey ? `<p style="margin-top:10px;font-size:12px;color:#a5e8b3;">✓ OpenAI key saved — gpt-4o-mini-tts active${state.elevenLabsKey ? ' (ElevenLabs key present, so ElevenLabs plays instead — clear it to use OpenAI)' : ' · this is your podcast voice engine'}. Pick voices in Voice Studio below.</p>
         <button class="btn btn-light btn-sm" data-action="test-voice" data-provider="openai" style="margin-top:8px;">▶ Test OpenAI voice</button>` : ''}
       </div>
 
@@ -22721,7 +23220,7 @@ function renderApiSetup() {
         <button class="btn btn-light btn-sm" data-action="test-voice" data-provider="eleven" style="margin-top:8px;">▶ Test ElevenLabs voice</button>` : ''}
       </div>
 
-      ${state.elevenLabsKey ? renderVoiceStudio() : ''}
+      ${(state.elevenLabsKey || state.openaiKey) ? renderVoiceStudio() : ''}
     </div>
   `;
 }
@@ -22742,7 +23241,31 @@ const VOICE_STUDIO_VOICES = [
   { id: 'nPczCjzI2devNBz1zQrb', name: 'Brian',    gender: 'male',   tone: 'soft-spoken, thoughtful' },
 ];
 
+// OpenAI voices for gpt-4o-mini-tts. 'id' is the literal OpenAI voice name.
+const OPENAI_STUDIO_VOICES = [
+  { id: 'shimmer', name: 'Shimmer', gender: 'female', tone: 'warm, bright, podcast-host classic (default host)' },
+  { id: 'nova',    name: 'Nova',    gender: 'female', tone: 'clear, friendly, energetic' },
+  { id: 'coral',   name: 'Coral',   gender: 'female', tone: 'expressive, engaging, natural' },
+  { id: 'sage',    name: 'Sage',    gender: 'female', tone: 'calm, measured, reassuring' },
+  { id: 'alloy',   name: 'Alloy',   gender: 'female', tone: 'neutral, balanced, even-toned' },
+  { id: 'echo',    name: 'Echo',    gender: 'male',   tone: 'grounded, resonant (default cohost)' },
+  { id: 'onyx',    name: 'Onyx',    gender: 'male',   tone: 'deep, authoritative, lecturer gravitas' },
+  { id: 'ash',     name: 'Ash',     gender: 'male',   tone: 'thoughtful, natural, conversational' },
+  { id: 'ballad',  name: 'Ballad',  gender: 'male',   tone: 'smooth, expressive, storyteller' },
+  { id: 'fable',   name: 'Fable',   gender: 'male',   tone: 'warm British narrator' },
+];
+
+/* Which HD engine is actually driving the podcast right now.
+   bestTtsBlobUrl prioritizes ElevenLabs, then OpenAI. Mirror that here so the
+   Voice Studio shows the voices that will actually play. */
+function activeVoiceProvider() {
+  if (state.elevenLabsKey) return 'eleven';
+  if (state.openaiKey) return 'openai';
+  return null;
+}
+
 function renderVoiceStudio() {
+  if (activeVoiceProvider() === 'openai') return renderOpenAiVoiceStudio();
   const cur = state.elevenLabsVoices || {};
   const curHost = cur.host || '21m00Tcm4TlvDq8ikWAM';
   const curCo = cur.cohost || 'pNInz6obpgDQGcFmaJgB';
@@ -22780,6 +23303,52 @@ function renderVoiceStudio() {
         <button class="btn btn-primary" data-action="vs-save" style="font-size:14.5px;padding:12px 22px;">💾 Save hosts &amp; refresh</button>
         <button class="btn btn-light" data-action="vs-test" style="font-size:14px;padding:12px 18px;">🎧 Test my hosts</button>
         <span style="color:#c4d4ee;font-size:12.5px;flex:1;min-width:160px;">Save applies your host &amp; cohost everywhere and clears cached audio. Test plays a short line through the exact podcast voice engine — if it fails, you'll see the real reason (quota / key).</span>
+      </div>
+    </div>
+  `;
+}
+
+/* OpenAI variant of the Voice Studio — shows the 10 gpt-4o-mini-tts voices.
+   Picks are saved to state.openaiVoices and drive every podcast immediately. */
+function renderOpenAiVoiceStudio() {
+  const cur = state.openaiVoices || {};
+  const curHost = cur.host || OPENAI_VOICES.host; // 'shimmer'
+  const curCo = cur.cohost || OPENAI_VOICES.cohost; // 'echo'
+  const voiceCard = (v, role) => {
+    const isPicked = (role === 'host' ? curHost : curCo) === v.id;
+    return `
+      <div class="voice-card ${isPicked ? 'picked' : ''}" data-voice-id="${v.id}">
+        <div class="vc-head">
+          <div class="vc-name">${v.gender === 'female' ? '🎀' : '🎙️'} ${v.name}</div>
+          ${isPicked ? `<span class="vc-badge">✓ ${role}</span>` : ''}
+        </div>
+        <div class="vc-tone">${v.tone}</div>
+        <div class="vc-actions">
+          <button class="btn btn-sm btn-light" data-action="vs-preview" data-provider="openai" data-voice="${v.id}" data-name="${escapeAttr(v.name)}">▶ Preview</button>
+          ${!isPicked ? `<button class="btn btn-sm btn-light" data-action="vs-pick" data-provider="openai" data-role="${role}" data-voice="${v.id}">Use as ${role}</button>` : `<span class="vc-current">Currently used</span>`}
+        </div>
+      </div>
+    `;
+  };
+  return `
+    <div style="border-top:1px solid rgba(255,255,255,.15);margin-top:18px;padding-top:18px;">
+      <h3 style="margin:0 0 8px;color:#fff;">🎚️ Voice Studio <span style="font-size:12px;font-weight:600;color:#c4b5fd;">· OpenAI HD</span></h3>
+      <p style="margin:0 0 14px;color:#c4d4ee;font-size:13px;">Preview OpenAI's 10 HD voices and pick your host and cohost. After choosing, press <strong>Save hosts</strong> below — the whole app refreshes and every podcast immediately uses your new voices.</p>
+      <div style="display:flex;gap:14px;flex-direction:column;">
+        <div>
+          <h4 style="margin:0 0 8px;color:#fff;font-size:14px;">Host (lead)</h4>
+          <div class="voice-grid">${OPENAI_STUDIO_VOICES.filter(v=>v.gender==='female').map(v => voiceCard(v, 'host')).join('')}</div>
+        </div>
+        <div>
+          <h4 style="margin:14px 0 8px;color:#fff;font-size:14px;">Cohost</h4>
+          <div class="voice-grid">${OPENAI_STUDIO_VOICES.filter(v=>v.gender==='male').map(v => voiceCard(v, 'cohost')).join('')}</div>
+        </div>
+      </div>
+      <p style="margin:12px 0 0;color:#9fb3d1;font-size:12px;">Any voice can be used for either role — the two columns are just a suggested split. Pick whichever pairing sounds best to you.</p>
+      <div style="margin-top:18px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.15);padding-top:16px;">
+        <button class="btn btn-primary" data-action="vs-save" style="font-size:14.5px;padding:12px 22px;">💾 Save hosts &amp; refresh</button>
+        <button class="btn btn-light" data-action="vs-test" style="font-size:14px;padding:12px 18px;">🎧 Test my hosts</button>
+        <span style="color:#c4d4ee;font-size:12.5px;flex:1;min-width:160px;">Save applies your host &amp; cohost everywhere and clears cached audio. Test plays a short line through the exact podcast voice engine.</span>
       </div>
     </div>
   `;
@@ -24058,7 +24627,10 @@ function attachListeners() {
           break;
         }
         case 'vs-preview': {
-          if (!state.elevenLabsKey) { alert('Save your ElevenLabs key first.'); return; }
+          const isOpenAi = el.dataset.provider === 'openai';
+          if (isOpenAi ? !state.openaiKey : !state.elevenLabsKey) {
+            alert('Save your ' + (isOpenAi ? 'OpenAI' : 'ElevenLabs') + ' key first.'); return;
+          }
           const voiceId = el.dataset.voice;
           const name = el.dataset.name;
           const sample = "Welcome to ENT Academy. I'm here to walk you through the high-yield material for boards. This is a quick preview of how I sound.";
@@ -24067,14 +24639,34 @@ function attachListeners() {
           el.disabled = true;
           (async () => {
             try {
-              const r = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '?output_format=mp3_44100_128', {
-                method: 'POST',
-                headers: { 'xi-api-key': state.elevenLabsKey, 'content-type': 'application/json', 'accept': 'audio/mpeg' },
-                body: JSON.stringify({ text: sample, model_id: 'eleven_multilingual_v2', voice_settings: { stability: 0.45, similarity_boost: 0.85, style: 0.45, use_speaker_boost: true } })
-              });
-              if (!r.ok) throw new Error('HTTP ' + r.status);
-              const blob = await r.blob();
-              const url = URL.createObjectURL(blob);
+              let url;
+              if (isOpenAi) {
+                const r = await fetch('https://api.openai.com/v1/audio/speech', {
+                  method: 'POST',
+                  headers: { 'authorization': 'Bearer ' + state.openaiKey, 'content-type': 'application/json' },
+                  body: JSON.stringify({ model: 'gpt-4o-mini-tts', voice: voiceId, input: sample, response_format: 'mp3' })
+                });
+                if (!r.ok) {
+                  // Retry on tts-1-hd for accounts without gpt-4o-mini-tts access
+                  const fb = await fetch('https://api.openai.com/v1/audio/speech', {
+                    method: 'POST',
+                    headers: { 'authorization': 'Bearer ' + state.openaiKey, 'content-type': 'application/json' },
+                    body: JSON.stringify({ model: 'tts-1-hd', voice: voiceId, input: sample, response_format: 'mp3' })
+                  });
+                  if (!fb.ok) throw new Error('HTTP ' + fb.status);
+                  url = URL.createObjectURL(await fb.blob());
+                } else {
+                  url = URL.createObjectURL(await r.blob());
+                }
+              } else {
+                const r = await fetch('https://api.elevenlabs.io/v1/text-to-speech/' + voiceId + '?output_format=mp3_44100_128', {
+                  method: 'POST',
+                  headers: { 'xi-api-key': state.elevenLabsKey, 'content-type': 'application/json', 'accept': 'audio/mpeg' },
+                  body: JSON.stringify({ text: sample, model_id: 'eleven_multilingual_v2', voice_settings: { stability: 0.45, similarity_boost: 0.85, style: 0.45, use_speaker_boost: true } })
+                });
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                url = URL.createObjectURL(await r.blob());
+              }
               const a = new Audio(url);
               a.play();
               el.textContent = '🔊 Playing ' + name;
@@ -24091,8 +24683,13 @@ function attachListeners() {
         case 'vs-pick': {
           const role = el.dataset.role; // 'host' or 'cohost'
           const voiceId = el.dataset.voice;
-          if (!state.elevenLabsVoices) state.elevenLabsVoices = {};
-          state.elevenLabsVoices[role] = voiceId;
+          if (el.dataset.provider === 'openai') {
+            if (!state.openaiVoices) state.openaiVoices = {};
+            state.openaiVoices[role] = voiceId;
+          } else {
+            if (!state.elevenLabsVoices) state.elevenLabsVoices = {};
+            state.elevenLabsVoices[role] = voiceId;
+          }
           // Bust the TTS cache so future podcast plays use the new voice
           try { if (typeof TTS_CACHE !== 'undefined' && TTS_CACHE.clear) TTS_CACHE.clear(); } catch(e){}
           persist();
@@ -24134,8 +24731,10 @@ function attachListeners() {
           persist();
           if (typeof updateFloatingPlayer === 'function') updateFloatingPlayer();
           setState({});
-          const cur = state.elevenLabsVoices || {};
-          const nm = id => { const v = (typeof VOICE_STUDIO_VOICES !== 'undefined') && VOICE_STUDIO_VOICES.find(x => x.id === id); return v ? v.name : null; };
+          const isOpenAi = (typeof activeVoiceProvider === 'function') && activeVoiceProvider() === 'openai';
+          const cur = (isOpenAi ? state.openaiVoices : state.elevenLabsVoices) || {};
+          const list = isOpenAi ? OPENAI_STUDIO_VOICES : VOICE_STUDIO_VOICES;
+          const nm = id => { const v = (typeof list !== 'undefined') && list.find(x => x.id === id); return v ? v.name : null; };
           const h = nm(cur.host), co = nm(cur.cohost);
           appToast('✓ Hosts saved' + (h || co ? ' — ' + [h && ('host: ' + h), co && ('cohost: ' + co)].filter(Boolean).join(', ') : '') + '. Every podcast now uses your new voices.');
           break;
@@ -25237,6 +25836,32 @@ if (typeof applyClosingCases === 'function') applyClosingCases();
 if (typeof applyExtraQuiz === 'function') applyExtraQuiz();
 // A returning doctor stays signed in (no re-login) and sees THEIR own saved progress.
 if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser === 'function') bindProgressForUser();
+/* ---- Durability self-heal ----
+   If localStorage lost its data (Safari/file:// eviction, storage pressure, cleared cache) but
+   our IndexedDB backup survived, restore it before the user ever sees an empty app. This only
+   fills a gap — it never overwrites data that's already in localStorage, so a fresh sign-in or
+   an intentional reset is respected. Runs async; the boot render is deferred ~2.7s, so the
+   restore almost always lands before the first paint. */
+(function selfHealFromBackup(){
+  try {
+    var hasLS = false; try { hasLS = !!localStorage.getItem(STORE_KEY); } catch(e){}
+    if (hasLS) return;                         // localStorage intact — nothing to recover
+    if (typeof idbGet !== 'function') return;
+    idbGet('app-state-backup').then(function(backup){
+      if (!backup || typeof backup !== 'string') return;
+      var stillEmpty = false; try { stillEmpty = !localStorage.getItem(STORE_KEY); } catch(e){}
+      if (!stillEmpty) return;                  // someone signed in meanwhile — don't clobber
+      try { localStorage.setItem(STORE_KEY, backup); } catch(e){ return; }
+      try {
+        loadStored();
+        if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser === 'function') bindProgressForUser();
+        if (typeof setState === 'function') setState({});
+        else if (typeof render === 'function') render();
+      } catch(e){}
+      try { if (typeof appToast === 'function') appToast('✓ Restored your saved progress from this device’s backup.'); } catch(e){}
+    }).catch(function(){});
+  } catch(e){}
+})();
 (function(){
   var run = false;
   function go(){
@@ -25490,7 +26115,7 @@ function endScene(title,c){
 }
 
 /* ================= player ================= */
-var ENTV={scenes:null,steps:null,i:0,playing:false,paused:false,speed:1,cur:null,shownScene:-1,jumped:false};
+var ENTV={scenes:null,steps:null,i:0,playing:false,paused:false,speed:1,cur:null,shownScene:-1,jumped:false,token:0};
 
 function flatten(scenes){
   var steps=[];
@@ -25503,6 +26128,38 @@ function speakerMeta(sp){
 }
 function stopCurrent(){ if(ENTV.cur&&ENTV.cur.stop) ENTV.cur.stop(); }
 
+function entvSetVoice(mode, reason){
+  var el=document.getElementById('entv-voice'); if(!el) return;
+  if(mode==='hd'){ el.style.color='#86efac'; el.textContent='\u25cf '+(((typeof activeVoiceProvider==='function'&&activeVoiceProvider()==='openai'))?'OpenAI HD':'ElevenLabs HD'); }
+  else if(mode==='loading'){ el.style.color='#fbbf24'; el.textContent='\u25cf loading HD\u2026'; }
+  else { el.style.color='#fca5a5'; el.textContent='\u25cf Browser voice' + (reason?(' \u2014 '+reason):''); }
+}
+/* Look-ahead prefetch: while the current line plays, warm the next few lines' HD audio into
+   TTS_CACHE so speakLine() finds them instantly (no per-line network gap). OpenAI only —
+   ElevenLabs rate-limits on bursts. cachedTtsUrl/openaiTtsBlobUrl share the same cache key,
+   so a warmed clip is a guaranteed synchronous hit. */
+function entvPrefetch(fromIdx){
+  try{
+    if(!ENTV.steps) return;
+    var prov=(typeof activeVoiceProvider==='function')?activeVoiceProvider():null;
+    if(prov!=='openai') return;                 // only OpenAI is safe to burst-prefetch
+    if(typeof bestTtsBlobUrl!=='function') return;
+    ENTV._pf=ENTV._pf||{};
+    var AHEAD=3;                                 // buffer depth — plenty to stay ahead of playback
+    for(var k=fromIdx; k<Math.min(ENTV.steps.length, fromIdx+AHEAD); k++){
+      var st=ENTV.steps[k]; if(!st||!st.line) continue;
+      var _txt=(typeof ttsNormalize==='function'?ttsNormalize(st.line.text):st.line.text);
+      if(typeof cachedTtsUrl==='function' && cachedTtsUrl(st.line.speaker,_txt)) continue; // already cached
+      var key=st.line.speaker+'|'+_txt;
+      if(ENTV._pf[key]) continue;               // already in flight — don't double-fetch
+      ENTV._pf[key]=1;
+      (function(kk){
+        bestTtsBlobUrl(st.line.speaker,_txt).then(function(){ delete ENTV._pf[kk]; })
+          .catch(function(){ delete ENTV._pf[kk]; });
+      })(key);
+    }
+  }catch(e){}
+}
 function speakLine(line){
   return new Promise(function(resolve){
     var done=false; function fin(){ if(done)return; done=true; ENTV.cur=null; resolve(); }
@@ -25510,22 +26167,51 @@ function speakLine(line){
       pause:function(){ try{ if(this.audio)this.audio.pause(); else if('speechSynthesis'in window)window.speechSynthesis.pause(); }catch(e){} },
       resume:function(){ try{ if(this.audio)this.audio.play(); else if('speechSynthesis'in window)window.speechSynthesis.resume(); }catch(e){} }};
     ENTV.cur=handle;
-    var hasHd = window.state&&(state.openaiKey||state.elevenLabsKey);
+    // Capture the player "generation" at the moment this line starts. close()/open() bump
+    // ENTV.token, so every async callback below can verify it's still the CURRENT player before
+    // it makes any sound. This is what prevents a late fetch or a queued utterance from speaking
+    // after the video was closed ("a stray browser voice suddenly continues").
+    var myToken=ENTV.token;
+    function live(){ return ENTV.playing && ENTV.token===myToken && ENTV.cur===handle; }
+    // HD video narration is safe on OpenAI (pay-per-use, high rate limits, handles the video's
+    // rapid short-line cadence fine). ElevenLabs' aggressive rate limit trips on short lines and
+    // would jeopardize the podcast's HD voice, so with ElevenLabs the video stays on device voice.
+    var _entvProv = (typeof activeVoiceProvider==='function') ? activeVoiceProvider()
+                    : (state.elevenLabsKey ? 'eleven' : (state.openaiKey ? 'openai' : null));
+    var hasHd = (_entvProv === 'openai');
     if(hasHd&&typeof bestTtsBlobUrl==='function'){
-      bestTtsBlobUrl(line.speaker,(typeof ttsNormalize==='function'?ttsNormalize(line.text):line.text)).then(function(url){
-        if(ENTV.cur!==handle) return;
-        var a=ENTV.el||(ENTV.el=new Audio());
-        try{ a.pause(); }catch(e){}
-        a.muted=false; a.src=url; a.playbackRate=ENTV.speed||1; handle.audio=a;
-        a.onended=fin; a.onerror=browser;
-        var pr=a.play(); if(pr&&pr.catch) pr.catch(browser);
-      }).catch(browser);
-    } else browser();
-    function browser(){
+      entvSetVoice('loading');
+      var _txt=(typeof ttsNormalize==='function'?ttsNormalize(line.text):line.text);
+      (function tryHd(attempt){
+        if(!live()) return;
+        var _cu=(typeof cachedTtsUrl==='function')?cachedTtsUrl(line.speaker,_txt):null;
+        var _p=_cu?Promise.resolve(_cu):bestTtsBlobUrl(line.speaker,_txt);
+        _p.then(function(url){
+          if(!live()) return;
+          var a=(typeof TTS!=='undefined'&&TTS.audio)?TTS.audio:(ENTV.el||(ENTV.el=new Audio()));
+          try{ a.pause(); }catch(e){}
+          a.muted=false; a.src=url; a.playbackRate=ENTV.speed||1; handle.audio=a;
+          try{ a.load(); }catch(e){}
+          a.onplaying=function(){ if(live()) entvSetVoice('hd'); };
+          a.onended=fin; a.onerror=function(){ browser('audio error'); };
+          var pr=a.play(); if(pr&&pr.catch) pr.catch(function(){ browser('play blocked'); });
+        }).catch(function(_e){
+          if(!live()) return;
+          if(attempt<1){ entvSetVoice('loading'); setTimeout(function(){ if(live()) tryHd(attempt+1); }, 1500); }
+          else browser(String((_e&&_e.message)||'fetch failed').slice(0,46));
+        });
+      })(0);
+    } else browser('device voice');
+    function browser(reason){
+      // Never start a device-voice utterance if the player has moved on / been closed.
+      if(!live()) return fin();
+      entvSetVoice('browser', reason);
       if(!('speechSynthesis'in window)) return fin();
       var u=new SpeechSynthesisUtterance(typeof ttsNormalize==='function'?ttsNormalize(line.text):line.text);
       try{ var v=(typeof TTS!=='undefined'&&TTS.pickVoice)?TTS.pickVoice(line.speaker):null; if(v)u.voice=v; }catch(e){}
       u.rate=(ENTV.speed||1)*1.02; u.pitch=line.speaker==='host'?1.05:1.0; u.onend=fin; u.onerror=fin;
+      try{ if('speechSynthesis'in window) window.speechSynthesis.cancel(); }catch(e){} // clear any stale queue first
+      if(!live()) return fin();  // re-check: user may have closed during the cancel above
       window.speechSynthesis.speak(u);
     }
   });
@@ -25618,6 +26304,7 @@ async function runLoop(){
     if(step.sceneIdx!==ENTV.shownScene){ ENTV.shownScene=step.sceneIdx; renderScene(step.sceneIdx);
       var cnt=document.getElementById('entv-counter'); if(cnt) cnt.textContent=(step.sceneIdx+1)+' / '+ENTV.scenes.length; }
     updateCaption(step); updateProgress();
+    entvPrefetch(ENTV.i+1);   // warm upcoming lines while this one plays → no gap between lines
     await speakLine(step.line);
     if(!ENTV.playing) return;
     if(ENTV.jumped){ ENTV.jumped=false; continue; }
@@ -25636,16 +26323,19 @@ function open(week){
   try{ if(typeof ppodStop==='function') ppodStop(); }catch(e){}
   try{ if(typeof TTS!=='undefined'&&TTS.stop) TTS.stop(); }catch(e){}
   try{ if('speechSynthesis'in window) window.speechSynthesis.cancel(); }catch(e){}
+  ENTV.token=(ENTV.token||0)+1;   // new player generation — invalidates any in-flight callbacks from a prior open
   ENTV.scenes=buildScenes(c,week); ENTV.steps=flatten(ENTV.scenes);
   ENTV.i=0; ENTV.shownScene=-1; ENTV.playing=true; ENTV.paused=false; ENTV.jumped=false;
-  ENTV.speed=(window.state&&state.playbackSpeed)||1;
+  ENTV.speed=((typeof state!=='undefined'&&state.playbackSpeed))||1;
   try { if(!ENTV.el){ ENTV.el=new Audio(); ENTV.el.preload='auto'; ENTV.el.setAttribute('playsinline',''); }
         ENTV.el.muted=true; ENTV.el.src='data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=';
         var _pp=ENTV.el.play(); if(_pp&&_pp.catch)_pp.catch(function(){}); } catch(e){}
+  try{ if(typeof TTS!=='undefined' && TTS.unlockAudio) TTS.unlockAudio(); }catch(e){}
   var ov=document.createElement('div'); ov.className='entv-overlay'; ov.id='entv-overlay';
   ov.innerHTML=
     '<div class="entv-top"><span id="entv-counter" style="flex-shrink:0;font-size:11px;font-weight:800;letter-spacing:1.4px;color:#a5b4fc;min-width:62px;"></span>'+
       '<div class="entv-progress"><div class="entv-progress-bar" id="entv-bar"></div></div>'+
+    '<span id="entv-voice" style="flex-shrink:0;font-size:10px;font-weight:800;margin:0 8px;color:#8aa0c8;white-space:nowrap;">\u25cf voice</span>'+
       '<button class="entv-close" id="entv-close" aria-label="Close video">✕</button></div>'+
     '<div class="entv-stage" id="entv-stage" title="Tap to pause / resume"></div>'+
     '<div class="entv-caption" id="entv-caption"></div>'+
@@ -25668,8 +26358,16 @@ function open(week){
   runLoop();
 }
 function close(){
-  ENTV.playing=false; stopCurrent();
-  try{ if('speechSynthesis'in window) window.speechSynthesis.cancel(); }catch(e){}
+  ENTV.playing=false;
+  ENTV.token=(ENTV.token||0)+1;   // invalidate every in-flight narration callback immediately
+  stopCurrent();
+  // Fully silence any narration. speechSynthesis.cancel() is unreliable across browsers (it can
+  // no-op mid-utterance, or an utterance queued in the same tick can start AFTER a single cancel),
+  // so we also pause the HD audio element and repeat cancel on the next ticks to be certain.
+  try{ if(ENTV.el){ ENTV.el.pause(); } }catch(e){}
+  try{ if(typeof TTS!=='undefined' && TTS.audio && TTS.audio!==ENTV.el){ /* leave podcast element alone */ } }catch(e){}
+  var _hush=function(){ try{ if('speechSynthesis'in window) window.speechSynthesis.cancel(); }catch(e){} };
+  _hush(); setTimeout(_hush,60); setTimeout(_hush,250);
   var ov=document.getElementById('entv-overlay'); if(ov) ov.remove();
   document.body.style.overflow='';
   document.removeEventListener('keydown',keyHandler);
