@@ -1664,28 +1664,29 @@
   /* ====== Floating mini-player (Now Playing) — persists across all routes ====== */
   #floating-player {
     position: fixed;
-    left: 50%;
+    right: 18px;
+    left: auto;
     bottom: 18px;
-    transform: translateX(-50%) translateY(0);
+    transform: translateY(0);
     z-index: 5000;
-    max-width: min(720px, calc(100vw - 24px));
-    width: calc(100vw - 32px);
+    max-width: min(400px, calc(100vw - 24px));
+    width: max-content;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
     color: #f1f5f9;
     border: 1px solid rgba(99,102,241,.35);
     border-radius: 18px;
-    padding: 12px 18px;
+    padding: 12px 16px;
     box-shadow: 0 12px 40px rgba(15, 23, 42, 0.45), 0 2px 8px rgba(99,102,241,.18);
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     transition: transform .26s cubic-bezier(.4,0,.2,1), opacity .2s;
     font-family: inherit;
   }
   #floating-player.fp-hidden {
-    transform: translateX(-50%) translateY(120%);
+    transform: translateY(160%);
     opacity: 0;
     pointer-events: none;
   }
@@ -1753,7 +1754,7 @@
   .lm-progress:hover { height: 10px; }
   .lm-progress-fill { pointer-events: none; transition: width .1s linear; }
   @media (max-width: 540px) {
-    #floating-player { padding: 10px 12px; gap: 10px; bottom: 70px; /* sit above mobile tabbar */ }
+    #floating-player { right: 10px; left: auto; padding: 9px 12px; gap: 9px; bottom: 74px; max-width: calc(100vw - 20px); /* compact card above mobile tabbar, right-docked so it never covers centered buttons */ }
     .fp-art { width: 38px; height: 38px; font-size: 18px; }
     .fp-btn { width: 34px; height: 34px; }
     .fp-btn-play { width: 40px; height: 40px; }
@@ -3355,8 +3356,20 @@
     padding: 10px 12px;
     border-top: 1px solid var(--border);
   }
-  .img-card .cap { font-size: 13px; color: var(--navy-900); font-weight: 600; line-height: 1.35; margin-bottom: 3px; }
-  .img-card .cred { font-size: 11.5px; color: var(--text-soft); }
+  .img-card .cap { font-size: 13px; color: var(--navy-900); font-weight: 600; line-height: 1.35; margin-bottom: 3px; overflow-wrap: anywhere; }
+  .img-card .cred { font-size: 11.5px; color: var(--text-soft); overflow-wrap: anywhere; }
+  /* ---- Responsive media: diagrams, images and wide content never overflow their card ---- */
+  .img-card svg, .anatomy-block svg, .card svg, .slide-body svg, .slide-body img {
+    max-width: 100%; height: auto; display: block; background: #fdfbf7;
+  }
+  .slide-body table { display: block; max-width: 100%; overflow-x: auto; }
+  .slide-body pre, .card pre { max-width: 100%; overflow-x: auto; white-space: pre-wrap; word-break: break-word; }
+  /* Long unbreakable strings (URLs, long medical terms) wrap instead of pushing the page wide */
+  .cap, .cred, .turn-text, .slide-body, .anatomy-block, .page-sub, .page-title { overflow-wrap: anywhere; }
+  /* Global guard against horizontal scroll on small screens */
+  @media (max-width: 640px) {
+    html, body { max-width: 100%; overflow-x: hidden; }
+  }
 
   /* iOS install banner */
   .ios-install-banner {
@@ -3648,6 +3661,7 @@
 <!-- Persistent floating mini-player — survives full re-renders -->
 <div id="floating-player" class="fp-hidden"></div>
 <div id="resume-fab" class="rfab-hidden" role="button" tabindex="0" aria-label="Continue learning"></div>
+<button id="back-fab" class="bfab-hidden" aria-label="Go back" onclick="goBack()"><span class="bfab-chev">‹</span><span>Back</span></button>
 <style id="rfab-css">
 #resume-fab{position:fixed;left:16px;bottom:20px;z-index:900;display:flex;align-items:center;gap:10px;
   padding:11px 16px 11px 12px;border-radius:999px;cursor:pointer;border:none;
@@ -3661,6 +3675,19 @@
 #resume-fab .rfab-title{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 #resume-fab.rfab-hidden{opacity:0;pointer-events:none;transform:translateY(14px);}
 @media (max-width:720px){ #resume-fab{bottom:148px;left:12px;font-size:12.5px;} }
+/* ---- Back button (iOS-style) — return one step to the previous view ---- */
+#back-fab{position:fixed;top:12px;left:12px;z-index:940;display:inline-flex;align-items:center;gap:6px;
+  padding:9px 15px 9px 12px;border-radius:999px;cursor:pointer;border:1px solid rgba(255,255,255,.14);
+  background:rgba(15,23,42,.82);color:#eaf1fb;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 8px 22px -8px rgba(0,0,0,.55);font-family:var(--font-sans);font-weight:700;font-size:13.5px;
+  transition:transform .16s ease, opacity .22s ease;}
+#back-fab:hover{transform:translateX(-2px);}
+#back-fab:active{transform:scale(.95);}
+#back-fab .bfab-chev{font-size:16px;line-height:1;margin-top:-1px;}
+#back-fab.bfab-hidden{opacity:0;pointer-events:none;transform:translateX(-10px);}
+/* On desktop the persistent sidebar + breadcrumbs already provide navigation, so keep the
+   back button for the mobile/tablet layouts where it's actually needed. */
+@media (min-width:981px){ #back-fab{display:none;} }
 </style>
 
 <script>
@@ -10376,7 +10403,12 @@ const CONTENT = {
       { name: '"Hot potato" voice',           category: 'clinical', description: 'Muffled voice quality from oropharyngeal mass effect.', implication: 'Suggests peritonsillar or parapharyngeal abscess with significant pharyngeal swelling.' },
       { name: 'Rim-enhancing collection',     category: 'radiologic', description: 'Low-density center with peripheral contrast enhancement on CT.', implication: 'Drainable abscess (vs phlegmon = enhancement without collection).' },
       { name: 'Lincoln\'s highway',           category: 'anatomic', description: 'The carotid sheath provides a craniocaudal route for infection spread from neck to mediastinum.', implication: 'Always evaluate for mediastinal extension in carotid-space infections.' },
-      { name: 'Lemierre syndrome',            category: 'clinical', description: 'Fusobacterium IJV thrombophlebitis with septic pulmonary emboli after oropharyngeal infection.', implication: 'Prolonged IV antibiotics; consider anticoagulation.' }
+      { name: 'Lemierre syndrome',            category: 'clinical', description: 'Fusobacterium IJV thrombophlebitis with septic pulmonary emboli after oropharyngeal infection.', implication: 'Prolonged IV antibiotics; consider anticoagulation.' },
+      { name: 'IJV filling defect',           category: 'radiologic', description: 'Non-enhancing intraluminal thrombus expanding the internal jugular vein on contrast CT/MRV.', implication: 'Diagnostic of Lemierre — look for cavitary pulmonary emboli on chest CT.' },
+      { name: 'Soft-tissue gas',              category: 'radiologic', description: 'Locules of gas within deep neck soft tissues on CT.', implication: 'Gas-forming / necrotizing infection — urgent surgical debridement.' },
+      { name: 'Mediastinal widening / fluid', category: 'radiologic', description: 'Widened mediastinum, mediastinal fluid or gas tracking below the carina on CT.', implication: 'Descending necrotizing mediastinitis (20–40% mortality) — combined ENT + cardiothoracic drainage.' },
+      { name: 'Phlegmon vs abscess',          category: 'radiologic', description: 'Phlegmon = ill-defined soft-tissue enhancement with fat stranding, no drainable center; abscess = organized rim-enhancing fluid.', implication: 'Phlegmon → IV antibiotics + serial exam; abscess ≥2–2.5 cm → drainage.' },
+      { name: 'Scalloped abscess wall',       category: 'radiologic', description: 'Thick, irregular, scalloped rim of an enhancing collection.', implication: 'Favors a mature, drainable abscess over early phlegmon.' }
     ],
     keyPoints: [
       { category: 'Fascial spaces (highways of spread)', items: [
@@ -11650,33 +11682,61 @@ const CONTENT = {
       { name: 'Auricular chondritis sparing the lobe', category: 'clinical', description: 'Painful, erythematous auricle that spares the cartilage-free lobe.', implication: 'Relapsing polychondritis — coordinated immunosuppression + airway monitoring.' }
     ],
     podcastTitle: 'Systemic Disease in the Upper Airway — Read the Mucosal Mirror',
-    podcastDuration: '~12 min',
+    podcastDuration: '~21 min - deep dive',
     podcastScript: [
       { speaker: 'host',   text: "Welcome to ENT Academy. I'm Elena." },
-      { speaker: 'cohost', text: "And I'm Marcus. Today: systemic disease manifestations in the upper aerodigestive tract. When the H-and-N is the first clue." },
-      { speaker: 'host',   text: "Start with the granulomatous diseases. GPA — granulomatosis with polyangiitis." },
-      { speaker: 'cohost', text: "Old name was Wegener. The triad: upper airway, lower airway, glomerulonephritis." },
-      { speaker: 'host',   text: "Upper airway findings include nasal crusting, septal perforation, saddle nose, and the laryngology classic — subglottic stenosis." },
-      { speaker: 'cohost', text: "c-ANCA, P-R-3 positive in eighty-plus percent of active disease. Treatment: rituximab or cyclophosphamide plus glucocorticoids." },
-      { speaker: 'host',   text: "Sarcoidosis." },
-      { speaker: 'cohost', text: "Non-caseating granulomas. Heerfordt syndrome — uveoparotid fever. Strawberry cobblestoning of the nasal mucosa. Elevated A-C-E, hypercalcemia." },
-      { speaker: 'host',   text: "T-B." },
-      { speaker: 'cohost', text: "Laryngeal T-B presents as hoarseness — and is mostly reactivation of pulmonary disease. Scrofula is cervical lymphadenitis. Biopsy with A-F-B and culture." },
-      { speaker: 'host',   text: "Move to autoimmune. Sjögren syndrome." },
-      { speaker: 'cohost', text: "Bilateral parotid enlargement. Xerostomia. Keratoconjunctivitis sicca. Anti-Ro, anti-La. The dangerous one — five to fifteen percent lifetime risk of M-A-L-T lymphoma." },
-      { speaker: 'host',   text: "R-A." },
-      { speaker: 'cohost', text: "Cricoarytenoid joint involvement causes hoarseness and can present as airway emergency. And — caution — atlantoaxial instability means no neck extension for intubation." },
-      { speaker: 'host',   text: "Relapsing polychondritis." },
-      { speaker: 'cohost', text: "Painful auricular chondritis that spares the earlobe — the lobe has no cartilage. Saddle nose. Laryngotracheal cartilage destruction is life-threatening." },
-      { speaker: 'host',   text: "Endocrine clues to recognize." },
-      { speaker: 'cohost', text: "Hypothyroid — hoarseness from mucinous vocal fold infiltration, macroglossia, O-S-A. Acromegaly — macroglossia, prognathism, sleep apnea. Graves — orbitopathy." },
-      { speaker: 'host',   text: "Hematology." },
-      { speaker: 'cohost', text: "A-M-L M-five — gum infiltration. Chloroma — soft-tissue mass of myeloid blasts, can appear in the nasal cavity. Sickle cell can cause S-N-H-L from microinfarcts." },
-      { speaker: 'host',   text: "H-H-T." },
-      { speaker: 'cohost', text: "Recurrent epistaxis from telangiectasias. Curaçao criteria. Screen for visceral A-V-Ms." },
-      { speaker: 'host',   text: "Three takeaways." },
-      { speaker: 'cohost', text: "Saddle nose plus subglottic stenosis equals GPA — c-ANCA before anything else. Bilateral parotid enlargement equals Sjögren or sarcoid until you prove otherwise. R-A patient with hoarseness — flex scope to check cricoarytenoid mobility." },
-      { speaker: 'host',   text: "Next week — otolaryngology in older adults." },
+      { speaker: 'cohost', text: "And I'm Marcus. Today's deep dive: systemic disease in the upper aerodigestive tract — the times when the ear, nose, and throat is the first place a whole-body illness shows its face." },
+      { speaker: 'host',   text: "That's the theme I want listeners to hold onto — the mucosa is a mirror. A saddle nose, a boggy parotid, a stubbornly hoarse voice: each can be the presenting sign of a disease that lives far beyond the airway. Miss the pattern and you treat a symptom; catch it and you change the diagnosis." },
+      { speaker: 'cohost', text: "So here's our roadmap. We'll start with the granulomatous diseases — G-P-A, sarcoid, T-B, and E-G-P-A. Then the autoimmune connective-tissue group — Sjögren, rheumatoid arthritis, and relapsing polychondritis. Then endocrine clues, hematologic clues, and amyloidosis. We'll finish with the one blood test that anchors the whole workup, and a case." },
+      { speaker: 'host',   text: "Let's start where the boards love to start — granulomatosis with polyangiitis. Old name, Wegener." },
+      { speaker: 'cohost', text: "The concept is a necrotizing granulomatous vasculitis of small vessels, and it has a classic triad: upper airway, lower airway, and kidney — glomerulonephritis. As an E-N-T you very often see the upper-airway limb first, months before the kidneys declare." },
+      { speaker: 'host',   text: "And the upper-airway findings are a checklist worth memorizing: persistent nasal crusting, mucosal friability, septal perforation, and eventually a saddle-nose deformity as the septal cartilage collapses. Then the laryngology classic." },
+      { speaker: 'cohost', text: "Subglottic stenosis. Here's the pearl: idiopathic subglottic stenosis and G-P-A subglottic stenosis look identical on the scope. So any new subglottic stenosis gets serology before you call it idiopathic — you do not want to dilate a vasculitis and miss the systemic disease." },
+      { speaker: 'host',   text: "What's the serology?" },
+      { speaker: 'cohost', text: "c-ANCA with a P-R-3 pattern — positive in eighty-plus percent of active generalized disease. Back it with urinalysis for hematuria and casts, creatinine, chest imaging for nodules or cavities, and E-S-R and C-R-P for activity. Biopsy shows the necrotizing granulomas and vasculitis, though sinonasal biopsies are notoriously non-specific." },
+      { speaker: 'host',   text: "And treatment has genuinely changed." },
+      { speaker: 'cohost', text: "Induction is rituximab or cyclophosphamide plus glucocorticoids, then a maintenance phase. Rituximab has become first-line for many. The E-N-T role is airway management — dilation, intralesional steroid — coordinated with rheumatology, never in isolation." },
+      { speaker: 'host',   text: "Next granulomatous disease — sarcoidosis." },
+      { speaker: 'cohost', text: "Non-caseating granulomas, this time. In the head and neck, watch for strawberry cobblestoning of the nasal mucosa, and Heerfordt syndrome — uveoparotid fever, which is the combination of parotid enlargement, anterior uveitis, facial nerve palsy, and fever." },
+      { speaker: 'host',   text: "So sarcoid is on the differential for both a parotid mass and a facial palsy — quietly one of the great mimickers." },
+      { speaker: 'cohost', text: "Exactly. Labs: elevated A-C-E is supportive but not specific, and hypercalcemia from dysregulated vitamin D. Chest imaging for bilateral hilar adenopathy. Tissue confirmation still matters. Pearl: bilateral facial palsy is sarcoid until proven otherwise, alongside Lyme and Guillain-Barré." },
+      { speaker: 'host',   text: "Then tuberculosis, which never really left." },
+      { speaker: 'cohost', text: "Laryngeal T-B classically presents as hoarseness and is usually reactivation from pulmonary disease, so it's infectious — mask up before you scope. Scrofula is the cervical lymphadenitis form, a firm matted neck mass that can fistulize. Diagnosis is biopsy and culture with A-F-B staining, and don't forget to check H-I-V status." },
+      { speaker: 'host',   text: "Round out the granulomatous group with E-G-P-A." },
+      { speaker: 'cohost', text: "Eosinophilic granulomatosis with polyangiitis — old name Churg-Strauss. The triad to recognize is asthma, blood and tissue eosinophilia, and chronic rhinosinusitis with nasal polyps. It's p-ANCA, M-P-O positive in roughly forty percent. So the adult with refractory polyps, asthma, and eosinophilia deserves a second thought beyond ordinary sinus disease." },
+      { speaker: 'host',   text: "Let's move to the autoimmune connective-tissue diseases. Sjögren first." },
+      { speaker: 'cohost', text: "The clinical picture is the sicca complex — xerostomia and keratoconjunctivitis sicca — with bilateral, often recurrent parotid enlargement. Antibodies are anti-Ro, S-S-A and anti-La, S-S-B. Minor salivary gland biopsy shows focal lymphocytic sialadenitis." },
+      { speaker: 'host',   text: "And this is the one with the tail you must not forget." },
+      { speaker: 'cohost', text: "A five to fifteen percent lifetime risk of M-A-L-T lymphoma. So a Sjögren patient with a new dominant, firm, or growing parotid nodule isn't just another flare — that's a biopsy. Surveillance is part of the job." },
+      { speaker: 'host',   text: "Rheumatoid arthritis in the head and neck." },
+      { speaker: 'cohost', text: "The airway pearl is cricoarytenoid joint arthritis — it's a synovial joint like any other, and R-A attacks it. Patients get hoarseness, a foreign-body sensation, throat pain, and in the worst case bilateral joint fixation with stridor, a true airway emergency." },
+      { speaker: 'host',   text: "And there's a second R-A trap that lives in the anesthesia plan." },
+      { speaker: 'cohost', text: "Atlantoaxial instability. R-A erodes the transverse ligament, so aggressive neck extension at intubation can subluxate C-1 on C-2 and injure the cord. In a known R-A patient you assume an unstable neck: get flexion-extension films or just plan an awake fiberoptic intubation with the neck neutral." },
+      { speaker: 'host',   text: "Relapsing polychondritis — rare but examinable." },
+      { speaker: 'cohost', text: "It's autoimmune destruction of cartilage. The signature is painful auricular chondritis that spares the earlobe — because the lobe has no cartilage — so a red, swollen, tender pinna with a normal lobule is nearly pathognomonic. Add saddle nose from septal chondritis." },
+      { speaker: 'host',   text: "And the part that can kill." },
+      { speaker: 'cohost', text: "Laryngotracheal chondritis — the cartilage rings soften and collapse, causing dynamic airway obstruction. That's the life-threatening manifestation. Treat with systemic steroids plus a steroid-sparing agent, and severe airway disease may need stenting or tracheostomy." },
+      { speaker: 'host',   text: "Let's shift to endocrine clues you can read off the airway." },
+      { speaker: 'cohost', text: "Hypothyroidism gives a low, rough voice from mucinous infiltration of the vocal folds, plus macroglossia and worsened O-S-A. Acromegaly — macroglossia, prognathism, soft-tissue overgrowth, and often severe sleep apnea with a difficult airway. Graves disease — the orbitopathy, proptosis and restricted extraocular movement, and the airway consequences of a large goiter." },
+      { speaker: 'host',   text: "Now hematology, which hides some beautiful ENT signs." },
+      { speaker: 'cohost', text: "Acute myeloid leukemia, the M-five monocytic subtype, infiltrates the gingiva — boggy, hypertrophic gums. A chloroma, or myeloid sarcoma, is a soft-tissue mass of blasts that can appear in the sinonasal cavity or orbit and actually precede the marrow diagnosis. Sickle cell disease causes sensorineural hearing loss from cochlear microinfarcts, and functional asplenia raising infection risk." },
+      { speaker: 'host',   text: "And the bleeding disorders." },
+      { speaker: 'cohost', text: "Hereditary hemorrhagic telangiectasia — H-H-T, or Osler-Weber-Rendu. Recurrent epistaxis from nasal telangiectasias is the classic presentation, diagnosed by the Curaçao criteria, and you must screen for visceral A-V-Ms — pulmonary, hepatic, cerebral. And in any child or adult with recurrent epistaxis or heavy post-tonsillectomy bleeding, think von Willebrand disease." },
+      { speaker: 'host',   text: "One more disease that ties the room together — amyloidosis." },
+      { speaker: 'cohost', text: "The classic sign is macroglossia with tooth indentations along the lateral tongue. Amyloid also deposits in the larynx — supraglottic or subglottic — as a submucosal firm mass or a hoarse voice. Diagnose with biopsy and Congo red stain, which shows apple-green birefringence under polarized light." },
+      { speaker: 'host',   text: "And when you find it, you don't stop at the airway." },
+      { speaker: 'cohost', text: "Right — get an echocardiogram, because cardiac amyloid drives the prognosis, and coordinate with hematology to type it, A-L light-chain versus A-A. Localized laryngeal amyloid can be managed with conservative excision, but systemic disease is a whole different problem." },
+      { speaker: 'host',   text: "Before the case — is there one unifying workup? These diseases are all over the map." },
+      { speaker: 'cohost', text: "There is a sensible core panel: C-B-C, basic metabolic panel, E-S-R and C-R-P for inflammation, and the autoantibody set — ANCA both c and p, A-N-A, anti-Ro and anti-La, rheumatoid factor. Add A-C-E and calcium if sarcoid is in play, H-I-V and syphilis serology broadly, and imaging directed at the finding. Then biopsy with the right stains — A-F-B, fungal, Congo red — because the single most common error is a biopsy sent without the stain you actually needed." },
+      { speaker: 'host',   text: "Let's put it together. Fifty-two-year-old, three months of nasal crusting, now a change in the voice and mild exertional stridor. On the scope, a saddling nasal dorsum and a circumferential subglottic narrowing. Where's your head?" },
+      { speaker: 'cohost', text: "Saddle nose plus subglottic stenosis is G-P-A until proven otherwise. Before I touch that airway with a dilator, I'm sending c-ANCA and P-R-3, a urinalysis looking for glomerulonephritis, creatinine, and chest imaging for nodules." },
+      { speaker: 'host',   text: "Urinalysis shows dysmorphic red cells and red-cell casts, creatinine is rising, c-ANCA is strongly positive. Now what?" },
+      { speaker: 'cohost', text: "That's active generalized G-P-A with renal involvement — this is systemic, urgent, and multidisciplinary. Rheumatology and nephrology on board, induction with rituximab or cyclophosphamide plus steroids. My airway role is to secure symptomatic subglottic stenosis — dilation with intralesional steroid — but the disease is treated systemically. Dilating alone and sending them home would be the classic miss." },
+      { speaker: 'host',   text: "Beautiful — the airway finding opened the door, but the serology and the urine made the diagnosis. Let's land it with the takeaways." },
+      { speaker: 'cohost', text: "One: saddle nose plus subglottic stenosis equals G-P-A — send c-ANCA and P-R-3 before you call any subglottic stenosis idiopathic. Two: bilateral parotid enlargement is Sjögren, sarcoid, or H-I-V until you prove otherwise — and a new dominant nodule in Sjögren is a lymphoma biopsy." },
+      { speaker: 'host',   text: "Three." },
+      { speaker: 'cohost', text: "Three: the rheumatoid patient with hoarseness gets a flexible scope to check cricoarytenoid mobility, and an unstable-neck airway plan. And the bonus: painful ear chondritis that spares the lobe is relapsing polychondritis — watch the airway cartilage." },
+      { speaker: 'host',   text: "Read the mucosal mirror, order the right test, and treat the disease, not just the symptom. Next week — otolaryngology in older adults." },
       { speaker: 'cohost', text: "See you in seven." }
     ],
     slides: [
@@ -11887,31 +11947,60 @@ const CONTENT = {
       { name: 'Gait slowing on Timed-Up-and-Go', category: 'clinical', description: 'Time >12 seconds to stand from chair, walk 3 m, return, and sit.', implication: 'Predicts falls, post-op complications, and mortality.' }
     ],
     podcastTitle: 'Older Adults — Frailty, Function, and the Last Decade',
-    podcastDuration: '~12 min',
+    podcastDuration: '~21 min - deep dive',
     podcastScript: [
       { speaker: 'host',   text: "Welcome to ENT Academy. I'm Elena." },
-      { speaker: 'cohost', text: "And I'm Marcus. Today: otolaryngology in older adults. The principle of the chapter — age is a number, physiology is the metric." },
-      { speaker: 'host',   text: "Start with frailty. Frailty scores like Fried and the Clinical Frailty Scale predict surgical outcomes better than A-S-A class or chronologic age." },
-      { speaker: 'cohost', text: "A fit eighty-year-old tolerates a free flap. A frail sixty-five-year-old may not." },
-      { speaker: 'host',   text: "Presbycusis." },
-      { speaker: 'cohost', text: "High-frequency, bilateral, sensorineural. Speech-in-noise difficulty is the chief complaint. Untreated hearing loss is linked to social isolation, depression, falls, and accelerated cognitive decline." },
-      { speaker: 'host',   text: "The Lancet Commission says addressing hearing loss is one of the modifiable risk factors for dementia." },
-      { speaker: 'cohost', text: "Hearing aids first. Cochlear implant when speech recognition drops below fifty percent with optimal amplification." },
-      { speaker: 'host',   text: "Presbyphagia." },
-      { speaker: 'cohost', text: "Age-related swallow changes — reduced lingual strength, delayed U-E-S relaxation, weaker cough. Aspiration pneumonia is the leading cause of death in advanced dementia." },
-      { speaker: 'host',   text: "Important — P-E-G tubes do not reduce aspiration risk in advanced dementia. Hand-feeding for comfort often aligns better with goals." },
-      { speaker: 'cohost', text: "Presbylaryngis." },
-      { speaker: 'host',   text: "Vocal fold atrophy. Bowing. Glottic gap. Breathy weak voice. Voice therapy first. Injection or medialization for refractory cases." },
-      { speaker: 'cohost', text: "Delirium prevention." },
-      { speaker: 'host',   text: "Postoperative delirium occurs in fifteen to fifty percent of elderly surgical patients. Independently associated with mortality. Reduce risk by avoiding benzodiazepines, anticholinergics, and meperidine — Beers list. Keep hearing aids and glasses on. Mobilize early. Maintain day-night cycle." },
-      { speaker: 'cohost', text: "I-C-U ABCDEF bundle." },
-      { speaker: 'host',   text: "Assess pain, Both spontaneous awakening and breathing trials, Choice of sedation, Delirium monitoring, Early mobility, Family engagement." },
-      { speaker: 'cohost', text: "H-and-N oncology in the elderly." },
-      { speaker: 'host',   text: "Stage-for-stage outcomes are similar, but tolerance differs. Hypofractionated R-T for fragile patients. Single-modality preferred over combined when feasible. Always discuss goals — extension of life versus preservation of function." },
-      { speaker: 'cohost', text: "Three takeaways." },
-      { speaker: 'host',   text: "Frailty score beats age for surgical risk. Untreated hearing loss accelerates cognitive decline — aid it. P-E-G in advanced dementia doesn't reduce aspiration." },
-      { speaker: 'cohost', text: "Next week — pain management in the H-and-N patient." },
-      { speaker: 'host',   text: "See you in seven." }
+      { speaker: 'cohost', text: "And I'm Marcus. Today's deep dive is otolaryngology in older adults — the fastest-growing part of almost every E-N-T practice, and one where the usual reflexes can quietly steer you wrong." },
+      { speaker: 'host',   text: "The organizing principle for the whole hour is one sentence: age is a number, physiology is the metric. Two people can share a birth year and be completely different surgical patients. Our job is to measure the physiology, not read the chart's date of birth." },
+      { speaker: 'cohost', text: "Roadmap: we'll start with frailty and why it beats chronologic age. Then the four great presby-syndromes — presbycusis, presbyphagia, presbylaryngis — and the cognitive thread that ties hearing to dementia. Then perioperative delirium, operative risk, geriatric head-and-neck cancer and goals of care, and we'll close with a case and takeaways." },
+      { speaker: 'host',   text: "Let's define frailty properly, because people use the word loosely." },
+      { speaker: 'cohost', text: "Frailty is a state of reduced physiologic reserve across multiple systems, so a small stress produces a disproportionate loss of function. The two workhorses are the Fried phenotype — weight loss, exhaustion, low activity, slow gait, weak grip — and the Rockwood Clinical Frailty Scale, C-F-S, a one-to-nine judgment of fitness versus dependence." },
+      { speaker: 'host',   text: "And the reason we care in the operating room?" },
+      { speaker: 'cohost', text: "Frailty predicts postoperative mortality, complications, and failure-to-rescue better than A-S-A class or age. A-S-A was built for anesthetic risk, not for recovery reserve. A fit eighty-year-old — C-F-S two or three — often sails through a free flap. A frail sixty-five-year-old — C-F-S six — may not, and that changes the whole conversation." },
+      { speaker: 'host',   text: "Is there a quick bedside measure a busy clinic can actually use?" },
+      { speaker: 'cohost', text: "The Timed-Up-and-Go: stand from a chair, walk three meters, turn, come back, sit. Over about twelve seconds flags fall risk and worse surgical outcomes. Gait speed alone is a remarkably good vital sign in older adults." },
+      { speaker: 'host',   text: "Let's go to the ear — presbycusis." },
+      { speaker: 'cohost', text: "Age-related sensorineural hearing loss: bilateral, symmetric, high-frequency down-sloping. Mechanistically it's a mix — loss of outer hair cells starting in the basal turn, atrophy of the stria vascularis, and spiral ganglion and central processing decline. That's why the chief complaint is so specific." },
+      { speaker: 'host',   text: "Speech-in-noise difficulty." },
+      { speaker: 'cohost', text: "Right — they hear you fine one-on-one in a quiet room and can't follow the table at a restaurant. That's the fingerprint. Audiometry confirms the high-frequency S-N-H-L, and speech-in-noise testing captures the real-world disability the pure tones underplay." },
+      { speaker: 'host',   text: "And this is where the chapter gets bigger than the ear." },
+      { speaker: 'cohost', text: "The Lancet Commission lists untreated hearing loss as one of the largest modifiable risk factors for dementia. Beyond cognition it drives social isolation, depression, and falls. So treating hearing loss is a public-health intervention, not just an audiology nicety." },
+      { speaker: 'host',   text: "What's the treatment ladder — and the honest counseling?" },
+      { speaker: 'cohost', text: "Hearing aids first, and counsel realistically: only around a third of adults who'd benefit actually wear them, from cost, stigma, and dexterity. When speech recognition drops below about fifty percent with optimal amplification, that patient meets cochlear implant criteria — and age alone is not a contraindication; healthy octogenarians do very well." },
+      { speaker: 'host',   text: "Move to the swallow — presbyphagia." },
+      { speaker: 'cohost', text: "Age brings reduced lingual strength, slower pharyngeal transit, delayed upper-esophageal-sphincter relaxation, and a weaker, less protective cough. On its own it's compensated, but layer on a stroke, dementia, or a course of radiation and it decompensates into unsafe swallowing. Characterize it with F-E-E-S or a videofluoroscopic swallow study." },
+      { speaker: 'host',   text: "And the statistic that should anchor every family meeting." },
+      { speaker: 'cohost', text: "Aspiration pneumonia is the leading cause of death in advanced dementia. Which sets up the single most important counseling point in this chapter." },
+      { speaker: 'host',   text: "The P-E-G tube question." },
+      { speaker: 'cohost', text: "Multiple studies show feeding tubes in advanced dementia do not improve survival, do not reduce aspiration pneumonia, and do not prevent pressure ulcers. Careful hand-feeding for comfort, with good positioning and pacing, usually aligns better with the patient's goals. That's an evidence-based recommendation, not a rationing one — and families need to hear it clearly and kindly." },
+      { speaker: 'host',   text: "Presbylaryngis — the voice." },
+      { speaker: 'cohost', text: "Vocal fold muscle atrophy leads to bowing and a glottic gap, so the voice becomes breathy, weak, and fatigues quickly. Interestingly pitch tends to rise in aging men and fall in aging women as the folds change." },
+      { speaker: 'host',   text: "But we don't jump to the operating room." },
+      { speaker: 'cohost', text: "No — voice therapy first; strengthening the glottic closure often gets them there. For refractory bowing, injection augmentation or a medialization thyroplasty closes the gap. And always exclude the things a weak elderly voice can hide — a vocal fold paralysis or a glottic cancer — before you call it simple presbylaryngis." },
+      { speaker: 'host',   text: "Now the perioperative theme that saves lives — delirium." },
+      { speaker: 'cohost', text: "Postoperative delirium hits fifteen to fifty percent of older surgical patients and is independently associated with mortality, longer stays, and permanent cognitive decline. The good news is that a lot of it is preventable." },
+      { speaker: 'host',   text: "How do we prevent it?" },
+      { speaker: 'cohost', text: "Avoid the Beers-list offenders — long-acting benzodiazepines, anticholinergics like diphenhydramine, and meperidine. Then the non-drug bundle: keep the hearing aids and glasses on so they can orient, mobilize early, protect the day-night cycle, treat pain with scheduled acetaminophen, and get family at the bedside. Simple, and it works." },
+      { speaker: 'host',   text: "And in the I-C-U there's a named bundle." },
+      { speaker: 'cohost', text: "The ABCDEF bundle: Assess and manage pain; Both spontaneous awakening and breathing trials; Choice of lighter, less-benzodiazepine sedation; Delirium monitoring with C-A-M-I-C-U; Early mobility; and Family engagement. It's the operational version of everything we just said." },
+      { speaker: 'host',   text: "Let's talk operative risk adjustments beyond the delirium piece." },
+      { speaker: 'cohost', text: "Do a real frailty assessment pre-op and pair it with a tool like the A-C-S N-S-Q-I-P calculator. Review polypharmacy and stop what you can. Coordinate anticoagulation with the prescriber. Stress-dose steroids if they're on chronic prednisone. And set the post-op acuity higher than you would for a younger patient — the complication that's survivable at forty can be fatal at eighty-five." },
+      { speaker: 'host',   text: "Which brings us to head-and-neck cancer in the older adult — where the reflexes really matter." },
+      { speaker: 'cohost', text: "Stage for stage, oncologic outcomes are broadly similar, but treatment tolerance is not. So the art is de-intensifying without under-treating. Favor single-modality when it suffices over combined therapy, and consider hypofractionated radiation — fewer, larger fractions — to cut the transportation and fatigue burden of a seven-week course in a fragile patient." },
+      { speaker: 'host',   text: "And the conversation that should happen at diagnosis, not at the end." },
+      { speaker: 'cohost', text: "Goals of care. Frame every plan as extension of life versus preservation of function, and bring palliative care in early — early palliative consultation improves quality of life and can even extend it while reducing aggressive care at the end. Repeat that conversation at every disease milestone." },
+      { speaker: 'host',   text: "One quick practical block — how we communicate in clinic." },
+      { speaker: 'cohost', text: "Face the patient, speak clearly at a normal volume — don't shout, it distorts. Cut the background noise, give a written summary to take home, allow time, and don't finish their sentences. And if they wear hearing aids, make sure they're in before you start the visit." },
+      { speaker: 'host',   text: "Let's do a case. Eighty-five-year-old, Clinical Frailty Scale four — pre-frail, still independent — with a biopsy-proven T-one N-zero glottic cancer. Family wants 'everything.' What do you offer?" },
+      { speaker: 'cohost', text: "For early glottic cancer in a fit older adult, single-modality wins: transoral laser microsurgery or radiation alone both give roughly ninety percent local control. I'd choose based on voice goals, comorbidity, and travel burden — radiation is daily for weeks, surgery is one anesthetic. What I would not do is stack chemoradiation on a T-one that a single modality cures." },
+      { speaker: 'host',   text: "Family then asks about a feeding tube 'just in case,' and mentions he's been forgetful and coughs at meals." },
+      { speaker: 'cohost', text: "That reframes it. I'd get a formal swallow evaluation before assuming anything, and I'd separate the two issues: a temporary tube during radiation is reasonable if he's losing weight, but a prophylactic P-E-G for cognitive decline is exactly the scenario where tubes don't help. I'd counsel the family on hand-feeding for comfort and set goals explicitly, with palliative care alongside from the start." },
+      { speaker: 'host',   text: "Perfect — function-first, evidence-based, and honest with the family. Land the takeaways." },
+      { speaker: 'cohost', text: "One: frailty beats chronologic age for surgical risk — measure it with the Clinical Frailty Scale or a Timed-Up-and-Go, not the birth date. Two: untreated hearing loss is a modifiable driver of cognitive decline and falls — aid it, and implant when they qualify." },
+      { speaker: 'host',   text: "And three." },
+      { speaker: 'cohost', text: "Three: in advanced dementia, P-E-G tubes don't reduce aspiration or extend life — hand-feed for comfort and have the goals-of-care conversation early. Prevent delirium with the Beers list and the ABCDEF bundle, and de-intensify cancer care to fit the physiology." },
+      { speaker: 'host',   text: "Age is a number; physiology is the metric. Next week — pain management in the head-and-neck patient." },
+      { speaker: 'cohost', text: "See you in seven." }
     ],
     slides: [
       { title: "Otolaryngology in Older Adults", subtitle: "Cummings 8e · Chapter 12", body: "<p>Age is a number. Physiology is the metric.</p>" },
@@ -12154,33 +12243,59 @@ const CONTENT = {
       { name: 'Pain in V1+V2+V3',             category: 'clinical', description: 'Bilateral or all-divisions trigeminal pain.', implication: 'Atypical — image with MRI to exclude tumor or MS plaque before treating as TN.' }
     ],
     podcastTitle: 'Pain in the Head and Neck — Multimodal and Mindful',
-    podcastDuration: '~12 min',
+    podcastDuration: '~21 min - deep dive',
     podcastScript: [
       { speaker: 'host',   text: "Welcome to ENT Academy. I'm Elena." },
-      { speaker: 'cohost', text: "And I'm Marcus. Today: pain management in H-and-N patients. Multimodal, opioid-sparing, and aware of the syndromes we underdiagnose." },
-      { speaker: 'host',   text: "Start with the three types. Nociceptive, neuropathic, mixed." },
-      { speaker: 'cohost', text: "Nociceptive is tissue injury — post-op, trauma, infection. Responds to NSAIDs, acetaminophen, opioids." },
-      { speaker: 'host',   text: "Neuropathic is nerve injury — trigeminal neuralgia, post-herpetic, post-treatment H-and-N cancer. Gabapentinoids, T-C-As, duloxetine." },
-      { speaker: 'cohost', text: "Mixed — most chronic post-treatment cancer pain." },
-      { speaker: 'host',   text: "Multimodal perioperative analgesia. Scheduled acetaminophen one gram every six hours, max three to four grams daily." },
-      { speaker: 'cohost', text: "Ibuprofen unless bleeding risk. And — important — ibuprofen does not increase post-tonsillectomy bleeding per meta-analyses." },
-      { speaker: 'host',   text: "Gabapentin pre-op plus scheduled post-op for high-pain procedures. Dexamethasone eight milligrams intraoperatively — analgesic plus antiemetic." },
-      { speaker: 'cohost', text: "Regional blocks where applicable — bilateral S-P block for tonsillectomy, greater auricular for parotid, cervical plexus for neck." },
-      { speaker: 'host',   text: "Opioids as breakthrough, not scheduled, when possible." },
-      { speaker: 'cohost', text: "Trigeminal neuralgia." },
-      { speaker: 'host',   text: "Brief, severe, electric, in V-2 or V-3 distribution. Triggered by light touch, eating, brushing teeth. First-line: carbamazepine or oxcarbazepine. Works in eighty percent within forty-eight hours." },
-      { speaker: 'cohost', text: "When carbamazepine fails — microvascular decompression of the trigeminal root entry zone, stereotactic radiosurgery, or glycerol rhizotomy." },
-      { speaker: 'host',   text: "Post-treatment H-and-N cancer pain." },
-      { speaker: 'cohost', text: "Around forty percent of survivors have persistent pain. Combination — gabapentinoids plus T-C-A or duloxetine for the neuropathic component, opioids carefully for the nociceptive piece." },
-      { speaker: 'host',   text: "Pediatric rules." },
-      { speaker: 'cohost', text: "No codeine. No tramadol. FDA black box — ultra-rapid C-Y-P two-D-six metabolizers can develop fatal respiratory depression, especially with O-S-A after T-and-A. Scheduled acetaminophen plus ibuprofen is the first-line." },
-      { speaker: 'host',   text: "Opioid prescribing best practices." },
-      { speaker: 'cohost', text: "Lowest effective dose. Shortest duration. Check the P-D-M-P. Avoid benzodiazepine co-prescription — synergistic respiratory depression quadruples overdose risk. Consider naloxone co-prescription for high-risk patients." },
-      { speaker: 'host',   text: "End-of-life pain control in advanced H-and-N cancer." },
-      { speaker: 'cohost', text: "Sustained-release opioids, fentanyl patches, methadone for the N-M-D-A antagonism in mixed neuropathic pain. Palliative care consultation early — improves quality and may even extend life." },
-      { speaker: 'host',   text: "Three takeaways." },
-      { speaker: 'cohost', text: "Multimodal stack — acetaminophen, NSAID, gabapentinoid, dexamethasone, regional block, opioid breakthrough. Trigeminal neuralgia gets carbamazepine. Children get no codeine, no tramadol — ever." },
-      { speaker: 'host',   text: "Next week — sleep apnea and sleep disorders." },
+      { speaker: 'cohost', text: "And I'm Marcus. Today's deep dive is pain in the head and neck — how to build a modern, multimodal, opioid-sparing plan, and how to recognize the neuralgias and syndromes that a reflexive opioid script would completely miss." },
+      { speaker: 'host',   text: "The frame I want to set is this: pain in the head and neck is rarely just one thing. Get the mechanism right and the treatment almost chooses itself. Reach for opioids first and you'll under-treat the neuropathic pain and over-expose the patient." },
+      { speaker: 'cohost', text: "Roadmap: the three pain types, then the multimodal perioperative stack, then the classic neuralgias — trigeminal, glossopharyngeal, and burning mouth. Then post-cancer-treatment pain, the pediatric rules you cannot break, opioid-prescribing safety, the interventional and end-of-life options, and a case." },
+      { speaker: 'host',   text: "Start with mechanism — the three types." },
+      { speaker: 'cohost', text: "Nociceptive pain is tissue injury — the post-op wound, trauma, infection. It's well localized and responds to acetaminophen, N-S-A-I-Ds, and opioids. Neuropathic pain is nerve injury or dysfunction — burning, electric, shooting, with allodynia — and it barely responds to opioids; it needs gabapentinoids, tricyclics, or duloxetine." },
+      { speaker: 'host',   text: "And the third." },
+      { speaker: 'cohost', text: "Mixed — both mechanisms at once. And that's the important one, because most chronic post-treatment head-and-neck cancer pain is mixed. If you treat only the nociceptive half, the patient stays miserable on escalating opioids while the neuropathic half goes untouched." },
+      { speaker: 'host',   text: "Let's build the perioperative stack, because opioid-sparing starts before the incision." },
+      { speaker: 'cohost', text: "The base layer is scheduled — not as-needed — acetaminophen, a gram every six hours up to three to four grams a day. Scheduled dosing keeps a floor under the pain instead of chasing it." },
+      { speaker: 'host',   text: "Then the anti-inflammatory layer, and here's a myth worth killing." },
+      { speaker: 'cohost', text: "Ibuprofen, unless there's a specific bleeding contraindication. And the big one: ibuprofen does not increase post-tonsillectomy bleeding — multiple meta-analyses are clear. Withholding N-S-A-I-Ds after a T-and-A out of old habit just means more opioid and more nausea." },
+      { speaker: 'host',   text: "What about the neuropathic and adjunct layers intra-op?" },
+      { speaker: 'cohost', text: "A gabapentinoid — gabapentin or pregabalin — pre-op and scheduled post-op for high-pain procedures reduces both pain and opioid use. And a single intraoperative dexamethasone, around eight milligrams, does double duty: it's analgesic and antiemetic." },
+      { speaker: 'host',   text: "And regional anesthesia, which E-N-T underuses." },
+      { speaker: 'cohost', text: "Match the block to the operation: a bilateral peritonsillar — sphenopalatine — block with bupivacaine at the end of a tonsillectomy, a greater auricular block for parotid surgery, a cervical plexus block for neck cases. Pre-emptive local anesthetic blunts central sensitization before it starts." },
+      { speaker: 'host',   text: "So where do opioids sit in this stack?" },
+      { speaker: 'cohost', text: "At the top, for breakthrough — not scheduled, when you can avoid it. If the acetaminophen, N-S-A-I-D, gabapentinoid, steroid, and block are all working, the opioid requirement drops dramatically. That's the whole philosophy: many small mechanisms instead of one big one." },
+      { speaker: 'host',   text: "Let's move to the neuralgias — starting with the famous one, trigeminal neuralgia." },
+      { speaker: 'cohost', text: "The history is the diagnosis: brief, severe, electric-shock paroxysms in a V-two or V-three distribution, triggered by light touch, a breeze, chewing, or brushing the teeth, with trigger zones on the face. Between attacks the exam is normal. Classically it's neurovascular compression of the trigeminal root entry zone, often by the superior cerebellar artery." },
+      { speaker: 'host',   text: "First-line treatment." },
+      { speaker: 'cohost', text: "Carbamazepine or oxcarbazepine — effective in about eighty percent within forty-eight hours, and that rapid response actually supports the diagnosis. Monitor sodium and blood counts on carbamazepine." },
+      { speaker: 'host',   text: "And the red flags that should stop you before you just prescribe." },
+      { speaker: 'cohost', text: "Bilateral pain, all-three-division involvement, sensory loss, or a young patient — those are atypical, so image with M-R-I to exclude a cerebellopontine-angle tumor or a multiple-sclerosis plaque at the root entry zone before you call it classic trigeminal neuralgia. When medications fail, options are microvascular decompression, stereotactic radiosurgery, or a percutaneous glycerol or radiofrequency rhizotomy." },
+      { speaker: 'host',   text: "Two more syndromes we underdiagnose — glossopharyngeal neuralgia and burning mouth." },
+      { speaker: 'cohost', text: "Glossopharyngeal neuralgia is sharp, lancinating pain in the throat, tongue base, and deep ear, triggered by swallowing, talking, or coughing — a ninth-nerve mimic of trigeminal neuralgia. Same first-line, carbamazepine. Rarely it comes with syncope from vagal reflex, which earns a cardiology look." },
+      { speaker: 'host',   text: "And burning mouth syndrome." },
+      { speaker: 'cohost', text: "Chronic oral burning with a completely normal exam and no mucosal lesion, most often in postmenopausal women. It's a diagnosis of exclusion — first rule out candidiasis, dry mouth, nutritional deficiencies like B-twelve, iron, and folate, and diabetes. Then treat with topical clonazepam, low-dose tricyclics, or alpha-lipoic acid." },
+      { speaker: 'host',   text: "Now the big chronic population — post-treatment cancer pain." },
+      { speaker: 'cohost', text: "About forty percent of head-and-neck cancer survivors have persistent pain, and it's classically mixed: neuropathic from surgery and radiation plus nociceptive from tissue damage. So the stack is a gabapentinoid plus a tricyclic or duloxetine for the neuropathic component, scheduled acetaminophen and an N-S-A-I-D for the nociceptive, and opioids only as breakthrough." },
+      { speaker: 'host',   text: "And a point clinicians forget — the sequelae themselves are pain generators." },
+      { speaker: 'cohost', text: "Exactly. Xerostomia, trismus, lymphedema, and mucosal fibrosis all generate pain. Treating the dry mouth, doing trismus stretching, and managing lymphedema is analgesia. You can't medicate your way past a jaw that won't open." },
+      { speaker: 'host',   text: "Now the rule I want every listener to tattoo on their brain — pediatrics." },
+      { speaker: 'cohost', text: "No codeine. No tramadol. Ever, in children. It's an F-D-A black box: ultra-rapid C-Y-P-two-D-six metabolizers convert codeine to morphine so fast they can have fatal respiratory depression — and the highest-risk scenario is exactly ours, a child with O-S-A after a tonsillectomy. First-line is scheduled acetaminophen plus ibuprofen, with low-dose oxycodone or hydromorphone reserved for breakthrough." },
+      { speaker: 'host',   text: "Let's cover adult opioid-prescribing safety, because this is where harm happens." },
+      { speaker: 'cohost', text: "Lowest effective dose, shortest duration, and check your state P-D-M-P — the prescription drug monitoring program — before you write. Avoid co-prescribing benzodiazepines: the combination is synergistic respiratory depression and roughly quadruples overdose risk. Counsel on safe storage and disposal." },
+      { speaker: 'host',   text: "When do we co-prescribe naloxone?" },
+      { speaker: 'cohost', text: "For high-risk patients — a history of opioid use disorder or overdose, O-S-A, concurrent C-N-S depressants, a morphine-milligram-equivalent at or above fifty, or a household with high-risk individuals. And watch for opioid-induced hyperalgesia: the chronic high-dose patient whose pain paradoxically worsens. The fix is counterintuitive — rotate or de-escalate the opioid, add ketamine or multimodal agents, not more opioid." },
+      { speaker: 'host',   text: "Round out the toolbox — interventional and end-of-life options." },
+      { speaker: 'cohost', text: "Interventionally, a sphenopalatine ganglion block helps migraine, cluster, and atypical facial pain; a stellate ganglion block helps C-R-P-S and some refractory cancer pain; diagnostic trigeminal branch blocks localize and sometimes treat. At end of life, sustained-release opioids and fentanyl patches for steady control, and methadone is uniquely useful because its N-M-D-A antagonism targets the neuropathic component of mixed pain." },
+      { speaker: 'host',   text: "And the recurring theme of this whole series." },
+      { speaker: 'cohost', text: "Palliative care early, not late — it improves quality of life, reduces aggressive end-of-life care, and in some studies extends survival. Early is the operative word." },
+      { speaker: 'host',   text: "Let's do a case. Fifty-eight-year-old, two years out from chemoradiation for an oropharyngeal cancer, now with constant burning in the throat and neck, sharp electric jolts when he swallows, a dry mouth, and jaw tightness. His last clinician just kept raising the oxycodone. Where do you start?" },
+      { speaker: 'cohost', text: "This is textbook mixed pain that's been treated as if it were purely nociceptive. I'd start a neuropathic agent — a gabapentinoid plus duloxetine or a tricyclic — layer scheduled acetaminophen and an N-S-A-I-D, and actively treat the sequelae: saliva substitutes or pilocarpine for the xerostomia and a trismus stretching program. Then I'd carefully taper, not spike, the oxycodone." },
+      { speaker: 'host',   text: "He's also on chronic escalating opioids and says the pain is somehow everywhere now, worse than before. What are you thinking?" },
+      { speaker: 'cohost', text: "Opioid-induced hyperalgesia is on the differential. Rather than climb the dose again, I'd rotate the opioid or de-escalate under a clear plan, lean harder on the multimodal stack, consider ketamine or a sphenopalatine block, and bring palliative care in as a partner — not as a last resort." },
+      { speaker: 'host',   text: "Beautiful — right mechanism, right agents, and the courage to go down on the opioid. Land the takeaways." },
+      { speaker: 'cohost', text: "One: build the multimodal stack — scheduled acetaminophen, an N-S-A-I-D including after tonsillectomy, a gabapentinoid, intra-op dexamethasone, a regional block, and opioids only for breakthrough. Two: the neuralgias are a history diagnosis — trigeminal and glossopharyngeal get carbamazepine, and bilateral or all-division pain gets an M-R-I first." },
+      { speaker: 'host',   text: "And three." },
+      { speaker: 'cohost', text: "Three: children get no codeine and no tramadol, ever — especially after a tonsillectomy with O-S-A. And in adults, check the P-D-M-P, never pair opioids with benzodiazepines, co-prescribe naloxone for high-risk patients, and think opioid-induced hyperalgesia when the dose keeps climbing and the pain keeps winning." },
+      { speaker: 'host',   text: "Match the drug to the mechanism, stack the small wins, and stay mindful with the opioids. Next week — sleep apnea and sleep disorders." },
       { speaker: 'cohost', text: "See you in seven." }
     ],
     slides: [
@@ -15119,6 +15234,37 @@ function loadStored() {
         if (!CONTENT[k]) CONTENT[k] = state.generatedContent[k];
       });
     }
+    // Critical-bucket fallback: recover keys / progress / sign-in if the main blob was missing
+    // or trimmed (quota) or partially evicted. Never overwrites a value the main blob already has.
+    _mergeCriticalFallback();
+  } catch (e) { /* ignore */ }
+}
+/* Overlay the tiny critical record onto state, filling only what the main blob didn't provide.
+   This is what makes the OpenAI key and study progress survive updates and storage pressure. */
+function _mergeCriticalFallback() {
+  try {
+    let raw = null;
+    try { raw = localStorage.getItem(CRIT_KEY); } catch(e){}
+    if (!raw) return;
+    const c = JSON.parse(raw); if (!c) return;
+    if (!state.openaiKey && c.openaiKey) state.openaiKey = c.openaiKey;
+    if (!state.apiKey && c.apiKey) state.apiKey = c.apiKey;
+    if (!state.elevenLabsKey && c.elevenLabsKey) state.elevenLabsKey = c.elevenLabsKey;
+    if (!state.openaiVoices && c.openaiVoices) state.openaiVoices = c.openaiVoices;
+    if (!state.elevenLabsVoices && c.elevenLabsVoices) state.elevenLabsVoices = c.elevenLabsVoices;
+    if (!state.userMode && c.userMode) state.userMode = c.userMode;
+    if (!state.userName && c.userName) state.userName = c.userName;
+    if (!state.managerName && c.managerName) state.managerName = c.managerName;
+    if (!state.managerPasscode && c.managerPasscode) state.managerPasscode = c.managerPasscode;
+    if (!state.managerCredId && c.managerCredId) state.managerCredId = c.managerCredId;
+    // Progress: only fill if the main record is empty/missing.
+    const emptyObj = o => !o || Object.keys(o).length === 0;
+    if (emptyObj(state.managerProgress) && !emptyObj(c.managerProgress)) state.managerProgress = c.managerProgress;
+    if (emptyObj(state.clientProgress) && !emptyObj(c.clientProgress)) state.clientProgress = c.clientProgress;
+    if (emptyObj(state.srs) && !emptyObj(c.srs)) state.srs = c.srs;
+    if (emptyObj(state.personalNotes) && !emptyObj(c.personalNotes)) state.personalNotes = c.personalNotes;
+    // Keep the active progress pointer sensible.
+    if (state.userMode !== 'client') state.progress = state.managerProgress || state.progress || {};
   } catch (e) { /* ignore */ }
 }
 function persist() {
@@ -15185,12 +15331,50 @@ function persist() {
       fullCummingsName: state.fullCummingsName,
       lastLocation: state.lastLocation
     });
-    localStorage.setItem(STORE_KEY, _payload);
-    // Durability mirror: also write the exact same snapshot to IndexedDB. localStorage on some
-    // browsers (esp. Safari / file://) can be evicted after inactivity or storage pressure;
-    // IndexedDB is far more durable. On boot we auto-restore from here if localStorage is empty.
-    // Debounced + fire-and-forget so it never blocks the UI or spams IDB transactions.
+    // ALWAYS write the tiny critical bucket FIRST — keys, progress, sign-in. It's small enough
+    // that it can't hit the ~5 MB quota, so even if the big blob below fails, the user never
+    // loses their API key or study progress across updates. This is the durability guarantee.
+    _writeCritical();
+    // Full snapshot. If it overflows quota, retry without the big regenerable fields so the
+    // rest still saves instead of the whole write failing silently.
+    try {
+      localStorage.setItem(STORE_KEY, _payload);
+    } catch (quotaErr) {
+      try {
+        const _trimmed = JSON.parse(_payload);
+        delete _trimmed.generatedContent; delete _trimmed.extendedPodcasts;
+        delete _trimmed.chapterChats;     delete _trimmed.advisorMessages;
+        localStorage.setItem(STORE_KEY, JSON.stringify(_trimmed));
+      } catch (e2) { /* critical bucket already saved above — safe to continue */ }
+    }
+    // Durability mirror: also write the snapshot to IndexedDB (far more eviction-resistant than
+    // localStorage on Safari). On boot we auto-restore from here if localStorage was cleared.
     _scheduleBackupMirror(_payload);
+  } catch (e) { /* ignore */ }
+}
+/* The small, always-saved record: API keys, progress, and sign-in. Kept separate from the big
+   blob so a quota overflow or partial eviction can never cost the user their key or their marks. */
+const CRIT_KEY = 'ent-academy-critical-v1';
+function _writeCritical() {
+  try {
+    const crit = {
+      apiKey: state.apiKey || '',
+      openaiKey: state.openaiKey || '',
+      elevenLabsKey: state.elevenLabsKey || '',
+      openaiVoices: state.openaiVoices || null,
+      elevenLabsVoices: state.elevenLabsVoices || null,
+      managerProgress: state.managerProgress || {},
+      clientProgress: state.clientProgress || {},
+      userMode: state.userMode || null,
+      userName: state.userName || '',
+      managerName: state.managerName || '',
+      managerPasscode: state.managerPasscode || '',
+      managerCredId: state.managerCredId || null,
+      srs: state.srs || {}, personalNotes: state.personalNotes || {}
+    };
+    const s = JSON.stringify(crit);
+    localStorage.setItem(CRIT_KEY, s);
+    try { if (typeof idbPut === 'function') idbPut('app-critical-backup', s).catch(function(){}); } catch(e){}
   } catch (e) { /* ignore */ }
 }
 /* True only if this browser actually persists localStorage. False in Private Browsing or when
@@ -15460,6 +15644,7 @@ function render() {
   // Refresh the persistent floating mini-player (lives outside #app so it survives renders)
   if (typeof updateFloatingPlayer === 'function') updateFloatingPlayer();
   if (typeof updateResumeFab === 'function') updateResumeFab();
+  if (typeof updateBackFab === 'function') updateBackFab();
   // Start the quiz timer ticker if needed
   if (typeof startQuizTimerTicker === 'function') startQuizTimerTicker();
   // Restore last visited Teaching scroll position if applicable
@@ -17884,6 +18069,11 @@ function applyExtraQuiz() {
 }
 
 function renderSlideStage(slides) {
+  // Wrapped in a stable #slide-stage container so slide navigation can update JUST this block
+  // in place (see updateSlideStageInPlace) — no full app re-render, so the page never jumps.
+  return `<div id="slide-stage">${renderSlideStageInner(slides)}</div>`;
+}
+function renderSlideStageInner(slides) {
   const idx = Math.max(0, Math.min(state.slideIndex || 0, slides.length - 1));
   const s = slides[idx];
   return `
@@ -17898,6 +18088,16 @@ function renderSlideStage(slides) {
       <button class="btn btn-ghost btn-sm" data-action="slide-next">Next →</button>
     </div>
   `;
+}
+/* Update only the slide block — keeps scroll position exactly where it is. */
+function updateSlideStageInPlace() {
+  try {
+    const c = CONTENT[state.selectedWeek];
+    const slides = (c && c.slides) || [];
+    const stage = document.getElementById('slide-stage');
+    if (stage && slides.length) { stage.innerHTML = renderSlideStageInner(slides); return true; }
+  } catch (e) {}
+  return false;
 }
 
 /* ---------- KEY POINTS TAB ---------- */
@@ -19308,26 +19508,22 @@ const TTS_CACHE = new Map(); // key: provider|speaker|text → Blob URL
 // OpenAI — switched to gpt-4o-mini-tts (much more natural than tts-1-hd) with
 // 9 voice options. "ash" and "ballad" are the most human-sounding.
 const OPENAI_VOICES = { host: 'shimmer', cohost: 'echo' };
+// IMPORTANT: these instructions are deliberately identity- and gender-NEUTRAL. gpt-4o-mini-tts
+// blends the `voice` parameter with `instructions`; naming a specific gender/persona here made the
+// model fight the user's chosen voice and drift from turn to turn (voices "changing"). Now the
+// chosen `voice` fully controls the timbre and stays consistent; instructions only shape delivery.
 const OPENAI_STYLE = {
   host: [
-    "Identity: Dr. Elena Marchetti — warm, intelligent female attending physician on a popular medical podcast.",
-    "Voice & timbre: rich, lively, mid-pitched, naturally slightly breathy. Sounds like a real person talking to a friend across the kitchen table — never a narrator.",
-    "Pacing: conversational, never rushed. Slow down and emphasize key clinical terms, speed up on connecting phrases. Use micro-pauses (about 250 ms) after periods and gentle longer pauses (about 500 ms) at paragraph turns.",
-    "Prosody: vary pitch and stress to sound spontaneous. Lift slightly at questions, dip slightly at conclusions. Sentence-final pitch should DESCEND naturally — never flat.",
-    "Disfluencies: a barely-audible breath at sentence starts is welcome. Avoid filler words.",
-    "Mood: confident, engaged, occasionally amused or earnestly curious — exactly the energy of NotebookLM Deep Dive or Hidden Brain hosts.",
-    "Forbidden: monotone delivery, robotic chunking, news-anchor cadence, AI assistant tone, fake-enthusiastic ad-read tone.",
-    "Accent: educated American English. Crisp consonants. Medical terms pronounced confidently."
+    "Role: the lead host of a warm, intelligent medical podcast — natural and conversational, like talking with a colleague across a table, never a narrator.",
+    "Keep the voice steady and consistent from start to finish. Moderate pace; slow down and stress key clinical terms, brief natural pauses at sentence ends.",
+    "Vary pitch so it sounds spontaneous; let sentence-final pitch descend naturally. Educated American English, crisp consonants, medical terms said confidently.",
+    "Avoid monotone, robotic chunking, news-anchor cadence, and any AI-assistant tone."
   ].join(' '),
   cohost: [
-    "Identity: Dr. Marcus Chen — thoughtful, slightly younger male senior resident, podcast co-host.",
-    "Voice & timbre: warm, lower-mid pitch, slightly resonant. Real human conversational quality.",
-    "Pacing: relaxed and reflective. Add small thoughtful pauses (about 300 ms) before key answers to suggest actively thinking, not reading.",
-    "Prosody: naturally exploratory — rising contours when posing follow-ups, falling on definitive statements. Vary speed within sentences.",
-    "Disfluencies: an occasional soft 'mm-hm' or 'right' tone before clarifying is fine. Avoid filler words.",
-    "Mood: engaged, genuinely curious, occasionally lightly amused. Sounds like he's enjoying the conversation.",
-    "Forbidden: monotone, news-anchor delivery, AI assistant cadence, over-emphatic word stress.",
-    "Accent: educated American English. Medical terminology spoken confidently and naturally."
+    "Role: the co-host of the same warm medical podcast — thoughtful and genuinely curious, in relaxed back-and-forth with the host.",
+    "Keep the voice steady and consistent from start to finish. Reflective pace with small natural pauses before key points.",
+    "Rising contours on follow-up questions, falling on definitive statements. Educated American English, medical terms said naturally and confidently.",
+    "Avoid monotone, news-anchor delivery, and any AI-assistant cadence."
   ].join(' ')
 };
 
@@ -19365,11 +19561,19 @@ async function openaiTtsBlobUrl(speakerId, text) {
     })
   });
   if (!resp.ok) {
-    // Fall back to tts-1-hd for accounts without gpt-4o-mini-tts access yet
+    // Fall back to tts-1-hd for accounts without gpt-4o-mini-tts access yet.
+    // tts-1-hd only supports the 6 classic voices, so map the chosen voice to its NEAREST
+    // classic voice. This keeps a fallback turn sounding like the same person as the
+    // gpt-4o-mini-tts turns — otherwise the podcast voice would switch mid-episode.
+    const TTS1HD_NEAREST = {
+      shimmer:'shimmer', nova:'nova', coral:'nova', sage:'shimmer', alloy:'alloy',
+      echo:'echo', onyx:'onyx', ash:'onyx', ballad:'onyx', fable:'fable'
+    };
+    const fbVoice = TTS1HD_NEAREST[voice] || (['alloy','echo','fable','onyx','nova','shimmer'].indexOf(voice) >= 0 ? voice : 'onyx');
     const fallback = await fetch('https://api.openai.com/v1/audio/speech', {
       method: 'POST',
       headers: { 'authorization': 'Bearer ' + state.openaiKey, 'content-type': 'application/json' },
-      body: JSON.stringify({ model: 'tts-1-hd', voice: voice === 'ballad' ? 'nova' : voice === 'ash' ? 'onyx' : voice, input: inputText, response_format: 'mp3', speed: 1.0 })
+      body: JSON.stringify({ model: 'tts-1-hd', voice: fbVoice, input: inputText, response_format: 'mp3', speed: 1.0 })
     });
     if (!fallback.ok) {
       const err = await fallback.text();
@@ -20538,6 +20742,211 @@ const ANATOMY_SVG = {
     <text x="68" y="262" font-size="11" font-weight="700" fill="#dc2626">mediastinitis: 20–40%</text>
   </svg>`,
 
+  /* ============== DEEP NECK SPACES — AXIAL SECTION ============== */
+  deepNeckAxial: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 520" style="background:#fdfbf7;">
+    <text x="250" y="22" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#0f172a">Deep Neck Spaces — Axial Section (oropharyngeal level)</text>
+    <text x="250" y="37" text-anchor="middle" font-size="9.5" fill="#64748b">Anterior ↑ · Posterior ↓ · patient's right = image left</text>
+    <!-- Investing (superficial) layer of deep cervical fascia — encircles the whole neck -->
+    <ellipse cx="250" cy="250" rx="205" ry="172" fill="#ecfdf5" stroke="#10b981" stroke-width="2.5" stroke-dasharray="8,4"/>
+    <!-- Masticator space (anterolateral) — muscles of mastication + mandibular ramus (CN V3) -->
+    <rect x="300" y="96" width="96" height="66" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.6" transform="rotate(18 348 129)"/>
+    <text x="352" y="126" text-anchor="middle" font-size="9" font-weight="700" fill="#6d28d9" transform="rotate(18 352 126)">Masticator</text>
+    <text x="352" y="138" text-anchor="middle" font-size="8" fill="#6d28d9" transform="rotate(18 352 138)">(V3, mandible)</text>
+    <rect x="104" y="96" width="96" height="66" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.6" transform="rotate(-18 152 129)"/>
+    <text x="148" y="126" text-anchor="middle" font-size="9" font-weight="700" fill="#6d28d9" transform="rotate(-18 148 126)">Masticator</text>
+    <!-- Pharyngeal mucosal / visceral space wrapped by middle (visceral) fascia -->
+    <ellipse cx="250" cy="212" rx="70" ry="56" fill="#fde6cf" stroke="#b45309" stroke-width="2"/>
+    <ellipse cx="250" cy="210" rx="36" ry="30" fill="#ffffff" stroke="#9a3412" stroke-width="1.4"/>
+    <text x="250" y="206" text-anchor="middle" font-size="9" fill="#9a3412">airway</text>
+    <text x="250" y="255" text-anchor="middle" font-size="9" font-weight="700" fill="#b45309">Pharynx (visceral space)</text>
+    <!-- Parapharyngeal spaces (fat) — lateral to pharynx, split by styloid into pre-/post-styloid -->
+    <polygon points="150,168 196,150 205,238 150,250" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+    <polygon points="350,168 304,150 295,238 350,250" fill="#fef9c3" stroke="#ca8a04" stroke-width="1.5"/>
+    <text x="176" y="150" text-anchor="middle" font-size="8.5" font-weight="700" fill="#a16207">Parapharyngeal</text>
+    <text x="176" y="140" text-anchor="middle" font-size="8" fill="#a16207">(prestyloid = fat)</text>
+    <circle cx="182" cy="212" r="5" fill="#94a3b8" stroke="#475569"/><text x="182" y="228" text-anchor="middle" font-size="7.5" fill="#475569">styloid</text>
+    <!-- Carotid sheath (poststyloid compartment) — its own fascia from all 3 layers -->
+    <circle cx="150" cy="252" r="30" fill="#fee2e2" stroke="#b91c1c" stroke-width="2"/>
+    <circle cx="143" cy="246" r="9" fill="#dc2626"/><text x="143" y="249" text-anchor="middle" font-size="7" fill="#fff" font-weight="700">ICA</text>
+    <circle cx="162" cy="258" r="11" fill="#2563eb"/><text x="162" y="261" text-anchor="middle" font-size="7" fill="#fff" font-weight="700">IJV</text>
+    <circle cx="150" cy="266" r="4" fill="#f59e0b"/>
+    <text x="150" y="252" text-anchor="middle" font-size="7.5" fill="#7f1d1d" font-weight="700"> </text>
+    <text x="86" y="300" text-anchor="middle" font-size="8.5" font-weight="700" fill="#b91c1c">Carotid sheath</text>
+    <text x="86" y="311" text-anchor="middle" font-size="7.5" fill="#b91c1c">ICA·IJV·X + CN IX–XII</text>
+    <!-- Parotid space (lateral) -->
+    <ellipse cx="92" cy="220" rx="26" ry="40" fill="#fde68a" opacity="0.6" stroke="#ca8a04" stroke-width="1.4"/>
+    <text x="92" y="222" text-anchor="middle" font-size="8.5" font-weight="700" fill="#a16207" transform="rotate(-90 92 222)">Parotid</text>
+    <!-- Retropharyngeal / danger / prevertebral — stacked posterior bands -->
+    <rect x="150" y="288" width="200" height="16" fill="#fbbf24" stroke="#b45309" stroke-width="1.2"/>
+    <text x="250" y="300" text-anchor="middle" font-size="9" font-weight="700" fill="#7c2d12">Retropharyngeal (skull base → T2)</text>
+    <line x1="150" y1="305" x2="350" y2="305" stroke="#dc2626" stroke-width="1.6" stroke-dasharray="5,3"/>
+    <text x="356" y="309" font-size="7.5" fill="#dc2626" font-weight="700">alar fascia</text>
+    <rect x="150" y="306" width="200" height="15" fill="#fecaca" stroke="#dc2626" stroke-width="1.2"/>
+    <text x="250" y="317" text-anchor="middle" font-size="8.5" font-weight="700" fill="#7f1d1d">⚠ Danger space → mediastinum → diaphragm</text>
+    <line x1="150" y1="322" x2="350" y2="322" stroke="#1f2937" stroke-width="1.6"/>
+    <text x="356" y="326" font-size="7.5" fill="#1f2937" font-weight="700">prevertebral fascia</text>
+    <rect x="160" y="323" width="180" height="14" fill="#e5e7eb" stroke="#64748b" stroke-width="1.1"/>
+    <text x="250" y="334" text-anchor="middle" font-size="8.5" font-weight="700" fill="#334155">Prevertebral space</text>
+    <!-- Vertebral body -->
+    <rect x="200" y="340" width="100" height="52" rx="14" fill="#cbd5e1" stroke="#475569" stroke-width="1.5"/>
+    <text x="250" y="370" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">Vertebral body</text>
+    <!-- Legend -->
+    <g font-family="ui-sans-serif, system-ui, sans-serif">
+      <rect x="30" y="410" width="440" height="98" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+      <rect x="42" y="420" width="14" height="11" fill="#ecfdf5" stroke="#10b981" stroke-dasharray="4,2"/><text x="62" y="429" font-size="9.5" fill="#0f172a">Investing (superficial) fascia — encircles neck</text>
+      <rect x="42" y="438" width="14" height="11" fill="#fde6cf" stroke="#b45309"/><text x="62" y="447" font-size="9.5" fill="#0f172a">Middle (visceral/pretracheal) fascia — pharynx, trachea, esophagus, thyroid</text>
+      <rect x="42" y="456" width="14" height="11" fill="#e5e7eb" stroke="#64748b"/><text x="62" y="465" font-size="9.5" fill="#0f172a">Deep (prevertebral) fascia — over vertebral column + deep muscles</text>
+      <rect x="42" y="474" width="14" height="11" fill="#fecaca" stroke="#dc2626"/><text x="62" y="483" font-size="9.5" fill="#0f172a"><tspan font-weight="700" fill="#b91c1c">Danger space</tspan> lies between alar &amp; prevertebral fascia → descending mediastinitis</text>
+      <rect x="42" y="492" width="14" height="11" fill="#fef9c3" stroke="#ca8a04"/><text x="62" y="501" font-size="9.5" fill="#0f172a">Parapharyngeal fat — prestyloid (fat) vs poststyloid (carotid sheath, CN IX–XII)</text>
+    </g>
+  </svg>`,
+
+  /* ============== CAROTID SHEATH — CROSS SECTION ============== */
+  carotidSheath: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 410" style="background:#fdfbf7;">
+    <text x="230" y="24" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#0f172a">Carotid Sheath — Cross Section</text>
+    <text x="230" y="40" text-anchor="middle" font-size="9.5" fill="#64748b">"Lincoln's highway": continuous skull base → mediastinum</text>
+    <!-- Sheath (contributions from all 3 fascial layers) -->
+    <circle cx="230" cy="205" r="112" fill="#fee2e2" stroke="#b91c1c" stroke-width="2.5" stroke-dasharray="9,4"/>
+    <text x="230" y="108" text-anchor="middle" font-size="10" font-weight="700" fill="#b91c1c">Carotid sheath (fibrous)</text>
+    <!-- Internal carotid artery (medial/anteromedial) -->
+    <circle cx="197" cy="188" r="40" fill="#dc2626" stroke="#7f1d1d" stroke-width="2"/>
+    <text x="197" y="185" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">ICA</text>
+    <text x="197" y="199" text-anchor="middle" font-size="8" fill="#fff">(medial)</text>
+    <!-- Internal jugular vein (lateral) -->
+    <circle cx="276" cy="194" r="48" fill="#2563eb" stroke="#1e3a8a" stroke-width="2"/>
+    <text x="276" y="191" text-anchor="middle" font-size="11" font-weight="700" fill="#fff">IJV</text>
+    <text x="276" y="205" text-anchor="middle" font-size="8" fill="#fff">(lateral)</text>
+    <!-- Vagus nerve — posterior, in the groove between artery and vein -->
+    <circle cx="234" cy="250" r="15" fill="#f59e0b" stroke="#92400e" stroke-width="1.8"/>
+    <text x="234" y="254" text-anchor="middle" font-size="9" font-weight="700" fill="#fff">X</text>
+    <!-- Sympathetic chain — OUTSIDE / posteromedial to sheath, in prevertebral fascia -->
+    <circle cx="150" cy="300" r="11" fill="#7c3aed" stroke="#4c1d95" stroke-width="1.6"/>
+    <line x1="161" y1="296" x2="192" y2="268" stroke="#7c3aed" stroke-width="1.3" stroke-dasharray="3,2"/>
+    <!-- Labels (kept inside the frame) -->
+    <g font-size="10" font-family="ui-sans-serif, system-ui, sans-serif" fill="#0f172a">
+      <line x1="170" y1="155" x2="120" y2="132" stroke="#7f1d1d" stroke-width="1"/><text x="116" y="128" text-anchor="end" font-weight="700" fill="#b91c1c">Internal carotid a.</text>
+      <line x1="312" y1="165" x2="352" y2="140" stroke="#1e3a8a" stroke-width="1"/><text x="356" y="136" font-weight="700" fill="#1e40af">Internal jugular v.</text>
+      <line x1="248" y1="260" x2="322" y2="300" stroke="#92400e" stroke-width="1"/><text x="326" y="304" font-weight="700" fill="#92400e">Vagus (X)</text>
+      <text x="326" y="317" font-size="8.5" fill="#92400e">groove between vessels</text>
+      <text x="150" y="330" text-anchor="middle" font-size="9" font-weight="700" fill="#6d28d9">Sympathetic chain</text>
+      <text x="150" y="343" text-anchor="middle" font-size="8" fill="#6d28d9">(OUTSIDE sheath, prevertebral fascia)</text>
+    </g>
+    <text x="230" y="392" text-anchor="middle" font-size="9.5" font-style="italic" fill="#334155">Poststyloid injury → CN IX–XII palsies + Horner syndrome</text>
+  </svg>`,
+
+  /* ============== MYLOHYOID LINE — LUDWIG'S MECHANISM ============== */
+  mylohyoidLudwig: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 400" style="background:#fdfbf7;">
+    <text x="230" y="24" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#0f172a">Mylohyoid Line — Why Molars Seed Ludwig's</text>
+    <text x="230" y="40" text-anchor="middle" font-size="9.5" fill="#64748b">Coronal section through the mandibular molar region</text>
+    <!-- Tongue (medial-superior) -->
+    <path d="M 70 150 Q 150 110 210 150 Q 200 205 135 210 Q 80 205 70 150 Z" fill="#fecdd3" stroke="#be123c" stroke-width="1.4"/>
+    <text x="135" y="170" text-anchor="middle" font-size="10" font-weight="700" fill="#9f1239">Tongue</text>
+    <!-- Mandible body cross-section (lateral) -->
+    <path d="M 320 120 Q 372 128 372 200 Q 372 262 316 268 Q 300 232 306 176 Q 310 138 320 120 Z" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+    <text x="345" y="205" text-anchor="middle" font-size="9" font-weight="700" fill="#475569" transform="rotate(90 345 205)">Mandible</text>
+    <!-- Molar tooth sitting on the mandible, roots pointing down into bone -->
+    <rect x="322" y="92" width="34" height="26" rx="5" fill="#fffbeb" stroke="#a16207" stroke-width="1.4"/>
+    <path d="M 328 118 L 324 176 M 350 118 L 354 178" stroke="#a16207" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <text x="339" y="86" text-anchor="middle" font-size="8.5" font-weight="700" fill="#a16207">2nd / 3rd molar</text>
+    <circle cx="354" cy="180" r="4" fill="#dc2626"/><text x="348" y="176" text-anchor="end" font-size="8" font-weight="700" fill="#dc2626">apex</text>
+    <!-- Mylohyoid line + muscle sling: mandible → midline -->
+    <line x1="316" y1="196" x2="315" y2="196" stroke="#000" stroke-width="1"/>
+    <path d="M 315 190 Q 200 232 78 236" fill="none" stroke="#7c3aed" stroke-width="4"/>
+    <circle cx="315" cy="190" r="4" fill="#7c3aed"/>
+    <text x="250" y="222" text-anchor="middle" font-size="9" font-weight="700" fill="#6d28d9" transform="rotate(-9 250 222)">Mylohyoid muscle (from mylohyoid line)</text>
+    <!-- Sublingual space (ABOVE mylohyoid) -->
+    <text x="205" y="150" text-anchor="middle" font-size="9.5" font-weight="700" fill="#0369a1">Sublingual space</text>
+    <text x="205" y="163" text-anchor="middle" font-size="8" fill="#0369a1">(above mylohyoid)</text>
+    <!-- Submandibular space (BELOW mylohyoid) -->
+    <path d="M 120 250 Q 230 250 320 260 Q 300 320 210 326 Q 130 322 120 250 Z" fill="#dbeafe" opacity="0.55" stroke="#2563eb" stroke-width="1.3" stroke-dasharray="4,3"/>
+    <text x="215" y="290" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1e40af">Submandibular space</text>
+    <text x="215" y="303" text-anchor="middle" font-size="8" fill="#1e40af">(below mylohyoid) → Ludwig's</text>
+    <!-- Rule box -->
+    <g font-family="ui-sans-serif, system-ui, sans-serif">
+      <rect x="26" y="344" width="408" height="46" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="36" y="361" font-size="9" fill="#0f172a"><tspan font-weight="700" fill="#0369a1">Roots ABOVE line</tspan> (incisors, canine, 1st molar) → sublingual space.</text>
+      <text x="36" y="377" font-size="9" fill="#0f172a"><tspan font-weight="700" fill="#1e40af">Roots BELOW line</tspan> (2nd &amp; 3rd molars) → submandibular → Ludwig's angina.</text>
+    </g>
+  </svg>`,
+
+  /* ============== LARYNGEAL FRAMEWORK + CRICOTHYROID MEMBRANE ============== */
+  larynxFramework: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 470" style="background:#fdfbf7;">
+    <text x="240" y="22" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#0f172a">Laryngeal Framework — Anterior View</text>
+    <text x="240" y="37" text-anchor="middle" font-size="9.5" fill="#64748b">Palpable landmarks for the emergency surgical airway</text>
+    <!-- Hyoid bone -->
+    <path d="M 118 58 Q 190 44 262 58 Q 254 72 190 68 Q 126 72 118 58 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="1.6"/>
+    <text x="190" y="63" text-anchor="middle" font-size="9" font-weight="700" fill="#475569">Hyoid bone</text>
+    <!-- Thyrohyoid membrane -->
+    <rect x="150" y="70" width="80" height="24" fill="#fef3c7" stroke="#ca8a04" stroke-width="1" stroke-dasharray="3,2"/>
+    <text x="190" y="86" text-anchor="middle" font-size="7.5" fill="#a16207">thyrohyoid membrane</text>
+    <!-- Superior cornua of thyroid -->
+    <path d="M 150 100 L 142 74" stroke="#64748b" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 230 100 L 238 74" stroke="#64748b" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- Thyroid cartilage (shield) with superior notch + laryngeal prominence -->
+    <path d="M 150 100 L 184 97 L 190 116 L 196 97 L 230 100 Q 254 150 246 214 L 134 214 Q 126 150 150 100 Z" fill="#e5e7eb" stroke="#475569" stroke-width="2"/>
+    <line x1="190" y1="116" x2="190" y2="210" stroke="#94a3b8" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="190" y="165" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">Thyroid</text>
+    <text x="190" y="178" text-anchor="middle" font-size="10" font-weight="700" fill="#334155">cartilage</text>
+    <!-- Inferior cornua -->
+    <path d="M 140 214 L 138 236" stroke="#64748b" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <path d="M 240 214 L 242 236" stroke="#64748b" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- Cricothyroid membrane (THE landmark) -->
+    <path d="M 158 216 L 222 216 L 206 250 L 174 250 Z" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+    <!-- Cricoid cartilage (arch anteriorly) -->
+    <path d="M 150 252 Q 190 244 230 252 Q 238 280 230 300 L 150 300 Q 142 280 150 252 Z" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+    <text x="190" y="282" text-anchor="middle" font-size="9" font-weight="700" fill="#334155">Cricoid</text>
+    <!-- Tracheal rings -->
+    <g fill="#eef2f7" stroke="#64748b" stroke-width="1.4">
+      <path d="M 156 312 Q 190 306 224 312 Q 190 322 156 312 Z"/>
+      <path d="M 156 328 Q 190 322 224 328 Q 190 338 156 328 Z"/>
+      <path d="M 156 344 Q 190 338 224 344 Q 190 354 156 344 Z"/>
+      <path d="M 156 360 Q 190 354 224 360 Q 190 370 156 360 Z"/>
+    </g>
+    <text x="240" y="345" font-size="9" font-weight="700" fill="#475569">Tracheal rings</text>
+    <!-- Labels / leaders -->
+    <g font-size="9.5" font-family="ui-sans-serif, system-ui, sans-serif" fill="#0f172a">
+      <line x1="196" y1="116" x2="300" y2="120" stroke="#334155" stroke-width="1"/><text x="304" y="116" font-weight="700" fill="#334155">Laryngeal prominence</text><text x="304" y="128" font-size="8" fill="#64748b">(thyroid notch — "Adam's apple")</text>
+      <line x1="222" y1="232" x2="300" y2="210" stroke="#dc2626" stroke-width="1"/><text x="304" y="206" font-weight="700" fill="#b91c1c">Cricothyroid membrane</text><text x="304" y="218" font-size="8" fill="#b91c1c">← cricothyrotomy incision site</text>
+      <line x1="230" y1="276" x2="300" y2="286" stroke="#475569" stroke-width="1"/><text x="304" y="284" font-weight="700" fill="#334155">Cricoid cartilage</text><text x="304" y="296" font-size="8" fill="#64748b">only complete tracheal ring</text>
+    </g>
+    <text x="240" y="452" text-anchor="middle" font-size="9.5" font-style="italic" fill="#334155">Emergency: palpate thyroid notch, slide to the soft cricothyroid membrane, incise.</text>
+  </svg>`,
+
+  /* ============== LARYNX — ENDOSCOPIC (LARYNGOSCOPIC) VIEW ============== */
+  larynxEndoscopic: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 420" style="background:#fdfbf7;">
+    <text x="240" y="22" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#0f172a">Larynx — Endoscopic View (abducted)</text>
+    <text x="240" y="37" text-anchor="middle" font-size="9.5" fill="#64748b">Anterior (epiglottis) ↑ · Posterior (arytenoids) ↓</text>
+    <!-- Laryngeal inlet / surrounding mucosa -->
+    <ellipse cx="190" cy="222" rx="150" ry="165" fill="#fecdd3" stroke="#be123c" stroke-width="1.5"/>
+    <!-- Epiglottis (anterior, top) -->
+    <path d="M 130 78 Q 190 52 250 78 Q 230 120 190 122 Q 150 120 130 78 Z" fill="#fca5a5" stroke="#b91c1c" stroke-width="1.4"/>
+    <text x="190" y="96" text-anchor="middle" font-size="9.5" font-weight="700" fill="#7f1d1d">Epiglottis</text>
+    <!-- Vestibular (false) folds -->
+    <path d="M 150 140 Q 120 230 150 320 L 172 316 Q 150 230 172 150 Z" fill="#f9a8d4" opacity="0.8" stroke="#be185d" stroke-width="1"/>
+    <path d="M 230 140 Q 260 230 230 320 L 208 316 Q 230 230 208 150 Z" fill="#f9a8d4" opacity="0.8" stroke="#be185d" stroke-width="1"/>
+    <!-- True vocal folds (pearly white) converging at anterior commissure -->
+    <path d="M 190 138 L 176 316 L 186 320 L 190 150 Z" fill="#fafafa" stroke="#9ca3af" stroke-width="1.2"/>
+    <path d="M 190 138 L 204 316 L 194 320 L 190 150 Z" fill="#fafafa" stroke="#9ca3af" stroke-width="1.2"/>
+    <!-- Glottis (rima glottidis) — the airway, dark -->
+    <polygon points="190,150 178,314 202,314" fill="#1f2937"/>
+    <!-- Arytenoid cartilages (posterior, bottom) -->
+    <ellipse cx="176" cy="330" rx="16" ry="13" fill="#e5e7eb" stroke="#475569" stroke-width="1.3"/>
+    <ellipse cx="204" cy="330" rx="16" ry="13" fill="#e5e7eb" stroke="#475569" stroke-width="1.3"/>
+    <!-- Piriform sinuses (lateral recesses) -->
+    <path d="M 78 210 Q 96 260 120 300" fill="none" stroke="#be123c" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <path d="M 302 210 Q 284 260 260 300" fill="none" stroke="#be123c" stroke-width="1.2" stroke-dasharray="4,3"/>
+    <!-- Labels -->
+    <g font-size="9.5" font-family="ui-sans-serif, system-ui, sans-serif" fill="#0f172a">
+      <line x1="190" y1="150" x2="300" y2="150" stroke="#374151" stroke-width="1"/><text x="304" y="147" font-weight="700" fill="#111827">Anterior commissure</text>
+      <line x1="196" y1="230" x2="306" y2="230" stroke="#6b7280" stroke-width="1"/><text x="310" y="227" font-weight="700" fill="#374151">True vocal fold</text>
+      <line x1="196" y1="230" x2="306" y2="230" stroke="none"/><text x="310" y="239" font-size="8" fill="#6b7280">(glottis = airway between)</text>
+      <line x1="234" y1="200" x2="300" y2="185" stroke="#be185d" stroke-width="1"/><text x="304" y="183" font-weight="700" fill="#9d174d">False (vestibular) fold</text>
+      <line x1="204" y1="336" x2="300" y2="356" stroke="#475569" stroke-width="1"/><text x="304" y="358" font-weight="700" fill="#334155">Arytenoids</text>
+      <text x="70" y="330" text-anchor="middle" font-size="8.5" font-weight="700" fill="#be123c">Piriform</text>
+      <text x="70" y="342" text-anchor="middle" font-size="8.5" font-weight="700" fill="#be123c">sinus</text>
+    </g>
+  </svg>`,
+
   /* ============== TRIGEMINAL NERVE — FACE DISTRIBUTION ============== */
   trigeminalDistribution: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 420" style="background:#fdfbf7;">
     <text x="180" y="22" text-anchor="middle" font-family="Georgia, serif" font-size="15" font-weight="600" fill="#0f172a">Trigeminal Nerve — Sensory Distribution</text>
@@ -20823,9 +21232,12 @@ const CHAPTER_IMAGES = {
   // Unit 3 — Anesthesia & Difficult Airway (Ch 6)
   3: {
     anatomy: [
+      { svg: 'larynxFramework', caption: 'Laryngeal cartilage framework + cricothyroid membrane (surgical airway landmark)', credit: 'Diagram · ENT Academy' },
+      { svg: 'larynxEndoscopic', caption: 'Endoscopic laryngeal view — vocal folds, glottis, arytenoids', credit: 'Diagram · ENT Academy' },
       { svg: 'mallampati', caption: 'Mallampati classes I–IV', credit: 'Diagram · ENT Academy' },
       { svg: 'difficultAirwayAlgo', caption: 'Difficult airway algorithm (simplified ASA)', credit: 'Diagram · ENT Academy' },
-      { svg: 'tracheostomyAnatomy', caption: 'Cricothyroid membrane + tracheal anatomy', credit: 'Diagram · ENT Academy' }
+      { svg: 'tracheostomyAnatomy', caption: 'Cricothyroid membrane + tracheal anatomy', credit: 'Diagram · ENT Academy' },
+      { url: 'https://www.kenhub.com/en/library/anatomy/the-larynx', caption: 'Kenhub · Larynx anatomy (cartilages, membranes, muscles)', credit: 'Kenhub' }
     ],
     radiology: [
       { url: 'https://commons.wikimedia.org/wiki/File:Macintosh_laryngoscopy.jpg', caption: 'Macintosh laryngoscopy view (Cormack-Lehane Grade 1)', credit: 'Wikimedia Commons · CC' },
@@ -20839,7 +21251,9 @@ const CHAPTER_IMAGES = {
   // Unit 4 — Tracheotomy (Ch 7)
   4: {
     anatomy: [
-      { svg: 'tracheostomyAnatomy', caption: 'Tracheostomy window between rings 2–3', credit: 'Diagram · ENT Academy' }
+      { svg: 'larynxFramework', caption: 'Laryngeal framework — thyroid, cricoid, cricothyroid membrane, tracheal rings', credit: 'Diagram · ENT Academy' },
+      { svg: 'tracheostomyAnatomy', caption: 'Tracheostomy window between rings 2–3', credit: 'Diagram · ENT Academy' },
+      { url: 'https://radiopaedia.org/articles/tracheostomy', caption: 'Radiopaedia · Tracheostomy — imaging & complications', credit: 'Radiopaedia · CC BY-NC-SA' }
     ]
   },
   // Unit 5 — Imaging (Ch 8) — placeholder, no specific SVG needed
@@ -20851,16 +21265,27 @@ const CHAPTER_IMAGES = {
   // Unit 6 — Deep neck infections (Ch 9)
   6: {
     anatomy: [
-      { svg: 'fascialSpaces', caption: 'Deep neck fascial spaces — danger space to mediastinum', credit: 'Diagram · ENT Academy' },
-      { svg: 'necktriangles', caption: 'Anterior + posterior triangles (drainage approaches)', credit: 'Diagram · ENT Academy' }
+      { svg: 'deepNeckAxial', caption: 'Axial deep neck spaces + 3 fascial layers (oropharyngeal level)', credit: 'Diagram · ENT Academy' },
+      { svg: 'fascialSpaces', caption: 'Sagittal — retropharyngeal & danger space, skull base → diaphragm', credit: 'Diagram · ENT Academy' },
+      { svg: 'carotidSheath', caption: 'Carotid sheath cross-section (ICA · IJV · vagus · sympathetic chain)', credit: 'Diagram · ENT Academy' },
+      { svg: 'mylohyoidLudwig', caption: "Mylohyoid line — why 2nd/3rd molars seed Ludwig's angina", credit: 'Diagram · ENT Academy' },
+      { svg: 'necktriangles', caption: 'Anterior + posterior triangles (drainage approaches)', credit: 'Diagram · ENT Academy' },
+      { url: 'https://www.kenhub.com/en/library/anatomy/the-deep-cervical-fascia', caption: 'Kenhub · Deep cervical fascia & neck spaces (labeled atlas)', credit: 'Kenhub' },
+      { url: 'https://teachmeanatomy.info/neck/misc/fascial-compartments-of-the-neck/', caption: 'TeachMeAnatomy · Fascial compartments of the neck', credit: 'TeachMeAnatomy' }
     ],
     radiology: [
-      { url: 'https://radiopaedia.org/articles/retropharyngeal-abscess', caption: 'Radiopaedia · Retropharyngeal abscess on CT', credit: 'Radiopaedia · CC BY-NC-SA' },
-      { url: 'https://radiopaedia.org/articles/ludwigs-angina', caption: 'Radiopaedia · Ludwig\'s angina imaging review', credit: 'Radiopaedia · CC BY-NC-SA' },
-      { url: 'https://radiopaedia.org/articles/lemierre-syndrome', caption: 'Radiopaedia · Lemierre syndrome (IJV thrombosis + septic emboli)', credit: 'Radiopaedia · CC BY-NC-SA' }
+      { url: 'https://radiopaedia.org/articles/retropharyngeal-abscess', caption: 'Radiopaedia · Retropharyngeal abscess on CT (rim-enhancing collection)', credit: 'Radiopaedia · CC BY-NC-SA' },
+      { url: 'https://radiopaedia.org/articles/parapharyngeal-abscess', caption: 'Radiopaedia · Parapharyngeal space abscess', credit: 'Radiopaedia · CC BY-NC-SA' },
+      { url: 'https://radiopaedia.org/articles/ludwigs-angina', caption: "Radiopaedia · Ludwig's angina imaging", credit: 'Radiopaedia · CC BY-NC-SA' },
+      { url: 'https://radiopaedia.org/articles/lemierre-syndrome', caption: 'Radiopaedia · Lemierre syndrome (IJV thrombus + septic pulmonary emboli)', credit: 'Radiopaedia · CC BY-NC-SA' },
+      { url: 'https://radiopaedia.org/articles/descending-necrotising-mediastinitis', caption: 'Radiopaedia · Descending necrotising mediastinitis', credit: 'Radiopaedia · CC BY-NC-SA' }
+    ],
+    pathology: [
+      { url: 'https://www.pathologyoutlines.com/topic/softtissuenecrotizingfasciitis.html', caption: 'PathologyOutlines · Necrotizing fasciitis (polymicrobial)', credit: 'PathologyOutlines' }
     ],
     clinical: [
-      { url: 'https://www.google.com/search?tbm=isch&q=ludwig+angina+clinical+photo', caption: 'Ludwig\'s angina clinical photos (Google Images)', credit: 'External search' }
+      { url: 'https://www.google.com/search?tbm=isch&q=ludwig+angina+floor+of+mouth+clinical', caption: "Ludwig's angina — elevated woody floor of mouth (clinical photos)", credit: 'External search' },
+      { url: 'https://www.google.com/search?tbm=isch&q=trismus+parapharyngeal+abscess', caption: 'Trismus & medial tonsillar bulge — parapharyngeal abscess', credit: 'External search' }
     ]
   },
   // Unit 7 — Immunocompromised (Ch 10)
@@ -23972,12 +24397,20 @@ function safeScrollTo(targetY) {
    scroll fires before layout settles and lands short, which is why "Open podcast" missed it. */
 function scrollToSectionWhenReady(id, opts) {
   opts = opts || {};
-  let tries = 0;
+  // Clear any sticky top chrome so the section header isn't hidden under it after the jump.
+  const topOffset = (window.innerWidth <= 980 ? -64 : -14);
+  let tries = 0, lastY = -1, settled = 0;
   const go = () => {
     const el = document.getElementById(id);
-    if (el) { try { safeScrollIntoView(el, { block: 'start', offset: opts.offset ?? -6 }); } catch(e){ try { el.scrollIntoView(); } catch(_){} } }
+    if (el) {
+      try { safeScrollIntoView(el, { block: 'start', offset: opts.offset ?? topOffset }); }
+      catch(e){ try { el.scrollIntoView(); } catch(_){} }
+      // Stop early once the target position stops moving (layout has settled).
+      const y = Math.round(window.scrollY || document.documentElement.scrollTop || 0);
+      if (y === lastY) { settled++; if (settled >= 2) return; } else { settled = 0; lastY = y; }
+    }
     tries++;
-    if (tries < 5) setTimeout(go, 130); // re-aim a few times over ~650ms as content settles
+    if (tries < 9) setTimeout(go, 120); // re-aim as the image-heavy tab finishes laying out (~1s)
   };
   requestAnimationFrame(() => requestAnimationFrame(go));
 }
@@ -24002,6 +24435,42 @@ function safeScrollIntoView(el, opts = {}) {
   }
 }
 
+/* ---------------- BACK NAVIGATION ---------------- */
+/* A lightweight view-history stack so the user can step back one screen if they tapped the wrong
+   place. Snapshots are captured just before each navigation; goBack() restores the previous one. */
+var __navStack = [];
+function _navSnapshot(){ return { view: state.view, selectedWeek: state.selectedWeek, weekTab: state.weekTab }; }
+function pushNav(){
+  try {
+    var snap = _navSnapshot();
+    var top = __navStack[__navStack.length - 1];
+    if (!top || top.view !== snap.view || top.selectedWeek !== snap.selectedWeek || top.weekTab !== snap.weekTab) {
+      __navStack.push(snap);
+      if (__navStack.length > 40) __navStack.shift();
+    }
+  } catch (e) {}
+}
+function goBack(){
+  try {
+    if (!__navStack.length) { setState({ view: 'dashboard' }); safeScrollTo(0); return; }
+    var prev = __navStack.pop();
+    setState({
+      view: prev.view || 'dashboard',
+      selectedWeek: (prev.selectedWeek != null ? prev.selectedWeek : state.selectedWeek),
+      weekTab: prev.weekTab || 'overview'
+    });
+    safeScrollTo(0);
+  } catch (e) {}
+}
+function updateBackFab(){
+  try {
+    var el = document.getElementById('back-fab');
+    if (!el) return;
+    var show = __navStack.length > 0 && state.view && state.view !== 'dashboard' && !state.showAuthScreen;
+    el.classList.toggle('bfab-hidden', !show);
+  } catch (e) {}
+}
+
 /* ---------------- EVENT HANDLERS ---------------- */
 function attachListeners() {
   document.querySelectorAll('[data-action]').forEach(el => {
@@ -24017,6 +24486,7 @@ function attachListeners() {
       }
       switch (a) {
         case 'nav': {
+          pushNav();
           // If leaving the chapter view, credit the elapsed minutes
           if (state.view === 'week' && state.lastSessionStart) {
             const mins = Math.round((Date.now() - state.lastSessionStart) / 60000);
@@ -24039,6 +24509,7 @@ function attachListeners() {
           break;
         }
         case 'pod-select': {
+          pushNav();
           const pw = Number(el.dataset.week);
           try { if (typeof TTS !== 'undefined' && TTS.stop) TTS.stop(); } catch(_){}
           state.podcastWeek = pw;
@@ -24047,6 +24518,7 @@ function attachListeners() {
           break;
         }
         case 'open-week': {
+          pushNav();
           const wn = Number(el.dataset.week);
           state.progress[wn] = { ...(state.progress[wn]||{}), lastVisited: new Date().toISOString() };
           state.lastLocation = { week: wn, tab: 'overview' };
@@ -24057,6 +24529,7 @@ function attachListeners() {
           break;
         }
         case 'open-week-section': {
+          pushNav();
           // Open a specific chapter, jump to a specific tab, and scroll to a section anchor inside it.
           // Used by Home-page "Listen to the podcast" / "Anatomy & Imaging" buttons.
           const wn = Number(el.dataset.week);
@@ -24074,6 +24547,7 @@ function attachListeners() {
         }
         case 'week-tab':
         case 'open-week-tab':
+          pushNav();
           state.lastLocation = { week: state.selectedWeek, tab: el.dataset.tab };
           setState({ weekTab: el.dataset.tab, flashcardFlipped: false });
           // Scroll to top so user sees the new tab immediately (animated, falls back to instant)
@@ -24974,13 +25448,17 @@ function attachListeners() {
           const slides = (c && c.slides) || [];
           if (!slides.length) return;
           state.slideIndex = Math.min((state.slideIndex || 0) + 1, slides.length - 1);
-          setState({});
+          persist();
+          // Update just the slide block in place — no full re-render, so no scroll jump.
+          if (!updateSlideStageInPlace()) setState({});
           break;
         }
-        case 'slide-prev':
+        case 'slide-prev': {
           state.slideIndex = Math.max(0, (state.slideIndex || 0) - 1);
-          setState({});
+          persist();
+          if (!updateSlideStageInPlace()) setState({});
           break;
+        }
         case 'auth-setup-manager': {
           const nameInp = document.getElementById('setup-name');
           const codeInp = document.getElementById('setup-passcode');
@@ -25844,9 +26322,27 @@ if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser =
    restore almost always lands before the first paint. */
 (function selfHealFromBackup(){
   try {
-    var hasLS = false; try { hasLS = !!localStorage.getItem(STORE_KEY); } catch(e){}
-    if (hasLS) return;                         // localStorage intact — nothing to recover
     if (typeof idbGet !== 'function') return;
+    // First, recover the tiny critical bucket (keys + progress) if localStorage lost it. This is
+    // the most important recovery — it keeps the user signed in with their API key.
+    var hasCrit = false; try { hasCrit = !!localStorage.getItem(CRIT_KEY); } catch(e){}
+    if (!hasCrit) {
+      idbGet('app-critical-backup').then(function(crit){
+        if (!crit || typeof crit !== 'string') return;
+        var stillEmpty = false; try { stillEmpty = !localStorage.getItem(CRIT_KEY); } catch(e){}
+        if (!stillEmpty) return;
+        try { localStorage.setItem(CRIT_KEY, crit); } catch(e){ return; }
+        try {
+          loadStored();
+          if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser === 'function') bindProgressForUser();
+          if (typeof setState === 'function') setState({});
+        } catch(e){}
+        try { if (typeof appToast === 'function') appToast('✓ Restored your API key and progress from this device’s backup.'); } catch(e){}
+      }).catch(function(){});
+    }
+    // Then the full snapshot, if the main blob is gone.
+    var hasLS = false; try { hasLS = !!localStorage.getItem(STORE_KEY); } catch(e){}
+    if (hasLS) return;                         // localStorage intact — nothing more to recover
     idbGet('app-state-backup').then(function(backup){
       if (!backup || typeof backup !== 'string') return;
       var stillEmpty = false; try { stillEmpty = !localStorage.getItem(STORE_KEY); } catch(e){}
