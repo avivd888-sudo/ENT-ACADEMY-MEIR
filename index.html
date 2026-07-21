@@ -15818,6 +15818,27 @@ function _writeCritical() {
     try { if (typeof idbPut === 'function') idbPut('app-critical-backup', s).catch(function(){}); } catch(e){}
   } catch (e) { /* ignore */ }
 }
+/* One-time cleanup: the app standardizes on OpenAI for HD narration. An old build had an
+   ElevenLabs key that got saved into this browser's storage + critical backup + IndexedDB
+   mirror, so the "ElevenLabs HD voice · key configured" banner kept reappearing after reload
+   even though the user removed it. This strips any stored ElevenLabs credentials from ALL three
+   stores, once, so it stays gone. (Adding a key later via the UI still works.) */
+function _purgeElevenLabsOnce(){
+  try { if (localStorage.getItem('ent-eleven-purged-v1') === '1') return; } catch(e){}
+  state.elevenLabsKey = '';
+  state.elevenLabsVoices = null;
+  try { delete state.elevenLabsModel; } catch(e){}
+  try { delete state.elevenLabsFormat; } catch(e){}
+  // Strip it out of the tiny critical backup bucket (that's what resurrects it on reload).
+  try {
+    var raw = localStorage.getItem(CRIT_KEY);
+    if (raw) { var c = JSON.parse(raw) || {}; c.elevenLabsKey = ''; c.elevenLabsVoices = null;
+      localStorage.setItem(CRIT_KEY, JSON.stringify(c)); }
+  } catch(e){}
+  try { persist(); } catch(e){}        // rewrite the main store without the key
+  try { _writeCritical(); } catch(e){} // rewrite the critical bucket + IndexedDB mirror without it
+  try { localStorage.setItem('ent-eleven-purged-v1','1'); } catch(e){}
+}
 /* True only if this browser actually persists localStorage. False in Private Browsing or when
    storage is blocked — in which case the user's progress and sign-in won't survive a reload,
    so we warn them clearly up front. */
@@ -24446,8 +24467,11 @@ async function videoSummaryPlay() {
     try {
       await speakOneLine(t.speaker || 'host', t.text);
     } catch (e) {
-      console.warn('Video TTS failed:', e.message);
-      break;
+      // Narration for this cue failed (e.g. a transient TTS error) — DON'T freeze the whole
+      // presentation on this slide. Pause briefly so the slide is readable, then advance.
+      console.warn('Video TTS failed, advancing slide anyway:', e && e.message);
+      if (!state.videoPlaying) break;
+      await new Promise(r => setTimeout(r, 2600));
     }
   }
   state.videoPlaying = false;
@@ -24982,20 +25006,31 @@ function safeScrollTo(targetY) {
    scroll fires before layout settles and lands short, which is why "Open podcast" missed it. */
 function scrollToSectionWhenReady(id, opts) {
   opts = opts || {};
-  // Clear any sticky top chrome so the section header isn't hidden under it after the jump.
-  const topOffset = (window.innerWidth <= 980 ? -64 : -14);
-  let tries = 0, lastY = -1, settled = 0;
+  // Pixels of sticky top chrome to clear so the section header isn't hidden after the jump.
+  const topOffset = (opts.offset != null ? Math.abs(opts.offset) : (window.innerWidth <= 980 ? 56 : 14));
+  let tries = 0, lastTop = null, settled = 0;
   const go = () => {
     const el = document.getElementById(id);
     if (el) {
-      try { safeScrollIntoView(el, { block: 'start', offset: opts.offset ?? topOffset }); }
-      catch(e){ try { el.scrollIntoView(); } catch(_){} }
-      // Stop early once the target position stops moving (layout has settled).
-      const y = Math.round(window.scrollY || document.documentElement.scrollTop || 0);
-      if (y === lastY) { settled++; if (settled >= 2) return; } else { settled = 0; lastY = y; }
+      // PRIMARY: native scrollIntoView. It works regardless of WHICH element is the scroll
+      // container and needs no manual Y math — the old manual path could clamp to 0 on iOS
+      // (when documentElement.scrollHeight was briefly wrong) and jump the page to the TOP.
+      try { el.scrollIntoView({ block: 'start', inline: 'nearest' }); }
+      catch(e){ try { safeScrollIntoView(el, { block: 'start', offset: -topOffset }); } catch(_){} }
+      // Nudge up by the sticky-header height using whichever scroller actually moved.
+      try {
+        const sc = document.scrollingElement || document.documentElement;
+        if (sc && sc.scrollTop > topOffset) sc.scrollTop = sc.scrollTop - topOffset;
+        else if (window.scrollY > topOffset) window.scrollBy(0, -topOffset);
+      } catch(_){}
+      // Stop once the element's position stops moving (image-heavy layout has settled).
+      const top = Math.round(el.getBoundingClientRect().top);
+      if (lastTop !== null && Math.abs(top - lastTop) < 2) { settled++; if (settled >= 2) return; }
+      else settled = 0;
+      lastTop = top;
     }
     tries++;
-    if (tries < 9) setTimeout(go, 120); // re-aim as the image-heavy tab finishes laying out (~1s)
+    if (tries < 10) setTimeout(go, 110); // re-aim as the image-heavy tab finishes laying out (~1s)
   };
   requestAnimationFrame(() => requestAnimationFrame(go));
 }
@@ -26914,6 +26949,8 @@ function renderStudyTrackerWidget() {
    to perceived speed. loadStored() is cheap (reads localStorage) and stays immediate so
    the loader picks up the saved light/dark theme. */
 loadStored();
+// Remove any lingering ElevenLabs key resurrected from an old build (app uses OpenAI HD now).
+if (typeof _purgeElevenLabsOnce === 'function') _purgeElevenLabsOnce();
 // Append the capstone clinical case to each episode (once).
 if (typeof applyClosingCases === 'function') applyClosingCases();
 if (typeof applyExtraQuiz === 'function') applyExtraQuiz();
@@ -27263,11 +27300,24 @@ function entvPrefetch(fromIdx){
 }
 function speakLine(line){
   return new Promise(function(resolve){
-    var done=false; function fin(){ if(done)return; done=true; ENTV.cur=null; resolve(); }
+    var done=false, _wd=null;
+    function fin(){ if(done)return; done=true; if(_wd){ clearTimeout(_wd); _wd=null; } ENTV.cur=null; resolve(); }
     var handle={audio:null,stop:function(){ try{ if(this.audio){this.audio.pause();this.audio.src='';} }catch(e){} if('speechSynthesis'in window)window.speechSynthesis.cancel(); fin(); },
       pause:function(){ try{ if(this.audio)this.audio.pause(); else if('speechSynthesis'in window)window.speechSynthesis.pause(); }catch(e){} },
       resume:function(){ try{ if(this.audio)this.audio.play(); else if('speechSynthesis'in window)window.speechSynthesis.resume(); }catch(e){} }};
     ENTV.cur=handle;
+    // WATCHDOG — guarantees this line resolves so the video always advances. Without it, a stalled
+    // HD audio or (very commonly on iOS/Chrome) a speechSynthesis utterance whose `onend` never
+    // fires would leave the Promise pending forever and FREEZE the video on the current slide.
+    (function(){
+      var _w = ((line && line.text || '').trim().split(/\s+/).length) || 6;
+      var _ms = Math.min(90000, _w * 600 / (ENTV.speed || 1) + 9000);
+      _wd = setTimeout(function(){
+        try { if (handle && handle.audio) handle.audio.pause(); } catch(e){}
+        try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch(e){}
+        fin();
+      }, _ms);
+    })();
     // Capture the player "generation" at the moment this line starts. close()/open() bump
     // ENTV.token, so every async callback below can verify it's still the CURRENT player before
     // it makes any sound. This is what prevents a late fetch or a queued utterance from speaking
