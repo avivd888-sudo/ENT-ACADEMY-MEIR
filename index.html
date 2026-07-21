@@ -3369,6 +3369,16 @@
   /* Global guard against horizontal scroll on small screens */
   @media (max-width: 640px) {
     html, body { max-width: 100%; overflow-x: hidden; }
+    /* Header and toolbars wrap instead of pushing the page wide */
+    .page-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .toolbar-actions { flex-wrap: wrap; width: 100%; }
+    .oe-quick-bar { flex-wrap: wrap; }
+    /* Tab bar becomes a horizontal swipe strip so all tabs stay reachable */
+    .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; flex-wrap: nowrap; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tabs .tab { flex: 0 0 auto; white-space: nowrap; }
+    /* Long option/answer text wraps cleanly */
+    .quiz-option, .kp-item, .slide-body li, .flashcard, .anatomy-block li { overflow-wrap: anywhere; }
   }
 
   /* iOS install banner */
@@ -14744,7 +14754,7 @@ const CONTENT = {
     podcastDuration: '~18 min - deep dive',
     podcastScript: [
       { speaker: 'host',   text: "Welcome to ENT Academy. I'm Elena." },
-      { speaker: 'cohost', text: "And I'm Marcus. Today's deep dive is acute otitis media — the single most common reason a child gets an antibiotic, and a favorite of every board exam because the details actually change what you do." },
+      { speaker: 'cohost', text: "And I'm Marcus. Today's deep dive is acute otitis media — the single most common reason a child gets an antibiotic, and a topic where the small details genuinely change what you do." },
       { speaker: 'host',   text: "Let's anchor the vocabulary first, because the whole chapter hinges on it. Three entities share one feature — a middle-ear effusion." },
       { speaker: 'cohost', text: "Right. A-O-M is effusion plus acute inflammation. O-M-E — otitis media with effusion, 'glue ear' — is effusion without the acute inflammation. And chronic suppurative otitis media is ongoing drainage through a hole in the eardrum. The effusion is common to all three; what makes it A-O-M is the acute inflammation." },
       { speaker: 'host',   text: "And clinically, the thing that screams acute inflammation is the bulging drum." },
@@ -14769,21 +14779,21 @@ const CONTENT = {
       { speaker: 'cohost', text: "Postauricular swelling and redness with the auricle pushed forward and down. That child gets a C-T of the temporal bone, admission for I-V antibiotics, and drainage of the middle ear — a myringotomy, adding a mastoidectomy if there's a subperiosteal abscess or they don't improve." },
       { speaker: 'host',   text: "Finally — the child who keeps coming back." },
       { speaker: 'cohost', text: "Recurrent A-O-M is three episodes in six months, or four in twelve months with at least one in the last six — that's your trigger to offer tympanostomy tubes. Separately, bilateral effusion — O-M-E — lasting three months or more with hearing loss earns tubes too. What we don't do anymore is continuous prophylactic antibiotics. Instead: pneumococcal and influenza vaccination, and tubes, with adenoidectomy added for the child heading for a second set." },
-      { speaker: 'host',   text: "Give me the exam-morning takeaways." },
+      { speaker: 'host',   text: "Give me the takeaways to hold onto." },
       { speaker: 'cohost', text: "One: it's the bulging drum, not the red drum — and confirm an effusion. Two: high-dose amoxicillin first-line, amox-clav if conjunctivitis or recent amox. Three: observation is only for the non-severe, older-or-unilateral child with guaranteed follow-up. Four: postauricular swelling with a protruding ear is mastoiditis until proven otherwise. And five: the tube rule is three in six months or four in twelve." },
-      { speaker: 'host',   text: "Perfect. Study the drum, respect the Eustachian tube, and know your complications. Good luck on the exam." },
-      { speaker: 'cohost', text: "You've got this." }
+      { speaker: 'host',   text: "Study the drum, respect the Eustachian tube, and know your complications." },
+      { speaker: 'cohost', text: "That's the chapter." }
     ]
   },
 
   /* ================= Ch. 148 — HEARING AIDS (exam prep) ================= */
   145: {
     objectives: [
-      'List hearing-aid styles (BTE, RIC, ITE, ITC, CIC, IIC) and their trade-offs.',
+      'List the hearing-aid styles — behind-the-ear (BTE), receiver-in-canal (RIC), in-the-ear (ITE), in-the-canal (ITC), completely-in-canal (CIC), and invisible-in-canal (IIC) — and their trade-offs.',
       'Describe the core components and the signal path of a digital hearing aid.',
-      'State candidacy and how gain is prescribed and verified (real-ear measurement, NAL-NL2/DSL).',
-      'Explain key features: directional microphones, noise reduction, feedback cancellation, telecoil, connectivity.',
-      'Choose among air-conduction aids, bone-conduction/osseointegrated devices, and CROS/BiCROS.'
+      'State candidacy and how gain is prescribed and verified — real-ear (probe-microphone) measurement against a prescriptive target such as the National Acoustic Laboratories non-linear 2 (NAL-NL2) or Desired Sensation Level (DSL) formula.',
+      'Explain key features: directional microphones, noise reduction, feedback cancellation, telecoil, and wireless connectivity.',
+      'Choose among air-conduction aids, bone-conduction / osseointegrated devices, and contralateral routing of signal (CROS/BiCROS) systems.'
     ],
     summary: `
       <h4>1. What a hearing aid does</h4>
@@ -14815,12 +14825,12 @@ const CONTENT = {
       'Always rule out red flags (asymmetry, sudden loss, otorrhea, pain) and treatable pathology before fitting an aid.'
     ],
     keyPoints: [
-      { category: 'Styles', items: ['BTE — most power/flexibility, all losses', 'RIC — sleek, open fit, mild-moderate HF loss', 'ITE/ITC/CIC/IIC — smaller, cosmetic, less gain, harder handling'] },
-      { category: 'Components', items: ['Microphone → DSP/amplifier → receiver → battery', 'Wide dynamic range compression', 'Zinc-air or rechargeable lithium'] },
-      { category: 'Fitting/verification', items: ['Prescriptive target: NAL-NL2 (adults), DSL (children)', 'Real-ear / probe-mic verification = standard of care', 'Binaural fitting aids localization + speech-in-noise'] },
-      { category: 'Features', items: ['Directional mics improve SNR', 'Noise reduction, feedback cancellation', 'Telecoil, Bluetooth streaming, frequency lowering', 'Venting reduces the occlusion effect'] },
-      { category: 'Beyond air-conduction aids', items: ['Bone-conduction/BAHA: draining ears, atresia, conductive/mixed', 'CROS/BiCROS or BCD for single-sided deafness', 'CI for true SSD; middle-ear implants for select SNHL'] },
-      { category: 'Access/outcomes', items: ['~1 in 3 who need aids use them (cost, stigma, dexterity)', 'OTC hearing aids (FDA 2022) for perceived mild-moderate loss', 'Treating loss reduces isolation, depression, falls, dementia risk'] }
+      { category: 'Styles', items: ['Behind-the-ear (BTE) — most power/flexibility, all losses', 'Receiver-in-canal (RIC) — sleek, open fit, mild-moderate high-frequency loss', 'In-the-ear / in-the-canal / completely-in-canal / invisible-in-canal (ITE, ITC, CIC, IIC) — smaller, cosmetic, less gain, harder handling'] },
+      { category: 'Components', items: ['Microphone → digital signal processor / amplifier → receiver (loudspeaker) → battery', 'Wide dynamic range compression (WDRC)', 'Zinc-air or rechargeable lithium battery'] },
+      { category: 'Fitting/verification', items: ['Prescriptive target: National Acoustic Laboratories non-linear 2 (NAL-NL2) for adults, Desired Sensation Level (DSL) for children', 'Real-ear (probe-microphone) verification = standard of care', 'Binaural (two-aid) fitting aids localization + speech-in-noise'] },
+      { category: 'Features', items: ['Directional microphones improve the signal-to-noise ratio (SNR)', 'Noise reduction, feedback cancellation', 'Telecoil, Bluetooth streaming, frequency lowering', 'Venting reduces the occlusion effect'] },
+      { category: 'Beyond air-conduction aids', items: ['Bone-conduction / osseointegrated device — bone-anchored hearing aid (BAHA): draining ears, atresia, conductive/mixed loss', 'Contralateral routing of signal (CROS/BiCROS) or a bone-conduction device for single-sided deafness (SSD)', 'Cochlear implant (CI) for true SSD; middle-ear implants for select sensorineural hearing loss (SNHL)'] },
+      { category: 'Access/outcomes', items: ['~1 in 3 who need aids use them (cost, stigma, dexterity)', 'Over-the-counter (OTC) hearing aids (FDA 2022) for perceived mild-moderate loss', 'Treating loss reduces isolation, depression, falls, dementia risk'] }
     ],
     flashcards: [
       { q: 'Signal path through a hearing aid?', a: 'Microphone → amplifier / digital signal processor → receiver (loudspeaker) → ear, powered by a battery.' },
@@ -14849,7 +14859,22 @@ const CONTENT = {
       { stem: 'Regarding hearing-aid candidacy in an active 85-year-old with moderate SNHL:', options: ['Too old to benefit', 'Age is not a contraindication — fit if there is communication difficulty', 'Only a cochlear implant is appropriate', 'Observe without intervention'], correct: 1, explanation: 'There is no age cutoff; treating hearing loss reduces isolation, depression, and falls and supports cognition. Fit after excluding treatable/red-flag causes.' },
       { stem: 'The 2022 FDA over-the-counter hearing aid category is intended for:', options: ['Children with any loss', 'Adults with perceived mild-to-moderate hearing loss', 'Profound loss requiring implants', 'Single-sided deafness'], correct: 1, explanation: 'OTC aids are for adults who perceive mild-to-moderate loss, improving access without a professional fitting; they are not for children or severe/complex loss.' },
       { stem: 'A telecoil in a hearing aid is most useful for:', options: ['Reducing wind noise', 'Coupling to hearing loops and telephones', 'Charging the battery', 'Cancelling feedback'], correct: 1, explanation: 'A telecoil picks up the electromagnetic signal from induction loops and telephones, delivering clearer audio directly to the aid.' },
-      { stem: 'Before fitting hearing aids, which finding requires medical/otologic evaluation first?', options: ['Symmetric age-related high-frequency loss', 'Asymmetric SNHL or sudden hearing loss, otorrhea, or otalgia', 'Bilateral tinnitus with symmetric hearing', 'A desire for smaller devices'], correct: 1, explanation: 'Red flags — asymmetry, sudden loss, drainage, pain — need work-up (including MRI for asymmetry) to exclude retrocochlear or treatable pathology before amplification.' }
+      { stem: 'Before fitting hearing aids, which finding requires medical/otologic evaluation first?', options: ['Symmetric age-related high-frequency loss', 'Asymmetric SNHL or sudden hearing loss, otorrhea, or otalgia', 'Bilateral tinnitus with symmetric hearing', 'A desire for smaller devices'], correct: 1, explanation: 'Red flags — asymmetry, sudden loss, drainage, pain — need work-up (including MRI for asymmetry) to exclude retrocochlear or treatable pathology before amplification.' },
+      { stem: 'In a hearing aid, the component that converts the electrical signal back into sound in the ear is called the:', options: ['Microphone', 'Receiver', 'Telecoil', 'Battery'], correct: 1, explanation: 'Confusingly, the hearing-aid "receiver" is the loudspeaker — it converts the processed electrical signal back to acoustic energy at the ear.' },
+      { stem: 'A patient with a profound sensorineural loss and no benefit from powerful hearing aids is best served by:', options: ['A smaller CIC aid', 'Cochlear implantation', 'A telecoil', 'A bone-conduction device'], correct: 1, explanation: 'When even high-power aids fail to deliver adequate speech understanding, cochlear implantation bypasses the hair cells and stimulates the auditory nerve directly.' },
+      { stem: 'Which coupling reduces the occlusion effect while limiting low-frequency gain?', options: ['A tightly sealed earmold', 'An open-fit / vented dome (typical of RIC aids)', 'A larger battery', 'A telecoil'], correct: 1, explanation: 'Open or well-vented fittings let low-frequency energy escape, relieving the boomy own-voice occlusion effect — a key advantage of open RIC fittings for high-frequency loss.' },
+      { stem: 'A patient hears a persistent whistle from the hearing aid. The most likely cause and first fix?', options: ['Dead battery; replace it', 'Acoustic feedback from sound leakage; improve the fit/seal or engage feedback cancellation (check for cerumen)', 'Occlusion; add venting', 'Telecoil interference; disable it'], correct: 1, explanation: 'Whistling is acoustic feedback — amplified sound leaking back to the microphone. Improve the seal, remove cerumen, or use feedback-cancellation processing.' },
+      { stem: 'What is the main advantage of fitting hearing aids binaurally rather than monaurally?', options: ['Longer battery life', 'Better sound localization and speech understanding in noise, and prevention of auditory deprivation', 'Lower cost', 'Smaller devices'], correct: 1, explanation: 'Two aids restore binaural cues (localization, squelch), improve speech-in-noise, and prevent deprivation-related decline of the unaided ear.' },
+      { stem: 'For a child requiring amplification, which prescriptive fitting target is preferred?', options: ['NAL-NL2', 'DSL v5', 'No target needed', 'POGO only'], correct: 1, explanation: 'DSL (Desired Sensation Level) targets are preferred for children as they aim to keep speech audible across frequencies for developing listeners; NAL-NL2 is common for adults.' },
+      { stem: 'Frequency-lowering (frequency compression) technology is most useful for a patient with:', options: ['A flat mild loss', 'A severe high-frequency loss with unusable high-frequency regions', 'A conductive loss', 'Normal hearing'], correct: 1, explanation: 'Frequency lowering shifts high-frequency energy (e.g., /s/, /sh/) into a lower region the patient can still hear, useful when high frequencies are unaidable.' },
+      { stem: 'A patient with a "dead" right ear and normal left ear wants to stop missing speech on the right side. Best option?', options: ['A powerful aid in the right ear', 'A CROS system or a bone-conduction device (CI is an option for true SSD)', 'Bilateral CIC aids', 'A telecoil in the left ear'], correct: 1, explanation: 'A conventional aid in a dead ear is useless. CROS routes right-side sound to the good left ear; a bone-conduction device is an alternative, and cochlear implantation can restore true binaural hearing in single-sided deafness.' },
+      { stem: 'A patient with a chronically draining mastoid cavity needs amplification but cannot tolerate an earmold. Best device?', options: ['Deep-fitting CIC', 'Bone-conduction / osseointegrated device (e.g., BAHA)', 'Open-fit RIC', 'Body-worn aid'], correct: 1, explanation: 'A draining ear that cannot use a canal device is a classic indication for a bone-conduction/osseointegrated device that bypasses the outer/middle ear.' },
+      { stem: 'The primary purpose of real-ear (probe-microphone) measurement is to:', options: ['Diagnose the type of hearing loss', 'Verify the sound level delivered at the eardrum matches the prescriptive target', 'Test middle-ear pressure', 'Measure otoacoustic emissions'], correct: 1, explanation: 'Real-ear measurement documents the actual output at the tympanic membrane versus target, accounting for each ear canal — the accepted verification standard.' },
+      { stem: 'Which is TRUE about over-the-counter (OTC) hearing aids per FDA rules?', options: ['They are for children of any age', 'They are for adults who perceive mild-to-moderate hearing loss, without a required professional fitting', 'They treat profound loss', 'They require surgical placement'], correct: 1, explanation: 'The 2022 OTC category is limited to adults with self-perceived mild-to-moderate loss and does not require an audiologist fitting; severe/complex loss and children still need professional care.' },
+      { stem: 'What does a directional microphone system primarily improve?', options: ['Battery life', 'Signal-to-noise ratio for sound in front of the listener', 'Cosmesis', 'Low-frequency gain'], correct: 1, explanation: 'Directional mics attenuate sound from behind/around and favor the front, raising the SNR — the main hardware feature that helps understanding in noise.' },
+      { stem: 'A patient wants the most discreet aid but has moderately-severe loss and poor manual dexterity. The best counseling is:', options: ['Fit an invisible-in-canal (IIC) device', 'Explain that a BTE/RIC gives the needed gain and is easier to handle; cosmetic micro-aids may underperform and be hard to manage', 'Recommend no aid', 'Fit a body-worn aid'], correct: 1, explanation: 'Greater loss needs more gain/receiver size, and tiny custom devices are hard for arthritic hands and have small batteries; counsel toward BTE/RIC despite the cosmetic preference.' },
+      { stem: 'A patient with hearing loss and bothersome tinnitus is being fit with hearing aids. Regarding tinnitus:', options: ['Hearing aids worsen tinnitus and should be avoided', 'Amplification itself often reduces tinnitus perception, and many aids offer built-in sound-therapy/masking', 'Only surgery helps tinnitus', 'Tinnitus is a contraindication to amplification'], correct: 1, explanation: 'Restoring audibility commonly lessens tinnitus by enriching the sound environment; many aids include masking/sound-therapy programs as part of tinnitus management.' },
+      { stem: 'Which powering option eliminates the need to handle tiny disposable batteries — helpful for patients with poor dexterity?', options: ['Zinc-air size 10 batteries', 'Rechargeable lithium-ion hearing aids', 'Mercury cells', 'A larger telecoil'], correct: 1, explanation: 'Rechargeable lithium-ion aids are placed on a charging dock nightly, removing the fine-motor task of changing small zinc-air batteries.' }
     ],
     signs: [
       { name: 'Occlusion effect', category: 'clinical', description: 'Booming/hollow perception of the patient own voice when the canal is sealed by the device.', implication: 'Relieve with venting or an open fitting.' },
@@ -14870,7 +14895,7 @@ const CONTENT = {
     podcastDuration: '~17 min - deep dive',
     podcastScript: [
       { speaker: 'host',   text: "Welcome back to ENT Academy. I'm Elena." },
-      { speaker: 'cohost', text: "And I'm Marcus. Today: hearing aids. It's easy to dismiss this as an audiology topic, but the boards love it, and honestly a surgeon who can't counsel on amplification is missing half of hearing care." },
+      { speaker: 'cohost', text: "And I'm Marcus. Today: hearing aids. It's easy to dismiss this as an audiology topic, but it matters at the bedside, and honestly a surgeon who can't counsel on amplification is missing half of hearing care." },
       { speaker: 'host',   text: "Let's start with the mental model. What is a hearing aid actually doing?" },
       { speaker: 'cohost', text: "It's a smart amplifier shaped to the audiogram. Sound path is simple: microphone, then a digital signal processor that's the amplifier, then a receiver — which confusingly is the loudspeaker — then into the ear, all run off a battery. The magic is in the processing, not the volume." },
       { speaker: 'host',   text: "What's the key processing trick?" },
@@ -14899,10 +14924,10 @@ const CONTENT = {
   /* ================= Ch. 149 — SENSORINEURAL HEARING LOSS IN ADULTS (exam prep) ================= */
   146: {
     objectives: [
-      'Differentiate sensorineural from conductive hearing loss by history, otoscopy, tuning forks, and audiometry.',
+      'Differentiate sensorineural hearing loss (SNHL) from conductive hearing loss by history, otoscopy, tuning forks, and audiometry.',
       'Build a differential for adult SNHL (presbycusis, noise-induced, ototoxic, sudden, autoimmune, retrocochlear).',
-      'Apply the AAO-HNS approach to sudden sensorineural hearing loss (SSNHL).',
-      'Recognize ototoxic agents and the audiometric signature of noise-induced loss.',
+      'Apply the American Academy of Otolaryngology–Head and Neck Surgery (AAO-HNS) approach to sudden sensorineural hearing loss (SSNHL).',
+      'Recognize ototoxic agents and the audiometric signature of noise-induced hearing loss (NIHL).',
       'Outline management: amplification, cochlear implantation, and disease-specific therapy.'
     ],
     summary: `
@@ -14919,7 +14944,9 @@ const CONTENT = {
       <h4>6. Autoimmune inner-ear disease (AIED)</h4>
       <p><strong>Rapidly progressive, bilateral (often asymmetric) SNHL over weeks to months</strong> that is <strong>corticosteroid-responsive</strong>. May be primary or part of a systemic autoimmune disorder (e.g., <strong>Cogan syndrome</strong> — interstitial keratitis + audiovestibular symptoms). Treat with steroids ± steroid-sparing immunosuppression.</p>
       <h4>7. Retrocochlear & other causes; management</h4>
-      <p>Any <strong>asymmetric or unilateral SNHL, unilateral tinnitus, or sudden loss</strong> warrants <strong>MRI of the internal auditory canals with gadolinium</strong> to exclude a <strong>vestibular schwannoma</strong>. Other causes: hereditary/genetic, Ménière disease (low-frequency fluctuating), infections (syphilis, congenital CMV, meningitis), and perilymph fistula. <strong>Management:</strong> hearing aids for most; <strong>cochlear implantation</strong> when aids no longer give adequate speech understanding; disease-specific therapy (steroids for SSNHL/AIED, tumor management for schwannoma); and tinnitus counseling. Prompt treatment of SSNHL improves the odds of recovery.</p>
+      <p>Any <strong>asymmetric or unilateral SNHL, unilateral tinnitus, or sudden loss</strong> warrants <strong>MRI of the internal auditory canals with gadolinium</strong> to exclude a <strong>vestibular schwannoma</strong>. Other causes worth knowing: <strong>Ménière disease</strong> — episodic vertigo lasting minutes-to-hours with <em>low-frequency, fluctuating</em> SNHL, aural fullness, and roaring tinnitus (endolymphatic hydrops); <strong>hereditary/genetic</strong> loss — GJB2/<em>connexin 26</em> is the commonest nonsyndromic gene; <strong>infections</strong> — otosyphilis (treatable — treponemal serology + penicillin ± steroids), congenital CMV (leading nongenetic pediatric cause, can progress), and post-meningitis loss (cochlear ossification — implant early); and <strong>perilymph fistula</strong>. For completeness, the main <em>conductive</em> mimic to keep off this list is <strong>otosclerosis</strong> (conductive→mixed loss, Carhart notch at 2 kHz, family history) — it is not SNHL but is a classic distractor. <strong>Management:</strong> hearing aids for most; <strong>cochlear implantation</strong> when aids no longer give adequate speech understanding; disease-specific therapy (steroids for SSNHL/AIED, targeted labs + treatment for syphilis, tumor management for schwannoma); and tinnitus counseling. Prompt treatment of SSNHL improves the odds of recovery — <strong>treat first, image in parallel.</strong></p>
+      <h4>8. SSNHL — treatment timing at a glance</h4>
+      <p><strong>Initial:</strong> oral corticosteroids, ideally started within ~2 weeks of onset (the earlier the better). <strong>Salvage:</strong> intratympanic corticosteroid injections when recovery is incomplete after initial therapy (roughly 2–6 weeks out). <strong>Adjunct:</strong> hyperbaric oxygen may be offered in the early window (about within 2 weeks for initial, up to ~1 month for salvage), combined with steroids. <strong>Do NOT</strong> routinely order labs, CT, antivirals, thrombolytics, vasodilators, or antioxidants. <strong>Follow-up audiogram</strong> to document recovery; prognosis is worse with profound loss, associated vertigo, and older age.</p>
     `,
     anatomy: [
       { title: 'Tuning-fork logic in SNHL', body: "<p><strong>Weber</strong> lateralizes to the <em>better-hearing</em> ear in sensorineural loss (and to the <em>worse</em> ear in conductive loss). <strong>Rinne</strong> is positive (air &gt; bone) in a normal or sensorineural ear. Together they localize the loss before the audiogram is even run.</p>" },
@@ -14933,11 +14960,11 @@ const CONTENT = {
       'Rapidly progressive bilateral SNHL that responds to steroids is autoimmune inner-ear disease.'
     ],
     keyPoints: [
-      { category: 'Confirm it is SNHL', items: ['Normal otoscopy; no air-bone gap', 'Weber → better ear; Rinne positive (AC>BC)', 'Poor word recognition; very poor = retrocochlear'] },
-      { category: 'Common causes', items: ['Presbycusis (bilateral high-frequency)', 'Noise-induced (3–6 kHz notch)', 'Ototoxic (aminoglycosides, cisplatin, loop diuretics, salicylates)'] },
-      { category: 'SSNHL', items: ['≥30 dB / ≥3 contiguous freq / ≤72 h — emergency', 'MRI (or ABR) for retrocochlear; NO routine labs/CT', 'Steroids initial; intratympanic salvage; HBO adjunct'] },
-      { category: 'Autoimmune (AIED)', items: ['Rapidly progressive bilateral SNHL over weeks-months', 'Steroid-responsive', 'Cogan syndrome = keratitis + audiovestibular'] },
-      { category: 'Retrocochlear/other', items: ['Asymmetric/unilateral SNHL or tinnitus → MRI IAC + gad', 'Vestibular schwannoma, Ménière, syphilis/CMV, fistula'] },
+      { category: 'Confirm it is SNHL', items: ['Normal otoscopy; no air-bone gap', 'Weber → better ear; Rinne positive (air conduction > bone conduction, AC>BC)', 'Poor word recognition; very poor = retrocochlear'] },
+      { category: 'Common causes', items: ['Presbycusis (bilateral high-frequency)', 'Noise-induced hearing loss (3–6 kHz notch)', 'Ototoxic (aminoglycosides, cisplatin, loop diuretics, salicylates)'] },
+      { category: 'Sudden SNHL (SSNHL)', items: ['≥30 dB / ≥3 contiguous frequencies / ≤72 h — emergency', 'Magnetic resonance imaging (MRI) — or auditory brainstem response (ABR) — for retrocochlear; NO routine labs / computed tomography (CT)', 'Steroids initial; intratympanic salvage; hyperbaric oxygen (HBO) adjunct'] },
+      { category: 'Autoimmune inner-ear disease (AIED)', items: ['Rapidly progressive bilateral SNHL over weeks-months', 'Steroid-responsive', 'Cogan syndrome = interstitial keratitis + audiovestibular symptoms'] },
+      { category: 'Retrocochlear/other', items: ['Asymmetric/unilateral SNHL or tinnitus → MRI internal auditory canals (IAC) with gadolinium', 'Vestibular schwannoma, Ménière disease, syphilis / cytomegalovirus (CMV), perilymph fistula'] },
       { category: 'Management', items: ['Hearing aids for most', 'Cochlear implant when aids inadequate', 'Disease-specific therapy + tinnitus counseling'] }
     ],
     flashcards: [
@@ -14968,7 +14995,21 @@ const CONTENT = {
       { stem: 'Which monitoring detects ototoxicity earliest, before speech frequencies are affected?', options: ['Standard pure-tone audiometry only', 'High-frequency audiometry and otoacoustic emissions', 'Tympanometry', 'Speech-in-noise testing'], correct: 1, explanation: 'Ototoxic damage begins in the high frequencies; high-frequency audiometry and OAEs catch it before the conversational range is involved.' },
       { stem: 'A cisplatin-treated patient develops symmetric high-frequency SNHL. This loss is:', options: ['Usually reversible on stopping the drug', 'Typically permanent and dose-dependent', 'Conductive', 'Due to middle-ear effusion'], correct: 1, explanation: 'Cisplatin ototoxicity is dose-dependent and typically permanent, affecting high frequencies first.' },
       { stem: 'Which finding argues the loss is conductive rather than sensorineural?', options: ['Normal otoscopy with Rinne positive bilaterally', 'An air-bone gap on audiometry with Weber to the affected ear', 'Down-sloping high-frequency thresholds', 'Poor word recognition'], correct: 1, explanation: 'An air-bone gap with the Weber lateralizing to the affected (worse) ear indicates conductive loss; SNHL has no air-bone gap and the Weber goes to the better ear.' },
-      { stem: 'When should cochlear implantation be considered for an adult with SNHL?', options: ['Immediately at diagnosis of any loss', 'When appropriately fit hearing aids no longer provide adequate speech understanding', 'Only for conductive loss', 'Never in adults'], correct: 1, explanation: 'Cochlear implantation is indicated when optimally fit hearing aids fail to deliver adequate speech understanding; candidacy criteria have broadened over time.' }
+      { stem: 'When should cochlear implantation be considered for an adult with SNHL?', options: ['Immediately at diagnosis of any loss', 'When appropriately fit hearing aids no longer provide adequate speech understanding', 'Only for conductive loss', 'Never in adults'], correct: 1, explanation: 'Cochlear implantation is indicated when optimally fit hearing aids fail to deliver adequate speech understanding; candidacy criteria have broadened over time.' },
+      { stem: 'A 45-year-old has episodic vertigo (hours), fluctuating low-frequency SNHL, aural fullness, and roaring tinnitus in one ear. Most likely diagnosis?', options: ['Vestibular schwannoma', 'Ménière disease (endolymphatic hydrops)', 'BPPV', 'Otosclerosis'], correct: 1, explanation: 'Ménière disease = episodic vertigo lasting minutes-hours, low-frequency fluctuating SNHL, aural fullness, and tinnitus — from endolymphatic hydrops.' },
+      { stem: 'Which finding on the audiogram is characteristic of early Ménière disease?', options: ['High-frequency notch at 4 kHz', 'Low-frequency (up-sloping) sensorineural loss', 'Flat conductive loss', 'Carhart notch at 2 kHz'], correct: 1, explanation: 'Early Ménière typically shows a low-frequency, rising (up-sloping) SNHL that fluctuates; later it can flatten.' },
+      { stem: 'A patient has conductive loss, a Carhart notch at 2 kHz, and a family history of hearing loss with normal TMs. Most likely diagnosis?', options: ['Otosclerosis', 'Presbycusis', 'Noise-induced hearing loss', 'Ménière disease'], correct: 0, explanation: 'Otosclerosis causes conductive (later mixed) loss with a Carhart notch (artifactual dip in bone conduction at 2 kHz) and often a positive family history; it is a differential for a conductive — not sensorineural — loss but is high-yield.' },
+      { stem: 'Which best distinguishes a cochlear from a retrocochlear lesion on testing?', options: ['Tympanometry type', 'Poor word recognition out of proportion to pure tones + absent acoustic reflexes / abnormal ABR', 'The Weber test', 'Otoscopy'], correct: 1, explanation: 'Retrocochlear (nerve) lesions give word recognition far worse than thresholds predict, reflex decay/absent reflexes, and prolonged ABR wave V latencies; MRI confirms.' },
+      { stem: 'A young adult has bilateral progressive SNHL and a family history; genetic testing is positive. The most common gene implicated in nonsyndromic hereditary hearing loss is:', options: ['GJB2 (connexin 26)', 'BRCA1', 'CFTR', 'PAX3'], correct: 0, explanation: 'GJB2 mutations (connexin 26) are the most common cause of nonsyndromic autosomal-recessive hereditary hearing loss.' },
+      { stem: 'Which infection is a classic cause of congenital SNHL and may progress after birth?', options: ['Cytomegalovirus (CMV)', 'Influenza', 'Rhinovirus', 'Norovirus'], correct: 0, explanation: 'Congenital CMV is the leading nongenetic cause of childhood SNHL and can cause progressive/late-onset loss — antiviral therapy may help selected neonates.' },
+      { stem: 'A patient with SNHL, a maculopapular rash, and a positive RPR/FTA-ABS has which treatable cause of hearing loss?', options: ['Otosyphilis', 'Presbycusis', 'Noise exposure', 'Cerumen'], correct: 0, explanation: 'Otosyphilis can cause SNHL (sometimes fluctuating or Ménière-like) and is treatable — test with treponemal serology and treat with penicillin ± steroids.' },
+      { stem: 'The audiometric hallmark of presbycusis is:', options: ['Low-frequency conductive loss', 'Bilateral symmetric high-frequency down-sloping SNHL', 'Unilateral flat loss', 'A 4 kHz notch with 8 kHz recovery'], correct: 1, explanation: 'Presbycusis is bilateral, symmetric, high-frequency down-sloping SNHL; the isolated 4 kHz notch is noise-induced.' },
+      { stem: 'For a patient with SSNHL and incomplete recovery after oral steroids, the recommended salvage option is:', options: ['Oral antivirals', 'Intratympanic corticosteroid injection', 'Thrombolysis', 'A CT of the temporal bone'], correct: 1, explanation: 'Intratympanic steroids are offered as salvage therapy when recovery is incomplete after initial oral steroids (typically within 2–6 weeks of onset).' },
+      { stem: 'Which statement about hyperbaric oxygen (HBO) in SSNHL is correct?', options: ['It is first-line monotherapy', 'It may be offered as an adjunct within the early window (roughly within 2 weeks–1 month)', 'It is contraindicated', 'It replaces steroids'], correct: 1, explanation: 'AAO-HNS lists HBO as an option, most useful early and in combination with steroids; it is an adjunct, not a replacement.' },
+      { stem: 'Which is the earliest audiometric change of aminoglycoside/cisplatin ototoxicity?', options: ['Low-frequency loss', 'Loss at the highest (ultra-high) frequencies first', 'A conductive component', 'Improved word recognition'], correct: 1, explanation: 'Ototoxic injury starts at the basal turn — the highest frequencies — before it reaches the speech range, which is why high-frequency audiometry and OAEs are used to monitor.' },
+      { stem: 'A patient on long-term furosemide develops hearing loss that improves after the drug is stopped. Mechanism/class?', options: ['Permanent aminoglycoside toxicity', 'Loop-diuretic ototoxicity (usually reversible, stria vascularis)', 'Cisplatin toxicity', 'Noise damage'], correct: 1, explanation: 'Loop diuretics affect the stria vascularis and typically cause reversible loss, worse with rapid IV dosing or renal impairment and synergistic with aminoglycosides.' },
+      { stem: 'Which patient with hearing loss most urgently needs an MRI of the internal auditory canals?', options: ['Symmetric age-related high-frequency loss', 'Unilateral SNHL with unilateral tinnitus and poor word recognition', 'Bilateral noise-induced 4 kHz notches', 'Cerumen impaction'], correct: 1, explanation: 'Asymmetric/unilateral SNHL, unilateral tinnitus, and disproportionately poor discrimination raise concern for vestibular schwannoma → MRI IAC with gadolinium.' },
+      { stem: 'Best next step for a fluctuating SNHL with vertigo when an autoimmune or syphilitic cause is suspected?', options: ['No further testing', 'Targeted labs (e.g., treponemal serology) ± a steroid trial', 'Immediate cochlear implant', 'CT head'], correct: 1, explanation: 'Unlike idiopathic SSNHL (where routine labs are discouraged), a fluctuating/progressive picture with clinical clues warrants targeted testing — treponemal serology, autoimmune workup — and steroids can be both diagnostic and therapeutic in AIED.' }
     ],
     signs: [
       { name: 'Weber to the better ear', category: 'clinical', description: 'Tuning fork on the forehead is heard louder in the better-hearing ear.', implication: 'Indicates sensorineural (not conductive) hearing loss.' },
@@ -14991,7 +15032,7 @@ const CONTENT = {
     podcastDuration: '~18 min - deep dive',
     podcastScript: [
       { speaker: 'host',   text: "Welcome back to ENT Academy. I'm Elena." },
-      { speaker: 'cohost', text: "And I'm Marcus. Today's deep dive is sensorineural hearing loss in adults — a broad topic, but there's one thread that will earn you points and save a patient's hearing: never sit on a sudden loss." },
+      { speaker: 'cohost', text: "And I'm Marcus. Today's deep dive is sensorineural hearing loss in adults — a broad topic, but there's one thread that can save a patient's hearing: never sit on a sudden loss." },
       { speaker: 'host',   text: "Let's start with localization, because every case begins here. How do you prove a loss is sensorineural at the bedside?" },
       { speaker: 'cohost', text: "Three things line up. Otoscopy is normal — no wax, no effusion, no perforation. The Weber tuning fork lateralizes to the better-hearing ear. And Rinne is positive, air conduction louder than bone, in both ears. On the audiogram there's no air-bone gap. That triad says sensory or neural, not conductive." },
       { speaker: 'host',   text: "And the audiogram gives one more clue about where in the pathway." },
@@ -15012,10 +15053,10 @@ const CONTENT = {
       { speaker: 'cohost', text: "Think of it when SNHL is rapidly progressive and bilateral over weeks to months, and — the giveaway — it responds to steroids. It can be primary or part of a systemic disease; Cogan syndrome pairs interstitial keratitis with audiovestibular symptoms. Treat with corticosteroids, adding a steroid-sparing immunosuppressant for maintenance." },
       { speaker: 'host',   text: "Round out the differential and management." },
       { speaker: 'cohost', text: "Any asymmetric or unilateral loss, unilateral tinnitus, or sudden loss earns an M-R-I of the I-A-Cs with gadolinium to rule out a schwannoma. Also on the list: hereditary loss, Ménière's with its low-frequency fluctuating pattern, infections like syphilis and congenital C-M-V, and perilymph fistula. For management, most patients do well with hearing aids; when aids no longer give adequate speech understanding, it's cochlear implant territory. Add disease-specific therapy and don't forget to counsel on tinnitus." },
-      { speaker: 'host',   text: "Exam-morning takeaways." },
+      { speaker: 'host',   text: "Let's land the key takeaways." },
       { speaker: 'cohost', text: "One: confirm SNHL with normal otoscopy, Weber to the better ear, positive Rinne, no air-bone gap. Two: sudden loss is thirty decibels over three frequencies in seventy-two hours — an emergency; start steroids now and get the M-R-I, but skip routine labs, C-T, antivirals, and thrombolytics. Three: word recognition worse than the audiogram predicts means retrocochlear — image it. Four: the four-K notch is noise; rapidly progressive bilateral steroid-responsive loss is autoimmune." },
-      { speaker: 'host',   text: "Localize, find the treatable cause, and treat sudden loss like the emergency it is. Good luck tomorrow — you're ready." },
-      { speaker: 'cohost', text: "Go get it." }
+      { speaker: 'host',   text: "Localize, find the treatable cause, and treat sudden loss like the emergency it is." },
+      { speaker: 'cohost', text: "That's the through-line." }
     ]
   }
 };
@@ -17314,10 +17355,10 @@ function renderWeek() {
       <span class="ra-status">segment 1</span>
     </div>
 
-    <div class="tabs">${tabsHTML}</div>
+    <div class="tabs" id="week-tabs">${tabsHTML}</div>
     <div class="week-with-notes">
       <div class="week-main-col">
-        <div class="week-tab-content">${body}</div>
+        <div class="week-tab-content" id="week-tab-content">${body}</div>
       </div>
       <aside class="week-notes-col">
         ${renderNotesPanel(w)}
@@ -24959,8 +25000,10 @@ function attachListeners() {
           pushNav();
           state.lastLocation = { week: state.selectedWeek, tab: el.dataset.tab };
           setState({ weekTab: el.dataset.tab, flashcardFlipped: false });
-          // Scroll to top so user sees the new tab immediately (animated, falls back to instant)
-          safeScrollTo(0, { duration: 350 });
+          // Scroll to the tab bar so the tabs AND the new content are immediately in view —
+          // on mobile, scrolling to the very top left the user above the fold (page header),
+          // forcing a manual scroll to reach the study material.
+          scrollToSectionWhenReady('week-tabs');
           break;
         case 'scroll-to-section': {
           scrollToSectionWhenReady(el.dataset.target);
