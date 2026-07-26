@@ -16076,6 +16076,28 @@ function loadStored() {
   // save would overwrite localStorage with that empty state, wiping the key and progress for good.
   try { _mergeCriticalFallback(); } catch (e) { /* ignore */ }
 }
+/* Merge two per-chapter progress records, keeping the BEST of each chapter (completed wins,
+   higher quiz score wins, latest visit wins). Used so progress is never lost when the main blob
+   and the backup disagree — the union always survives. */
+function _pickBetterProg(x, y){
+  if (!x) return y || undefined; if (!y) return x;
+  const m = Object.assign({}, x, y);
+  m.completed = !!(x.completed || y.completed);
+  const xs = (x.quizScore != null) ? x.quizScore : -1;
+  const ys = (y.quizScore != null) ? y.quizScore : -1;
+  if (xs >= ys && x.quizScore != null) { m.quizScore = x.quizScore; m.quizTotal = x.quizTotal; }
+  else if (y.quizScore != null) { m.quizScore = y.quizScore; m.quizTotal = y.quizTotal; }
+  const xv = x.lastVisited || '', yv = y.lastVisited || '';
+  m.lastVisited = (xv > yv) ? xv : yv;
+  return m;
+}
+function _mergeProgress(a, b){
+  a = a || {}; b = b || {}; const out = {};
+  const keys = {}; Object.keys(a).forEach(k => keys[k] = 1); Object.keys(b).forEach(k => keys[k] = 1);
+  Object.keys(keys).forEach(k => { out[k] = _pickBetterProg(a[k], b[k]); });
+  return out;
+}
+function _unionShallow(a, b){ return Object.assign({}, b || {}, a || {}); } // a (main) wins, b (backup) fills gaps
 /* Overlay the tiny critical record onto state, filling only what the main blob didn't provide.
    This is what makes the OpenAI key and study progress survive updates and storage pressure. */
 function _mergeCriticalFallback() {
@@ -16094,12 +16116,21 @@ function _mergeCriticalFallback() {
     if (!state.managerName && c.managerName) state.managerName = c.managerName;
     if (!state.managerPasscode && c.managerPasscode) state.managerPasscode = c.managerPasscode;
     if (!state.managerCredId && c.managerCredId) state.managerCredId = c.managerCredId;
-    // Progress: only fill if the main record is empty/missing.
-    const emptyObj = o => !o || Object.keys(o).length === 0;
-    if (emptyObj(state.managerProgress) && !emptyObj(c.managerProgress)) state.managerProgress = c.managerProgress;
-    if (emptyObj(state.clientProgress) && !emptyObj(c.clientProgress)) state.clientProgress = c.clientProgress;
-    if (emptyObj(state.srs) && !emptyObj(c.srs)) state.srs = c.srs;
-    if (emptyObj(state.personalNotes) && !emptyObj(c.personalNotes)) state.personalNotes = c.personalNotes;
+    // Progress: UNION-MERGE with the backup so nothing is ever dropped (partial saves self-heal).
+    state.managerProgress = _mergeProgress(state.managerProgress, c.managerProgress);
+    if (c.clientProgress) {
+      state.clientProgress = state.clientProgress || {};
+      Object.keys(c.clientProgress).forEach(function(u){
+        const mine = state.clientProgress[u] || {};
+        const theirs = c.clientProgress[u] || {};
+        state.clientProgress[u] = {
+          progress: _mergeProgress(mine.progress, theirs.progress),
+          quizScores: Object.assign({}, theirs.quizScores || {}, mine.quizScores || {})
+        };
+      });
+    }
+    state.srs = _unionShallow(state.srs, c.srs);
+    state.personalNotes = _unionShallow(state.personalNotes, c.personalNotes);
     // Keep the active progress pointer sensible.
     if (state.userMode !== 'client') state.progress = state.managerProgress || state.progress || {};
   } catch (e) { /* ignore */ }
@@ -20157,13 +20188,15 @@ function renderPodcast() {
           const active = p.week === wn;
           const chNum = p.w.chapter || p.week;
           const mins = (p.c.podcastDuration || '~15 min');
+          const offBadge = (state.podcastsDownloaded && state.podcastsDownloaded[p.week]) ? `<span title="Saved for offline — plays with no internet" style="flex-shrink:0;display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:800;color:#15803d;background:#dcfce7;border:1px solid #86efac;border-radius:99px;padding:2px 7px;">⬇ offline</span>` : '';
           const title = String(p.c.podcastTitle||p.w.title).replace(/^Deep Dive[ .\u00b7-]+/,'');
           return `<button class="pod-lib-card" data-action="pod-select" data-week="${p.week}" data-ch="${chNum}" data-title="${escapeAttr(title.toLowerCase())}" style="display:flex;align-items:center;gap:10px;text-align:left;padding:11px 13px;border-radius:12px;border:1px solid ${active?'var(--accent)':'var(--border)'};background:${active?'var(--accent-soft)':'var(--card)'};cursor:pointer;">
             <span style="width:36px;height:36px;flex-shrink:0;border-radius:9px;background:linear-gradient(135deg,#8b5cf6,#6366f1);color:#fff;display:grid;place-items:center;font-size:14px;font-weight:800;">${chNum}</span>
-            <span style="min-width:0;">
+            <span style="min-width:0;flex:1;">
               <span style="display:block;font-weight:700;font-size:13.5px;color:var(--navy-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHTML(title)}</span>
               <span style="display:block;font-size:11.5px;color:var(--text-soft);">Chapter ${chNum} · ${escapeHTML(mins)}</span>
             </span>
+            ${offBadge}
           </button>`;
         }).join('')}
       </div>
@@ -21156,6 +21189,27 @@ const TTS = {
     const cur = (state.podcastTurn >= 0) ? state.podcastTurn : 0;
     this.jumpTo(Math.max(0, cur - 1));
   },
+  // Skip ±N seconds. Seeks within the current HD clip and crosses into the next/previous turn
+  // at the clip boundaries, so 30-second skips keep working across the whole episode.
+  skip(sec) {
+    if (state.podcastStatus === 'stopped') return;
+    // No seekable audio (browser voice) → move whole turns.
+    if (!this.audio || !isFinite(this.audio.duration) || !this.audio.duration) {
+      const cur0 = (state.podcastTurn >= 0) ? state.podcastTurn : 0;
+      this.jumpTo(Math.max(0, cur0 + (sec >= 0 ? 1 : -1)));
+      return;
+    }
+    const t = (this.audio.currentTime || 0) + sec;
+    if (t < 0) {
+      // going back past the clip start → previous turn (unless we're mid-clip, then to clip start)
+      if ((this.audio.currentTime || 0) > 3.5) { try { this.audio.currentTime = 0; } catch(e){} }
+      else { const cur1 = (state.podcastTurn >= 0) ? state.podcastTurn : 0; this.jumpTo(Math.max(0, cur1 - 1)); }
+      return;
+    }
+    if (t >= this.audio.duration) { this.next(); return; }
+    try { this.audio.currentTime = t; } catch(e){}
+    try { if (typeof updateFloatingPlayer === 'function') updateFloatingPlayer(); } catch(e){}
+  },
   jumpTo(idx) {
     // Cancel current audio without forcing full render
     if (this.audio) { try { this.audio.pause(); } catch (e) {} this.audio = null; }
@@ -21319,12 +21373,13 @@ function updateFloatingPlayer() {
     </div>
     <div class="fp-controls" role="group" aria-label="Podcast playback controls">
       <button class="fp-btn fp-btn-listen" data-action="fp-listen-mode" title="Open full-screen Listen mode" aria-label="Open full-screen Listen mode">⊕</button>
-      <button class="fp-btn" data-action="fp-rewind10" title="Back 10 seconds" aria-label="Rewind 10 seconds">⟲10</button>
+      <button class="fp-btn" data-action="fp-skip-back" title="Back 30 seconds" aria-label="Back 30 seconds">↺30</button>
       <button class="fp-btn" data-action="fp-prev" title="Previous turn" aria-label="Previous turn">⏮</button>
       ${isPlaying
         ? `<button class="fp-btn fp-btn-play${isLoading ? ' fp-pulse' : ''}" data-action="fp-pause" title="Pause" aria-label="Pause podcast">⏸</button>`
         : `<button class="fp-btn fp-btn-play" data-action="fp-play" title="Play / Resume" aria-label="Play or resume podcast">▶</button>`}
       <button class="fp-btn" data-action="fp-next" title="Next turn" aria-label="Next turn">⏭</button>
+      <button class="fp-btn" data-action="fp-skip-fwd" title="Forward 30 seconds" aria-label="Forward 30 seconds">30↻</button>
       <button class="fp-btn" data-action="fp-stop" title="Stop and close" aria-label="Stop podcast">✕</button>
     </div>
     <div class="fp-progress" data-action="fp-seek-bar" role="slider" aria-label="Podcast progress" tabindex="0">
@@ -21391,17 +21446,18 @@ function updateListenMode() {
       <div class="lm-title">${escapeHTML(c.podcastTitle || ('Week ' + state.podcastWeek + ' Podcast'))}</div>
       <div class="lm-speaker">${speakerName} · ${speakerRole}</div>
       <div class="lm-turn-text">${escapeHTML(turn.text)}</div>
-      <div class="lm-progress" data-action="lm-seek-bar" role="slider" aria-label="Seek within current turn" tabindex="0">
+      <div class="lm-progress" data-action="lm-seek-bar" role="slider" aria-label="Seek through the episode" tabindex="0">
         <div class="lm-progress-fill" style="width:${audioPct}%"></div>
       </div>
       <div class="lm-meta">Turn ${turnIdx + 1} of ${total}${isLoading ? ' · generating voice…' : ''}</div>
       <div class="lm-controls">
-        <button class="lm-btn" data-action="lm-rewind10" aria-label="Rewind 10 seconds">⟲ 10</button>
+        <button class="lm-btn" data-action="lm-skip-back" aria-label="Back 30 seconds">↺30</button>
         <button class="lm-btn" data-action="lm-prev" aria-label="Previous turn">⏮</button>
         ${isPlaying
             ? `<button class="lm-btn lm-btn-play${isLoading ? ' lm-pulse' : ''}" data-action="lm-pause" aria-label="Pause podcast">⏸</button>`
             : `<button class="lm-btn lm-btn-play" data-action="lm-play" aria-label="Play or resume podcast">▶</button>`}
         <button class="lm-btn" data-action="lm-next" aria-label="Next turn">⏭</button>
+        <button class="lm-btn" data-action="lm-skip-fwd" aria-label="Forward 30 seconds">30↻</button>
         <button class="lm-btn" data-action="lm-close" aria-label="Close Listen mode">⊠</button>
       </div>
     </div>
@@ -21409,19 +21465,26 @@ function updateListenMode() {
 }
 
 /* Helper: when user clicks anywhere on a progress bar, seek the audio to that position */
-function seekToClick(barEl, clickEvent) {
-  if (!TTS.audio || !TTS.audio.duration) return;
+/* The progress bar represents the WHOLE episode (all turns), so a click/drag must map to a TURN —
+   the old code seeked within the current short clip, which is why the bar felt wildly inaccurate.
+   seekBarPreview updates the fill live and returns the target turn; the jump is committed on release. */
+function seekBarPreview(barEl, ev) {
   try {
+    const c = (state.podcastWeek != null) ? CONTENT[state.podcastWeek] : null;
+    const total = c && c.podcastScript ? c.podcastScript.length : 0;
+    if (!total) return null;
     const rect = barEl.getBoundingClientRect();
-    const x = (clickEvent.clientX || (clickEvent.touches && clickEvent.touches[0].clientX) || 0) - rect.left;
-    const pct = Math.max(0, Math.min(1, x / rect.width));
-    TTS.audio.currentTime = pct * TTS.audio.duration;
-    // Update visuals immediately
-    const fpFill = document.querySelector('#floating-player .fp-progress-fill');
-    if (fpFill) fpFill.style.width = (pct * 100) + '%';
-    const lmFill = document.querySelector('#listen-mode .lm-progress-fill');
-    if (lmFill) lmFill.style.width = (pct * 100) + '%';
-  } catch(e) {}
+    const cx = ev.clientX || (ev.touches && ev.touches[0] && ev.touches[0].clientX) || 0;
+    const pct = Math.max(0, Math.min(1, (cx - rect.left) / Math.max(1, rect.width)));
+    const w = (pct * 100) + '%';
+    const fpFill = document.querySelector('#floating-player .fp-progress-fill'); if (fpFill) fpFill.style.width = w;
+    const lmFill = document.querySelector('#listen-mode .lm-progress-fill'); if (lmFill) lmFill.style.width = w;
+    return Math.max(0, Math.min(total - 1, Math.floor(pct * total)));
+  } catch(e) { return null; }
+}
+function seekToClick(barEl, ev) {
+  const t = seekBarPreview(barEl, ev);
+  if (t != null && typeof TTS.jumpTo === 'function') TTS.jumpTo(t);
 }
 
 // Delegated click handler — attached once to the floating-player DOM node + Listen Mode + progress bars
@@ -21433,7 +21496,8 @@ function seekToClick(barEl, clickEvent) {
     const seekBar = e.target.closest('[data-action="fp-seek-bar"], [data-action="lm-seek-bar"]');
     if (seekBar) {
       e.stopPropagation();
-      seekToClick(seekBar, e);
+      // Pointer events already committed the seek on release — don't seek twice.
+      if (!(window.__fpSeekJustHappened && window.__fpSeekJustHappened())) seekToClick(seekBar, e);
       return;
     }
     const btn = e.target.closest('#floating-player [data-action], #listen-mode [data-action]');
@@ -21447,6 +21511,8 @@ function seekToClick(barEl, clickEvent) {
       case 'fp-prev':  TTS.prev();  break;
       case 'fp-next':  TTS.next();  break;
       case 'fp-rewind10': TTS.rewind10(); break;
+      case 'fp-skip-back': TTS.skip(-30); break;
+      case 'fp-skip-fwd':  TTS.skip(30);  break;
       case 'fp-listen-mode': openListenMode(); break;
       case 'lm-close': closeListenMode(); break;
       case 'lm-play':  TTS.play();  break;
@@ -21454,23 +21520,34 @@ function seekToClick(barEl, clickEvent) {
       case 'lm-prev':  TTS.prev();  break;
       case 'lm-next':  TTS.next();  break;
       case 'lm-rewind10': TTS.rewind10(); break;
+      case 'lm-skip-back': TTS.skip(-30); break;
+      case 'lm-skip-fwd':  TTS.skip(30);  break;
     }
   });
-  // Drag-to-scrub: hold and slide a finger (or mouse) along the progress bar to scrub the clip.
-  let _seekBar = null;
+  // Drag-to-scrub: preview the fill while dragging; COMMIT the jump (to the target turn) on release,
+  // so scrubbing doesn't re-trigger playback on every pixel of movement.
+  let _seekBar = null, _seekTarget = null, _seeked = 0;
   const _startDrag = (e) => {
     const bar = e.target.closest('[data-action="fp-seek-bar"], [data-action="lm-seek-bar"]');
     if (!bar) return;
     _seekBar = bar;
     try { e.preventDefault(); } catch(_){}
-    seekToClick(bar, e);
+    _seekTarget = seekBarPreview(bar, e);
   };
-  const _moveDrag = (e) => { if (_seekBar) { try { e.preventDefault(); } catch(_){} seekToClick(_seekBar, e); } };
-  const _endDrag = () => { _seekBar = null; };
+  const _moveDrag = (e) => { if (_seekBar) { try { e.preventDefault(); } catch(_){} _seekTarget = seekBarPreview(_seekBar, e); } };
+  const _endDrag = () => {
+    if (_seekBar) {
+      if (_seekTarget != null && typeof TTS.jumpTo === 'function') TTS.jumpTo(_seekTarget);
+      _seeked = Date.now();           // suppress the synthetic click that follows a tap/drag
+      _seekBar = null; _seekTarget = null;
+    }
+  };
   document.addEventListener('pointerdown', _startDrag, { passive: false });
   document.addEventListener('pointermove', _moveDrag, { passive: false });
   document.addEventListener('pointerup', _endDrag);
   document.addEventListener('pointercancel', _endDrag);
+  // Expose the suppression flag to the click handler above (avoid double-seek on tap).
+  window.__fpSeekJustHappened = function(){ return (Date.now() - _seeked) < 450; };
   window.__fpListenerAttached = true;
 })();
 // Pre-warm voices (Chrome lazy-loads them)
