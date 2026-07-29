@@ -20737,13 +20737,13 @@ async function openaiTtsBlobUrl(speakerId, text) {
     const blob = await fallback.blob();
     const url = URL.createObjectURL(blob);
     TTS_CACHE.set(cacheKey, url);
-    try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
+    try { if (typeof ttsStoreBlob === 'function') await ttsStoreBlob(speakerId, text, blob); } catch(_){}
     return url;
   }
   const blob = await resp.blob();
   const url = URL.createObjectURL(blob);
   TTS_CACHE.set(cacheKey, url);
-  try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
+  try { if (typeof ttsStoreBlob === 'function') await ttsStoreBlob(speakerId, text, blob); } catch(_){}
   return url;
 }
 
@@ -20870,7 +20870,7 @@ async function elevenLabsTtsBlobUrl(speakerId, text) {
   const blob = await resp.blob();
   const url = URL.createObjectURL(blob);
   TTS_CACHE.set(cacheKey, url);
-  try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
+  try { if (typeof ttsStoreBlob === 'function') await ttsStoreBlob(speakerId, text, blob); } catch(_){}
   return url;
 }
 
@@ -20901,7 +20901,8 @@ function _ttsMemSet(speakerId, text, url){
 // Store a blob DIRECTLY (called from the TTS fetchers with the blob in hand — reliable) so a
 // download always persists, even if re-fetching an object URL would have failed.
 function ttsStoreBlob(speakerId, text, blob){
-  try { if (blob && blob.size && typeof idbPut === 'function') idbPut(_ttsAudioKey(speakerId, text), blob).catch(function(){}); } catch(_){}
+  try { if (blob && blob.size && typeof idbPut === 'function') return idbPut(_ttsAudioKey(speakerId, text), blob).catch(function(){}); } catch(_){}
+  return Promise.resolve();
 }
 // Fallback fire-and-forget persist from an object URL (kept as a safety net).
 function _ttsPersist(speakerId, text, url){
@@ -21201,7 +21202,13 @@ const TTS = {
   voiceMap: {},
   // Renamed: HD TTS = either OpenAI OR ElevenLabs key configured.
   // Previously this only checked OpenAI — caused silent playback for ElevenLabs-only users.
-  useHdTts() { return !!(state.openaiKey || state.elevenLabsKey); },
+  useHdTts() {
+    // Take the HD path if a key is set OR if ANY podcast has been downloaded for offline — otherwise,
+    // offline with the key not detected, we'd skip the IndexedDB cache and wrongly use the browser
+    // voice even though the downloaded HD audio is available. The cache check happens first anyway,
+    // and if a clip isn't cached and there's no key it falls back to the device voice gracefully.
+    return !!(state.openaiKey || state.elevenLabsKey || (state.podcastsDownloaded && Object.keys(state.podcastsDownloaded).length));
+  },
   useOpenAI() { return this.useHdTts(); }, // back-compat alias
   ensureVoices() {
     if (!('speechSynthesis' in window)) return [];
