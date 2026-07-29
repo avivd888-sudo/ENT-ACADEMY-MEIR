@@ -13601,28 +13601,155 @@ const CONTENT = {
       'Septal hematoma is the easy-to-miss emergency — examine the septum in every facial trauma, drain within hours.'
     ],
     flashcards: [
-      { q: 'How long after injury can facial lacerations be primarily closed?', a: 'Up to 24 hours, given the face\'s rich blood supply (vs 6–12 hours elsewhere). With copious irrigation, even contaminated wounds often heal well.' },
-      { q: 'When are facial nerve lacerations repaired?', a: 'Within 72 hours under operating microscope. Branches lateral to a vertical line from the lateral canthus warrant exploration if cut in this zone.' },
-      { q: 'Parkland formula for burn fluid resuscitation?', a: 'Lactated Ringer\'s 4 mL × kg × %TBSA over 24 hours. Half in first 8 hours, half in next 16 hours. Titrate to UOP 0.5 mL/kg/hr.' },
-      { q: 'Antibiotic of choice for human or animal bite to the face?', a: 'Amoxicillin-clavulanate — covers Pasteurella, Eikenella, Staphylococcus, anaerobes.' },
-      { q: 'Why do you NEVER use ice on a fresh burn?', a: 'Ice causes vasoconstriction that deepens the burn (extends the zone of stasis into necrosis). Use room-temperature water for cooling.' },
-      { q: 'What is the danger of a septal hematoma?', a: 'Cartilage avascular necrosis within 3–4 days → saddle nose deformity. Drain immediately + place quilting sutures + bilateral pack + anti-staph antibiotic.' }
+      { q: 'How long after injury can facial lacerations be primarily closed, and why?', a: 'Up to ~24 hours (vs 6–12 elsewhere) because of the face\'s rich blood supply; with copious irrigation even contaminated wounds usually heal well.' },
+      { q: 'When and how are facial-nerve branch lacerations repaired?', a: 'Within ~72 hours under the operating microscope. Branches cut MEDIAL to a vertical line from the lateral canthus arborize and generally don\'t need repair; those cut LATERAL to it warrant exploration and coaptation.' },
+      { q: 'Parotid (Stensen) duct — course and repair?', a: 'Exits at the papilla opposite the upper 2nd molar, runs superficial to the masseter through the buccinator. Cannulate, repair over a silicone stent, leave ~2 weeks; missed injury → sialocele or cutaneous fistula.' },
+      { q: 'Management of a canalicular (lacrimal) laceration?', a: 'Repair with silicone (Crawford) stent intubation within ~72 hours to prevent epiphora from canalicular stenosis.' },
+      { q: 'Two "drain-it-now" facial-trauma emergencies?', a: 'Auricular hematoma (→ cauliflower ear) and septal hematoma (→ cartilage necrosis and saddle nose within 3–4 days). Drain, then bolster/quilt and pack; give anti-staph cover.' },
+      { q: 'Parkland formula for burn resuscitation?', a: 'Lactated Ringer\'s 4 mL × kg × %TBSA over 24 h — half in the first 8 h from time of injury, half over the next 16 h. Titrate to urine output 0.5 mL/kg/h (adults), 1 mL/kg/h (children).' },
+      { q: 'How is %TBSA estimated?', a: 'Rule of Nines (each arm 9%, each leg 18%, anterior trunk 18%, head 9% in adults); the patient\'s palm ≈ 1%. Use the Lund-Browder chart in children (proportionally larger head).' },
+      { q: 'Jackson\'s three zones of a burn?', a: 'Central zone of coagulation (dead), surrounding zone of stasis (salvageable — protect from hypoperfusion, hypothermia, and infection), and outer zone of hyperemia (recovers). Good resuscitation prevents the zone of stasis from converting to necrosis.' },
+      { q: 'Why never use ice on a fresh burn?', a: 'Ice causes vasoconstriction that deepens the burn by converting the zone of stasis to necrosis. Cool with room-temperature water instead.' },
+      { q: 'Inhalation-injury signs that push you to early intubation?', a: 'Facial burns, singed nasal hairs/eyebrows, carbonaceous sputum, hoarseness or stridor, and burns in an enclosed-space fire. Intubate EARLY — once edema sets in, the airway can become impossible to secure.' },
+      { q: 'Burn depth grading in one line each?', a: 'Superficial (epidermis, red/painful, no blister); superficial partial-thickness (blisters, painful, blanches — heals ≤3 wks); deep partial-thickness (mottled, sluggish blanch — often grafted); full-thickness (leathery, insensate, white/charred — graft).' },
+      { q: 'Topical antimicrobial choice on the FACE vs trunk in burns?', a: 'Face: bacitracin or mupirocin (silver sulfadiazine stains and is avoided near the face/eyes and in sulfa allergy). Trunk/extremities: silver sulfadiazine; mafenide penetrates eschar/cartilage (ears) but is painful and causes metabolic acidosis.' },
+      { q: 'Antibiotic and extra step for a HUMAN bite to the face?', a: 'Amoxicillin-clavulanate (covers Eikenella corrodens and oral flora); human bites are the most infection-prone bite. Irrigate copiously, update tetanus, and never close a clearly infected bite tightly.' },
+      { q: 'Which facial burns most threaten function, and how are they reconstructed?', a: 'Peri-orbital burns → ectropion (corneal exposure); peri-oral → microstomia; and neck contractures. Managed with early splinting/pressure, and later full-thickness grafts or flaps resurfacing by aesthetic subunit; grafting delayed until resuscitation is complete (~day 3–5).' }
     ],
     quiz: [
-      { stem: 'A 35-year-old presents 6 hours after a dog bite to the right cheek. The wound is 4 cm, full-thickness through to the buccal fat pad. Best initial management:',
-        options: ['Leave open to heal by secondary intention', 'Copious irrigation, exploration, primary closure, amoxicillin-clavulanate, tetanus prophylaxis', 'Antibiotics + delayed closure at 5 days', 'Skin graft immediately'],
-        correct: 1, explanation: 'Facial vascularity allows primary closure of bites within 24 hours after thorough irrigation. Empirical amoxicillin-clavulanate for Pasteurella + tetanus prophylaxis if >5 years since last booster.' },
-      { stem: 'A 70 kg adult with 30% TBSA burns. How much Lactated Ringer\'s should be given in the first 8 hours per Parkland?',
+      { stem: 'A 35-year-old presents 6 hours after a dog bite to the right cheek — a 4 cm full-thickness wound to the buccal fat pad. Best initial management:',
+        options: ['Leave open to heal by secondary intention', 'Copious irrigation, exploration, primary closure, amoxicillin-clavulanate, tetanus prophylaxis', 'Antibiotics and delayed closure at 5 days', 'Immediate skin graft'],
+        correct: 1, explanation: 'Facial vascularity permits primary closure of bites within ~24 hours after thorough irrigation and exploration; cover with amoxicillin-clavulanate for Pasteurella and update tetanus.' },
+      { stem: 'A 70 kg adult with 30% TBSA burns. Lactated Ringer\'s in the FIRST 8 hours by Parkland?',
         options: ['2100 mL', '4200 mL', '8400 mL', '6300 mL'],
-        correct: 1, explanation: 'Parkland = 4 × 70 × 30 = 8400 mL in 24h. Half (4200 mL) in first 8 hours from time of injury.' },
-      { stem: 'A 28-year-old firefighter has carbonaceous sputum, singed nasal hairs, and hoarseness after exposure. Hemodynamically stable. The most appropriate next step is:',
-        options: ['Observation with humidified O₂', 'Outpatient discharge with follow-up in 24 h', 'Early endotracheal intubation in a controlled setting', 'Tracheostomy under local anesthesia'],
-        correct: 2, explanation: 'Inhalation injury signs warrant early intubation BEFORE swelling makes the airway unmanageable. Awake fiberoptic in OR with surgeon ready for emergency tracheostomy is the safest approach.' }
+        correct: 1, explanation: '4 × 70 × 30 = 8400 mL over 24 h; half — 4200 mL — in the first 8 hours from the time of injury (not from arrival).' },
+      { stem: 'A firefighter has carbonaceous sputum, singed nasal hairs, and hoarseness, but is hemodynamically stable. Best next step:',
+        options: ['Humidified O₂ and observe', 'Discharge with 24 h follow-up', 'Early endotracheal intubation in a controlled setting', 'Await stridor before acting'],
+        correct: 2, explanation: 'Inhalation-injury signs warrant early intubation before progressive edema makes the airway impossible; awake fiberoptic in the OR with a surgeon ready for emergency tracheostomy is safest.' },
+      { stem: 'A cheek laceration produces clear fluid that increases when the patient chews, and cannulating the Stensen papilla reveals the tract. Correct management:',
+        options: ['Simple skin closure', 'Ligate the duct', 'Repair the duct over a silicone stent left ~2 weeks', 'Observe — it will heal'],
+        correct: 2, explanation: 'A parotid-duct laceration is repaired over a stent to prevent stricture, sialocele, or a salivary-cutaneous fistula; the stent is left about two weeks.' },
+      { stem: 'A young man has a boxer\'s injury with a tender, fluctuant, bluish swelling of the auricle. Untreated, the feared outcome and correct action are:',
+        options: ['Keloid; excise', 'Cauliflower ear from cartilage necrosis; incise/drain and bolster', 'Cellulitis; oral antibiotics only', 'Nothing; reassure'],
+        correct: 1, explanation: 'An auricular hematoma strips perichondrium from cartilage; if not drained and bolstered (through-and-through quilting/bolster), neocartilage forms — cauliflower ear.' },
+      { stem: 'On examining a nasal-trauma patient you see a bilateral bluish, fluctuant swelling of the nasal septum. The priority is:',
+        options: ['Reduce the nasal bones now', 'Immediate incision and drainage of the septal hematoma', 'CT and outpatient ENT follow-up', 'Nasal decongestant only'],
+        correct: 1, explanation: 'A septal hematoma devascularizes the septal cartilage, causing avascular necrosis and a saddle-nose deformity within days; drain immediately, place quilting sutures, pack, and give anti-staph antibiotics.' },
+      { stem: 'Which facial-nerve laceration generally does NOT require operative repair?',
+        options: ['A branch cut lateral to the lateral canthus', 'The main trunk at the stylomastoid foramen', 'A distal branch cut medial to a vertical line from the lateral canthus', 'The marginal mandibular branch at the mandibular border'],
+        correct: 2, explanation: 'Distal branches medial to a vertical line from the lateral canthus are small and arborize with cross-innervation, so repair is usually unnecessary; cuts lateral to that line warrant exploration and microscopic coaptation within 72 hours.' },
+      { stem: 'The single most important principle when repairing a laceration that crosses the vermilion border:',
+        options: ['Use the largest suture available', 'Align the vermilion (white roll) first, within 1 mm', 'Shave the lip first', 'Close in a single layer'],
+        correct: 1, explanation: 'A vermilion step-off of even 2 mm is visible at conversational distance, so the white roll is aligned first (mark before infiltrating local, which blanches the landmark).' },
+      { stem: 'Which topical agent is best AVOIDED on facial burns and near the eyes?',
+        options: ['Bacitracin', 'Mupirocin', 'Silver sulfadiazine', 'Plain petrolatum'],
+        correct: 2, explanation: 'Silver sulfadiazine stains, can cause transient leukopenia, is a sulfonamide (allergy risk), and is avoided near the eyes/face; bacitracin or mupirocin are preferred on the face.' },
+      { stem: 'A patient with deep circumferential full-thickness burns of the neck and chest develops rising airway pressures and restricted chest excursion. The needed procedure is:',
+        options: ['Fasciotomy of the limbs', 'Escharotomy of the constricting eschar', 'Immediate skin grafting', 'Tracheostomy'],
+        correct: 1, explanation: 'A rigid circumferential full-thickness eschar acts like a tourniquet; escharotomy — incising the eschar — relieves the constriction of the chest/neck (or a limb) and restores ventilation/perfusion.' },
+      { stem: 'A burn patient from an enclosed-space fire has a normal SpO₂ on the monitor but headache, confusion, and a cherry-red appearance. The most likely problem is:',
+        options: ['Simple anxiety', 'Carbon monoxide poisoning (pulse oximetry reads falsely normal)', 'Hypoglycemia', 'Opioid overdose'],
+        correct: 1, explanation: 'Standard pulse oximetry cannot distinguish carboxyhemoglobin from oxyhemoglobin, so SpO₂ looks normal; measure carboxyhemoglobin and give 100% oxygen. Consider concurrent cyanide toxicity (persistent lactic acidosis).' },
+      { stem: 'When is definitive excision and grafting of deep facial/neck burns typically performed?',
+        options: ['Within the first hour', 'After resuscitation is complete, around day 3–5', 'Only after 3 weeks', 'Never — all heal spontaneously'],
+        correct: 1, explanation: 'Early tangential excision and grafting of deep partial- and full-thickness burns (once the patient is resuscitated, ~day 3–5) reduces infection and improves outcomes versus prolonged conservative care.' },
+      { stem: 'What estimate does the patient\'s palm provide in burn assessment?',
+        options: ['5% TBSA', '1% TBSA', '9% TBSA', '18% TBSA'],
+        correct: 1, explanation: 'The patient\'s palm (including fingers) approximates 1% of TBSA — useful for scattered or patchy burns; the Rule of Nines covers larger areas and Lund-Browder is used in children.' },
+      { stem: 'A road-rash abrasion contains embedded gravel and asphalt. If not addressed at the first cleaning, the result is:',
+        options: ['Keloid', 'Traumatic tattoo (permanent pigmentation)', 'Cauliflower deformity', 'Ectropion'],
+        correct: 1, explanation: 'Embedded debris left in an abrasion epithelializes over and produces a permanent traumatic tattoo; meticulous early irrigation and scrubbing/dermabrasion of the debris prevents it.' },
+      { stem: 'In facial trauma, when should the facial-nerve motor exam ideally be documented?',
+        options: ['After local anesthetic infiltration', 'Before infiltrating local anesthetic', 'Only in the OR', 'It is unnecessary'],
+        correct: 1, explanation: 'Document facial-nerve function BEFORE injecting local anesthetic, which can transiently paralyze branches and mask (or fake) a nerve injury.' }
+    ],
+    keyPoints: [
+      { category: 'Assessment', items: ['ATLS first; face is vascular — hypovolemic shock → look elsewhere', 'Concurrent C-spine precautions', 'Document facial-nerve exam BEFORE local anesthetic', 'Photograph; check for foreign bodies / traumatic tattoo'] },
+      { category: 'Timing & bites', items: ['Face closes up to ~24 h (rich blood supply)', 'Irrigate copiously; conservative debridement', 'Bites: amoxicillin-clavulanate (Pasteurella, Eikenella)', 'Update tetanus ± rabies for animal bites'] },
+      { category: 'Special structures', items: ['Facial nerve — repair <72 h; lateral to canthus line = explore', 'Parotid (Stensen) duct — repair over stent ×2 wk', 'Lacrimal canaliculus — Crawford tubes <72 h', 'Auricular & septal hematoma — drain NOW (cauliflower / saddle)'] },
+      { category: 'Closure', items: ['Layered, tension-free, everted edges', 'Vermilion within 1 mm (mark before local)', 'Don\'t shave the eyebrow; align landmarks', 'Fine sutures, remove face at 5–7 days + steri-strips'] },
+      { category: 'Burns — severity & fluids', items: ['Depth: superficial → partial → deep partial → full', 'Jackson zones: coagulation / stasis / hyperemia', 'Rule of Nines; palm ≈ 1%; Lund-Browder in kids', 'Parkland: 4 mL × kg × %TBSA LR; ½ in 8 h; UOP 0.5 mL/kg/h'] },
+      { category: 'Burns — airway & wound', items: ['Inhalation signs → intubate EARLY', 'CO: SpO₂ falsely normal → check COHb, give 100% O₂', 'Cool with water, not ice; face → bacitracin/mupirocin', 'Circumferential eschar → escharotomy; excise+graft ~day 3–5'] }
+    ],
+    slides: [
+      { title: 'Facial Trauma — Soft Tissue & Burns', subtitle: 'Cummings 8e · Chapter 18', body: '<p>Find the airway and the hidden structures first; the cosmetic closure comes second.</p>' },
+      { title: 'Initial assessment', body: '<ul><li>ATLS + C-spine; face is vascular — shock ⇒ look elsewhere</li><li>Document facial-nerve exam BEFORE local</li><li>Photograph; remove foreign bodies (prevent traumatic tattoo)</li><li>Tetanus ± rabies</li></ul>' },
+      { title: 'Special structures — don\'t miss', body: '<ul><li>Facial nerve — repair &lt;72 h; lateral to canthus line = explore</li><li>Parotid (Stensen) duct — stent repair ×2 wk</li><li>Lacrimal canaliculus — Crawford tubes</li><li>Auricular & septal hematoma — drain NOW</li></ul>' },
+      { title: 'Closure principles', body: '<ul><li>Layered, tension-free, everted</li><li>Vermilion within 1 mm (mark before local)</li><li>Never shave the eyebrow</li><li>Face closes up to ~24 h</li></ul>' },
+      { title: 'Bites & prophylaxis', body: '<ul><li>Dog &lt; cat &lt; human infection risk</li><li>Amoxicillin-clavulanate (Pasteurella / Eikenella)</li><li>Copious irrigation; don\'t tightly close infected bites</li><li>Tetanus; rabies for animal bites</li></ul>' },
+      { title: 'Burn depth & TBSA', body: '<ul><li>Superficial · superficial partial · deep partial · full</li><li>Jackson zones: coagulation / stasis / hyperemia</li><li>Rule of Nines; palm ≈ 1%; Lund-Browder (kids)</li></ul>' },
+      { title: 'Resuscitation & airway', body: '<ul><li>Parkland: 4 mL × kg × %TBSA LR; ½ in first 8 h</li><li>Titrate to UOP 0.5 mL/kg/h (1 in kids)</li><li>Inhalation signs → intubate EARLY</li><li>CO: SpO₂ falsely normal → COHb, 100% O₂</li></ul>' },
+      { title: 'Wound care & reconstruction', body: '<ul><li>Cool with water, not ice</li><li>Face → bacitracin/mupirocin; trunk → silver sulfadiazine</li><li>Circumferential eschar → escharotomy</li><li>Excise + graft ~day 3–5; watch ectropion / microstomia</li></ul>' }
     ],
     signs: [
-      { name: 'Carbonaceous sputum',     category: 'clinical', description: 'Black-flecked sputum after smoke exposure.', implication: 'Inhalation injury — early intubation strongly considered.' },
-      { name: 'Vermilion misalignment',  category: 'clinical', description: 'Step-off >1 mm at the white roll of the lip.', implication: 'Visible at conversational distance — meticulous primary alignment is critical.' },
-      { name: 'Stensen duct laceration', category: 'anatomic', description: 'Penetrating cheek wound with clear/saliva drainage; cannulation confirms tract.', implication: 'Repair over a silicone stent, leave 2 weeks to prevent stricture.' }
+      { name: 'Carbonaceous sputum', category: 'clinical', description: 'Black-flecked sputum after smoke exposure.', implication: 'Inhalation injury — strongly consider early intubation before edema.' },
+      { name: 'Vermilion misalignment', category: 'clinical', description: 'Step-off >1 mm at the white roll of the lip.', implication: 'Visible at conversational distance — align the vermilion first.' },
+      { name: 'Stensen duct laceration', category: 'anatomic', description: 'Cheek wound with clear/salivary drainage; cannulation confirms the tract.', implication: 'Repair over a silicone stent, leave ~2 weeks to prevent stricture/fistula.' },
+      { name: 'Bilateral septal swelling', category: 'clinical', description: 'Bluish, fluctuant swelling of both sides of the nasal septum after trauma.', implication: 'Septal hematoma — drain immediately to prevent cartilage necrosis and saddle nose.' }
+    ],
+    podcastTitle: 'Deep Dive · Facial Trauma — Soft Tissue and Burns',
+    podcastDuration: '~23 min - deep dive',
+    podcastScript: [
+      { speaker: 'host',   text: "Welcome to ENT Academy. I'm Elena." },
+      { speaker: 'cohost', text: "And I'm Marcus. Today's deep dive is facial soft-tissue trauma and burns — the emergency-room end of facial plastics, where a rushed closure can bury a divided nerve or a duct, and a missed airway can kill." },
+      { speaker: 'host',   text: "The frame for the hour is a hierarchy: life before limb before eye before nerve before cosmesis. The face is dramatic and bloody, so it's tempting to jump to the beautiful closure — but you earn that by first securing the airway, finding the hidden critical structures, and draining the two silent emergencies." },
+      { speaker: 'cohost', text: "Roadmap: initial assessment and the vascular-face pearl, then the special structures you cannot miss — facial nerve, parotid duct, lacrimal system, auricular and septal hematomas — then closure principles, bites and prophylaxis. Then a full second act on burns: depth, the zones of injury, TBSA, the Parkland formula, the airway, carbon monoxide, wound care, and reconstruction. And two cases." },
+      { speaker: 'host',   text: "Start with the primary survey. What's the face-specific twist?" },
+      { speaker: 'cohost', text: "It's still ATLS — airway, breathing, circulation, with C-spine precautions, because facial trauma from a car crash or assault carries a one-to-ten-percent rate of cervical-spine injury. The face-specific pearl is about circulation: the face is enormously vascular, so brisk facial bleeding is common, but it rarely causes hemorrhagic shock on its own. So if a facial-trauma patient IS in shock, don't blame the face — go looking for a chest, abdomen, or pelvic source." },
+      { speaker: 'host',   text: "And the exam sequence — there's a classic order-of-operations trap." },
+      { speaker: 'cohost', text: "The big one: document the facial-nerve motor exam BEFORE you infiltrate any local anesthetic. Lidocaine will transiently paralyze branches, so if you inject first and then test, you can either miss a real transection or manufacture a fake palsy. Have the patient raise the brows, close the eyes tight, smile, and show the lower teeth — then inject. Also photograph everything, do a cranial-nerve and eye exam, check for foreign bodies, and take a tetanus and, for animal bites, a rabies history." },
+      { speaker: 'host',   text: "Timing of closure — the vascular face buys you time." },
+      { speaker: 'cohost', text: "Right. Because of the blood supply, facial lacerations can usually be primarily closed up to about twenty-four hours after injury, versus six to twelve hours elsewhere on the body. Irrigate copiously — dilution is the solution to contamination — and debride conservatively; on the face you preserve every millimeter of viable tissue because it's hard to replace. Even grubby wounds do well after a good washout." },
+      { speaker: 'host',   text: "Now the special structures. Start with the one everyone fears — the facial nerve." },
+      { speaker: 'cohost', text: "Here's the clean rule. Drop a vertical line down from the lateral canthus of the eye. Branches divided MEDIAL to that line are small and richly arborized with cross-connections, so they recover without repair — you don't need to chase them. Branches divided LATERAL to that line are larger named branches, and those you explore and repair, ideally within seventy-two hours, under the operating microscope, before the cut ends retract and scar and become hard to find." },
+      { speaker: 'host',   text: "The parotid duct — easy to miss, painful to leave." },
+      { speaker: 'cohost', text: "Stensen's duct. It exits at a papilla opposite the upper second molar, runs forward superficial to the masseter, and pierces the buccinator. Think of it whenever you have a deep cheek laceration in the region of a line drawn from the tragus to the middle of the upper lip — the same line the buccal branch of the facial nerve follows, so duct and nerve travel together. Clear fluid welling into the wound, especially with chewing, is saliva. You confirm it by cannulating the papilla, then repair the duct over a fine silicone stent left about two weeks. Miss it and you get a sialocele or a salivary-cutaneous fistula." },
+      { speaker: 'host',   text: "Two more structures — the lacrimal system and the ear." },
+      { speaker: 'cohost', text: "Any medial eyelid laceration — medial to the puncta — can divide a canaliculus, and if you don't repair it you get lifelong tearing, epiphora. So those get silicone Crawford-tube intubation within about seventy-two hours. And the auricle: never leave bare cartilage exposed to air — it dies and gets infected — so you advance skin to cover it. And drain an auricular hematoma promptly, then bolster it with through-and-through quilting sutures, because blood stripping the perichondrium off the cartilage triggers disorganized neocartilage — the boxer's or wrestler's cauliflower ear." },
+      { speaker: 'host',   text: "And the nasal one — the classic missed emergency." },
+      { speaker: 'cohost', text: "The septal hematoma. Every facial-trauma and nasal-injury patient gets the speculum on the septum. A bilateral, bluish, boggy, fluctuant swelling of the septum is blood between the mucoperichondrium and the cartilage. The cartilage gets its blood from that lining, so a hematoma starves it — avascular necrosis in three to four days, and the septum collapses into a saddle-nose deformity. So you drain it immediately, place quilting sutures to obliterate the space, pack both sides, and cover with an anti-staph antibiotic. It is the cheapest save in facial trauma." },
+      { speaker: 'host',   text: "Closure principles — make the repair invisible." },
+      { speaker: 'cohost', text: "Layered and tension-free: approximate muscle and SMAS, then buried deep-dermal absorbable sutures to carry the tension, then fine skin sutures — six-oh or finer on the face — with the edges everted. Align the landmarks obsessively: the vermilion border of the lip within one millimeter, because a two-millimeter step-off is visible across a dinner table — and mark it before you inject local, which blanches the white roll. Line up the alar rim, the eyebrow — and never, ever shave an eyebrow; it may not grow back and it's your alignment guide. Remove facial sutures early, at five to seven days, and support with steri-strips." },
+      { speaker: 'host',   text: "Bites and prophylaxis — round out the soft-tissue half." },
+      { speaker: 'cohost', text: "Infection risk runs dog, then cat, then human — human bites are the worst, seeded with Eikenella and dense oral flora, and cat bites are deep punctures that inoculate Pasteurella. Amoxicillin-clavulanate covers all of them. Irrigate hard, debride, and on the face you can often still close primarily within the window because of the vascularity — but never tightly close a frankly infected bite. Update tetanus for tetanus-prone wounds, and give rabies prophylaxis after an unprovoked or wild-animal bite. And a subtle one — road rash: scrub embedded gravel and asphalt out at the first cleaning, or it epithelializes over into a permanent traumatic tattoo." },
+      { speaker: 'host',   text: "Turn to burns. Start with reading the depth." },
+      { speaker: 'cohost', text: "Four descriptions. Superficial — first-degree — is red, dry, painful, no blisters, like a sunburn; heals in days. Superficial partial-thickness blisters, is wet and very painful, and blanches with pressure; it heals in under three weeks without grafting. Deep partial-thickness is mottled red-and-white, less painful because some nerve endings are gone, and blanches sluggishly if at all — it often needs grafting. And full-thickness — third-degree — is dry, leathery, waxy-white or charred, and insensate; that always needs grafting. The two that fool you are deep-partial versus full — and both usually end up excised and grafted." },
+      { speaker: 'host',   text: "And the conceptual model that guides resuscitation — Jackson's zones." },
+      { speaker: 'cohost', text: "A burn has three concentric zones. A central zone of coagulation — dead tissue. Around it a zone of stasis — injured but salvageable tissue that is precariously perfused. And an outer zone of hyperemia that recovers. The entire game of early burn care is keeping the zone of stasis alive: adequate resuscitation, no hypothermia, no infection, and no ice — because anything that drops perfusion converts that salvageable zone into more dead tissue, and the burn 'deepens' over the first days." },
+      { speaker: 'host',   text: "Estimating size — TBSA." },
+      { speaker: 'cohost', text: "The Rule of Nines in adults: each arm nine percent, each leg eighteen, the anterior trunk eighteen, the posterior trunk eighteen, the head nine, the perineum one. For scattered burns, the patient's own palm including the fingers is about one percent. And in children you use the Lund-Browder chart, because a child's head is a proportionally much larger share of the body surface and the legs smaller — the Rule of Nines over-counts a toddler's limbs. Only count partial- and full-thickness burns in the TBSA for fluids; superficial erythema doesn't count." },
+      { speaker: 'host',   text: "The formula everyone memorizes — Parkland." },
+      { speaker: 'cohost', text: "Lactated Ringer's, four milliliters times kilograms times percent TBSA, over the first twenty-four hours. Give half in the first eight hours — and critically, timed from the moment of the burn, not from arrival, so if they show up two hours late, you front-load — and the other half over the next sixteen hours. Then, and this is the real lesson, you don't worship the number: it's a starting estimate that you titrate to urine output, aiming for about half a milliliter per kilo per hour in adults and one in children. Over-resuscitation — 'fluid creep' — causes its own harm: compartment syndromes, pulmonary edema, and conversion of the burn." },
+      { speaker: 'host',   text: "The airway in facial and inhalation burns — the highest-stakes decision." },
+      { speaker: 'cohost', text: "Intubate early on suspicion. The warning signs: facial burns, singed nasal hairs and eyebrows, carbonaceous sputum, a hoarse voice or stridor, and a history of fire in an enclosed space. The trap is that the patient can look fine for the first hour and then the face, tongue, and pharynx swell and the airway shuts over the next several hours — and once it's swollen, you can neither intubate nor easily do a surgical airway. So you secure it early, in a controlled setting, awake-fiberoptic if you can, with someone ready for an emergency tracheostomy." },
+      { speaker: 'host',   text: "And two toxins that ride along with the fire." },
+      { speaker: 'cohost', text: "Carbon monoxide and cyanide. Carbon monoxide binds hemoglobin far tighter than oxygen — and the killer detail is that a standard pulse oximeter can't tell carboxyhemoglobin from oxyhemoglobin, so the SpO2 reads falsely normal while the patient is hypoxic, confused, headachy, classically cherry-red. You diagnose it with a measured carboxyhemoglobin level and treat with one-hundred-percent oxygen, which slashes the half-life. Suspect cyanide too — from burning plastics — when there's a profound, persistent lactic acidosis; it has its own antidote, hydroxocobalamin." },
+      { speaker: 'host',   text: "Acute wound care and the one procedure that saves a chest." },
+      { speaker: 'cohost', text: "Cool the fresh burn with room-temperature water — never ice, which vasoconstricts and deepens it. Cover, control pain, and choose the topical by site: on the face, bacitracin or mupirocin — silver sulfadiazine stains, is a sulfonamide, and is kept away from the eyes; on the trunk and limbs, silver sulfadiazine; and mafenide when you need eschar and cartilage penetration, like a burned ear, accepting that it stings and can cause a metabolic acidosis. And the emergency procedure: a circumferential full-thickness burn forms a rigid eschar that acts like a tourniquet — around the chest it stops ventilation, around a limb it stops perfusion. The fix is an escharotomy, cutting through the eschar to release it." },
+      { speaker: 'host',   text: "And definitive management and facial reconstruction." },
+      { speaker: 'cohost', text: "Deep partial- and full-thickness burns do best with early tangential excision and grafting, once the patient is resuscitated, around day three to five — it beats waiting weeks and courting infection. On the face you resurface by aesthetic subunit for the best color and contour match, and you fight the functional complications hard: peri-orbital burns pull the lids into ectropion and expose the cornea; peri-oral burns contract into microstomia; and the neck webs into contracture. Splinting, pressure, and timely grafts and flaps are what preserve the eye, the mouth, and the range of motion." },
+      { speaker: 'host',   text: "Before the cases — two special burn types that don't follow the usual rules." },
+      { speaker: 'cohost', text: "Electrical burns first: the visible skin wound massively understates the damage, because the current travels along muscle and vessels and cooks deep tissue between entry and exit points. So you worry about hidden muscle necrosis with rhabdomyolysis — myoglobin in the urine — which needs aggressive fluids and a higher urine-output target to protect the kidneys, plus cardiac monitoring for arrhythmias. And chemical burns: the treatment is prolonged copious water irrigation — do NOT waste time hunting for a neutralizing agent, which generates heat. The exceptions to know are hydrofluoric acid, where the fluoride ion chelates calcium and you treat with calcium gluconate, and elemental metals, which ignite with water." },
+      { speaker: 'host',   text: "And who needs to go to a dedicated burn center?" },
+      { speaker: 'cohost', text: "The American Burn Association criteria are worth carrying. Transfer for partial-thickness burns over about ten percent TBSA; any full-thickness burn; and — high-yield for us — burns of the FACE, hands, feet, genitalia, perineum, or over major joints, because those are functionally and cosmetically critical. Also inhalation injury, electrical and chemical burns, burns in children at a non-pediatric hospital, and burns with major trauma or serious comorbidity. A facial burn, almost by definition, belongs at a burn center." },
+      { speaker: 'host',   text: "One recognition duty we can't skip in facial trauma — especially in kids and vulnerable adults." },
+      { speaker: 'cohost', text: "Non-accidental trauma. You have to actively look for it. The red flags: an injury that doesn't fit the story or the developmental stage — a supposed fall in a baby too young to roll; injuries at multiple healing stages; patterned burns like a sharp-bordered stocking-glove immersion scald or a cigarette-tip circle; frenulum tears in an infant; and delayed presentation. It's a mandatory-report situation, and missing it can be fatal for the child. The same vigilance applies to elder and intimate-partner abuse — the head and neck are the most common sites of assault." },
+      { speaker: 'host',   text: "And two more quick items — cold injury and the metabolic aftermath." },
+      { speaker: 'cohost', text: "Frostbite loves the exposed, poorly perfused parts — the ears, the nose, the cheeks. You rewarm rapidly in warm water, don't rub the tissue, and you're deliberately patient about debridement, because the true line of demarcation between dead and viable takes weeks to declare itself — 'frostbite in January, amputate in July.' And after a large burn the body goes profoundly hypermetabolic and catabolic for weeks — so early, aggressive nutrition, usually enteral and high-protein, is part of the treatment; wounds and grafts fail on a starving patient." },
+      { speaker: 'host',   text: "Case one. A 24-year-old is punched and head-butted in a fight. He has a cheek laceration, a swollen tender ear, and after you look in the nose, a boggy bilateral septal swelling. Walk the priorities." },
+      { speaker: 'cohost', text: "I triage by what causes irreversible harm fastest. First, the septal hematoma — I incise and drain it now, quilt and pack, and start anti-staph antibiotics, because that cartilage necroses in days into a saddle nose. Next the auricular hematoma — drain and bolster to prevent cauliflower ear. Then the cheek: before I inject local I test the facial nerve and I probe for a parotid-duct injury given the location; I cannulate Stensen's if there's clear drainage and repair over a stent if it's cut. Only then do I do the meticulous layered closure, aligning any vermilion or landmark within a millimeter. The two hematomas come before the pretty closure." },
+      { speaker: 'host',   text: "Case two. A 60-year-old, 80 kg, is pulled from a house fire with burns over both arms and the anterior trunk. He has singed nasal hairs, a hoarse voice, and carbonaceous sputum; SpO2 reads ninety-eight percent. First moves and the fluid math?" },
+      { speaker: 'cohost', text: "The airway comes first, and that ninety-eight percent doesn't reassure me — with those inhalation signs and possible carbon monoxide, the oximeter can read falsely normal, so I put him on one-hundred-percent oxygen, check a carboxyhemoglobin, and intubate early before the airway swells. For size: both arms are nine each, that's eighteen, and the anterior trunk is eighteen — about thirty-six percent TBSA. Parkland is four times eighty times thirty-six, so roughly eleven-and-a-half liters of Lactated Ringer's over twenty-four hours, half in the first eight hours timed from the burn — but then I titrate to a urine output of about forty milliliters an hour and watch for over-resuscitation. And I check for circumferential burns that might need escharotomy." },
+      { speaker: 'host',   text: "Airway, hidden structures, hematomas, then cosmesis — and in burns, the airway and the zone of stasis. Land the takeaways." },
+      { speaker: 'cohost', text: "One: it's ATLS with C-spine, and a facial-trauma patient in shock is bleeding somewhere else. Document the facial-nerve exam before you inject local, and the face lets you close up to twenty-four hours." },
+      { speaker: 'host',   text: "Two." },
+      { speaker: 'cohost', text: "Two: hunt the hidden structures — facial nerve lateral to the canthus line, parotid duct, lacrimal canaliculus — and drain the two silent emergencies, the auricular and septal hematomas, or you get cauliflower ear and saddle nose. Align the vermilion within a millimeter and never shave an eyebrow." },
+      { speaker: 'host',   text: "Three." },
+      { speaker: 'cohost', text: "Three, burns: grade the depth, protect the zone of stasis, size it with the Rule of Nines and the one-percent palm, and run Parkland — four times kilos times percent, half in the first eight hours from the burn — but titrate to urine output, don't worship the number." },
+      { speaker: 'host',   text: "And four." },
+      { speaker: 'cohost', text: "Four: intubate the inhalation-injury airway EARLY, remember pulse oximetry lies about carbon monoxide, cool with water not ice, escharotomy for a constricting circumferential eschar, and excise-and-graft deep burns around day three to five — guarding the eye against ectropion and the mouth against microstomia." },
+      { speaker: 'host',   text: "Secure the airway, save the hidden structures, and respect the zone of stasis. Next week — craniomaxillofacial trauma and the facial fractures." },
+      { speaker: 'cohost', text: "See you in seven." }
     ]
   },
 
@@ -13677,30 +13804,149 @@ const CONTENT = {
       'Restore occlusion first in mandible fractures; the bone follows. Premature plate fixation that violates occlusion is worse than no plate.'
     ],
     flashcards: [
-      { q: 'What structure is involved in all three Le Fort fracture patterns by definition?', a: 'The pterygoid plates. If pterygoids are intact on CT, it\'s NOT a Le Fort fracture.' },
-      { q: 'Most common location of mandibular fracture?', a: 'Condyle (29%), followed by body (22%), angle (16%), parasymphysis (14%). Multiple fractures are common because the mandible behaves like a ring.' },
-      { q: 'What is the trapdoor fracture, and why is it an emergency?', a: 'Linear orbital floor fracture in children where the inferior rectus muscle gets caught in the closing fracture (the bone snaps back). Without an obvious black eye ("white-eyed blowout"), can be missed. Muscle ischemia in hours; surgery within 24 h.' },
-      { q: 'Bedside treatment of retrobulbar hematoma?', a: 'Lateral canthotomy + cantholysis of the inferior crus (then superior if needed). Window of 90 minutes from vision loss for reversibility.' },
-      { q: 'What does telecanthus suggest after facial trauma?', a: 'NOE fracture with medial canthal tendon disruption. Intercanthal distance > 35 mm in adults. Surgical correction with transnasal canthopexy.' },
-      { q: 'When does a frontal sinus fracture need cranialization?', a: 'Posterior table fracture with persistent CSF leak, severe displacement, or comminution. Remove the posterior table, strip mucosa, plug the frontonasal recess, allow brain to fill the cavity.' }
+      { q: 'What structure is involved in ALL three Le Fort patterns by definition?', a: 'The pterygoid plates. If the pterygoids are intact on CT, it is not a Le Fort fracture.' },
+      { q: 'Describe Le Fort I, II, and III.', a: 'I — horizontal transmaxillary ("floating palate"). II — pyramidal through the nasal bridge, maxilla, infraorbital rims ("floating midface"). III — craniofacial dissociation, separating the entire midface from the skull base. Combined/asymmetric patterns are common.' },
+      { q: 'Most common mandibular fracture sites and the "ring" rule?', a: 'Condyle (~29%) > body > angle > parasymphysis. The mandible is a ring, so always hunt for a second fracture (classically the contralateral angle or condyle).' },
+      { q: 'Guiding principle of mandible fracture fixation?', a: 'Restore the OCCLUSION first (the bite), then fix the bone to it — via MMF (closed) for non-displaced/many condylar fractures, or ORIF for displaced, comminuted, or open fractures. A plate that violates occlusion is worse than no plate.' },
+      { q: 'Classic findings of an orbital floor blowout?', a: 'V2 (infraorbital) hypoesthesia, diplopia, enophthalmos, and restricted upgaze from inferior-rectus entrapment; the globe decompresses into the maxillary sinus.' },
+      { q: 'Why is the pediatric "white-eyed blowout" a surgical emergency?', a: 'A springy trapdoor floor fracture snaps back and entraps the inferior rectus with little bruising; muscle ischemia (and an oculocardiac reflex — bradycardia/nausea) begins within hours, so it needs release within ~24 hours.' },
+      { q: 'Bedside treatment of a retrobulbar hematoma?', a: 'Lateral canthotomy and inferior (then superior) cantholysis at the bedside — within ~90 minutes of vision loss. Do NOT wait for imaging or ophthalmology.' },
+      { q: 'What does traumatic telecanthus indicate, and how is it classified?', a: 'A naso-orbito-ethmoid (NOE) fracture with medial canthal tendon disruption (intercanthal >35 mm). Markowitz I (single central fragment, tendon attached), II (comminuted, tendon still on bone), III (tendon avulsed) — II/III need ORIF with transnasal canthopexy.' },
+      { q: 'How are frontal sinus fractures managed?', a: 'Driven by the posterior table and the nasofrontal outflow tract. Isolated anterior table → cosmetic repair if displaced. Posterior table / CSF leak / outflow obstruction → obliteration (patent-ish, isolated) or cranialization (remove posterior table, let brain fill) for severe posterior-table injury with leak.' },
+      { q: 'Findings of a zygomaticomaxillary complex (ZMC) fracture?', a: 'Malar (cheek) flattening, lateral subconjunctival hemorrhage, V2 hypoesthesia, trismus (arch impinging the coronoid), and a step-off at the infraorbital rim/zygomaticofrontal suture. ORIF the buttresses when displaced.' },
+      { q: 'What are the facial buttresses and why restore them?', a: 'Vertical (nasomaxillary, zygomaticomaxillary, pterygomaxillary) and horizontal (orbital rims, maxillary alveolus, mandible) struts. Reducing and plating the buttresses restores facial height, width, and projection — the framework the soft tissue drapes over.' },
+      { q: 'Globe rupture — what do you do and NOT do?', a: 'Place a rigid eye shield and get ophthalmology urgently; do NOT check intraocular pressure or manipulate the eye. Give antiemetics/analgesia to avoid Valsalva that could extrude contents.' },
+      { q: 'CSF rhinorrhea after facial/skull-base trauma — how confirmed?', a: 'Test the fluid for beta-2 transferrin (± beta-trace protein); the "halo/ring sign" and glucose are unreliable. Most traumatic leaks stop with conservative measures; persistent leaks need repair.' },
+      { q: 'Imaging of choice for facial fractures?', a: 'Non-contrast maxillofacial CT with axial, coronal, and sagittal reformats; 3D reconstruction for planning complex/comminuted repairs.' }
     ],
     quiz: [
-      { stem: 'A 25-year-old presents after assault with diplopia on upgaze, V2 hypoesthesia, and 3 mm enophthalmos. CT shows a 40% orbital floor defect with inferior rectus tethered into the maxillary sinus. The best management is:',
-        options: ['Observation × 2 weeks then reassess', 'ORIF orbital floor with implant within 2 weeks', 'Immediate orbital floor exploration', 'Lateral canthotomy'],
-        correct: 2, explanation: 'Muscle entrapment with restricted upgaze + symptomatic enophthalmos = surgical indication. Don\'t wait 2 weeks if there\'s mechanical restriction; immediate surgery prevents ischemia and persistent diplopia.' },
-      { stem: 'A 30-year-old MVA victim has proptosis, vision dropping from 20/40 to hand motion, RAPD, and IOP 50 mmHg. The most appropriate immediate action is:',
-        options: ['Call ophthalmology for OR exploration', 'CT scan first to confirm hematoma', 'Bedside lateral canthotomy + cantholysis NOW', 'IV mannitol + acetazolamide and observe'],
-        correct: 2, explanation: 'Retrobulbar hematoma with vision loss is a time-critical surgical emergency. Bedside lateral canthotomy + cantholysis within 90 minutes — do not wait for imaging or specialty consultation.' },
-      { stem: 'On bimanual palpation, a patient\'s entire maxilla moves freely with stable nasal bridge and zygomas. Most likely Le Fort pattern:',
-        options: ['Le Fort I', 'Le Fort II', 'Le Fort III', 'Zygomaticomaxillary complex'],
-        correct: 0, explanation: 'Le Fort I = "floating palate" — horizontal transmaxillary fracture separating the dental arch from the upper face. Stable nasion and zygomas distinguish from LF II/III.' }
+      { stem: 'A 25-year-old after assault has upgaze diplopia, V2 hypoesthesia, and 3 mm enophthalmos; CT shows a 40% floor defect with the inferior rectus tethered into the maxillary sinus. Best management:',
+        options: ['Observe 2 weeks then reassess', 'ORIF orbital floor with an implant within ~2 weeks', 'Prompt orbital floor exploration/release', 'Lateral canthotomy'],
+        correct: 2, explanation: 'Mechanical entrapment with restricted motility plus symptomatic enophthalmos is a surgical indication; don\'t wait two weeks when the muscle is tethered — release it promptly to prevent ischemia and lasting diplopia.' },
+      { stem: 'An MVA victim has proptosis, vision falling to hand-motion, a relative afferent pupillary defect, and IOP 50 mmHg. Immediate action:',
+        options: ['Call ophthalmology for the OR', 'CT first to confirm hematoma', 'Bedside lateral canthotomy + cantholysis NOW', 'IV mannitol and observe'],
+        correct: 2, explanation: 'Retrobulbar hematoma with an orbital compartment syndrome and vision loss is a time-critical bedside emergency — canthotomy and cantholysis within ~90 minutes, before imaging or consultation.' },
+      { stem: 'On bimanual exam the entire maxillary dental arch moves while the nasal bridge and zygomas stay put. Le Fort pattern?',
+        options: ['Le Fort I', 'Le Fort II', 'Le Fort III', 'ZMC'],
+        correct: 0, explanation: 'A "floating palate" with a stable nasion and zygomas is Le Fort I — a horizontal transmaxillary fracture separating the dental arch from the upper face.' },
+      { stem: 'A patient has malocclusion, a sublingual hematoma, and pain with jaw movement after a fall. The most appropriate next step:',
+        options: ['Reassure — soft-tissue only', 'Maxillofacial CT (sublingual hematoma is pathognomonic for a mandible fracture)', 'Panoramic film only, discharge if normal', 'MRI of the TMJ'],
+        correct: 1, explanation: 'A sublingual (floor-of-mouth) hematoma is essentially pathognomonic for a mandibular (body) fracture; image with CT even if plain films look normal, and look for a second fracture given the ring.' },
+      { stem: 'A frontal sinus fracture involves the posterior table with a persistent CSF leak and comminution. The appropriate operation is often:',
+        options: ['Observation indefinitely', 'Anterior-table onlay only', 'Cranialization (remove posterior table, strip mucosa, plug the outflow tract)', 'Balloon sinuplasty'],
+        correct: 2, explanation: 'A badly comminuted posterior table with a CSF leak is managed by cranialization — removing the posterior table, meticulously removing all mucosa, and separating the sinus from the nose so the brain fills the space.' },
+      { stem: 'A young child is struck in the eye, has little bruising, but cannot look up and becomes nauseated and bradycardic when trying. This is:',
+        options: ['Simple periorbital contusion — reassure', 'White-eyed blowout with entrapment + oculocardiac reflex — urgent release', 'Retrobulbar hematoma', 'Globe rupture'],
+        correct: 1, explanation: 'The pediatric white-eyed blowout traps the inferior rectus in a springy trapdoor with minimal ecchymosis; the oculocardiac reflex (bradycardia/nausea) signals entrapment and mandates urgent surgical release (within ~24 h).' },
+      { stem: 'Which finding on facial CT excludes a true Le Fort fracture?',
+        options: ['Maxillary sinus fluid', 'Intact pterygoid plates', 'Nasal bone fracture', 'Orbital floor defect'],
+        correct: 1, explanation: 'By definition every Le Fort pattern fractures the pterygoid plates; intact pterygoids mean it is some other maxillofacial fracture, not a Le Fort.' },
+      { stem: 'A patient has cheek flattening, trismus, lateral subconjunctival hemorrhage, and infraorbital numbness. The fracture and a key exam step are:',
+        options: ['NOE; check intercanthal distance', 'ZMC ("tripod"); assess globe/vision and the buttresses', 'Le Fort I; check occlusion only', 'Isolated arch; no eye exam needed'],
+        correct: 1, explanation: 'That constellation is a zygomaticomaxillary complex fracture; because the zygoma forms the lateral orbit, always examine the globe and vision, then plan ORIF of the displaced buttresses.' },
+      { stem: 'When repairing panfacial fractures, the classic sequencing principle is to:',
+        options: ['Fix the smallest fractures first at random', 'Reestablish the occlusion and reconstruct in an organized sequence to restore the buttress framework', 'Skip the occlusion', 'Always start with the nasal bones'],
+        correct: 1, explanation: 'Panfacial repair reestablishes the occlusion and reconstructs the vertical and horizontal buttresses in an organized sequence so facial height, width, and projection are restored around a correct bite.' },
+      { stem: 'A trauma patient has clear rhinorrhea that tests positive for beta-2 transferrin. This indicates:',
+        options: ['Allergic rhinitis', 'A CSF leak (anterior skull base / cribriform)', 'Nasolacrimal duct injury', 'Normal nasal secretions'],
+        correct: 1, explanation: 'Beta-2 transferrin is specific for CSF; a positive test confirms a leak (often cribriform/anterior skull base). Most traumatic leaks resolve conservatively; persistent ones need repair, with attention to meningitis risk.' },
+      { stem: 'The infraorbital nerve that is commonly injured in orbital floor and ZMC fractures is a branch of:',
+        options: ['V1 (ophthalmic)', 'V2 (maxillary)', 'V3 (mandibular)', 'The facial nerve'],
+        correct: 1, explanation: 'The infraorbital nerve is the terminal V2 (maxillary) branch running in the orbital floor; cheek/upper-lip numbness is a hallmark of floor and ZMC fractures.' },
+      { stem: 'A comminuted, displaced mandibular angle fracture in a dentate adult is best treated with:',
+        options: ['Soft diet alone', 'Open reduction and internal fixation (ORIF)', 'Maxillomandibular fixation only for 6 weeks in all cases', 'No treatment'],
+        correct: 1, explanation: 'Displaced, comminuted, or open mandible fractures are managed with ORIF (load-bearing/load-sharing plates) after restoring occlusion; MMF alone suits many non-displaced or select condylar fractures.' },
+      { stem: 'A patient with an orbital apex fracture has ophthalmoplegia, a fixed dilated pupil, ptosis, AND vision loss. This is:',
+        options: ['Superior orbital fissure syndrome only', 'Orbital apex syndrome (SOF syndrome + optic nerve/CN II involvement)', 'Simple blowout', 'Cavernous sinus thrombosis'],
+        correct: 1, explanation: 'Superior orbital fissure syndrome is CN III, IV, VI and V1 dysfunction; when the optic nerve (CN II) is also involved with vision loss, it is orbital apex syndrome — a more posterior, more ominous injury.' },
+      { stem: 'A displaced isolated zygomatic ARCH fracture most commonly causes:',
+        options: ['Enophthalmos', 'Trismus/limited opening from impingement on the coronoid/temporalis', 'CSF leak', 'Telecanthus'],
+        correct: 1, explanation: 'A depressed zygomatic arch impinges on the coronoid process and temporalis, limiting mouth opening (trismus); it is elevated (e.g., Gillies approach) when symptomatic/displaced.' }
+    ],
+    keyPoints: [
+      { category: 'Primary survey', items: ['Airway — mandible/tongue, blood, teeth/dentures; C-spine', 'Face in shock ⇒ look elsewhere for bleeding', 'Screen the eye + vision early; test occlusion', 'Non-contrast facial CT (axial/coronal/sagittal + 3D)'] },
+      { category: 'Le Fort', items: ['ALL involve the pterygoid plates', 'I — floating palate (transmaxillary)', 'II — pyramidal, floating midface', 'III — craniofacial dissociation', 'Patterns often combined/asymmetric'] },
+      { category: 'Mandible', items: ['Ring — hunt for a 2nd fracture', 'Condyle > body > angle > parasymphysis', 'Sublingual hematoma = pathognomonic', 'Restore OCCLUSION first; MMF vs ORIF'] },
+      { category: 'Orbit & eye emergencies', items: ['Blowout: V2 numbness, diplopia, enophthalmos, entrapment', 'White-eyed blowout (child) → release <24 h (oculocardiac reflex)', 'Retrobulbar hematoma → canthotomy+cantholysis <90 min', 'Globe rupture → shield, no IOP, ophthalmology'] },
+      { category: 'NOE / frontal / ZMC', items: ['NOE — telecanthus; Markowitz I–III; transnasal canthopexy', 'Frontal sinus — posterior table + outflow tract → obliterate/cranialize', 'ZMC "tripod" — malar flattening, trismus, V2, ORIF buttresses', 'CSF leak → beta-2 transferrin'] },
+      { category: 'Fixation principles', items: ['Reduce/plate the vertical + horizontal buttresses', 'Occlusion drives everything', 'Panfacial — organized sequence to restore height/width/projection', 'Mind pediatric growth + tooth buds'] }
+    ],
+    slides: [
+      { title: 'Craniomaxillofacial Trauma', subtitle: 'Cummings 8e · Chapter 19', body: '<p>Airway and eye first; then rebuild the buttress framework around a correct occlusion.</p>' },
+      { title: 'Primary survey', body: '<ul><li>Airway (mandible/tongue, blood, teeth) + C-spine</li><li>Face in shock ⇒ bleeding is elsewhere</li><li>Early vision/globe check; test the bite</li><li>Non-contrast facial CT + 3D</li></ul>' },
+      { title: 'Le Fort classification', body: '<ul><li><strong>All</strong> involve the pterygoid plates</li><li>I — floating palate</li><li>II — pyramidal / floating midface</li><li>III — craniofacial dissociation</li></ul>' },
+      { title: 'Mandible', body: '<ul><li>Ring — look for a 2nd fracture</li><li>Condyle > body > angle > parasymphysis</li><li>Sublingual hematoma = pathognomonic</li><li>Occlusion first → MMF vs ORIF</li></ul>' },
+      { title: 'Orbital floor blowout', body: '<ul><li>V2 numbness · diplopia · enophthalmos · entrapment</li><li>Child white-eyed blowout → release &lt;24 h (oculocardiac reflex)</li><li>Repair: entrapment, diplopia &gt;2 wk, enophthalmos &gt;2 mm, large defect</li></ul>' },
+      { title: 'Eye emergencies', body: '<ul><li><strong>Retrobulbar hematoma</strong>: ↓vision, RAPD, ↑IOP → canthotomy+cantholysis &lt;90 min</li><li><strong>Globe rupture</strong>: shield, no IOP, ophthalmology now</li><li>Orbital apex syndrome — SOF + optic nerve</li></ul>' },
+      { title: 'NOE · Frontal sinus · ZMC', body: '<ul><li>NOE — telecanthus; Markowitz I–III; transnasal canthopexy</li><li>Frontal — posterior table + outflow → obliterate/cranialize; CSF leak (β2-transferrin)</li><li>ZMC "tripod" — malar flattening, trismus, V2; ORIF</li></ul>' },
+      { title: 'Buttresses & fixation', body: '<ul><li>Vertical: nasomaxillary · zygomaticomaxillary · pterygomaxillary</li><li>Horizontal: orbital rims · alveolus · mandible</li><li>Restore height, width, projection around the occlusion</li><li>Pediatric — respect growth & tooth buds</li></ul>' }
     ],
     signs: [
-      { name: 'Sublingual hematoma',         category: 'clinical', description: 'Ecchymosis on the floor of the mouth.', implication: 'Pathognomonic for mandibular body fracture.' },
-      { name: 'Floating palate',             category: 'clinical', description: 'Maxillary dental arch moves independently of nasal bridge on bimanual exam.', implication: 'Le Fort I fracture.' },
-      { name: 'White-eyed blowout',          category: 'clinical', description: 'Restricted upgaze in a child without ecchymosis after blunt orbital trauma.', implication: 'Trapdoor orbital floor fracture with muscle entrapment — surgery within 24 hours.' },
-      { name: 'Battle sign / Raccoon eyes',  category: 'clinical', description: 'Mastoid ecchymosis (Battle) or periorbital ecchymosis (raccoon).', implication: 'Skull base fracture — basilar or anterior cranial fossa.' },
-      { name: 'Telecanthus',                 category: 'clinical', description: 'Intercanthal distance > 35 mm in adults.', implication: 'NOE complex fracture with medial canthal tendon disruption.' }
+      { name: 'Sublingual hematoma', category: 'clinical', description: 'Ecchymosis on the floor of the mouth.', implication: 'Pathognomonic for a mandibular body fracture — image even with normal plain films.' },
+      { name: 'Floating palate', category: 'clinical', description: 'Maxillary dental arch moves independently of the nasal bridge on bimanual exam.', implication: 'Le Fort I fracture.' },
+      { name: 'White-eyed blowout', category: 'clinical', description: 'Restricted upgaze in a child with little ecchymosis after blunt orbital trauma, ± bradycardia/nausea.', implication: 'Trapdoor floor fracture with inferior-rectus entrapment — release within ~24 hours.' },
+      { name: 'Battle sign / raccoon eyes', category: 'clinical', description: 'Mastoid (Battle) or bilateral periorbital (raccoon) ecchymosis.', implication: 'Basilar / anterior cranial fossa skull-base fracture.' },
+      { name: 'Telecanthus', category: 'clinical', description: 'Intercanthal distance >35 mm in an adult.', implication: 'NOE fracture with medial canthal tendon disruption — Markowitz classification guides repair.' }
+    ],
+    podcastTitle: 'Deep Dive · Craniomaxillofacial Trauma',
+    podcastDuration: '~23 min - deep dive',
+    podcastScript: [
+      { speaker: 'host',   text: "Welcome to ENT Academy. I'm Elena." },
+      { speaker: 'cohost', text: "And I'm Marcus. Today's deep dive is craniomaxillofacial trauma — the facial fractures. It's a chapter of patterns and priorities: recognize the pattern on exam and CT, triage the emergencies, and then rebuild the face's structural skeleton around a correct bite." },
+      { speaker: 'host',   text: "The frame for the hour: the face is a scaffold of buttresses that the soft tissue drapes over, and the occlusion — the way the teeth meet — is the reference point for the whole reconstruction. But before any of the beautiful plating, two things can blind or kill the patient in the first hour: the airway and the eye. So we triage those first, always." },
+      { speaker: 'cohost', text: "Roadmap: primary survey and the airway/eye emergencies, then the systematic exam. Then the fracture patterns — Le Fort, mandible, orbital blowout, naso-orbito-ethmoid, frontal sinus, and the zygomaticomaxillary complex. Then the buttress concept and the principles of fixation, imaging, and two cases." },
+      { speaker: 'host',   text: "Primary survey — the face-specific airway threats." },
+      { speaker: 'cohost', text: "It's ATLS with C-spine precautions, because facial-fracture mechanisms carry a real rate of cervical injury. The airway threats are specific: blood and clot, avulsed teeth or dentures as foreign bodies, massive edema, and — the classic — a bilateral or comminuted mandible fracture that lets the tongue base fall back and obstruct, especially supine. And the circulation pearl carries over from soft-tissue trauma: the face bleeds dramatically but rarely causes shock by itself, so a hypotensive facial-trauma patient is bleeding in the chest, abdomen, or pelvis until proven otherwise." },
+      { speaker: 'host',   text: "And you interleave the eye exam early — because some findings can't wait for the fracture workup." },
+      { speaker: 'cohost', text: "Three ophthalmic emergencies you screen for immediately. First, globe rupture — a peaked or teardrop pupil, extruding contents, severe injury: you place a rigid shield, do NOT check the intraocular pressure or touch the eye, control nausea and pain to avoid a Valsalva that extrudes more, and call ophthalmology. Second, the retrobulbar hematoma — we'll come back to it, but it's the true bedside surgical emergency. And third, traumatic optic neuropathy — vision loss with a relative afferent pupillary defect. So a vision and pupil check is part of the primary survey, not an afterthought." },
+      { speaker: 'host',   text: "Let's give the retrobulbar hematoma its full moment, because it's the one you must act on yourself." },
+      { speaker: 'cohost', text: "It's an orbital compartment syndrome — bleeding behind the globe raises the orbital pressure, stretches and ischemically threatens the optic nerve. The picture is proptosis, a tense hard orbit, falling vision, a relative afferent pupillary defect, and a high intraocular pressure. The treatment is a bedside lateral canthotomy and cantholysis — you cut the lateral canthus and release the inferior crus of the canthal tendon, then the superior crus if needed, decompressing the orbit. And the clock matters: you have roughly ninety minutes from vision loss for reversibility, so you do NOT wait for the CT or for ophthalmology to arrive. Knowing this procedure is a vision-saving skill." },
+      { speaker: 'host',   text: "Now the systematic exam beyond the eye." },
+      { speaker: 'cohost', text: "Inspect for asymmetry, flattening, and lengthening of the face. Palpate the whole bony framework for step-offs — the orbital rims, the zygoma and arch, the nose, the mandibular border. Test the cranial nerves, especially V2 sensation over the cheek and the facial nerve. Look in the mouth: check the occlusion — ask if the bite feels normal — look for a floor-of-mouth hematoma, and do a bimanual exam of the maxilla and mandible for mobility. And check for clear rhinorrhea suggesting a CSF leak. Then image: the workhorse is a non-contrast maxillofacial CT with axial, coronal, and sagittal reformats, plus a three-D reconstruction for planning." },
+      { speaker: 'host',   text: "Fracture patterns. Start with the famous one — Le Fort." },
+      { speaker: 'cohost', text: "Rene Le Fort's classic three levels of midface fracture. Le Fort one is a horizontal, transmaxillary fracture just above the tooth roots — it frees the palate and dental arch from the rest of the face, so on bimanual exam you get a 'floating palate' while the nasal bridge and cheeks stay put. Le Fort two is pyramidal — the fracture runs up through the nasal bridge and across the infraorbital rims and maxilla, so the whole central midface moves as a pyramid, the 'floating midface.' Le Fort three is craniofacial dissociation — the entire midface separates from the skull base through the nasofrontal region, the medial orbits, and the zygomaticofrontal sutures." },
+      { speaker: 'host',   text: "And the unifying rule that examiners love." },
+      { speaker: 'cohost', text: "Every Le Fort pattern, by definition, fractures the pterygoid plates. So if the pterygoids are intact on CT, whatever you're looking at is not a Le Fort. And in the real world these are rarely pure — you'll see a Le Fort two on one side and a three on the other, or combinations, because faces don't break along textbook lines." },
+      { speaker: 'host',   text: "The mandible — the ring." },
+      { speaker: 'cohost', text: "Think of the mandible as a bony ring, so a force at one point commonly produces a second fracture elsewhere — classically the contralateral angle or condyle. So when you find one mandible fracture, you actively hunt for the second. The frequency order to know: the condyle is the most common, then the body, the angle, and the parasymphysis. Signs: malocclusion — the patient's own sense that the bite is off is gold — a palpable step, gum bleeding, and the pathognomonic one, a sublingual hematoma, ecchymosis in the floor of the mouth, which essentially means a mandibular body fracture." },
+      { speaker: 'host',   text: "And the governing principle of fixing it." },
+      { speaker: 'cohost', text: "Restore the occlusion first — then fix the bone to it. You reestablish the bite, usually by putting the patient into maxillomandibular fixation, wiring the jaws together in occlusion, and THEN you either leave them in that fixation to heal — closed treatment, good for many non-displaced fractures and a lot of condylar fractures — or you do open reduction and internal fixation with plates for displaced, comminuted, or open fractures. The cardinal sin is placing a rigid plate that locks the patient into a wrong bite; a plate that violates the occlusion is worse than no plate, because the malocclusion is then fixed in place." },
+      { speaker: 'host',   text: "Orbital floor blowout — the daily-practice fracture." },
+      { speaker: 'cohost', text: "The floor and medial wall are thin; a blow to the globe transmits pressure that blows out the weak floor, and orbital contents herniate into the maxillary sinus. The signs: numbness of the cheek and upper lip from injury to the infraorbital nerve — the terminal V2 that runs in the floor; double vision; enophthalmos, the eye sinking back as the orbital volume expands; and restricted upgaze if the inferior rectus is caught. You repair for entrapment, for diplopia that persists beyond a week or two, for enophthalmos over about two millimeters, or for a large defect — over roughly half the floor — that will cause late enophthalmos." },
+      { speaker: 'host',   text: "And the pediatric variant that is a genuine emergency." },
+      { speaker: 'cohost', text: "The white-eyed blowout. A child's bone is springy, so instead of blowing out and staying open, the floor cracks like a trapdoor and snaps shut, clamping the inferior rectus. Because there's barely any fracture displacement, there's often little bruising — hence 'white eye' — so it gets dismissed. But the muscle is strangled: you see marked restriction of upgaze, and the giveaway is the oculocardiac reflex — the child gets bradycardic, nauseated, and vagal when they try to look up. That entrapped muscle becomes ischemic within hours, so it needs surgical release within about twenty-four hours. A kid who can't look up and feels sick is an orbit emergency, not a simple black eye." },
+      { speaker: 'host',   text: "The naso-orbito-ethmoid complex — small area, big consequences." },
+      { speaker: 'cohost', text: "The NOE region is where the nose, the orbits, and the ethmoids meet, and it's where the medial canthal tendon anchors. Break it and the tendon springs laterally, giving traumatic telecanthus — the inner canthi splay apart, an intercanthal distance over about thirty-five millimeters — plus a flattened saddled nasal dorsum, and sometimes a CSF leak from the adjacent cribriform. The Markowitz classification grades it by the tendon: type one is a single central fragment with the tendon still attached; type two is comminuted but the tendon is still on a piece of bone; type three the tendon is avulsed from bone. Types two and three need open reduction and a transnasal canthopexy to cinch the canthi back to the midline — and you must reduce the intercanthal distance or the eyes look permanently wide-set." },
+      { speaker: 'host',   text: "Frontal sinus fractures — the algorithm hinges on two things." },
+      { speaker: 'cohost', text: "The posterior table and the nasofrontal outflow tract. The anterior table is the forehead wall — if it's isolated and displaced, you repair it for contour, cosmesis. The danger is the posterior table, which is the anterior wall of the cranial cavity, so its fracture risks a CSF leak, meningitis, and a late mucocele. The modern algorithm turns on outflow: if the frontonasal recess still drains and the posterior table injury is minimal, you can observe. If the outflow is wrecked or the posterior table is displaced with a leak, you either obliterate the sinus — remove all mucosa and pack it, for isolated outflow injury — or, for a badly comminuted posterior table with a persistent leak, you cranialize: remove the posterior table entirely, meticulously strip every bit of mucosa, plug the outflow tract, and let the brain expand to fill the space. Leaving mucosa behind is how you get a mucocele years later." },
+      { speaker: 'host',   text: "And the zygomaticomaxillary complex — the tripod." },
+      { speaker: 'cohost', text: "The zygoma articulates at several points, so a displaced ZMC — the old 'tripod,' really a quadripod — separates at the zygomaticofrontal suture, the zygomaticomaxillary buttress and infraorbital rim, and the zygomatic arch. The signs: a flattened cheek prominence, which the swelling can hide until it settles; numbness in the V2 infraorbital distribution; a lateral subconjunctival hemorrhage; and trismus, because the displaced arch impinges on the coronoid and temporalis. And because the zygoma forms the lateral orbit, you always check vision and globe position. Displaced ones get open reduction and fixation of the buttresses; an isolated depressed arch causing trismus gets elevated." },
+      { speaker: 'host',   text: "Step back to the unifying concept — the buttresses." },
+      { speaker: 'cohost', text: "The midface is reinforced by vertical and horizontal struts of thicker bone — the buttresses — and everything between them is thin. The vertical buttresses are the nasomaxillary, zygomaticomaxillary, and pterygomaxillary; the horizontal ones are the orbital rims, the maxillary alveolus, and the mandible. When you reduce and plate a complex fracture, you're really reconstructing these struts, because restoring them restores facial height, width, and projection — the three-dimensional shape the soft tissue then drapes over. In panfacial trauma you work in an organized sequence, reestablishing the occlusion and rebuilding the buttress framework around it." },
+      { speaker: 'host',   text: "One more eye syndrome pair to distinguish, since it's tested." },
+      { speaker: 'cohost', text: "Superior orbital fissure syndrome versus orbital apex syndrome. The superior orbital fissure transmits cranial nerves three, four, and six and the first division of the trigeminal, so a fracture there gives ophthalmoplegia, a fixed dilated ptotic eye, and forehead numbness — but vision is preserved. Move a few millimeters more posterior to the orbital apex and you add the optic nerve, cranial nerve two, so now you get all of that PLUS vision loss. Apex syndrome is the more posterior, more ominous injury — and it changes the urgency entirely." },
+      { speaker: 'host',   text: "Before the cases — round out a few fracture types we glossed over, starting with the single most common facial fracture." },
+      { speaker: 'cohost', text: "The nasal bones. Isolated nasal fractures are the most common facial fracture, and the management is mostly clinical — you drain any septal hematoma immediately, and for a displaced fracture you do a closed reduction, ideally within a window: either in the first few hours before swelling, or, more practically, at about five to ten days once the edema settles but before the bones set, which is roughly two weeks in adults and one in children. Persistent post-traumatic deformity or airway obstruction later gets a formal septorhinoplasty." },
+      { speaker: 'host',   text: "And the teeth and alveolus — easy to overlook, quick to fix." },
+      { speaker: 'cohost', text: "Dentoalveolar injuries. Examine for loose, fractured, or missing teeth — and account for every missing tooth, because an unaccounted tooth may be aspirated or embedded in a lip laceration, so you get a chest or soft-tissue film. A completely avulsed permanent tooth is a time-critical reimplantation: handle it by the crown, not the root, keep it in milk or saline, and reimplant as fast as possible — minutes matter for the periodontal ligament. Dentoalveolar segment fractures are stabilized with a splint or arch bar, and dental and occlusal injuries are co-managed with oral-maxillofacial surgery." },
+      { speaker: 'host',   text: "The temporal bone — where facial trauma meets otology." },
+      { speaker: 'cohost', text: "A lateral skull blow can fracture the temporal bone, and the classification that matters clinically is otic-capsule-sparing versus otic-capsule-violating. Sparing fractures are more common, usually longitudinal-ish, and tend to give a conductive loss and CSF otorrhea. Violating fractures cross the otic capsule and are the bad ones — profound sensorineural loss, vertigo, and a much higher rate of facial-nerve injury and CSF leak. The two things to assess urgently are facial-nerve function and the timing of its onset: an immediate, complete palsy suggests transection and may need exploration, whereas a delayed or partial palsy usually recovers with steroids and observation. And Battle sign or blood behind an intact drum are your bedside clues." },
+      { speaker: 'host',   text: "And two practical threads — timing of repair and antibiotics." },
+      { speaker: 'cohost', text: "Timing: unless there's an emergency like entrapment, an open fracture, or a vision threat, most facial fractures are repaired within about one to two weeks — you often wait for the swelling to settle so you can judge reduction, but not so long that the bones malunite; children heal and remodel faster, so their window is shorter. Antibiotics are genuinely debated — there's reasonable support for perioperative coverage in fractures that communicate with a contaminated space, like the mouth or a sinus, and for open or grossly contaminated fractures, but routine prolonged prophylaxis for closed fractures isn't well supported. And you always factor in the whole patient — anticoagulation, comorbidity, and concurrent intracranial or cervical injury frequently dictate the timing more than the fracture itself." },
+      { speaker: 'host',   text: "Case one. A 30-year-old is assaulted. He's talking but his voice is muffled, the bite feels 'off' to him, there's a floor-of-mouth hematoma, and he can't fully open his mouth. Then you notice his left cheek is flat and his upper lip is numb. Where's your head?" },
+      { speaker: 'cohost', text: "Two injuries. The malocclusion plus the sublingual hematoma is a mandible fracture until proven otherwise — and because the mandible's a ring, I expect a second fracture, so I image the whole jaw. Separately, the flat cheek, the trismus, and the V2 numbness are a left zygomaticomaxillary complex fracture — and since the zygoma builds the lateral orbit, I check his vision and globe now. Airway first given the muffled voice and floor-of-mouth swelling; then a non-contrast facial CT with three-D. Management: restore occlusion and treat the mandible with MMF or ORIF, and ORIF the displaced ZMC buttresses — after I've cleared the eye." },
+      { speaker: 'host',   text: "Case two. A restrained driver hits the windshield. He has a lengthened, flattened midface, his whole upper jaw moves as a unit on bimanual exam with a stable forehead, clear fluid drips from his nose, and his inner eye corners look too far apart. Assessment?" },
+      { speaker: 'cohost', text: "A high-energy midface injury. The mobile maxilla with a floating quality is a Le Fort pattern — and I'll confirm the level on CT and check the pterygoids. The wide-set inner canthi are traumatic telecanthus from an NOE component, so I measure the intercanthal distance and plan a transnasal canthopexy. And the clear rhinorrhea is a CSF leak until proven otherwise — I send it for beta-two transferrin, keep his head up, avoid nose-blowing and nasal instrumentation, and watch for meningitis; most stop on their own. Then organized panfacial repair: reestablish occlusion, rebuild the buttresses, reduce the NOE and cinch the canthi." },
+      { speaker: 'host',   text: "Airway and eye first, then rebuild the scaffold around the bite. Land the takeaways." },
+      { speaker: 'cohost', text: "One: primary survey with C-spine; the face rarely causes shock, so look elsewhere; and screen the globe and vision early — globe rupture gets a shield and no IOP, and a retrobulbar hematoma gets a bedside canthotomy and cantholysis within ninety minutes." },
+      { speaker: 'host',   text: "Two." },
+      { speaker: 'cohost', text: "Two: all Le Fort patterns break the pterygoids — floating palate, floating midface, craniofacial dissociation. The mandible is a ring, so find the second fracture; a sublingual hematoma is pathognomonic; and you restore the occlusion first, then the bone." },
+      { speaker: 'host',   text: "Three." },
+      { speaker: 'cohost', text: "Three: an orbital blowout means V2 numbness, diplopia, and enophthalmos — and a child's white-eyed blowout with the oculocardiac reflex is a same-day surgical release. NOE gives telecanthus needing transnasal canthopexy, and a frontal sinus posterior-table fracture with a leak is obliterated or cranialized." },
+      { speaker: 'host',   text: "And four." },
+      { speaker: 'cohost', text: "Four: the ZMC flattens the cheek and locks the jaw and threatens the eye; reconstruction is really about restoring the vertical and horizontal buttresses to rebuild facial height, width, and projection around a correct occlusion — and test CSF leaks with beta-two transferrin." },
+      { speaker: 'host',   text: "Triage the airway and the eye, read the pattern, and rebuild the scaffold. Next week — reconstruction of facial defects." },
+      { speaker: 'cohost', text: "See you in seven." }
     ]
   },
 
@@ -20490,11 +20736,13 @@ async function openaiTtsBlobUrl(speakerId, text) {
     const blob = await fallback.blob();
     const url = URL.createObjectURL(blob);
     TTS_CACHE.set(cacheKey, url);
+    try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
     return url;
   }
   const blob = await resp.blob();
   const url = URL.createObjectURL(blob);
   TTS_CACHE.set(cacheKey, url);
+  try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
   return url;
 }
 
@@ -20621,6 +20869,7 @@ async function elevenLabsTtsBlobUrl(speakerId, text) {
   const blob = await resp.blob();
   const url = URL.createObjectURL(blob);
   TTS_CACHE.set(cacheKey, url);
+  try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
   return url;
 }
 
@@ -20630,9 +20879,17 @@ let LAST_TTS_ERROR = '';
    Downloaded podcast clips are stored as blobs in IndexedDB so a saved episode plays with NO
    network — the whole point for a flight. The key is provider+speaker+text so it survives reloads
    (object URLs don't). Playing a podcast online also caches each clip automatically. */
-function _ttsAudioKey(speakerId, text){
-  var prov = state.elevenLabsKey ? 'el' : (state.openaiKey ? 'oa' : 'br');
-  return 'ttsa|' + prov + '|' + speakerId + '|' + text;
+// PRIMARY offline key — provider-agnostic, so a downloaded clip is found regardless of whether the
+// key-state is detected as OpenAI/ElevenLabs/none at playback time (that mismatch was breaking
+// offline HD playback). We store new audio here.
+function _ttsAudioKey(speakerId, text){ return 'ttsa|v2|' + speakerId + '|' + text; }
+// ALL candidate keys to CHECK on lookup — the new key plus the legacy provider-specific keys, so
+// podcasts you already downloaded still play offline without re-downloading.
+function _ttsAudioKeys(speakerId, text){
+  return ['ttsa|v2|' + speakerId + '|' + text,
+          'ttsa|oa|' + speakerId + '|' + text,
+          'ttsa|el|' + speakerId + '|' + text,
+          'ttsa|br|' + speakerId + '|' + text];
 }
 function _ttsMemSet(speakerId, text, url){
   try {
@@ -20640,36 +20897,43 @@ function _ttsMemSet(speakerId, text, url){
     else if (state.openaiKey) TTS_CACHE.set('openai|v2|' + speakerId + '|' + text, url);
   } catch(_){}
 }
-// Fire-and-forget: copy an object-URL's blob into IndexedDB for offline replay.
-function _ttsPersist(akey, url){
-  try {
-    fetch(url).then(function(r){ return r.blob(); }).then(function(b){
-      if (b && b.size && typeof idbPut === 'function') idbPut(akey, b).catch(function(){});
-    }).catch(function(){});
-  } catch(_){}
+// Store a blob DIRECTLY (called from the TTS fetchers with the blob in hand — reliable) so a
+// download always persists, even if re-fetching an object URL would have failed.
+function ttsStoreBlob(speakerId, text, blob){
+  try { if (blob && blob.size && typeof idbPut === 'function') idbPut(_ttsAudioKey(speakerId, text), blob).catch(function(){}); } catch(_){}
 }
-// True if this exact clip is already saved offline (used to compute a podcast's "downloaded" state).
+// Fallback fire-and-forget persist from an object URL (kept as a safety net).
+function _ttsPersist(speakerId, text, url){
+  try { fetch(url).then(function(r){ return r.blob(); }).then(function(b){ ttsStoreBlob(speakerId, text, b); }).catch(function(){}); } catch(_){}
+}
+// True if this clip is saved offline under ANY key (used for the "downloaded" state).
 async function ttsAudioCached(speakerId, text){
-  try { if (typeof idbGet !== 'function') return false; var b = await idbGet(_ttsAudioKey(speakerId, text)); return !!(b && b.size); }
-  catch(_){ return false; }
+  try {
+    if (typeof idbGet !== 'function') return false;
+    const keys = _ttsAudioKeys(speakerId, text);
+    for (let i = 0; i < keys.length; i++){ const b = await idbGet(keys[i]); if (b && b.size) return true; }
+    return false;
+  } catch(_){ return false; }
 }
 async function bestTtsBlobUrl(speakerId, text) {
-  const akey = _ttsAudioKey(speakerId, text);
-  // 1) OFFLINE-FIRST: a previously downloaded clip plays with no network at all.
+  // 1) OFFLINE-FIRST: check every candidate key so a saved clip plays with no network at all.
   try {
     if (typeof idbGet === 'function') {
-      const cached = await idbGet(akey);
-      if (cached && cached.size) { const url = URL.createObjectURL(cached); _ttsMemSet(speakerId, text, url); LAST_TTS_ERROR = ''; return url; }
+      const keys = _ttsAudioKeys(speakerId, text);
+      for (let i = 0; i < keys.length; i++){
+        const cached = await idbGet(keys[i]);
+        if (cached && cached.size) { const url = URL.createObjectURL(cached); _ttsMemSet(speakerId, text, url); LAST_TTS_ERROR = ''; return url; }
+      }
     }
   } catch(_){}
-  // 2) Network HD — then persist the clip so it's available offline next time.
+  // 2) Network HD — persisted directly inside the fetchers, plus a fallback here.
   let elevenErr = '';
   if (state.elevenLabsKey) {
-    try { const u = await elevenLabsTtsBlobUrl(speakerId, text); LAST_TTS_ERROR = ''; _ttsPersist(akey, u); return u; }
+    try { const u = await elevenLabsTtsBlobUrl(speakerId, text); LAST_TTS_ERROR = ''; _ttsPersist(speakerId, text, u); return u; }
     catch (e) { elevenErr = (e && e.message) || String(e); LAST_TTS_ERROR = elevenErr; console.warn('ElevenLabs failed, falling back:', e); }
   }
   if (state.openaiKey) {
-    try { const u = await openaiTtsBlobUrl(speakerId, text); LAST_TTS_ERROR = ''; _ttsPersist(akey, u); return u; }
+    try { const u = await openaiTtsBlobUrl(speakerId, text); LAST_TTS_ERROR = ''; _ttsPersist(speakerId, text, u); return u; }
     catch (e2) { LAST_TTS_ERROR = (e2 && e2.message) || String(e2); throw new Error(LAST_TTS_ERROR); }
   }
   throw new Error(elevenErr || 'No HD TTS key configured');
@@ -25823,7 +26087,7 @@ function attachListeners() {
           (async () => {
             try {
               const script = (CONTENT[wk] && CONTENT[wk].podcastScript) || [];
-              for (const t of script) { try { if (typeof idbDel === 'function') await idbDel(_ttsAudioKey(t.speaker, t.text)); } catch(_){} }
+              for (const t of script) { try { if (typeof idbDel === 'function') { const ks = _ttsAudioKeys(t.speaker, t.text); for (const k of ks) await idbDel(k); } } catch(_){} }
             } catch(_){}
             if (state.podcastsDownloaded) delete state.podcastsDownloaded[wk];
             try { persist(); } catch(_){}
