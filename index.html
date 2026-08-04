@@ -26057,7 +26057,7 @@ function attachListeners() {
           state.lastLocation = { week: wn, tab: 'overview' };
           state.lastSessionStart = Date.now();
           markStudyActivity(0);
-          setState({ view: 'week', selectedWeek: wn, weekTab: 'overview', flashcardIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
+          setState({ view: 'week', selectedWeek: wn, weekTab: 'overview', flashcardIndex: 0, slideIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
           safeScrollTo(0);  // Opening chapter → start at top
           break;
         }
@@ -26072,7 +26072,7 @@ function attachListeners() {
           state.lastSessionStart = Date.now();
           markStudyActivity(0);
           state.lastLocation = { week: wn, tab: tab };
-          setState({ view: 'week', selectedWeek: wn, weekTab: tab, flashcardIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
+          setState({ view: 'week', selectedWeek: wn, weekTab: tab, flashcardIndex: 0, slideIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
           // After render, reliably scroll to the section anchor inside the new tab (retries as it lays out).
           if (section) scrollToSectionWhenReady(section);
           else safeScrollTo(0);
@@ -27014,14 +27014,17 @@ function attachListeners() {
           if (!slides.length) break;
           state.slideIndex = Math.min((state.slideIndex || 0) + 1, slides.length - 1);
           persist();
-          // Update just the slide block in place — no full re-render, so no scroll jump.
-          if (!updateSlideStageInPlace()) setState({});
+          // Full re-render (setState already preserves scroll position, so no jump) — this ALWAYS
+          // reflects the new slide index, unlike the in-place DOM swap which could target a stale
+          // element and leave the deck visually stuck.
+          setState({});
           break;
         }
         case 'slide-prev': {
-          state.slideIndex = Math.max(0, (state.slideIndex || 0) - 1);
+          const slidesP = (typeof currentSlides === 'function') ? currentSlides() : [];
+          state.slideIndex = Math.max(0, Math.min((state.slideIndex || 0) - 1, (slidesP.length || 1) - 1));
           persist();
-          if (!updateSlideStageInPlace()) setState({});
+          setState({});
           break;
         }
         case 'auth-setup-manager': {
