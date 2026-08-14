@@ -21184,13 +21184,13 @@ async function openaiTtsBlobUrl(speakerId, text) {
     const blob = await fallback.blob();
     const url = URL.createObjectURL(blob);
     TTS_CACHE.set(cacheKey, url);
-    try { if (typeof ttsStoreBlob === 'function') await ttsStoreBlob(speakerId, text, blob); } catch(_){}
+    try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
     return url;
   }
   const blob = await resp.blob();
   const url = URL.createObjectURL(blob);
   TTS_CACHE.set(cacheKey, url);
-  try { if (typeof ttsStoreBlob === 'function') await ttsStoreBlob(speakerId, text, blob); } catch(_){}
+  try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
   return url;
 }
 
@@ -21317,7 +21317,7 @@ async function elevenLabsTtsBlobUrl(speakerId, text) {
   const blob = await resp.blob();
   const url = URL.createObjectURL(blob);
   TTS_CACHE.set(cacheKey, url);
-  try { if (typeof ttsStoreBlob === 'function') await ttsStoreBlob(speakerId, text, blob); } catch(_){}
+  try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
   return url;
 }
 
@@ -21355,22 +21355,34 @@ function ttsStoreBlob(speakerId, text, blob){
 function _ttsPersist(speakerId, text, url){
   try { fetch(url).then(function(r){ return r.blob(); }).then(function(b){ ttsStoreBlob(speakerId, text, b); }).catch(function(){}); } catch(_){}
 }
+// idbGet with a hard timeout so a stalled IndexedDB can NEVER freeze playback.
+// On a flaky device the DB read may never settle; we cap it and fall through to network.
+function _idbGetSafe(key, ms){
+  try {
+    if (typeof idbGet !== 'function') return Promise.resolve(null);
+    return Promise.race([
+      idbGet(key).catch(function(){ return null; }),
+      new Promise(function(res){ setTimeout(function(){ res(null); }, ms || 1200); })
+    ]);
+  } catch(_){ return Promise.resolve(null); }
+}
 // True if this clip is saved offline under ANY key (used for the "downloaded" state).
 async function ttsAudioCached(speakerId, text){
   try {
     if (typeof idbGet !== 'function') return false;
     const keys = _ttsAudioKeys(speakerId, text);
-    for (let i = 0; i < keys.length; i++){ const b = await idbGet(keys[i]); if (b && b.size) return true; }
+    for (let i = 0; i < keys.length; i++){ const b = await _idbGetSafe(keys[i], 1200); if (b && b.size) return true; }
     return false;
   } catch(_){ return false; }
 }
 async function bestTtsBlobUrl(speakerId, text) {
   // 1) OFFLINE-FIRST: check every candidate key so a saved clip plays with no network at all.
+  //    Guarded by a timeout — if the DB stalls we drop straight to network rather than hang.
   try {
     if (typeof idbGet === 'function') {
       const keys = _ttsAudioKeys(speakerId, text);
       for (let i = 0; i < keys.length; i++){
-        const cached = await idbGet(keys[i]);
+        const cached = await _idbGetSafe(keys[i], 1500);
         if (cached && cached.size) { const url = URL.createObjectURL(cached); _ttsMemSet(speakerId, text, url); LAST_TTS_ERROR = ''; return url; }
       }
     }
