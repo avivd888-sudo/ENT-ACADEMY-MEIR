@@ -17105,6 +17105,17 @@ function extractJSON(s) {
 }
 
 function setState(patch) {
+  // Detect a REAL navigation (view/chapter/tab change). On those, the caller scrolls to top
+  // with safeScrollTo(0) right after — so we must NOT restore the old scroll position, or the
+  // rAF below fires a frame later and drags the page back down to where it was (this is what
+  // dumped the user at the BOTTOM of the landing page when opening a chapter).
+  const _navChanged = patch && (
+    ('view' in patch      && patch.view      !== state.view) ||
+    ('selectedWeek' in patch && patch.selectedWeek !== state.selectedWeek) ||
+    ('weekTab' in patch   && patch.weekTab   !== state.weekTab) ||
+    ('podcastWeek' in patch && patch.podcastWeek !== state.podcastWeek) ||
+    ('quizSubmitted' in patch && patch.quizSubmitted !== state.quizSubmitted)
+  );
   Object.assign(state, patch);
   persist();
   // Preserve scroll position across re-renders so navigating slides / flashcards /
@@ -17114,10 +17125,14 @@ function setState(patch) {
   // handlers already do this.
   const _preservedY = window.scrollY || document.documentElement.scrollTop || 0;
   render();
-  if (_preservedY > 0) {
+  if (_preservedY > 0 && !_navChanged) {
     // Restore synchronously then re-apply in next frame in case render layout shifted height
     try { window.scrollTo(0, _preservedY); } catch(e){}
     requestAnimationFrame(() => { try { window.scrollTo(0, _preservedY); } catch(e){} });
+  } else if (_navChanged) {
+    // Fresh view → guarantee top even if the caller forgets, and beat any late layout shift.
+    try { window.scrollTo(0, 0); } catch(e){}
+    requestAnimationFrame(() => { try { window.scrollTo(0, 0); } catch(e){} });
   }
 }
 
@@ -27081,7 +27096,46 @@ function attachListeners() {
           }
           state.openaiKey = v;
           TTS_CACHE.clear();
+          // Persist immediately (belt-and-suspenders: critical bucket + main store + IDB mirror).
+          try { persist(); } catch(_){}
           setState({});
+          // LIVE VERIFY — fetch one real HD clip so the user KNOWS before the OR whether HD works,
+          // and sees the exact reason if it doesn't (bad key / no credit / model access / network).
+          (async () => {
+            try { appToast('Checking your OpenAI key…'); } catch(_){}
+            let ok = false, reason = '';
+            try {
+              let r = await fetch('https://api.openai.com/v1/audio/speech', {
+                method: 'POST',
+                headers: { 'authorization': 'Bearer ' + v, 'content-type': 'application/json' },
+                body: JSON.stringify({ model: 'gpt-4o-mini-tts', voice: (state.openaiVoices && state.openaiVoices.host) || 'shimmer', input: 'ENT Academy voice check.', response_format: 'mp3' })
+              });
+              if (!r.ok) {
+                const body1 = await r.text().catch(()=> '');
+                // retry on the classic engine for accounts without gpt-4o-mini-tts access
+                r = await fetch('https://api.openai.com/v1/audio/speech', {
+                  method: 'POST',
+                  headers: { 'authorization': 'Bearer ' + v, 'content-type': 'application/json' },
+                  body: JSON.stringify({ model: 'tts-1-hd', voice: 'shimmer', input: 'ENT Academy voice check.', response_format: 'mp3' })
+                });
+                if (!r.ok) { reason = 'HTTP ' + r.status + ' — ' + (String(body1).slice(0,140) || 'request rejected'); }
+                else { ok = true; }
+              } else { ok = true; }
+              if (ok) {
+                const b = await r.blob();
+                if (b && b.size > 200) {
+                  try { const a = new Audio(URL.createObjectURL(b)); a.play().catch(()=>{}); } catch(_){}
+                  try { alert('✅ OpenAI HD voice is working — you just heard a test clip. Podcasts will use your HD voices.'); } catch(_){}
+                } else { ok = false; reason = 'empty audio response'; }
+              }
+            } catch (e) { reason = (e && e.message) || String(e); }
+            if (!ok) {
+              try {
+                alert('⚠️ OpenAI HD voice did NOT work.\n\nReason: ' + reason +
+                  '\n\nMost common fixes:\n• Key is wrong or was revoked → make a new key at platform.openai.com/api-keys\n• No billing/credit on the OpenAI account → add credit\n• The key’s project has no TTS access\n\nUntil this is fixed the app will read podcasts with the basic device voice. TIP: pre-DOWNLOAD each surgery chapter now (Save offline) while online, so the HD audio is saved on your phone for tomorrow.');
+              } catch(_){}
+            }
+          })();
           break;
         }
         case 'openai-clear':
