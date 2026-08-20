@@ -16757,6 +16757,7 @@ function loadStored() {
       });
     }
   } catch (e) { /* main blob unreadable/corrupt — the critical fallback below still recovers */ }
+  try { normalizeMissingFlags(); } catch(e){}
   // ALWAYS run the critical-bucket fallback, even if the main blob threw while parsing. Otherwise a
   // single corrupt/oversized main record would leave state empty AND skip recovery — and the next
   // save would overwrite localStorage with that empty state, wiping the key and progress for good.
@@ -17167,6 +17168,20 @@ function overallProgress() {
   const total = CURRICULUM.length;
   const done = Object.values(state.progress).filter(p => p.completed).length;
   return { done, total, pct: Math.round((done/total)*100) };
+}
+/* Honesty pass: mark every curriculum chapter that has NO real CONTENT as `missing`, and clear the
+   flag on any chapter that DOES have content. The hand-set `missing` flags had drifted — 68 chapters
+   with no content were showing as available and opened empty. This derives the flag from reality, so
+   the catalog is always truthful and it self-corrects the moment a chapter is actually built. */
+function normalizeMissingFlags() {
+  try {
+    if (!Array.isArray(CURRICULUM)) return;
+    CURRICULUM.forEach(function(e){
+      var c = CONTENT[e.week];
+      var has = !!(c && (c.podcastScript || c.summary || (c.objectives && c.objectives.length)));
+      e.missing = !has;
+    });
+  } catch (err) {}
 }
 
 /* ---------------- RENDER ---------------- */
@@ -18765,6 +18780,13 @@ function renderWeekTeaching(w, c) {
       ? `<button class="btn btn-light" data-action="pod-pause" aria-label="Pause podcast">${I.pause} ${isLoading ? 'Generating… · Pause' : 'Pause'}</button>`
       : `<button class="btn btn-primary" data-action="pod-play" aria-label="Play podcast" ${ttsAvailable && hasScript ? '' : 'disabled'}>${I.play} ${status === 'paused' ? 'Resume' : 'Play podcast'}</button>`;
   const stopBtn = (status !== 'stopped') ? `<button class="btn btn-light" data-action="pod-stop">${I.stop}</button>` : '';
+  // Transport controls on the MAIN bar (not just the floating player) so control + re-listen are
+  // always one tap away: previous line, back 10s, replay this line, next line.
+  const transport = (status !== 'stopped') ? `
+      <button class="btn btn-light" data-action="fp-prev" title="Previous line" aria-label="Previous line">⏮</button>
+      <button class="btn btn-light" data-action="fp-rewind10" title="Back 10 seconds" aria-label="Back 10 seconds">⏪</button>
+      <button class="btn btn-light" data-action="pod-replay-line" title="Replay this line" aria-label="Replay this line">↺</button>
+      <button class="btn btn-light" data-action="fp-next" title="Next line" aria-label="Next line">⏭</button>` : '';
   const liveDot = (status === 'playing') ? `<span class="tts-status"><span class="pulse"></span> Live</span>` : '';
 
   // Set podcastWeek to the displayed week so TTS plays the right script
@@ -18821,7 +18843,7 @@ function renderWeekTeaching(w, c) {
       <div class="pod-eyebrow">Episode ${w.week} · ${c.podcastDuration || '~16 min'} · ${hasHdKey ? '<span style="color:#86efac;">HD voice</span>' : '<span style="color:#fbbf24;">Browser TTS</span>'}</div>
       <h2 class="pod-title">${escapeHTML(c.podcastTitle || w.title)}</h2>
       <p class="pod-meta">A two-host conversation in NotebookLM-style — Marchetti frames, Chen probes.</p>
-      <div class="pod-controls">${playBtn} ${stopBtn} ${videoBtn} ${liveDot}</div>
+      <div class="pod-controls">${playBtn} ${transport} ${stopBtn} ${videoBtn} ${liveDot}</div>
       <div style="margin-top:14px;">${speedHTML}</div>
     </div>
     <div class="card" style="margin-top:14px;">
@@ -20881,6 +20903,7 @@ function renderPodcast() {
   let wn = state.podcastWeek || state.selectedWeek;
   if (!CONTENT[wn] || !CONTENT[wn].podcastScript || !CONTENT[wn].podcastScript.length) { wn = (podLibrary[0]||{}).week || wn; }
   state.podcastWeek = wn;
+  try { setTimeout(function(){ try { TTS.prefetchLeadIn(wn); } catch(_){} }, 0); } catch(_){}
   const w = getWeek(wn);
   const c = CONTENT[wn];
   const cast = getCast(wn);
@@ -21852,6 +21875,30 @@ const TTS = {
         const u = new SpeechSynthesisUtterance(' ');
         u.volume = 0;
         window.speechSynthesis.speak(u);
+      }
+    } catch (e) {}
+  },
+  // Pre-fetch the first few HD clips as soon as a podcast is opened, so the moment the user taps
+  // Play the opening line is already a cached blob — speakTurn's fast path then starts audio
+  // SYNCHRONOUSLY inside the tap, which is what iOS requires for HD. Without this the first clip is
+  // fetched after the tap (an await breaks the gesture) and iOS blocks it → drop to the robotic voice.
+  prefetchLeadIn(week) {
+    try {
+      const wk = (week != null ? week : state.podcastWeek);
+      if (wk == null) return;
+      if (this._prefetchedWeek === wk) return;
+      if (!this.useHdTts || !this.useHdTts()) return;
+      if (typeof bestTtsBlobUrl !== 'function') return;
+      const c = CONTENT[wk];
+      const script = c && c.podcastScript;
+      if (!script || !script.length) return;
+      this._prefetchedWeek = wk;
+      const n = Math.min(3, script.length);
+      for (let i = 0; i < n; i++) {
+        const t = script[i];
+        if (!t || !t.text) continue;
+        if (typeof cachedTtsUrl === 'function' && cachedTtsUrl(t.speaker, t.text)) continue;
+        bestTtsBlobUrl(t.speaker, t.text).catch(function(){});
       }
     } catch (e) {}
   },
@@ -26503,6 +26550,7 @@ function attachListeners() {
           state.podcastWeek = pw;
           setState({ view: 'podcast' });
           safeScrollTo(0);
+          try { TTS.prefetchLeadIn(pw); } catch(_){}
           break;
         }
         case 'open-week': {
@@ -27792,6 +27840,12 @@ function attachListeners() {
           break;
         }
         case 'pod-play':  TTS.play();  break;
+        case 'pod-replay-line': {
+          // Re-speak the current line from its start — the easiest "let me hear that again".
+          const cur = (state.podcastTurn >= 0) ? state.podcastTurn : 0;
+          try { TTS.jumpTo(cur); } catch(_){}
+          break;
+        }
         case 'pod-play-week': {
           // Play a podcast straight from the list. unlockAudio() inside TTS.play() must run in THIS
           // synchronous tap for iOS, so we set the week and start playback here, no async in between.
@@ -28390,6 +28444,7 @@ if (typeof _purgeElevenLabsOnce === 'function') _purgeElevenLabsOnce();
 // Append the capstone clinical case to each episode (once).
 if (typeof applyClosingCases === 'function') applyClosingCases();
 if (typeof applyExtraQuiz === 'function') applyExtraQuiz();
+if (typeof normalizeMissingFlags === 'function') normalizeMissingFlags();
 // A returning doctor stays signed in (no re-login) and sees THEIR own saved progress.
 if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser === 'function') bindProgressForUser();
 /* ---- Durability self-heal ----
@@ -28436,6 +28491,58 @@ if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser =
     }).catch(function(){});
   } catch(e){}
 })();
+/* ---- Storage durability guard ----
+   The single biggest cause of "I lost my key / my marks again" is iOS Safari evicting ALL
+   site storage (localStorage + IndexedDB together) after ~7 idle days in a normal browser tab.
+   No amount of mirroring survives that. Two defenses:
+   1) Ask the browser to make storage persistent (granted automatically for an installed / Home-Screen
+      app, and on some Chrome/Android setups) — this alone stops most eviction.
+   2) If storage is NOT durable, show the agreed one-per-day warning modal with a one-tap backup
+      export, so the user is never silently wiped and always has a file to restore from. */
+function _isIOSlike(){ try{ return /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1); }catch(e){ return false; } }
+function _isStandaloneApp(){ try{ return (window.navigator.standalone===true) || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches); }catch(e){ return false; } }
+function _dmDismiss(){ try{ localStorage.setItem('ent-durability-warned', new Date().toISOString().slice(0,10)); }catch(e){} var m=document.getElementById('ent-durability-modal'); if(m&&m.parentNode) m.parentNode.removeChild(m); }
+function _showDurabilityModal(){
+  if (document.getElementById('ent-durability-modal')) return;
+  var ios=_isIOSlike();
+  var howto = ios
+    ? 'לחץ על כפתור השיתוף (Share) ואז “Add to Home Screen”. פתח את האפליקציה מהאייקון הזה — והנתונים יישמרו.'
+    : 'פתח בחלון רגיל (לא פרטי) ואל תנקה נתוני אתר. מומלץ לשמור קובץ גיבוי.';
+  var ov=document.createElement('div');
+  ov.id='ent-durability-modal';
+  ov.setAttribute('dir','rtl');
+  ov.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(8,15,30,.62);display:flex;align-items:center;justify-content:center;padding:20px;';
+  ov.innerHTML='<div style="max-width:450px;width:100%;background:#fff;color:#111;border-radius:16px;padding:22px 22px 18px;box-shadow:0 20px 60px rgba(0,0,0,.42);font-family:-apple-system,system-ui,sans-serif;">'
+    +'<div style="font-size:19px;font-weight:700;margin-bottom:8px;">⚠️ הדפדפן עלול למחוק את השמירות שלך</div>'
+    +'<div style="font-size:14px;line-height:1.65;color:#333;">'+(ios?'ב‑iOS, אפליקציה שרצה בכרטיסיית Safari רגילה נמחקת אחרי כשבוע — כולל מפתח ה‑OpenAI, סימוני הפרקים והפודקאסטים שהורדת.':'ייתכן שהדפדפן ימחק נתונים שמורים (מצב פרטי / ניקוי אתר).')+'</div>'
+    +'<div style="font-size:14px;line-height:1.65;color:#111;margin-top:10px;"><strong>הפתרון:</strong> '+howto+'</div>'
+    +'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;">'
+    +'<button id="ent-dm-export" style="flex:1;min-width:160px;padding:12px;border:0;border-radius:10px;background:#6d28d9;color:#fff;font-size:15px;font-weight:700;cursor:pointer;">⬇️ שמור קובץ גיבוי</button>'
+    +'<button id="ent-dm-close" style="flex:1;min-width:110px;padding:12px;border:1px solid #ccc;border-radius:10px;background:#f3f4f6;color:#111;font-size:15px;cursor:pointer;">הבנתי</button>'
+    +'</div>'
+    +'<div style="font-size:12px;color:#666;margin-top:10px;">אפשר לשחזר מהקובץ בכל רגע: Settings ← Restore from backup.</div>'
+    +'</div>';
+  document.body.appendChild(ov);
+  var ex=document.getElementById('ent-dm-export'); if(ex) ex.onclick=function(){ try{ if(typeof exportProgress==='function') exportProgress(); }catch(e){} _dmDismiss(); };
+  var cl=document.getElementById('ent-dm-close'); if(cl) cl.onclick=_dmDismiss;
+  ov.onclick=function(e){ if(e.target===ov) _dmDismiss(); };
+}
+async function _initDurability(){
+  var durable=false;
+  try{ if(navigator.storage&&navigator.storage.persisted){ durable=await navigator.storage.persisted(); } }catch(e){}
+  if(!durable){ try{ if(navigator.storage&&navigator.storage.persist){ durable=await navigator.storage.persist(); } }catch(e){} }
+  window.__storageDurable=durable;
+  if(durable) return;                 // storage protected — no eviction risk, no warning
+  if(_isStandaloneApp()) return;       // installed to Home Screen — iOS treats it as durable
+  if(!_isIOSlike()){                    // desktop: only warn if storage is genuinely non-functional
+    if(typeof storagePersists==='function' && storagePersists()) return;
+  }
+  var today=new Date().toISOString().slice(0,10);
+  var last=''; try{ last=localStorage.getItem('ent-durability-warned')||''; }catch(e){}
+  if(last===today) return;             // already warned today — don't nag
+  setTimeout(_showDurabilityModal, 3400); // let the self-heal restore land first
+}
+try{ _initDurability(); }catch(e){}
 (function(){
   var run = false;
   function go(){
