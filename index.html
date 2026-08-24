@@ -4423,6 +4423,569 @@ function getCast() {
 /* ---------------- DETAILED CONTENT ---------------- */
 /* Resident-level study content. Add new weeks by populating CONTENT[N]. */
 const CONTENT = {
+  26: {
+    objectives: [
+      "Describe the bony-cartilaginous septal anatomy and the blood supply that keeps the cartilage alive.",
+      "Preserve the dorsal-caudal L-strut and keystone area during septoplasty to prevent saddle-nose deformity.",
+      "Select the incision (Killian vs caudal/hemitransfixion) for the deviation, and recognize the caudal deflection as the hardest.",
+      "Diagnose and emergently drain a septal hematoma to prevent cartilage necrosis and perforation.",
+      "Evaluate a septal perforation — including systemic causes — and manage it medically or surgically."
+    ],
+    summary: `
+      <h4>1. What the septum is made of</h4>
+      <p>The nasal septum is part cartilage, part bone: the <strong>quadrangular (septal) cartilage</strong> anteriorly; the <strong>perpendicular plate of the ethmoid</strong> superoposteriorly; the <strong>vomer</strong> posteroinferiorly; and the <strong>maxillary crest / palatine bone</strong> along the floor. The <strong>keystone area</strong> — where the upper lateral cartilages meet the dorsal septum — is the structural linchpin of the dorsum.</p>
+      <h4>2. The blood supply and why it matters</h4>
+      <p>Septal <strong>cartilage is avascular</strong> — it is fed entirely by its overlying <strong>mucoperichondrium</strong>. On the anterior septum, <strong>Little's area</strong> carries <strong>Kiesselbach's plexus</strong> (anastomosis of the anterior ethmoidal, sphenopalatine, greater palatine, and superior labial arteries) — the commonest epistaxis site. The clinical corollary drives everything that follows: if you raise mucoperichondrium off <strong>both sides at the same level</strong> and tear both flaps, the cartilage between them loses its blood supply and dies — a <strong>perforation</strong>.</p>
+      <h4>3. Evaluating the deviated septum</h4>
+      <p>Deviation causes <strong>nasal obstruction</strong> and can drive epistaxis or contribute to sinus disease. Examine with anterior rhinoscopy and endoscopy, and <strong>decongest</strong> to separate the fixed structural component from reversible mucosal swelling. Look for <strong>compensatory inferior-turbinate hypertrophy</strong> on the concave (roomier) side, which must be addressed too, and note whether the deviation is posterior or involves the <strong>caudal</strong> septum.</p>
+      <h4>4. Septoplasty — preserve the L-strut</h4>
+      <p>Septoplasty corrects a symptomatic deviation that fails medical management (or provides access for sinus/skull-base surgery). The cardinal rule: <strong>preserve an L-shaped strut of at least ~1–1.5 cm along the dorsum and the caudal septum.</strong> Over-resecting the dorsal strut collapses the dorsum into a <strong>saddle-nose deformity</strong>; losing the caudal strut drops tip support. Elevate the mucoperichondrial flap, remove or reshape only the deviated bone/cartilage, and keep that L-strut and the keystone intact.</p>
+      <h4>5. Choosing the incision</h4>
+      <p>The classic <strong>Killian incision</strong> sits a few millimeters behind the caudal edge and is ideal for <strong>posterior</strong> deviations — but it does not give access to the caudal septum. A <strong>caudal deviation</strong> — the hardest problem — needs a <strong>hemitransfixion or transfixion incision</strong> at the caudal edge, and often caudal septal reconstruction with techniques such as batten or spreader grafts, a swinging-door, or tongue-in-groove fixation to the anterior nasal spine.</p>
+      <h4>6. Septal hematoma — a drain-now emergency</h4>
+      <p>A <strong>septal hematoma</strong> (after trauma or surgery) strips the mucoperichondrium off the cartilage — cutting its blood supply. If it is not <strong>drained promptly</strong>, the avascular cartilage undergoes <strong>necrosis</strong>, frequently becomes a <strong>septal abscess</strong>, and heals as a <strong>perforation and saddle-nose deformity</strong>. Treat immediately: incise and drain, then prevent reaccumulation with a <strong>quilting suture and/or packing</strong>; antibiotics if abscess. A boggy, fluctuant septal swelling after nasal trauma is a hematoma until proven otherwise.</p>
+      <h4>7. Septal perforation — think systemic, then treat</h4>
+      <p>Perforations come from surgery/over-resection, bilateral mucosal tears, an untreated hematoma/abscess, <strong>digital trauma</strong>, <strong>cocaine</strong>, <strong>granulomatous disease (GPA/granulomatosis with polyangiitis, sarcoid)</strong>, infection (TB, syphilis), neoplasm, and chemical/occupational exposure. So an unexplained perforation warrants a <strong>work-up and a biopsy of the perforation edge</strong> for vasculitis or malignancy. <strong>Anterior</strong> perforations <strong>whistle</strong>, crust, and bleed; <strong>posterior</strong> ones are often asymptomatic. Manage symptomatic ones with humidification, saline, and emollients, a <strong>silastic septal button</strong>, or surgical closure with bilateral mucosal advancement flaps plus an interposition graft — with success inversely related to perforation size.</p>
+    `,
+    keyPoints: [
+      { category: "Anatomy & supply", items: [
+        "Septum = quadrangular cartilage + perpendicular plate of ethmoid + vomer + maxillary crest; keystone = ULC-dorsal septum junction.",
+        "Cartilage is avascular — fed by mucoperichondrium; Little's area = Kiesselbach's plexus (commonest epistaxis).",
+        "Bilateral opposing mucosal tears → the cartilage between dies → perforation."
+      ]},
+      { category: "Septoplasty", items: [
+        "Preserve an L-strut ≥ ~1–1.5 cm (dorsal + caudal) — over-resection → saddle nose / tip ptosis.",
+        "Killian incision for posterior deviation; hemitransfixion/transfixion for caudal deviation (the hardest).",
+        "Address compensatory inferior-turbinate hypertrophy on the concave side."
+      ]},
+      { category: "Emergencies", items: [
+        "Septal hematoma → drain immediately (+ quilting suture/packing); untreated → cartilage necrosis, abscess, perforation, saddle nose.",
+      ]},
+      { category: "Perforation", items: [
+        "Anterior perforation whistles/crusts/bleeds; posterior often asymptomatic.",
+        "Consider cocaine, digital trauma, GPA/granulomatous, TB/syphilis, malignancy → biopsy the edge if unexplained.",
+        "Treat: humidification/emollients, silastic button, or flap closure + interposition graft (success inversely related to size)."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 29 · Management of the Nasal Septum", subtitle: "Cummings 8e · Chapter 29", body: "<p style='font-size:18px;line-height:1.55;'>Straighten the septum without starving the cartilage — preserve the L-strut, drain the hematoma, and think systemically about a perforation.</p>" },
+      { title: "What the septum is made of", body: "<ul><li>Quadrangular (septal) cartilage — anterior.</li><li>Perpendicular plate of ethmoid — superoposterior.</li><li>Vomer — posteroinferior; maxillary crest/palatine — floor.</li><li><strong>Keystone</strong> = upper-lateral-cartilage / dorsal-septum junction.</li></ul>" },
+      { title: "Blood supply = survival", body: "<ul><li>Cartilage is <strong>avascular</strong> — fed by mucoperichondrium.</li><li><strong>Little's area = Kiesselbach's plexus</strong> (commonest epistaxis).</li><li><strong>Bilateral opposing tears → perforation.</strong></li></ul>" },
+      { title: "Evaluate the deviation", body: "<ul><li>Obstruction ± epistaxis / sinus disease.</li><li><strong>Decongest</strong> to separate mucosal vs structural.</li><li>Compensatory <strong>inferior-turbinate hypertrophy</strong> on the concave side.</li></ul>" },
+      { title: "Septoplasty — preserve the L-strut", body: "<ul><li>Keep an <strong>L-strut ≥ ~1–1.5 cm</strong> (dorsal + caudal).</li><li>Over-resect the dorsum → <strong>saddle nose</strong>; lose the caudal strut → tip ptosis.</li><li>Reshape only the deviated bone/cartilage; keep the keystone.</li></ul>" },
+      { title: "Choose the incision", body: "<ul><li><strong>Killian</strong> — posterior deviations (no caudal access).</li><li><strong>Hemitransfixion / transfixion</strong> — caudal deviation (the hardest); ± spreader/batten, swinging-door, tongue-in-groove.</li></ul>" },
+      { title: "Septal hematoma — drain NOW", body: "<ul><li>Strips mucoperichondrium → avascular cartilage.</li><li>Untreated → <strong>necrosis → abscess → perforation + saddle nose.</strong></li><li>Incise & drain + <strong>quilting suture / packing</strong>; antibiotics if abscess.</li></ul>" },
+      { title: "Septal perforation — think systemic", body: "<ul><li>Causes: surgery, cocaine, digital trauma, <strong>GPA</strong>/granulomatous, TB/syphilis, malignancy.</li><li>Unexplained → <strong>biopsy the edge.</strong></li><li>Anterior whistles/crusts/bleeds; posterior often silent.</li></ul>" },
+      { title: "Perforation management", body: "<ul><li>Humidification, saline, emollients.</li><li><strong>Silastic septal button.</strong></li><li>Surgical closure: bilateral advancement flaps + interposition graft (success ↓ as size ↑).</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Preserve the ≥1–1.5 cm L-strut and keystone or you get a saddle nose.</li><li>Boggy septal swelling after trauma = hematoma → drain immediately.</li><li>Unexplained perforation → work up cocaine/GPA/malignancy and biopsy the edge.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Septal framework & the L-strut", body: "<ul><li>Cartilage anteriorly; perpendicular plate of ethmoid, vomer, and maxillary crest posteriorly/inferiorly.</li><li><strong>L-strut</strong>: leave ≥ ~1–1.5 cm of dorsal and caudal cartilage for support — the anti-saddle-nose rule.</li><li><strong>Keystone</strong> (ULC-dorsal septum): preserve for dorsal height.</li></ul>" },
+      { title: "Mucoperichondrium & Kiesselbach", body: "<ul><li>The cartilage lives off its mucoperichondrium — raise flaps in the correct subperichondrial plane and avoid opposing bilateral tears.</li><li><strong>Little's area</strong> on the anterior septum carries <strong>Kiesselbach's plexus</strong> — the commonest epistaxis source.</li></ul>" }
+    ],
+    pearls: [
+      "Septal cartilage is avascular and survives on its mucoperichondrium — bilateral opposing mucosal tears kill the cartilage between them and cause a perforation.",
+      "Preserve an L-strut of at least ~1–1.5 cm of dorsal and caudal septum (and the keystone) during septoplasty, or the dorsum collapses into a saddle-nose deformity.",
+      "A boggy, fluctuant septal swelling after nasal trauma is a septal hematoma — drain it immediately, because the avascular cartilage will necrose, abscess, and perforate.",
+      "The Killian incision handles posterior deviations but gives no caudal access; a caudal septal deviation is the hardest problem and needs a hemitransfixion approach and caudal reconstruction.",
+      "An unexplained septal perforation deserves a systemic work-up — cocaine, digital trauma, granulomatosis with polyangiitis, TB/syphilis, malignancy — and a biopsy of the perforation edge."
+    ],
+    flashcards: [
+      { q: "Why does raising mucoperichondrial flaps on both sides at the same level risk a septal perforation?", a: "Because septal cartilage is avascular and depends entirely on its overlying mucoperichondrium for blood supply. Opposing bilateral mucosal tears at the same spot strip both blood-supply layers, so the cartilage between them necroses and perforates." },
+      { q: "What is the L-strut and why preserve it?", a: "An L-shaped strut of at least ~1–1.5 cm of dorsal and caudal septal cartilage left intact during septoplasty. It maintains dorsal height and tip support; over-resecting it causes a saddle-nose deformity and tip ptosis." },
+      { q: "Which incision is used for a posterior septal deviation, and which for a caudal deviation?", a: "The Killian incision (a few mm behind the caudal edge) for posterior deviations — but it gives no caudal access. A caudal deviation, the hardest, needs a hemitransfixion/transfixion incision at the caudal edge, often with caudal reconstruction (spreader/batten grafts, swinging-door, tongue-in-groove)." },
+      { q: "A child has a boggy septal swelling and pain after a nose injury. Diagnosis and management?", a: "Septal hematoma. Incise and drain it immediately and prevent reaccumulation with a quilting suture and/or packing (antibiotics if an abscess). Untreated, the avascular cartilage necroses and forms an abscess, causing a perforation and saddle-nose deformity." },
+      { q: "How do anterior and posterior septal perforations differ symptomatically?", a: "Anterior perforations whistle, crust, and bleed and are often symptomatic; posterior perforations are frequently asymptomatic. Symptomatic ones are managed with humidification/emollients, a silastic button, or surgical flap closure." },
+      { q: "Name systemic causes of a septal perforation to work up.", a: "Cocaine use, digital trauma, granulomatosis with polyangiitis (GPA) and other granulomatous disease (sarcoid), infections (TB, syphilis), neoplasm, and chemical/occupational exposure — biopsy the perforation edge if the cause is unclear." },
+      { q: "What is Little's area and its clinical significance?", a: "The anterior septum carrying Kiesselbach's plexus — an anastomosis of the anterior ethmoidal, sphenopalatine, greater palatine, and superior labial arteries — and the commonest site of epistaxis." },
+      { q: "What is the keystone area?", a: "The junction of the upper lateral cartilages with the dorsal septum — the structural linchpin of the middle-third dorsum, which must be preserved to maintain dorsal height." }
+    ],
+    quiz: [
+      { stem: "During septoplasty, which maneuver most directly prevents a postoperative saddle-nose deformity?",
+        options: ["Removing the entire quadrangular cartilage", "Preserving a dorsal and caudal L-strut of at least ~1–1.5 cm", "Raising bilateral mucosal flaps at the same level", "Resecting the keystone area"],
+        correct: 1, explanation: "Leaving an intact L-strut of at least ~1–1.5 cm of dorsal and caudal cartilage maintains dorsal support; over-resection there collapses the dorsum into a saddle nose. Removing the whole cartilage or the keystone, or tearing bilateral flaps, causes exactly the problems you want to avoid." },
+      { stem: "A 10-year-old has a fluctuant, boggy septal swelling and nasal pain two days after being hit in the nose. The most appropriate management is:",
+        options: ["Oral antibiotics and review in a week", "Nasal decongestant spray only", "Immediate incision and drainage with a quilting suture/packing", "Observation — it will resorb"],
+        correct: 2, explanation: "This is a septal hematoma. It must be drained immediately, because the cartilage is avascular and a hematoma cuts its blood supply — untreated it necroses, forms a septal abscess, and results in a perforation and saddle-nose deformity. A quilting suture and/or packing prevents reaccumulation." },
+      { stem: "A patient has an unexplained anterior septal perforation with crusting and whistling and no surgical history. The most important next step is:",
+        options: ["Immediate surgical closure", "A work-up for systemic causes (cocaine, GPA, infection, malignancy) with biopsy of the perforation edge", "Reassurance only", "Silastic button without any evaluation"],
+        correct: 1, explanation: "An unexplained perforation demands a systemic work-up — cocaine, granulomatosis with polyangiitis and other granulomatous disease, TB/syphilis, and malignancy — with a biopsy of the perforation edge before committing to closure, which would otherwise fail or miss a dangerous diagnosis." },
+      { stem: "A significant caudal septal deviation is best approached through which incision?",
+        options: ["Killian incision", "Hemitransfixion (or transfixion) incision", "Intercartilaginous incision", "Lateral rhinotomy"],
+        correct: 1, explanation: "The Killian incision sits behind the caudal edge and cannot reach the caudal septum. A caudal deviation — the most difficult to correct — is approached through a hemitransfixion or transfixion incision at the caudal edge, often with caudal reconstruction (spreader/batten grafts, swinging-door, or tongue-in-groove)." }
+    ],
+    signs: [
+      { name: "Boggy fluctuant septal swelling post-trauma", category: "clinical", description: "Soft bilateral septal bulge with pain after nasal injury.", implication: "Septal hematoma — drain immediately to prevent necrosis/abscess/perforation." },
+      { name: "Anterior septal whistling", category: "clinical", description: "Audible whistle with crusting and epistaxis.", implication: "Anterior septal perforation — humidify; button or surgical closure; work up cause." },
+      { name: "Saddle-nose deformity", category: "clinical", description: "Loss of dorsal height / middle-third collapse.", implication: "Loss of dorsal L-strut support (over-resection, hematoma) — reconstruct." },
+      { name: "Compensatory turbinate hypertrophy", category: "clinical", description: "Enlarged inferior turbinate on the concave side of a deviation.", implication: "Address the turbinate too, or obstruction persists after septoplasty." }
+    ],
+    podcastTitle: "Deep Dive · Management of the Nasal Septum",
+    podcastDuration: "~20 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy. I'm Elena." },
+      { speaker: "cohost", text: "And I'm Marcus. Today: the nasal septum — deviation, septoplasty, hematoma, and perforation. There's one idea that ties the whole chapter together, and if you hold it, everything else is common sense: septal cartilage is alive only because of the lining draped over it. Respect that lining and preserve support, and you fix noses; violate it, and you make perforations and saddle noses. We'll build the anatomy, the operation, the emergency, and the perforation work-up — then a case." },
+      { speaker: "host",   text: "Start with what the septum actually is." },
+      { speaker: "cohost", text: "Part cartilage, part bone. Anteriorly it's the quadrangular, or septal, cartilage. Behind and above, the perpendicular plate of the ethmoid; behind and below, the vomer; and along the floor, the maxillary crest and palatine bone. And one named spot to hold: the keystone area, where the upper lateral cartilages meet the dorsal septum — that's the structural linchpin of the middle third of the nose." },
+      { speaker: "host",   text: "Now the blood supply — you say it governs the whole chapter." },
+      { speaker: "cohost", text: "It does. The cartilage itself is avascular — it has no blood vessels of its own. It survives entirely on the mucoperichondrium, the lining glued to each side. On the anterior septum that lining carries Little's area, home of Kiesselbach's plexus — the anastomosis of the anterior ethmoidal, sphenopalatine, greater palatine, and superior labial arteries, and the commonest site of nosebleeds. Here's the corollary that explains half the complications in this chapter: if you lift the lining off both sides at the same level and tear both flaps, the cartilage sandwiched between them loses its blood supply and dies — and you get a perforation." },
+      { speaker: "host",   text: "Let's evaluate a deviated septum before we operate." },
+      { speaker: "cohost", text: "The main symptom is nasal obstruction, and a deviation can also drive epistaxis or feed sinus disease. Examine with anterior rhinoscopy and endoscopy, and crucially decongest the nose — that separates the fixed, structural blockage from reversible mucosal swelling, so you don't operate on a problem that a spray would fix. And look at the wide, concave side: the inferior turbinate there is often hypertrophied to fill the space — compensatory hypertrophy — and if you straighten the septum but ignore that turbinate, the patient is still blocked." },
+      { speaker: "host",   text: "Septoplasty. What's the cardinal rule?" },
+      { speaker: "cohost", text: "Preserve the L-strut. You leave an L-shaped strut of at least about one to one and a half centimeters of cartilage along the dorsum and along the caudal edge. That L is the scaffolding of the nose: over-resect the dorsal limb and the bridge collapses into a saddle-nose deformity; lose the caudal limb and the tip drops. So you elevate the lining, remove or reshape only the deviated bone and cartilage in the middle, and leave that L-strut and the keystone completely alone." },
+      { speaker: "host",   text: "And the incision depends on where the problem is." },
+      { speaker: "cohost", text: "Right. The classic Killian incision sits a few millimeters behind the caudal edge and is perfect for posterior deviations — but notice, it does not give you access to the caudal septum. A caudal deviation is the hardest problem in the chapter, and it needs a hemitransfixion or transfixion incision right at the caudal edge, and often real reconstruction — spreader or batten grafts, a swinging-door maneuver, or tongue-in-groove fixation of the caudal septum to the anterior nasal spine." },
+      { speaker: "host",   text: "Now the emergency — the septal hematoma. Why the urgency?" },
+      { speaker: "cohost", text: "Because it's the blood-supply lesson made real. Blood collects between the lining and the cartilage — after trauma or surgery — and it peels the mucoperichondrium away, cutting the cartilage off from its only blood source. If you don't drain it promptly, the cartilage necroses, it very often becomes a septal abscess, and it heals as a perforation with a saddle nose. So a boggy, fluctuant septal swelling after a nasal injury is a hematoma until proven otherwise: you incise and drain it right away, and you stop it from reaccumulating with a quilting suture through-and-through or packing — antibiotics if it's already an abscess." },
+      { speaker: "host",   text: "Last big topic — the perforation. You keep saying 'think systemic.'" },
+      { speaker: "cohost", text: "Because a hole in the septum is sometimes a window into a body-wide disease. Yes, the common causes are mechanical — prior surgery, over-resection, bilateral tears, an untreated hematoma, and chronic digital trauma. But the list you must not forget is cocaine; granulomatosis with polyangiitis and other granulomatous disease like sarcoid; infections like TB and syphilis; malignancy; and chemical or occupational exposure. So an unexplained perforation gets a work-up and a biopsy of the perforation edge — because closing a Wegener's or a cancer without diagnosing it is a disaster." },
+      { speaker: "host",   text: "And once you've worked it up, how do you treat it?" },
+      { speaker: "cohost", text: "By symptoms and location. Anterior perforations whistle, crust, and bleed — they're the symptomatic ones — whereas posterior perforations are often silent and just observed. For a symptomatic one, start conservative: humidification, saline, and emollients to stop the crusting. A silastic septal button plugs it non-surgically. And definitive surgical closure uses bilateral mucosal advancement flaps with an interposition graft between them — with one honest caveat: success falls as the perforation gets bigger." },
+      { speaker: "host",   text: "Let's do a case. A 28-year-old man has years of left-sided nasal obstruction; on exam the septum deviates to the left with a roomy right side, and after decongestion he's still blocked on the left. The deviation is mostly posterior. What's your plan?" },
+      { speaker: "cohost", text: "Persistent obstruction after decongestion means a real structural deviation, so he's a septoplasty candidate. It's posterior, so a Killian incision gives me good access; I elevate the lining, take out just the deviated bone and cartilage, and I religiously preserve an L-strut of at least a centimeter to a centimeter and a half so I don't saddle him. And I check that roomy right side — if the inferior turbinate has compensatorily hypertrophied, I reduce it, or he'll still feel blocked." },
+      { speaker: "host",   text: "Change it: now the obstruction is from a caudal septal deflection sitting in the nostril. Does the plan change?" },
+      { speaker: "cohost", text: "Yes — that's the hard one. A Killian incision won't reach it, so I use a hemitransfixion incision at the caudal edge and I'm prepared to reconstruct the caudal septum — a swinging-door or tongue-in-groove to the nasal spine, with spreader or batten grafts as needed. Caudal deviations are where septoplasties fail if you under-plan." },
+      { speaker: "host",   text: "Finally, a different patient: a 35-year-old with an anterior perforation, crusting and whistling, no surgery, but he's cagey about drug use. Approach?" },
+      { speaker: "cohost", text: "I don't just plug it — I work it up. I ask directly about cocaine, send vasculitis serologies for granulomatosis with polyangiitis, consider TB and syphilis, and biopsy the edge of the perforation to exclude vasculitis or malignancy. Meanwhile I control symptoms with humidification and emollients and offer a silastic button; I only consider flap closure once I know the cause and the mucosa is stable — and I tell him the bigger the hole, the lower the closure success." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: septal cartilage is avascular and lives off its mucoperichondrium — bilateral opposing tears cause a perforation. Two: preserve the one-to-one-and-a-half-centimeter L-strut and the keystone, or you saddle the nose. Three: Killian for posterior deviations, hemitransfixion for the caudal deviation, which is the hardest." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: a boggy septal swelling after trauma is a hematoma — drain it immediately or it necroses, abscesses, and perforates. And five: an unexplained perforation is a systemic work-up — cocaine, GPA, TB, syphilis, malignancy — and a biopsy of the edge; anterior ones whistle and crust, posterior ones are often silent, and you close symptomatic ones with advancement flaps plus an interposition graft." },
+      { speaker: "host",   text: "Respect the lining, keep the L-strut, drain the hematoma, and never close a perforation you haven't explained." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  25: {
+    objectives: [
+      "Grade facial paralysis with the House-Brackmann scale and distinguish flaccid from nonflaccid (synkinetic) palsy.",
+      "Use denervation time and muscle viability to choose nerve repair, nerve transfer, or muscle transfer.",
+      "Prioritize corneal protection — lagophthalmos management and the upper-lid weight.",
+      "Compare cross-face nerve grafting with masseteric and hypoglossal transfers for spontaneity vs power.",
+      "Select free (gracilis) and regional (temporalis) muscle transfers for long-standing or congenital paralysis, and manage synkinesis."
+    ],
+    summary: `
+      <h4>1. Grade it and name the state</h4>
+      <p>Grade with the <strong>House-Brackmann</strong> scale, I to VI: I normal; III moderate (obvious weakness, but complete eye closure with effort); IV moderately severe (disfiguring, <strong>incomplete eye closure</strong>); VI total paralysis. More regional scales (Sunnybrook, eFACE) add detail. Then classify the <strong>state</strong>: <strong>flaccid</strong> (no tone or movement) versus <strong>nonflaccid</strong> (recovered but with synkinesis/hypertonicity) — because they are managed completely differently.</p>
+      <h4>2. The organizing question — is there a muscle to reinnervate?</h4>
+      <p>The whole reconstructive algorithm turns on <strong>denervation time and mimetic-muscle viability</strong>. After roughly <strong>18–24 months of denervation</strong> the motor endplates degenerate and the native muscle can no longer be reinnervated — beyond that you must <strong>import new muscle</strong>, not just a nerve. So the first question is always: how long has it been paralyzed, and is the muscle still alive?</p>
+      <h4>3. Recent injury — repair the nerve</h4>
+      <p>If the nerve is freshly injured but its proximal and distal ends are available, do the strongest thing: <strong>primary tension-free coaptation</strong>, or if there's a gap an <strong>interposition nerve graft</strong> (great auricular or sural). Earlier is better.</p>
+      <h4>4. Viable muscle (denervation < ~2 years) — reinnervate it</h4>
+      <ul>
+        <li><strong>Cross-face nerve graft</strong> — a sural graft carries axons from selected buccal branches of the <em>normal</em> facial nerve across the face to the paralyzed side. Its prize is a <strong>spontaneous, emotional smile</strong>, but it is two-stage and takes months and axons.</li>
+        <li><strong>Masseteric (trigeminal, V) nerve transfer</strong> — <strong>strong and reliable with fast reinnervation</strong>, but the smile is initially <strong>less spontaneous</strong> (driven by biting, though many patients learn spontaneity).</li>
+        <li><strong>Hypoglossal-facial (XII–VII) transfer</strong> — powerful tone and symmetry, but classic full transfer causes <strong>hemitongue atrophy</strong>; partial or end-to-side techniques reduce that morbidity. A hypoglossal or masseteric "babysitter" can maintain the muscle while a cross-face graft matures.</li>
+      </ul>
+      <h4>5. No viable muscle (>~2 years or congenital) — bring in muscle</h4>
+      <ul>
+        <li><strong>Free functional muscle transfer</strong> — most often <strong>gracilis</strong>, powered by the <strong>masseteric nerve</strong> (one-stage, strong, reliable) or by a <strong>cross-face graft</strong> (two-stage, more spontaneous). This is the answer for long-standing paralysis and for <strong>congenital (e.g., Möbius)</strong> cases.</li>
+        <li><strong>Regional muscle transfer</strong> — <strong>temporalis tendon transfer</strong> (lengthening myoplasty) reroutes the temporalis to the oral commissure for a <strong>single-stage dynamic smile</strong>.</li>
+      </ul>
+      <h4>6. The eye comes first — always</h4>
+      <p>Corneal protection outranks the smile. <strong>Lagophthalmos</strong> (incomplete closure) plus a <strong>poor Bell's phenomenon</strong> and, if V1 is involved, <strong>reduced corneal sensation</strong>, causes <strong>exposure keratopathy</strong> → ulceration and blindness. Manage with <strong>lubrication</strong> (drops by day, ointment at night), taping, and a moisture chamber; then the definitive dynamic fix is an <strong>upper-eyelid gold or platinum weight</strong> that lets gravity close the lid, plus <strong>lower-lid tightening</strong> (lateral tarsal strip / canthoplasty) for paralytic ectropion; a tarsorrhaphy is an adjunct.</p>
+      <h4>7. Brow, static support, and synkinesis</h4>
+      <p>A ptotic brow gets a <strong>direct browlift</strong>. When a dynamic smile isn't possible or as an adjunct, a <strong>static sling</strong> (fascia lata) suspends the oral commissure for resting symmetry. For the <strong>nonflaccid, synkinetic</strong> face — involuntary co-contraction such as the eye narrowing on smiling — the mainstay is <strong>botulinum toxin plus neuromuscular retraining (facial physical therapy)</strong>, with selective myectomy/neurectomy in refractory cases.</p>
+    `,
+    keyPoints: [
+      { category: "Assess", items: [
+        "Grade with House-Brackmann I–VI (IV = disfiguring with incomplete eye closure).",
+        "Classify flaccid vs nonflaccid (synkinetic) — they are managed differently."
+      ]},
+      { category: "The algorithm", items: [
+        "Denervation > ~18–24 months → endplates gone → import muscle (native muscle no longer reinnervable).",
+        "Fresh injury with both ends → primary coaptation or interposition graft (great auricular/sural).",
+        "Viable muscle < ~2 yr → nerve transfer: cross-face graft (spontaneous smile) vs masseteric (strong, fast, less spontaneous); hypoglossal-facial (tongue morbidity)."
+      ]},
+      { category: "Muscle transfer", items: [
+        "Long-standing / congenital (Möbius) → free gracilis transfer (masseteric = one-stage strong; cross-face = two-stage spontaneous).",
+        "Temporalis tendon transfer = single-stage regional dynamic smile."
+      ]},
+      { category: "Eye first + synkinesis", items: [
+        "Lagophthalmos + poor Bell (± reduced corneal sensation) → exposure keratopathy. Lubricate; upper-lid gold/platinum weight + lower-lid tightening.",
+        "Synkinesis (nonflaccid) → botulinum toxin + neuromuscular retraining."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 28 · Rehabilitation of Facial Paralysis", subtitle: "Cummings 8e · Chapter 28", body: "<p style='font-size:18px;line-height:1.55;'>Protect the eye, then restore the smile — and let denervation time and muscle viability choose the operation.</p>" },
+      { title: "Grade and classify", body: "<ul><li><strong>House-Brackmann I–VI</strong> (IV = disfiguring, incomplete eye closure).</li><li><strong>Flaccid</strong> (no tone) vs <strong>nonflaccid</strong> (synkinetic) — different management.</li></ul>" },
+      { title: "The organizing question", body: "<ul><li>Is there a <strong>viable mimetic muscle</strong> to reinnervate?</li><li>After <strong>~18–24 months</strong> denervation, endplates degenerate → must import muscle.</li></ul>" },
+      { title: "Recent injury", body: "<ul><li>Both nerve ends available → <strong>primary tension-free coaptation</strong>.</li><li>Gap → <strong>interposition graft</strong> (great auricular / sural). Earlier is better.</li></ul>" },
+      { title: "Viable muscle (< ~2 yr): reinnervate", body: "<ul><li><strong>Cross-face nerve graft</strong> → spontaneous emotional smile (two-stage).</li><li><strong>Masseteric (V)</strong> → strong, fast, less spontaneous.</li><li><strong>Hypoglossal-facial</strong> → powerful; tongue morbidity (use partial/end-to-side).</li></ul>" },
+      { title: "No viable muscle: import muscle", body: "<ul><li><strong>Free gracilis</strong> — masseteric-driven (one-stage, strong) or cross-face-driven (two-stage, spontaneous).</li><li>Best for long-standing and <strong>congenital (Möbius)</strong>.</li><li><strong>Temporalis tendon transfer</strong> — single-stage regional smile.</li></ul>" },
+      { title: "The eye comes first", body: "<ul><li>Lagophthalmos + poor Bell (± low corneal sensation) → <strong>exposure keratopathy</strong>.</li><li>Lubricate; <strong>upper-lid gold/platinum weight</strong> + <strong>lower-lid tightening</strong> (lateral tarsal strip).</li></ul>" },
+      { title: "Brow & static support", body: "<ul><li>Ptotic brow → <strong>direct browlift</strong>.</li><li><strong>Static sling</strong> (fascia lata) suspends the oral commissure for resting symmetry.</li></ul>" },
+      { title: "Synkinesis (nonflaccid)", body: "<ul><li>Involuntary co-contraction (eye narrows on smiling).</li><li><strong>Botulinum toxin + neuromuscular retraining</strong>; selective myectomy/neurectomy if refractory.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Protect the cornea first — weight the upper lid, tighten the lower.</li><li>Muscle viable (<~2 yr) → reinnervate; muscle gone/congenital → free gracilis.</li><li>Cross-face = spontaneous, masseteric = strong/fast; synkinesis → botox + retraining.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Donor nerves for reanimation", body: "<ul><li><strong>Cross-face graft</strong> — sural nerve carrying axons from contralateral buccal branches → spontaneous smile.</li><li><strong>Masseteric nerve</strong> (branch of V) — powerful, close, fast reinnervation; less spontaneous.</li><li><strong>Hypoglossal (XII)</strong> — strong tone; risk of hemitongue atrophy (mitigated by partial/end-to-side).</li></ul>" },
+      { title: "Eye-protection anatomy", body: "<ul><li>Orbicularis oculi (VII) closes the lid; loss → lagophthalmos.</li><li><strong>Bell's phenomenon</strong> (upward globe roll) and corneal sensation (V1) are protective — poor Bell + low sensation = high keratopathy risk.</li><li>Upper-lid <strong>gold/platinum weight</strong> uses gravity to close the lid.</li></ul>" }
+    ],
+    pearls: [
+      "The reconstructive choice hinges on denervation time: after ~18–24 months the motor endplates degenerate and native muscle can no longer be reinnervated, so you must import muscle (free gracilis) rather than transfer a nerve.",
+      "Corneal protection outranks the smile — lagophthalmos with a poor Bell's phenomenon causes exposure keratopathy; lubricate and place an upper-lid gold/platinum weight with lower-lid tightening.",
+      "Cross-face nerve grafting gives a spontaneous emotional smile but is slow and two-stage; the masseteric nerve gives a strong, fast, reliable smile that is initially less spontaneous.",
+      "For long-standing or congenital (Möbius) paralysis, free gracilis transfer — masseteric-driven for power in one stage or cross-face-driven for spontaneity — is the workhorse.",
+      "The nonflaccid, synkinetic face is treated with botulinum toxin and neuromuscular retraining, not with more reinnervation surgery."
+    ],
+    flashcards: [
+      { q: "Why does denervation time drive the reconstructive plan in facial paralysis?", a: "Because after roughly 18–24 months of denervation the motor endplates degenerate and the native mimetic muscle can no longer be reinnervated. Before that you can transfer a nerve to the existing muscle; after that you must import new muscle (free functional muscle transfer)." },
+      { q: "Contrast cross-face nerve grafting with masseteric nerve transfer.", a: "A cross-face graft (sural nerve from contralateral buccal branches) produces a spontaneous, emotional smile but is two-stage and slow. The masseteric nerve gives a strong, fast, reliable smile but is initially less spontaneous (bite-driven), though many patients gain spontaneity." },
+      { q: "What is the first priority in facial paralysis, and how is it managed?", a: "Corneal protection. Lagophthalmos plus a poor Bell's phenomenon (and reduced corneal sensation if V1 is involved) causes exposure keratopathy. Lubricate (drops by day, ointment at night), tape/moisture chamber, then place an upper-lid gold or platinum weight and tighten the lower lid (lateral tarsal strip)." },
+      { q: "Which reconstruction is used for long-standing or congenital (Möbius) facial paralysis?", a: "Free functional muscle transfer — usually gracilis — driven by the masseteric nerve (one-stage, strong) or by a cross-face graft (two-stage, more spontaneous), because there is no viable native muscle to reinnervate." },
+      { q: "What is the morbidity of a classic complete hypoglossal-facial transfer, and how is it reduced?", a: "Hemitongue atrophy and dysfunction. It is reduced by using partial (split) hypoglossal or end-to-side coaptation, which spares tongue function while still providing tone/symmetry." },
+      { q: "What is a temporalis tendon transfer used for?", a: "A single-stage regional dynamic smile — the temporalis muscle/tendon is rerouted to the oral commissure (lengthening myoplasty) to produce voluntary movement, useful when free-tissue transfer is not chosen." },
+      { q: "How is post-paralytic synkinesis managed?", a: "Botulinum toxin to the over-contracting muscles plus neuromuscular retraining (facial physical therapy); selective myectomy or neurectomy for refractory cases. This is the nonflaccid face — not treated with more reinnervation." },
+      { q: "What does House-Brackmann grade IV describe?", a: "Moderately severe dysfunction: obvious, disfiguring weakness with INCOMPLETE eye closure — the threshold where corneal protection becomes pressing (grade VI is total paralysis)." }
+    ],
+    quiz: [
+      { stem: "A patient has had complete facial paralysis for 4 years after a resected tumor; the mimetic muscles are atrophic and non-functional. The best option to restore a dynamic smile is:",
+        options: ["Hypoglossal-facial nerve transfer", "Cross-face nerve graft alone", "Free functional (gracilis) muscle transfer", "Primary nerve repair"],
+        correct: 2, explanation: "After ~18–24 months the endplates degenerate and the native muscle cannot be reinnervated, so a nerve transfer or repair won't move a dead muscle. You must import muscle — a free gracilis transfer, powered by the masseteric nerve (one-stage, strong) or a cross-face graft (two-stage, spontaneous)." },
+      { stem: "A patient wants the most spontaneous, emotional smile and can accept a slower, two-stage reconstruction with viable muscle present. The best nerve source is:",
+        options: ["Masseteric (trigeminal) nerve", "Cross-face nerve graft from the contralateral facial nerve", "Hypoglossal nerve", "Spinal accessory nerve"],
+        correct: 1, explanation: "A cross-face nerve graft carries axons from the normal facial nerve, so the smile is spontaneous and emotional — at the cost of being two-stage and slow. The masseteric nerve is strong and fast but initially less spontaneous." },
+      { stem: "A patient with a flaccid facial palsy has 6 mm of lagophthalmos, a poor Bell's phenomenon, and early corneal staining. The most appropriate priority is:",
+        options: ["Proceed directly to gracilis transfer for the smile", "Aggressive corneal protection — lubrication plus an upper-lid gold/platinum weight and lower-lid tightening", "Botulinum toxin to the smile muscles", "Observation"],
+        correct: 1, explanation: "The cornea comes first. Lagophthalmos with a poor Bell's phenomenon and corneal staining is exposure keratopathy heading toward ulceration — lubricate and place an upper-lid weight with lower-lid tightening before addressing the smile." },
+      { stem: "Six months after recovering from Bell's palsy a patient notes her eye narrows every time she smiles. The best management is:",
+        options: ["Repeat nerve decompression", "Botulinum toxin plus neuromuscular retraining", "Free muscle transfer", "Hypoglossal-facial transfer"],
+        correct: 1, explanation: "This is synkinesis — the nonflaccid, aberrantly regenerated face. It is managed with botulinum toxin to the co-contracting muscles and neuromuscular retraining, not with further reinnervation or muscle-transfer surgery." }
+    ],
+    signs: [
+      { name: "House-Brackmann grade", category: "clinical", description: "I normal → IV disfiguring with incomplete eye closure → VI total paralysis.", implication: "Standardizes severity and tracks recovery." },
+      { name: "Lagophthalmos + poor Bell's", category: "clinical", description: "Incomplete eye closure with weak protective globe roll.", implication: "Exposure keratopathy risk — lubricate, upper-lid weight, lower-lid tightening. Eye first." },
+      { name: "Synkinesis", category: "clinical", description: "Involuntary co-contraction (eye narrows on smiling) after recovery.", implication: "Nonflaccid face — botulinum toxin + neuromuscular retraining." },
+      { name: "Muscle atrophy after prolonged denervation", category: "clinical", description: "Non-functional mimetic muscle > ~2 years.", implication: "Endplates gone — needs free muscle transfer, not nerve transfer." }
+    ],
+    podcastTitle: "Deep Dive · Rehabilitation of Facial Paralysis",
+    podcastDuration: "~20 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy. I'm Elena." },
+      { speaker: "cohost", text: "And I'm Marcus. Today: rehabilitating the paralyzed face. This looks like a huge menu of operations, but there's a spine that organizes all of it — protect the eye first, and then let two variables, how long the face has been paralyzed and whether there's still a living muscle, choose the operation. Get that framework and every technique snaps into place. We'll grade it, walk the algorithm, protect the cornea, and finish with a case." },
+      { speaker: "host",   text: "Start with grading and the word that changes management." },
+      { speaker: "cohost", text: "Grade with House-Brackmann, one to six: one is normal, three is moderate but the eye still closes with effort, four is disfiguring with incomplete eye closure, and six is total paralysis. The regional scales, Sunnybrook and eFACE, add detail. Then name the state — and this is the word that matters — is the face flaccid, meaning no tone and no movement, or nonflaccid, meaning it recovered but with synkinesis and hypertonicity? Those two are managed in completely opposite ways." },
+      { speaker: "host",   text: "Now the organizing question of the whole chapter." },
+      { speaker: "cohost", text: "Is there a muscle left to reinnervate? Because the entire algorithm turns on denervation time and muscle viability. After roughly eighteen to twenty-four months of denervation, the motor endplates degenerate, and the native mimetic muscle can no longer be reinnervated no matter how good a nerve you bring it. So before you plan anything you ask: how long has it been paralyzed, and is the muscle still alive?" },
+      { speaker: "host",   text: "Walk the algorithm from the top — a fresh injury." },
+      { speaker: "cohost", text: "If the nerve was just injured and you have both the proximal and distal ends, you do the strongest thing there is: a primary, tension-free coaptation. If there's a gap, you bridge it with an interposition nerve graft — the great auricular or the sural nerve. Sooner is better; don't let it sit." },
+      { speaker: "host",   text: "Next tier — the muscle is still viable but the nerve can't be directly repaired." },
+      { speaker: "cohost", text: "Then you reinnervate the living muscle with a nerve transfer, and the choice is a trade-off between spontaneity and power. A cross-face nerve graft takes a sural graft and carries axons from selected buccal branches of the normal facial nerve, across the face, to the paralyzed side. Its prize is a spontaneous, emotional smile — you smile when something's funny, not when you concentrate. The cost is that it's two-stage and slow and spends axons. The masseteric nerve, a branch of the trigeminal, is the opposite bargain: strong, close, fast reinnervation, very reliable — but the smile is initially less spontaneous because it's driven by biting, though many patients learn to fire it spontaneously." },
+      { speaker: "host",   text: "And the hypoglossal option." },
+      { speaker: "cohost", text: "The hypoglossal-facial transfer, twelve to seven, gives powerful resting tone and symmetry, but a classic complete transfer atrophies half the tongue — so you use a partial, split hypoglossal or an end-to-side coaptation to spare tongue function. And a nice concept: a hypoglossal or masseteric 'babysitter' can keep the muscle alive and toned while a slower cross-face graft matures — you get the best of both." },
+      { speaker: "host",   text: "Now the muscle is gone — long-standing or congenital. What then?" },
+      { speaker: "cohost", text: "Then a nerve is useless because there's nothing to reinnervate, so you import muscle: a free functional muscle transfer, most often the gracilis. You can power it two ways — the masseteric nerve for a strong, reliable, one-stage result, or a cross-face graft for a more spontaneous but two-stage result. This is the answer for paralysis beyond about two years and for congenital cases like Möbius syndrome, where the muscle never developed. And if you want a single-stage regional option, a temporalis tendon transfer reroutes the temporalis to the oral commissure for a dynamic smile." },
+      { speaker: "host",   text: "You keep saying the eye comes first. Make the case." },
+      { speaker: "cohost", text: "Because the smile is cosmetic and the cornea is the eye. When the orbicularis is paralyzed the lid won't close — lagophthalmos — and if the protective Bell's phenomenon is poor and, when V1 is involved, corneal sensation is down, the cornea dries, ulcerates, and can perforate. That's exposure keratopathy, and it blinds people. So first-line is relentless lubrication — drops by day, ointment at night — taping and a moisture chamber. Then the definitive dynamic fix is an upper-eyelid gold or platinum weight that simply lets gravity pull the lid closed, plus lower-lid tightening — a lateral tarsal strip — for the sagging paralytic ectropion. A tarsorrhaphy is an adjunct. Eye first, every time." },
+      { speaker: "host",   text: "Round it out — brow, static support, and the synkinetic face." },
+      { speaker: "cohost", text: "A drooping brow gets a direct browlift. When a dynamic smile isn't achievable, or as an adjunct, a static sling of fascia lata suspends the corner of the mouth so at least the face is symmetric at rest. And the nonflaccid, synkinetic face — where the eye narrows every time the patient smiles because the nerve regenerated to the wrong muscles — is treated with botulinum toxin to the over-firing muscles plus neuromuscular retraining, facial physical therapy, with selective myectomy or neurectomy only if that fails. Crucially, you do NOT treat synkinesis with more reinnervation surgery." },
+      { speaker: "host",   text: "Let's do a case. A 45-year-old woman had a facial nerve sacrificed during a parotid cancer resection four years ago. Her mid-face is flat, she can't smile on that side, and the muscles look atrophic. She wants her smile back. What do you offer, and why not a nerve transfer?" },
+      { speaker: "cohost", text: "Four years of denervation means the endplates are long gone and the mimetic muscle is dead, so any nerve I bring — cross-face, masseteric, hypoglossal — would just be wired to muscle that can't contract. She needs imported muscle: a free gracilis transfer. If she most wants reliability and a single stage, I power it with the masseteric nerve; if she most wants a spontaneous emotional smile and accepts two stages, I drive it with a cross-face graft." },
+      { speaker: "host",   text: "On exam her eye on that side doesn't close fully, her Bell's is weak, and the cornea already stains with fluorescein. Does the smile plan go first?" },
+      { speaker: "cohost", text: "No — the eye jumps the queue. That's exposure keratopathy in the making. I start aggressive lubrication immediately and plan an upper-lid gold or platinum weight plus a lower-lid tightening to get her closing and protect the cornea. The gracilis can wait a few weeks; a scarred cornea can't be undone." },
+      { speaker: "host",   text: "Different patient: three months after Bell's palsy a man recovers movement but his eye squeezes shut whenever he smiles. Plan?" },
+      { speaker: "cohost", text: "That's synkinesis — a nonflaccid, aberrantly regenerated face. No more nerve surgery. I treat it with targeted botulinum toxin to the co-contracting muscles and refer him for neuromuscular retraining; if it's refractory, selective myectomy. It's a retraining problem, not a rewiring problem." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: grade with House-Brackmann and decide flaccid versus nonflaccid. Two: denervation over about eighteen to twenty-four months means the muscle is gone — import muscle, don't transfer a nerve. Three: with viable muscle, cross-face graft buys spontaneity, the masseteric nerve buys speed and power." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: long-standing or congenital, like Möbius, means free gracilis transfer — masseteric-driven for one-stage power or cross-face-driven for spontaneity; temporalis tendon transfer is the single-stage regional option. And five, the one that trumps everything: protect the cornea first — lagophthalmos with a poor Bell's gets lubrication, an upper-lid weight, and lower-lid tightening — and treat synkinesis with botulinum toxin and retraining, not more surgery." },
+      { speaker: "host",   text: "Guard the eye, then read the clock and the muscle — and match spontaneity or power to what the patient wants." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  24: {
+    objectives: [
+      "Define the normal auricular measurements and the timing of otoplasty.",
+      "Identify the two anatomic causes of the prominent ear — an unfurled antihelix and conchal excess.",
+      "Match technique to deformity: Mustardé antihelix sutures, Furnas conchomastoid setback, and cartilage-scoring.",
+      "Apply Gibson's principle to cartilage-cutting techniques.",
+      "Recognize the complications — hematoma, chondritis, and the telephone-ear deformity — and manage them."
+    ],
+    summary: `
+      <h4>1. What makes an ear look prominent — the numbers</h4>
+      <p>Normal auricular position: the <strong>auriculocephalic angle</strong> (ear to scalp) is about <strong>20–30°</strong>, and the <strong>helix sits roughly 1.5–2 cm</strong> from the scalp. An ear is "prominent" when that angle exceeds ~30–40° or the helical rim stands more than ~2 cm off the head. The auricle reaches about <strong>85% of adult size by age 3–4</strong> and near-full size by <strong>5–6</strong>, which is why elective otoplasty is usually done around <strong>age 5–6</strong> — mature enough to operate, and before the school-age teasing.</p>
+      <h4>2. The two anatomic causes</h4>
+      <p>Prominence comes from one or both of two problems, and naming which one drives the operation:</p>
+      <ul>
+        <li><strong>An underdeveloped / unfurled antihelical fold</strong> — the antihelix hasn't curled, so the scapha and helix flare outward. This is the commonest cause.</li>
+        <li><strong>Conchal excess</strong> — a deep or overdeveloped concha (conchal hypertrophy) with an increased conchoscaphal angle pushes the whole ear away from the head.</li>
+      </ul>
+      <p>The two frequently coexist, and a good plan addresses each component that is present.</p>
+      <h4>3. Recreating the antihelix</h4>
+      <ul>
+        <li><strong>Mustardé sutures</strong> — permanent horizontal mattress sutures placed across the scapha to fold and recreate the antihelical fold. A cartilage-<em>sparing</em>, suture-based method.</li>
+        <li><strong>Cartilage scoring (Stenström / Chongchet)</strong> — weakening the <strong>anterior</strong> cartilage surface so it curls backward into a fold. This works because of Gibson's principle.</li>
+      </ul>
+      <h4>4. Gibson's principle</h4>
+      <p><strong>Cartilage warps AWAY from the cut/scored surface.</strong> So scoring the <strong>anterior</strong> surface of the antihelix makes the cartilage bend <strong>posteriorly</strong>, forming the fold. This single principle underlies every cartilage-cutting otoplasty and explains why you score the side opposite to the direction you want the ear to bend.</p>
+      <h4>5. Setting back the concha</h4>
+      <p>When the problem is conchal excess, you set the concha back toward the head:</p>
+      <ul>
+        <li><strong>Furnas sutures</strong> — permanent <strong>conchomastoid</strong> sutures anchoring the conchal cartilage to the mastoid periosteum, rotating the concha back. Avoid pulling it so far forward that you narrow the external auditory meatus.</li>
+        <li><strong>Conchal resection</strong> — excising a strip of conchal cartilage when the bowl is very deep.</li>
+      </ul>
+      <h4>6. The neonatal window — molding</h4>
+      <p>In the first <strong>2–3 weeks of life</strong>, auricular cartilage is soft and moldable because of circulating <strong>maternal estrogen</strong>. <strong>Ear molding/splinting</strong> started that early can correct many prominent-ear and other auricular deformities <strong>without surgery</strong> — the earlier it begins, the better it works, so recognize and refer neonatal ear deformities promptly.</p>
+      <h4>7. Complications</h4>
+      <ul>
+        <li><strong>Hematoma</strong> — the early emergency: <strong>severe pain out of proportion</strong> signals it, and it must be <strong>evacuated immediately</strong> to prevent pressure necrosis, cartilage loss, and a cauliflower deformity.</li>
+        <li><strong>Chondritis / perichondritis</strong> — cartilage infection (classically <em>Pseudomonas</em>) that can dissolve the framework; treat aggressively.</li>
+        <li><strong>Telephone-ear deformity</strong> — <strong>over-correction of the middle third</strong> with relative under-correction of the upper and lower poles, so the ear looks like a telephone receiver (the reverse pattern is the opposite).</li>
+        <li>Suture extrusion/granuloma, recurrence, asymmetry, an unnaturally sharp antihelical ridge, a narrowed meatus, and keloid (especially in darker skin).</li>
+      </ul>
+    `,
+    keyPoints: [
+      { category: "Norms & timing", items: [
+        "Auriculocephalic angle normal ~20–30°; helix ~1.5–2 cm off the scalp; prominent if angle >~30–40° or rim >~2 cm.",
+        "Auricle ~85% adult size by 3–4, near-full by 5–6 → elective otoplasty around age 5–6 (before school teasing)."
+      ]},
+      { category: "The two causes", items: [
+        "Unfurled/underdeveloped antihelical fold (commonest) — scapha/helix flare.",
+        "Conchal excess (deep concha, increased conchoscaphal angle) — whole ear pushed out. They often coexist."
+      ]},
+      { category: "Technique → deformity", items: [
+        "Mustardé = horizontal mattress sutures to recreate the antihelix (cartilage-sparing).",
+        "Furnas = conchomastoid sutures to set the concha back; don't narrow the meatus.",
+        "Cartilage scoring (Stenström/Chongchet) uses Gibson's principle: cartilage bends AWAY from the scored surface → score the anterior surface to curl it posteriorly."
+      ]},
+      { category: "Safety", items: [
+        "Hematoma = severe pain out of proportion → evacuate immediately (prevents necrosis/cauliflower ear). Chondritis (Pseudomonas) destroys cartilage.",
+        "Telephone-ear deformity = over-correction of the middle third relative to the poles.",
+        "Neonatal ear molding in the first 2–3 weeks (maternal estrogen) can avoid surgery — refer early."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 27 · Otoplasty", subtitle: "Cummings 8e · Chapter 27", body: "<p style='font-size:18px;line-height:1.55;'>Correcting the prominent ear — name the cause, match the technique, protect the cartilage.</p>" },
+      { title: "What is 'prominent'?", body: "<ul><li>Auriculocephalic angle normal <strong>~20–30°</strong> (prominent >~30–40°).</li><li>Helix <strong>~1.5–2 cm</strong> off the scalp (prominent >~2 cm).</li></ul>" },
+      { title: "Timing", body: "<ul><li>Ear ~<strong>85%</strong> adult size by age 3–4, near-full by 5–6.</li><li>Elective otoplasty ~<strong>age 5–6</strong> — before school-age teasing.</li></ul>" },
+      { title: "Two anatomic causes", body: "<ul><li><strong>Unfurled antihelical fold</strong> (commonest) — scapha/helix flare.</li><li><strong>Conchal excess</strong> — deep concha pushes the ear out.</li><li>They often coexist — treat each present component.</li></ul>" },
+      { title: "Recreate the antihelix", body: "<ul><li><strong>Mustardé sutures</strong> — horizontal mattress sutures (cartilage-sparing).</li><li><strong>Cartilage scoring</strong> (Stenström/Chongchet) — weaken the anterior surface.</li></ul>" },
+      { title: "Gibson's principle", body: "<p style='text-align:center;font-size:17px;'>Cartilage warps <strong>away from the cut surface.</strong></p><ul><li>Score the <strong>anterior</strong> antihelix → it curls <strong>posteriorly</strong> into a fold.</li></ul>" },
+      { title: "Set back the concha", body: "<ul><li><strong>Furnas sutures</strong> — conchomastoid setback to the mastoid periosteum.</li><li><strong>Conchal resection</strong> — for a very deep bowl.</li><li>Avoid narrowing the external meatus.</li></ul>" },
+      { title: "Neonatal molding", body: "<ul><li>First <strong>2–3 weeks</strong>: cartilage is soft (maternal estrogen).</li><li><strong>Ear molding/splinting</strong> can avoid surgery — refer early.</li></ul>" },
+      { title: "Complications", body: "<ul><li><strong>Hematoma</strong> — severe pain out of proportion → <strong>evacuate immediately</strong> (prevents necrosis / cauliflower ear).</li><li><strong>Chondritis</strong> (Pseudomonas) destroys cartilage.</li><li><strong>Telephone-ear</strong> = over-correction of the middle third.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Name the cause: unfurled antihelix (Mustardé/scoring) vs conchal excess (Furnas).</li><li>Gibson: cartilage bends away from the scored surface.</li><li>Severe post-op pain = hematoma → evacuate now; over-correcting the middle = telephone ear.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "The prominent-ear components", body: "<ul><li><strong>Antihelix:</strong> when unfurled, the scapha and helix flare — recreate the fold (Mustardé sutures or anterior scoring).</li><li><strong>Concha:</strong> when deep/overdeveloped, it pushes the ear out — set it back (Furnas conchomastoid sutures) or resect a strip.</li><li>Normal auriculocephalic angle ~20–30°; helix ~1.5–2 cm from scalp.</li></ul>" },
+      { title: "Gibson's principle in practice", body: "<ul><li>Cartilage curls AWAY from the incised/scored side.</li><li>To fold the antihelix posteriorly, weaken its <strong>anterior</strong> surface.</li></ul>" }
+    ],
+    pearls: [
+      "Elective otoplasty is timed around age 5–6, because the auricle is ~85% of adult size by 3–4 and near-complete by 5–6 — and it precedes school-age teasing.",
+      "Prominent ears come from an unfurled antihelical fold, conchal excess, or both — name the component(s) and the operation follows.",
+      "Mustardé sutures recreate the antihelix; Furnas conchomastoid sutures set the concha back — match the suture to the deformity.",
+      "Gibson's principle: cartilage warps away from the cut surface, so you score the anterior antihelix to make it fold posteriorly.",
+      "Severe pain out of proportion after otoplasty is a hematoma until proven otherwise — evacuate it immediately to prevent cartilage necrosis and a cauliflower ear."
+    ],
+    flashcards: [
+      { q: "What are the normal auriculocephalic angle and helix-to-scalp distance, and when is otoplasty timed?", a: "Auriculocephalic angle ~20–30° and helix ~1.5–2 cm from the scalp. Otoplasty is timed around age 5–6, since the ear is ~85% of adult size by 3–4 and near-full by 5–6, and this precedes school teasing." },
+      { q: "What are the two anatomic causes of the prominent ear?", a: "An underdeveloped/unfurled antihelical fold (commonest — scapha and helix flare) and conchal excess (a deep/overdeveloped concha with an increased conchoscaphal angle). They frequently coexist." },
+      { q: "Distinguish the roles of Mustardé and Furnas sutures.", a: "Mustardé sutures are horizontal mattress sutures across the scapha that recreate the antihelical fold (cartilage-sparing). Furnas sutures are conchomastoid sutures that set an excessively deep concha back to the mastoid periosteum." },
+      { q: "State Gibson's principle and its practical use in otoplasty.", a: "Cartilage warps away from the cut/scored surface. To fold the antihelix posteriorly, you score/weaken its anterior surface so it curls backward (Stenström/Chongchet scoring techniques)." },
+      { q: "A child has severe, disproportionate ear pain the night after otoplasty. Diagnosis and management?", a: "Hematoma under the dressing — the early emergency. Evacuate it immediately to relieve pressure and prevent cartilage necrosis, infection, and a cauliflower deformity; then re-dress and observe." },
+      { q: "What is the telephone-ear deformity?", a: "An over-correction of the middle third of the ear relative to the upper and lower poles, so the auricle looks like a telephone receiver. The reverse pattern (poles over-corrected relative to the middle) is the reverse-telephone deformity." },
+      { q: "When and why can a prominent ear be corrected without surgery?", a: "In the first 2–3 weeks of life, auricular cartilage is soft and moldable from circulating maternal estrogen, so ear molding/splinting started that early can correct many deformities non-surgically — refer promptly." },
+      { q: "Which infection threatens the cartilage after otoplasty, and by what organism classically?", a: "Chondritis/perichondritis — cartilage infection, classically by Pseudomonas — which can destroy the auricular framework and must be treated aggressively." }
+    ],
+    quiz: [
+      { stem: "A 6-year-old has bilateral prominent ears. Exam shows a poorly developed antihelical fold with a normal-depth concha. The most appropriate technique is:",
+        options: ["Furnas conchomastoid setback sutures", "Mustardé antihelix-recreating sutures (± anterior scoring)", "Conchal cartilage resection", "Observation until adulthood"],
+        correct: 1, explanation: "The deformity is an unfurled antihelix with a normal concha, so you recreate the antihelical fold — Mustardé horizontal mattress sutures, with or without anterior cartilage scoring. Furnas sutures and conchal resection address conchal excess, which isn't the problem here." },
+      { stem: "During cartilage-scoring otoplasty, to make the antihelix fold posteriorly you score the:",
+        options: ["Posterior cartilage surface", "Anterior cartilage surface", "Both surfaces equally", "Helical rim only"],
+        correct: 1, explanation: "By Gibson's principle, cartilage warps away from the scored surface. Scoring the anterior surface makes the antihelix curl posteriorly to form the fold." },
+      { stem: "The night after otoplasty a child has severe pain out of proportion to exam under an intact dressing. The most appropriate next step is:",
+        options: ["Reassure and give analgesia", "Remove the dressing to evacuate a hematoma and inspect", "Start oral antibiotics and review in a week", "Obtain a CT of the temporal bones"],
+        correct: 1, explanation: "Severe, disproportionate pain after otoplasty is a hematoma until proven otherwise. Take down the dressing, evacuate the hematoma, and inspect — untreated it causes pressure necrosis, infection, and a cauliflower deformity." },
+      { stem: "An otoplasty result in which the middle third of the ear is set back more than the upper and lower poles is called:",
+        options: ["Reverse-telephone deformity", "Telephone-ear deformity", "Cup-ear deformity", "Stahl ear"],
+        correct: 1, explanation: "Over-correction of the middle third relative to the poles produces the telephone-ear deformity (the ear resembles a telephone receiver). Correcting the poles more than the middle gives the reverse-telephone deformity." }
+    ],
+    signs: [
+      { name: "Increased auriculocephalic angle", category: "clinical", description: "Ear-to-scalp angle beyond ~30–40° (normal ~20–30°).", implication: "Prominent ear — assess antihelix vs concha to plan the operation." },
+      { name: "Unfurled antihelix", category: "clinical", description: "Absent/underdeveloped antihelical fold with scaphal-helical flare.", implication: "Recreate the fold — Mustardé sutures ± anterior scoring." },
+      { name: "Severe pain out of proportion post-op", category: "clinical", description: "Disproportionate ear pain under the dressing after otoplasty.", implication: "Hematoma — evacuate immediately to prevent cartilage necrosis." },
+      { name: "Telephone-ear appearance", category: "clinical", description: "Middle third over-set relative to the poles.", implication: "Over-correction — plan balanced correction across all thirds." }
+    ],
+    podcastTitle: "Deep Dive · Otoplasty",
+    podcastDuration: "~20 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy. I'm Elena." },
+      { speaker: "cohost", text: "And I'm Marcus. Today: otoplasty — fixing the prominent ear. It's a deceptively simple-looking operation with a very clean logic: measure the ear, name which of two things is making it stick out, match the technique to that, and respect the cartilage. Get that chain right and the rest follows. We'll teach the numbers, the two causes, the sutures, one principle that governs all the cutting, the neonatal shortcut, and the complications — then a case." },
+      { speaker: "host",   text: "Start with the numbers — what does a normal ear position even look like?" },
+      { speaker: "cohost", text: "Two measurements. The auriculocephalic angle — the ear to the scalp — is normally about twenty to thirty degrees. And the helix sits roughly one and a half to two centimeters off the head. You call an ear prominent when that angle climbs past about thirty to forty degrees, or the rim stands more than about two centimeters off the scalp." },
+      { speaker: "host",   text: "And the timing question everyone gets asked." },
+      { speaker: "cohost", text: "The auricle reaches about eighty-five percent of adult size by age three to four, and it's near full size by five to six. So elective otoplasty is usually done around age five or six — the ear is mature enough to operate on, and, importantly, it's before the school-age teasing that makes prominent ears a real quality-of-life issue for kids." },
+      { speaker: "host",   text: "Now the heart of it — the two causes. This is where the operation is really decided." },
+      { speaker: "cohost", text: "Exactly. Prominence comes from one or both of two things. One: an underdeveloped, unfurled antihelical fold — the antihelix never curled, so the scapha and the helix flare outward. That's the commonest cause. Two: conchal excess — a deep or overdeveloped concha, with an increased conchoscaphal angle, that shoves the whole ear away from the head. Very often both are present, and your job is to name which components exist, because each one has its own fix." },
+      { speaker: "host",   text: "Take the antihelix first. How do you rebuild the fold?" },
+      { speaker: "cohost", text: "Two families. The suture method is Mustardé — permanent horizontal mattress sutures placed across the scapha that fold the cartilage into a new antihelix. It's cartilage-sparing: you're bending, not cutting. The other family weakens the cartilage so it curls on its own — scoring the anterior surface, the Stenström or Chongchet techniques. And why scoring the anterior surface works is one principle you have to know." },
+      { speaker: "host",   text: "Gibson's principle. Teach it clearly." },
+      { speaker: "cohost", text: "Cartilage warps AWAY from the cut or scored surface. So if you score the anterior surface of the antihelix, the cartilage bends posteriorly — backward — which is exactly the fold you want. Flip it and you'd bend it the wrong way. That one sentence — cartilage bends away from the side you score — governs every cartilage-cutting otoplasty, so score the side opposite the direction you want the ear to go." },
+      { speaker: "host",   text: "Now the concha. When the bowl itself is the problem." },
+      { speaker: "cohost", text: "You set it back. The classic is Furnas sutures — permanent conchomastoid sutures that anchor the conchal cartilage to the mastoid periosteum and rotate the whole concha back toward the head. One caution: don't drag it so far anteriorly that you narrow the external auditory meatus. And if the bowl is very deep, you can resect a strip of conchal cartilage instead of, or in addition to, the setback. Mustardé for the antihelix, Furnas for the concha — that pairing is worth memorizing." },
+      { speaker: "host",   text: "Before complications — the shortcut that avoids surgery entirely." },
+      { speaker: "cohost", text: "The neonatal window. In the first two to three weeks of life, auricular cartilage is soft and moldable because the baby still has circulating maternal estrogen. If you start ear molding or splinting that early, you can correct many prominent-ear and other auricular deformities without ever operating. The earlier it starts, the better it works — so the practical lesson is to recognize a newborn ear deformity and refer it promptly, because that window closes fast." },
+      { speaker: "host",   text: "Complications — lead with the emergency." },
+      { speaker: "cohost", text: "Hematoma. The tell is severe pain out of proportion to what you'd expect, usually the first night, under an intact dressing. That is an emergency: you take the dressing down and evacuate it immediately, because a hematoma under tension causes pressure necrosis of the cartilage, gets infected, and heals as a cauliflower ear. Don't just medicate the pain away — look." },
+      { speaker: "host",   text: "And the infection, and the shape problem." },
+      { speaker: "cohost", text: "Chondritis, or perichondritis, is infection of the cartilage — classically Pseudomonas — and it can dissolve the framework, so it's treated aggressively. The characteristic aesthetic failure is the telephone-ear deformity: you over-correct the middle third relative to the upper and lower poles, and the ear ends up looking like an old telephone receiver — narrow in the middle, sticking out at the ends. Correct the poles more than the middle and you get the reverse telephone. The fix is balanced correction across all thirds. Add the usual list — suture extrusion, recurrence, asymmetry, an unnaturally sharp ridge, and keloid in darker skin." },
+      { speaker: "host",   text: "Let's do a case. A 6-year-old boy is brought in with both ears sticking out; he's started to get teased at school. On exam the antihelical folds are poorly formed and the scaphae flare, but the conchal depth looks normal. What's your plan?" },
+      { speaker: "cohost", text: "The measurements and the exam point to an unfurled antihelix with a normal concha, so the operation targets the fold, not the bowl. I'd recreate the antihelix with Mustardé horizontal mattress sutures, adding light anterior scoring if the cartilage is stiff — and if I score, I score the anterior surface so Gibson's principle curls it posteriorly. Age six is right on time, and I'd counsel the family it's partly to prevent the teasing he's already getting." },
+      { speaker: "host",   text: "Change it: now the antihelix is fine but the conchal bowls are deep and the whole ear is pushed out. Does the plan change?" },
+      { speaker: "cohost", text: "Completely — that's conchal excess, not an antihelix problem. I'd set the concha back with Furnas conchomastoid sutures, and if the bowl is very deep, resect a strip of conchal cartilage. I'd take care not to narrow the ear canal opening when I rotate the concha in." },
+      { speaker: "host",   text: "Post-op night one, the parents call: he has severe ear pain, much worse than expected, and he's inconsolable. Go." },
+      { speaker: "cohost", text: "Pain out of proportion after otoplasty is a hematoma until proven otherwise. He comes in, I take down the dressing and inspect, evacuate any hematoma, control the bleeding point, and re-dress — because if I leave it under tension the cartilage necroses and he ends up with a cauliflower ear. This is the one otoplasty complication where waiting costs cartilage." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: normal auriculocephalic angle about twenty to thirty degrees, helix one and a half to two centimeters off the scalp; operate around age five to six. Two: two causes — an unfurled antihelix and conchal excess, often together. Three: Mustardé sutures rebuild the antihelix, Furnas conchomastoid sutures set the concha back." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: Gibson's principle — cartilage bends away from the scored surface, so score the anterior antihelix to fold it posteriorly; and neonatal molding in the first two to three weeks can avoid surgery entirely. And five: severe pain out of proportion means a hematoma — evacuate immediately; watch for Pseudomonas chondritis; and over-correcting the middle third gives the telephone-ear deformity." },
+      { speaker: "host",   text: "Measure it, name the cause, match the technique — and treat that first-night pain as cartilage on the clock." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  23: {
+    objectives: [
+      'Analyze the masculine-versus-feminine craniofacial features by facial third to plan facial feminization surgery (FFS).',
+      'Classify frontal-sinus/forehead anatomy and select burring versus anterior-table osteotomy and setback.',
+      'Describe mandible-angle and chin (genioplasty) feminization and the nerves at risk.',
+      'Explain chondrolaryngoplasty (tracheal shave) and the anterior-commissure pitfall.',
+      'Counsel that FFS does not change vocal pitch and coordinate care within WPATH standards.'
+    ],
+    summary: `
+      <h4>1. The approach — analyze by facial thirds</h4>
+      <p>Facial feminization surgery reshapes masculine craniofacial features toward feminine norms. The organizing principle is to analyze the face in <strong>thirds</strong> and address each: the <strong>upper third</strong> (forehead, brow, hairline), the <strong>middle third</strong> (nose, cheeks, upper lip), and the <strong>lower third</strong> (jaw, chin, and the laryngeal prominence). Planning is cephalometric and multidisciplinary, within <strong>WPATH standards of care</strong>.</p>
+      <h4>2. Upper third — the forehead is the signature</h4>
+      <p>The single most characteristic masculine feature is <strong>frontal bossing</strong>: prominence of the supraorbital brow ridge and the anterior table of the frontal sinus, with a more sloped forehead. Feminizing it is the highest-impact FFS move. How you do it depends on the bone over the sinus.</p>
+      <h4>3. Forehead cranioplasty — the three types</h4>
+      <ul>
+        <li><strong>Type 1</strong> — thick anterior table with little/no underlying sinus: simply <strong>burr down</strong> the prominence.</li>
+        <li><strong>Type 2</strong> — minor deficiency: burr and <strong>augment/fill</strong>.</li>
+        <li><strong>Type 3</strong> — the common one: a <strong>thin anterior table over a pneumatized frontal sinus</strong>. Burring alone would breach the sinus, so you perform an <strong>osteotomy of the anterior table, set it back, and rigidly fixate it</strong> — the classic forehead reconstruction/setback.</li>
+      </ul>
+      <p>Feminization also <strong>raises the brow</strong> (browlift) and, because males often have a higher, M-shaped receding hairline, may include <strong>hairline lowering / scalp advancement</strong> (pretrichial or coronal).</p>
+      <h4>4. Middle third — nose, cheeks, lip</h4>
+      <p>Feminizing <strong>rhinoplasty</strong> reduces a dorsal hump, narrows the dorsum, and slightly rotates/refines the tip toward a <strong>nasolabial angle of ~100–105°</strong>. <strong>Malar (cheek) augmentation</strong> — implant or fat — restores the fuller, higher feminine cheek. A <strong>lip lift</strong> shortens the typically longer masculine philtrum, increasing upper-<strong>incisor show</strong> and lip pout.</p>
+      <h4>5. Lower third — jaw and chin</h4>
+      <p>Masculine jaws are wider with flared, squarer <strong>mandibular angles</strong>; <strong>angle reduction/contouring</strong> narrows them. The masculine <strong>chin</strong> is taller, wider, and squarer — a <strong>genioplasty</strong> reduces height and width and narrows it to a softer, more tapered shape. Nerves at risk: the <strong>inferior alveolar nerve</strong> within the mandible (lip/chin numbness) and, on the approach, the <strong>marginal mandibular branch</strong> of the facial nerve.</p>
+      <h4>6. The laryngeal prominence — chondrolaryngoplasty</h4>
+      <p><strong>Chondrolaryngoplasty</strong> (\"tracheal shave\") reduces the thyroid-cartilage prominence — the Adam's apple. The critical pitfall: the <strong>anterior commissure</strong> of the vocal folds attaches to the inner thyroid cartilage, so you must <strong>stay above/anterior to the commissure and not over-resect</strong> — resecting too low or too deep risks detaching the commissure and permanently altering the voice. It's typically approached through a small, well-hidden (often submental-referred or direct skin-crease) incision.</p>
+      <h4>7. Voice is separate</h4>
+      <p>Crucial counseling point: <strong>FFS does not change vocal pitch</strong>. Chondrolaryngoplasty reduces the visible bump, not the fundamental frequency. Pitch elevation requires <strong>voice therapy</strong> and, when surgical, a <strong>glottoplasty (e.g., Wendler)</strong> — a distinct procedure. Never promise a higher voice from a tracheal shave.</p>
+      <h4>8. Assessment and sequencing</h4>
+      <p>Work from a cephalometric analysis and photographs against feminine norms per third. Many procedures are combined in one stage (forehead + browlift + hairline; jaw + chin + chondrolaryngoplasty). Confirm readiness and coordinate hormones and mental-health support per WPATH; set realistic, individualized goals.</p>
+      <h4>9. Complications to counsel</h4>
+      <p>Forehead setback: sinus injury, mucocele, contour irregularity, forehead numbness (supraorbital nerves). Jaw/chin: inferior alveolar and marginal mandibular nerve injury, asymmetry, over-resection. Chondrolaryngoplasty: voice change if the commissure is violated. Hairline: scarring, alopecia at the incision.</p>
+    `,
+    keyPoints: [
+      { category: 'Upper third', items: [
+        'Frontal bossing (supraorbital ridge + frontal-sinus anterior table) is THE signature masculine feature and the highest-yield feminizing target.',
+        'Type 3 forehead = thin anterior table over a pneumatized sinus → anterior-table osteotomy + setback + fixation (burring alone breaches the sinus). Type 1 = burr down.',
+        'Add browlift (raise brow) and hairline lowering/scalp advancement for male-pattern recession.'
+      ]},
+      { category: 'Middle third', items: [
+        'Feminizing rhinoplasty: reduce hump, narrow dorsum, slight tip rotation toward a nasolabial angle ~100–105°.',
+        'Lip lift shortens the long masculine philtrum → more upper-incisor show.'
+      ]},
+      { category: 'Lower third', items: [
+        'Mandible-angle reduction narrows a square jaw; risks the inferior alveolar nerve (in bone) and marginal mandibular branch (approach).',
+        'Genioplasty reduces chin height/width to a tapered feminine shape.'
+      ]},
+      { category: 'Larynx & voice', items: [
+        'Chondrolaryngoplasty reduces the Adam\'s apple — stay above/anterior to the anterior commissure; over-resection detaches it and changes the voice.',
+        'FFS does NOT raise vocal pitch — that needs voice therapy or glottoplasty (Wendler). Counsel this explicitly. Coordinate care per WPATH.'
+      ]}
+    ],
+    slides: [
+      { title: 'Chapter 26 · Facial Feminization Surgery', subtitle: 'Cummings 8e · Chapter 26', body: "<p style='font-size:18px;line-height:1.55;'>Reshaping masculine craniofacial features toward feminine norms — analyzed and treated by facial thirds.</p>" },
+      { title: 'Analyze by thirds', body: "<ul><li><strong>Upper:</strong> forehead, brow, hairline.</li><li><strong>Middle:</strong> nose, cheeks, upper lip.</li><li><strong>Lower:</strong> jaw, chin, laryngeal prominence.</li></ul>" },
+      { title: 'The signature feature', body: "<ul><li><strong>Frontal bossing</strong> — supraorbital ridge + frontal-sinus anterior table — is the most characteristic masculine trait.</li><li>Feminizing the forehead is the highest-impact FFS step.</li></ul>" },
+      { title: 'Forehead cranioplasty — 3 types', body: "<ul><li><strong>Type 1</strong> — thick table, little sinus → burr down.</li><li><strong>Type 2</strong> — minor deficiency → burr + fill.</li><li><strong>Type 3</strong> (common) — thin table over pneumatized sinus → <strong>anterior-table osteotomy + setback + fixation</strong>.</li></ul>" },
+      { title: 'Upper third — finish the frame', body: "<ul><li>Raise the brow (browlift).</li><li>Male hairline is higher / M-shaped → <strong>hairline lowering / scalp advancement</strong>.</li><li>Protect the supraorbital nerves.</li></ul>" },
+      { title: 'Middle third', body: "<ul><li>Feminizing rhinoplasty: reduce hump, narrow, tip rotation → <strong>nasolabial angle ~100–105°</strong>.</li><li>Malar augmentation (implant/fat).</li><li><strong>Lip lift</strong> shortens the philtrum → more incisor show.</li></ul>" },
+      { title: 'Lower third — jaw & chin', body: "<ul><li><strong>Mandible-angle reduction</strong> narrows a square jaw — risks inferior alveolar + marginal mandibular nerves.</li><li><strong>Genioplasty</strong> reduces chin height/width → tapered shape.</li></ul>" },
+      { title: 'Chondrolaryngoplasty', body: "<ul><li>Reduces the thyroid-cartilage prominence (Adam's apple).</li><li><strong>Stay above/anterior to the anterior commissure</strong> — over-resection detaches it and changes the voice.</li></ul>" },
+      { title: 'Voice is a separate problem', body: "<ul><li><strong>FFS does not raise vocal pitch.</strong></li><li>Pitch needs voice therapy or <strong>glottoplasty (Wendler)</strong>.</li><li>Never promise a higher voice from a tracheal shave.</li></ul>" },
+      { title: 'Three takeaways', body: "<ol style='font-size:17px;'><li>Frontal bossing is the signature — Type 3 forehead needs osteotomy + setback, not just burring.</li><li>Chondrolaryngoplasty: protect the anterior commissure.</li><li>FFS ≠ voice; counsel and refer for pitch. Work within WPATH.</li></ol>" }
+    ],
+    anatomy: [
+      { title: 'Frontal sinus & the anterior table', body: "<ul><li>Frontal bossing = prominent supraorbital ridge + anterior table of the frontal sinus.</li><li><strong>Type 3</strong>: thin anterior table over a pneumatized sinus — burring breaches it, so osteotomy + setback + rigid fixation is required.</li><li>Supraorbital/supratrochlear nerves (V1) at the rim — forehead sensation.</li></ul>" },
+      { title: 'Thyroid cartilage & the commissure', body: "<ul><li>The <strong>anterior commissure</strong> of the vocal folds inserts on the inner thyroid cartilage near its midline.</li><li>During chondrolaryngoplasty, resect only the prominence ABOVE/anterior to the commissure — going too low/deep detaches it and alters the voice.</li></ul>" }
+    ],
+    pearls: [
+      'Frontal bossing is the most characteristic masculine facial feature and the single highest-impact target in facial feminization.',
+      'A Type 3 forehead — thin anterior table over a pneumatized frontal sinus — cannot be simply burred; it needs an anterior-table osteotomy, setback, and fixation.',
+      'In chondrolaryngoplasty the anterior commissure attaches to the inner thyroid cartilage — stay above it and do not over-resect, or you will change the voice.',
+      'Facial feminization surgery does not raise vocal pitch; counsel the patient that pitch requires voice therapy or a glottoplasty (Wendler).',
+      'Mandible-angle reduction endangers the inferior alveolar nerve within the bone and the marginal mandibular branch on the approach.'
+    ],
+    flashcards: [
+      { q: 'What is the most characteristic masculine upper-face feature, and why is it the priority in FFS?', a: 'Frontal bossing — prominence of the supraorbital brow ridge and the frontal-sinus anterior table. Feminizing the forehead is the highest-impact change, so it anchors most FFS plans.' },
+      { q: 'A Type 3 forehead has a thin anterior table over a pneumatized frontal sinus. How is it feminized?', a: 'Not by burring (which would breach the sinus) — by an osteotomy of the anterior table, setting it back, and rigidly fixating it (forehead reconstruction/setback). Type 1 (thick table) can simply be burred down.' },
+      { q: 'What is the key pitfall of chondrolaryngoplasty (tracheal shave)?', a: 'The anterior commissure of the vocal folds attaches to the inner thyroid cartilage; you must stay above/anterior to it and avoid over-resection. Resecting too low or deep detaches the commissure and permanently alters the voice.' },
+      { q: 'Does facial feminization surgery raise the voice? What is required for pitch?', a: 'No — FFS (including a tracheal shave) does not change vocal pitch. Pitch elevation requires voice therapy and, surgically, a glottoplasty such as the Wendler procedure. Counsel this explicitly.' },
+      { q: 'Which nerves are at risk in mandible-angle reduction?', a: 'The inferior alveolar nerve within the mandible (lower-lip/chin numbness) and the marginal mandibular branch of the facial nerve on the approach (lower-lip depressor weakness).' },
+      { q: 'How does a lip lift feminize the middle third?', a: 'It shortens the longer masculine philtrum, increasing upper-incisor show and lip pout — moving the lip-to-nose proportions toward feminine norms.' },
+      { q: 'What nasolabial angle is targeted in feminizing rhinoplasty, and what other maneuvers?', a: 'About 100–105° (slightly rotated tip). Also reduce the dorsal hump, narrow the dorsum, and refine the tip.' },
+      { q: 'Why is the male hairline addressed, and how?', a: 'Males often have a higher, M-shaped receding hairline; hairline lowering / scalp advancement (pretrichial or coronal) — often combined with the forehead setback and browlift — feminizes the upper third.' }
+    ],
+    quiz: [
+      { stem: 'A transgender woman seeks facial feminization. CT shows a thin frontal-sinus anterior table over a well-pneumatized sinus with prominent brow bossing. The most appropriate forehead procedure is:',
+        options: ['Burr down the anterior table until smooth', 'Anterior-table osteotomy, setback, and rigid fixation', 'Alloplastic forehead implant only', 'Observation — bossing cannot be safely altered'],
+        correct: 1, explanation: 'This is a Type 3 forehead: a thin anterior table over a pneumatized sinus. Burring alone would breach the sinus, so the standard is an osteotomy of the anterior table with setback and rigid fixation. A thick table with little sinus (Type 1) could be burred down.' },
+      { stem: 'During chondrolaryngoplasty, which structure most limits how much cartilage you can safely remove?',
+        options: ['The cricothyroid membrane', 'The anterior commissure of the vocal folds', 'The hyoid bone', 'The superior laryngeal nerve external branch'],
+        correct: 1, explanation: 'The anterior commissure attaches to the inner surface of the thyroid cartilage near the midline. Over-resection or resecting too low can detach it and permanently change the voice, so the surgeon stays above/anterior to it.' },
+      { stem: 'A patient expects a higher-pitched voice after her facial feminization surgery, including a tracheal shave. The correct counseling is:',
+        options: ['The tracheal shave will raise her pitch', 'FFS does not change vocal pitch; pitch requires voice therapy or a glottoplasty (e.g., Wendler)', 'Pitch will rise once swelling resolves', 'Hormones will raise the pitch of a post-pubertal voice'],
+        correct: 1, explanation: 'Chondrolaryngoplasty reduces the visible laryngeal prominence but not the fundamental frequency; and hormones do not raise an already-deepened post-pubertal voice. Pitch elevation is a separate pathway — voice therapy and, surgically, glottoplasty (Wendler).' },
+      { stem: 'Mandible-angle reduction for jaw feminization most directly risks injury to:',
+        options: ['The lingual and glossopharyngeal nerves', 'The inferior alveolar nerve and the marginal mandibular branch of the facial nerve', 'The hypoglossal nerve', 'The great auricular and lesser occipital nerves'],
+        correct: 1, explanation: 'The inferior alveolar nerve runs within the mandible (its injury numbs the lower lip and chin), and the marginal mandibular branch of the facial nerve is at risk on the approach (its injury weakens the lower-lip depressors).' }
+    ],
+    signs: [
+      { name: 'Frontal bossing', category: 'clinical', description: 'Prominent supraorbital ridge and frontal-sinus anterior table with a sloped forehead.', implication: 'Signature masculine feature; the highest-impact FFS target (burr vs osteotomy by type).' },
+      { name: 'Type 3 forehead (thin table over sinus)', category: 'radiology', description: 'CT shows a thin anterior table over a pneumatized frontal sinus.', implication: 'Requires anterior-table osteotomy + setback + fixation, not burring.' },
+      { name: 'Anterior-commissure proximity', category: 'clinical', description: 'Inner thyroid-cartilage attachment of the vocal folds during a tracheal shave.', implication: 'Limit resection above/anterior to it to protect the voice.' },
+      { name: 'Persistent low pitch after FFS', category: 'clinical', description: 'Unchanged vocal pitch despite chondrolaryngoplasty.', implication: 'Expected — refer for voice therapy / glottoplasty (Wendler).' }
+    ],
+    podcastTitle: 'Deep Dive · Facial Feminization Surgery',
+    podcastDuration: '~20 min - deep dive',
+    podcastScript: [
+      { speaker: 'host',   text: "Welcome to ENT Academy. I'm Elena." },
+      { speaker: 'cohost', text: "And I'm Marcus. Today: facial feminization surgery — reshaping masculine craniofacial features toward feminine norms. The organizing idea is simple and testable: analyze the face in thirds, and treat each third. We'll go top to bottom — forehead, midface, jaw and larynx — hit the high-yield decisions and the nerves, make one counseling point that patients care about most, and finish with a case." },
+      { speaker: 'host',   text: "Set the frame — literally, the thirds." },
+      { speaker: 'cohost', text: "Upper third: forehead, brow, hairline. Middle third: nose, cheeks, upper lip. Lower third: jaw, chin, and the laryngeal prominence — the Adam's apple. You plan it cephalometrically, against feminine norms for each third, and you work within the WPATH standards of care with the patient's hormone and mental-health team." },
+      { speaker: 'host',   text: "Start at the top, because you say the forehead is the whole ballgame." },
+      { speaker: 'cohost', text: "It usually is. The single most characteristic masculine feature is frontal bossing — the prominence of the supraorbital brow ridge and the anterior table of the frontal sinus, with a more backward-sloped forehead. Feminizing the forehead is the highest-impact move in the whole operation, so it anchors most plans. But how you do it depends entirely on the bone over the sinus." },
+      { speaker: 'host',   text: "Teach the classification — this is a favorite exam point." },
+      { speaker: 'cohost', text: "Three types. Type 1 is a thick anterior table with little or no sinus underneath — you simply burr the prominence down. Type 2 is a minor deficiency — you burr and augment. Type 3 is the common and important one: a thin anterior table over a well-pneumatized frontal sinus. If you just burr that, you breach the sinus. So the standard is an osteotomy of the anterior table — you take it off, set it back, and rigidly fixate it. That's the forehead reconstruction, or setback. Type 3 equals osteotomy and setback, not burring — hold that." },
+      { speaker: 'host',   text: "And the rest of the upper third." },
+      { speaker: 'cohost', text: "You raise the brow with a browlift, because a higher, arched brow reads feminine. And because males often have a higher, M-shaped receding hairline, you frequently lower the hairline — a scalp advancement, pretrichial or coronal — often in the same stage as the setback and browlift. Watch the supraorbital and supratrochlear nerves at the rim so you don't leave a numb forehead." },
+      { speaker: 'host',   text: "Middle third — nose, cheeks, lip." },
+      { speaker: 'cohost', text: "Feminizing rhinoplasty reduces a dorsal hump, narrows the dorsum, and gives a little tip rotation toward a nasolabial angle of about a hundred to a hundred and five degrees. Cheeks: feminine malar eminences are fuller and higher, so you augment with an implant or fat. And the lip lift — masculine upper lips are longer, so you shorten the philtrum, which shows more of the upper incisors and gives a softer pout." },
+      { speaker: 'host',   text: "Lower third — the jaw and chin." },
+      { speaker: 'cohost', text: "Masculine jaws are wider with flared, square angles, so angle reduction and contouring narrows them. The masculine chin is taller, wider, and more square, so a genioplasty reduces its height and width and tapers it. Two nerves to name before you cut: the inferior alveolar nerve, which runs inside the mandible — injure it and the lower lip and chin go numb — and the marginal mandibular branch of the facial nerve on the approach, which if hurt weakens the lower-lip depressors and gives an asymmetric smile." },
+      { speaker: 'host',   text: "Now the larynx. The tracheal shave — teach the pitfall." },
+      { speaker: 'cohost', text: "Chondrolaryngoplasty reduces the thyroid-cartilage prominence — the Adam's apple. The pitfall you must know: the anterior commissure of the vocal folds attaches to the inside of the thyroid cartilage near the midline. So you stay above and anterior to the commissure and you do not over-resect. Resect too low or too deep and you detach the commissure — and that permanently changes the voice. It's done through a small, well-hidden skin-crease incision." },
+      { speaker: 'host',   text: "Which sets up the counseling point patients care about most." },
+      { speaker: 'cohost', text: "The big one: facial feminization surgery does not change vocal pitch. The tracheal shave reduces the bump, not the fundamental frequency — and hormones don't raise a voice that already deepened at puberty. Pitch is a separate pathway: voice therapy, and when surgical, a glottoplasty such as the Wendler procedure. Never let a patient walk in thinking a shave will give her a higher voice — that's a promise you can't keep." },
+      { speaker: 'host',   text: "Tie the plan together." },
+      { speaker: 'cohost', text: "Analyze by thirds against feminine norms, then combine procedures sensibly — forehead setback with browlift and hairline lowering up top; rhinoplasty, cheeks, and lip in the middle; jaw, chin, and chondrolaryngoplasty below — staged to the patient. Confirm readiness and coordinate hormones and mental-health support per WPATH, and set individualized, realistic goals." },
+      { speaker: 'host',   text: "Let's do a case. A 32-year-old transgender woman wants facial feminization. Her most bothersome feature is a heavy, prominent brow with a sloping forehead; CT shows a thin anterior sinus table over a large frontal sinus. What do you offer for the forehead, and what do you add up top?" },
+      { speaker: 'cohost', text: "That prominent brow with a thin table over a pneumatized sinus is a Type 3 forehead — so burring is off the table because it would open the sinus. I offer an anterior-table osteotomy with setback and rigid fixation. In the same upper-third stage I'd raise the brow with a browlift and, given a high male hairline, lower the hairline with a scalp advancement — protecting the supraorbital nerves throughout." },
+      { speaker: 'host',   text: "She also asks you to reduce her Adam's apple, and she assumes it'll make her voice higher. How do you proceed and what do you tell her?" },
+      { speaker: 'cohost', text: "I offer a chondrolaryngoplasty to reduce the prominence, and I'm careful to stay above and anterior to the anterior commissure so I don't alter her voice. But I correct the assumption directly: the shave will not raise her pitch — that requires voice therapy and possibly a glottoplasty, the Wendler procedure, which I refer for separately. Managing that expectation before surgery is as important as the operation." },
+      { speaker: 'host',   text: "Finally she wants a squarer jaw softened. What do you plan and warn about?" },
+      { speaker: 'cohost', text: "Mandible-angle reduction to narrow the flared angles plus a genioplasty to reduce and taper the chin. I warn about the inferior alveolar nerve inside the bone — possible lower-lip and chin numbness — and the marginal mandibular branch on the approach, which can weaken the lower lip. Realistic goals, per-third planning, and WPATH-coordinated care tie it together." },
+      { speaker: 'host',   text: "Give me the five to walk out with." },
+      { speaker: 'cohost', text: "One: analyze the face in thirds. Two: frontal bossing is the signature masculine feature and the highest-impact target — and a Type 3 forehead, thin table over a pneumatized sinus, needs an anterior-table osteotomy and setback, not burring. Three: middle third — feminizing rhinoplasty toward a nasolabial angle around a hundred to a hundred five, cheek augmentation, and a lip lift to shorten the philtrum." },
+      { speaker: 'host',   text: "Four and five." },
+      { speaker: 'cohost', text: "Four: lower third — narrow the mandibular angles and taper the chin, protecting the inferior alveolar and marginal mandibular nerves; and in chondrolaryngoplasty, stay above the anterior commissure or you'll change the voice. And five, the counseling point: facial feminization does not raise vocal pitch — that's voice therapy or a glottoplasty — and all of this happens within WPATH standards of care." },
+      { speaker: 'host',   text: "Read the face in thirds, respect the sinus and the commissure, and never confuse the shape of the larynx with the sound of the voice." },
+      { speaker: 'cohost', text: "That's the chapter." }
+    ]
+  },
   22: {
     objectives: [
       'Distinguish true brow ptosis from upper-eyelid dermatochalasis and sequence their correction.',
