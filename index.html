@@ -4423,6 +4423,141 @@ function getCast() {
 /* ---------------- DETAILED CONTENT ---------------- */
 /* Resident-level study content. Add new weeks by populating CONTENT[N]. */
 const CONTENT = {
+  28: {
+    objectives: [
+      "Perform a nasal aesthetic analysis using key angles, the Goode tip-projection ratio, and the tripod concept.",
+      "List the major and minor tip-support mechanisms and predict the effect of disrupting them.",
+      "Compare the endonasal (closed) and external (open) approaches.",
+      "Manage the dorsum and bony vault — hump reduction, the open roof, osteotomies, and spreader grafts.",
+      "Protect the internal and external nasal valves and recognize the classic rhinoplasty deformities."
+    ],
+    summary: `
+      <h4>1. Aesthetic analysis first</h4>
+      <p>Rhinoplasty begins on paper. Know the norms: the <strong>nasofrontal angle</strong> ~115–130°, the <strong>nasolabial angle</strong> ~95–105° in women and ~90–95° in men, and the <strong>nasofacial angle</strong> ~30–40°. Tip projection is judged with the <strong>Goode ratio</strong> (alar-to-tip / nasion-to-tip ≈ <strong>0.55–0.60</strong>). And think of the tip as a <strong>tripod</strong> (Anderson): the two lateral crura are two legs and the conjoined medial crura the third — shortening or lengthening a leg predictably changes tip <strong>rotation and projection</strong>.</p>
+      <h4>2. Tip support — major and minor</h4>
+      <p>The tip holds its shape through support mechanisms you must not blindly destroy. The <strong>three MAJOR tip supports</strong> are: (1) the intrinsic <strong>size, shape, and resilience of the lower lateral (alar) cartilages</strong>; (2) the <strong>medial crural footplate attachment to the caudal septum</strong>; and (3) the <strong>attachment of the upper lateral cartilages to the lower lateral cartilages (the scroll)</strong>. Minor supports include the dorsal septum, the interdomal ligament, the membranous septum, the nasal spine, the sesamoid complex, and the skin–soft-tissue envelope. Disrupt majors during surgery and you must reconstruct support (struts, sutures) or the tip drops.</p>
+      <h4>3. Approach — closed vs open</h4>
+      <p>The <strong>endonasal (closed)</strong> approach hides all incisions inside the nose — no columellar scar, less dissection and tip edema, faster recovery — but less exposure. The <strong>external (open)</strong> approach adds a <strong>transcolumellar (inverted-V) incision</strong> for full binocular exposure and precise suturing/grafting, at the cost of a small columellar scar and more/longer-lasting tip edema. Complex tips and revisions favor open; conservative primary cases can be closed.</p>
+      <h4>4. The dorsum and the open roof</h4>
+      <p>Reducing a dorsal hump removes bone and the cartilaginous dorsum at the keystone. Taking down the bony hump leaves an <strong>open-roof deformity</strong> — a flat, wide bridge with palpable edges — that you close by narrowing the bony vault with <strong>medial and lateral osteotomies</strong>. And when you open the middle vault, place <strong>spreader grafts</strong> between the septum and the upper lateral cartilages to rebuild it, which both prevents the <strong>inverted-V deformity</strong> and keeps the <strong>internal nasal valve</strong> open.</p>
+      <h4>5. The tip — refine without collapsing it</h4>
+      <p>Tip refinement uses <strong>cephalic trim</strong> of the lower lateral crura, but you must <strong>preserve a complete rim strip of at least ~6–8 mm</strong> — over-resecting the alar cartilage causes <strong>alar retraction/notching, a pinched tip, and external-valve collapse</strong>. Suture techniques (transdomal, interdomal, lateral crural) and grafts (columellar strut, shield/tip grafts, alar rim/contour grafts) shape and support the tip.</p>
+      <h4>6. The nasal valves — the airway</h4>
+      <ul>
+        <li><strong>Internal nasal valve</strong> — the angle between the caudal <strong>upper lateral cartilage</strong> and the septum, normally about <strong>10–15°</strong>. It is the <strong>narrowest part of the nasal airway</strong>; collapse (a positive <strong>Cottle / modified-Cottle</strong> maneuver) causes obstruction and is treated with <strong>spreader grafts</strong>.</li>
+        <li><strong>External nasal valve</strong> — the alar rim / lower lateral cartilage; collapse on inspiration is treated with <strong>alar batten and rim grafts</strong>.</li>
+      </ul>
+      <p>Function outranks cosmesis: never destabilize a valve to make a nose look smaller.</p>
+      <h4>7. Grafts and the classic deformities</h4>
+      <p>Graft material in order: <strong>septal cartilage</strong> first, then <strong>auricular (conchal)</strong>, then <strong>costal (rib)</strong> for major reconstruction. Learn the named failures: <strong>inverted-V</strong> (middle-vault collapse from ULC–septum separation without spreaders); <strong>pollybeak</strong> (supratip fullness from under-resected cartilaginous dorsum or supratip scar/dead space); <strong>saddle nose</strong> (over-resected dorsal septum / lost L-strut); an unclosed <strong>open roof</strong>; <strong>alar retraction</strong> and a <strong>pinched tip</strong> from over-resection; and the <strong>rocker deformity</strong> from a lateral osteotomy carried too high into thick frontal bone.</p>
+    `,
+    keyPoints: [
+      { category: "Analysis", items: [
+        "Nasolabial angle ~95–105° (women) / 90–95° (men); nasofrontal ~115–130°; Goode tip-projection ratio ~0.55–0.60.",
+        "Tripod concept: lateral crura (2 legs) + conjoined medial crura (1 leg) — altering a leg changes tip rotation/projection."
+      ]},
+      { category: "Tip support", items: [
+        "3 MAJOR supports: (1) intrinsic lower-lateral-cartilage strength, (2) medial crural footplate–caudal septum, (3) upper-to-lower lateral cartilage (scroll).",
+        "Disrupting majors requires reconstruction (columellar strut/sutures) or the tip drops."
+      ]},
+      { category: "Dorsum & vault", items: [
+        "Hump reduction → open roof → close with medial + lateral osteotomies.",
+        "Spreader grafts rebuild the middle vault — prevent inverted-V deformity and keep the internal valve open."
+      ]},
+      { category: "Tip & valves", items: [
+        "Cephalic trim: preserve a rim strip ≥ ~6–8 mm — over-resection → alar retraction, pinched tip, external-valve collapse.",
+        "Internal valve = ULC–septum angle ~10–15°, the NARROWEST airway → spreader grafts (positive Cottle). External valve = alar → batten/rim grafts."
+      ]},
+      { category: "Deformities", items: [
+        "Inverted-V = middle-vault collapse (no spreaders). Pollybeak = supratip fullness. Saddle = dorsal over-resection. Rocker = osteotomy too high."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 31 · Primary Rhinoplasty", subtitle: "Cummings 8e · Chapter 31", body: "<p style='font-size:18px;line-height:1.55;'>Reshape the nose without breaking its support or its airway — analysis, tip, dorsum, and the valves.</p>" },
+      { title: "Aesthetic analysis", body: "<ul><li>Nasolabial angle ~95–105° (♀) / 90–95° (♂).</li><li>Nasofrontal ~115–130°; nasofacial ~30–40°.</li><li>Goode tip projection ~<strong>0.55–0.60</strong>.</li></ul>" },
+      { title: "Tripod concept", body: "<ul><li>Two lateral crura + conjoined medial crura = a tripod.</li><li>Shorten/lengthen a leg → predictable change in tip <strong>rotation & projection</strong>.</li></ul>" },
+      { title: "Major tip support (3)", body: "<ol><li>Intrinsic lower-lateral-cartilage size/shape/resilience.</li><li>Medial crural footplate ↔ caudal septum.</li><li>Upper-to-lower lateral cartilage (scroll).</li></ol><p>Disrupt a major → reconstruct or the tip drops.</p>" },
+      { title: "Approach", body: "<ul><li><strong>Closed (endonasal)</strong> — no columellar scar, less edema, faster; less exposure.</li><li><strong>Open (external)</strong> — transcolumellar incision, binocular exposure, precise grafting; small scar, more tip edema.</li></ul>" },
+      { title: "Dorsum & the open roof", body: "<ul><li>Hump reduction (bone + cartilage) → <strong>open-roof deformity</strong>.</li><li>Close with <strong>medial + lateral osteotomies</strong>.</li><li><strong>Spreader grafts</strong> rebuild the middle vault.</li></ul>" },
+      { title: "Tip refinement", body: "<ul><li>Cephalic trim — <strong>keep a rim strip ≥ ~6–8 mm</strong>.</li><li>Over-resection → <strong>alar retraction, pinched tip, external-valve collapse</strong>.</li><li>Sutures (transdomal/interdomal) + strut/tip grafts.</li></ul>" },
+      { title: "The nasal valves", body: "<ul><li><strong>Internal valve</strong> — ULC–septum angle ~<strong>10–15°</strong>, the narrowest airway → <strong>spreader grafts</strong> (positive Cottle).</li><li><strong>External valve</strong> — alar rim → <strong>batten/rim grafts</strong>.</li></ul>" },
+      { title: "Named deformities", body: "<ul><li><strong>Inverted-V</strong> = middle-vault collapse (no spreaders).</li><li><strong>Pollybeak</strong> = supratip fullness.</li><li><strong>Saddle</strong> = dorsal over-resection.</li><li><strong>Rocker</strong> = osteotomy too high.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Know the 3 major tip supports — reconstruct what you disrupt.</li><li>Hump → open roof → osteotomies; spreaders prevent inverted-V and save the internal valve.</li><li>Preserve a ≥6–8 mm alar rim strip; function outranks cosmesis.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Tip-support mechanisms", body: "<ul><li><strong>Major:</strong> (1) lower-lateral-cartilage intrinsic strength; (2) medial crural footplate–caudal septum; (3) upper-to-lower lateral cartilage attachment (scroll).</li><li><strong>Minor:</strong> dorsal septum, interdomal ligament, membranous septum, nasal spine, sesamoids, skin envelope.</li></ul>" },
+      { title: "The nasal valves", body: "<ul><li><strong>Internal valve:</strong> angle between the caudal upper lateral cartilage and the septum (~10–15°) — the narrowest airway segment; opened with spreader grafts.</li><li><strong>External valve:</strong> the alar rim / lower lateral cartilage — supported with batten and rim grafts.</li></ul>" }
+    ],
+    pearls: [
+      "There are three major tip-support mechanisms — the intrinsic lower lateral cartilages, the medial crural footplate to caudal septum, and the upper-to-lower lateral cartilage scroll — and if you disrupt one you must reconstruct support or the tip drops.",
+      "The internal nasal valve — the ~10–15° angle between the upper lateral cartilage and the septum — is the narrowest part of the airway; a positive Cottle maneuver points to it, and spreader grafts open it.",
+      "After a dorsal hump reduction you are left with an open roof; close it with medial and lateral osteotomies, and place spreader grafts to prevent an inverted-V deformity and internal-valve collapse.",
+      "During cephalic trim, preserve a complete alar rim strip of at least ~6–8 mm; over-resecting the lower lateral cartilage causes alar retraction, a pinched tip, and external-valve collapse.",
+      "Learn the named failures: inverted-V is middle-vault collapse, pollybeak is supratip fullness, saddle nose is dorsal over-resection, and rocker deformity is a lateral osteotomy carried too high into the frontal bone."
+    ],
+    flashcards: [
+      { q: "What are the three major tip-support mechanisms?", a: "(1) The intrinsic size, shape, and resilience of the lower lateral (alar) cartilages; (2) the attachment of the medial crural footplate to the caudal septum; (3) the attachment of the upper lateral cartilages to the lower lateral cartilages (the scroll). Disrupting a major support requires reconstruction or the tip loses projection." },
+      { q: "What and where is the internal nasal valve, and how is its collapse treated?", a: "It is the angle between the caudal edge of the upper lateral cartilage and the septum, normally ~10–15°, and it is the narrowest segment of the nasal airway. Collapse (a positive Cottle/modified-Cottle maneuver) is treated with spreader grafts." },
+      { q: "What deformity follows a bony hump reduction if the vault is not narrowed, and how is it corrected?", a: "An open-roof deformity — a flat, wide bridge with palpable open edges. It is closed with medial and lateral osteotomies to narrow and reunite the bony vault." },
+      { q: "Why place spreader grafts, and what do they prevent?", a: "Spreader grafts sit between the dorsal septum and the upper lateral cartilages to rebuild the middle vault. They prevent the inverted-V deformity and maintain the internal nasal valve, preserving the airway after hump reduction." },
+      { q: "How much lower-lateral-cartilage rim strip must be preserved during cephalic trim, and what happens if you take too much?", a: "Preserve a complete rim strip of at least ~6–8 mm. Over-resection causes alar retraction/notching, a pinched tip, and external nasal-valve collapse." },
+      { q: "Contrast the open and closed rhinoplasty approaches.", a: "Closed (endonasal) hides all incisions internally — no columellar scar, less dissection and tip edema, faster recovery, but less exposure. Open (external) uses a transcolumellar incision for full binocular exposure and precise suturing/grafting, at the cost of a small columellar scar and more/longer tip edema." },
+      { q: "Define pollybeak and saddle-nose deformities.", a: "Pollybeak is supratip fullness (the tip appears to droop below a full supratip) from under-resected cartilaginous dorsum or supratip scar/dead space. Saddle nose is loss of dorsal height from over-resection of the dorsal septum / L-strut." },
+      { q: "What is the tripod concept?", a: "Anderson's model: the nasal tip is a tripod formed by the two lateral crura (two legs) and the conjoined medial crura (one leg). Lengthening or shortening a leg predictably changes tip rotation and projection." }
+    ],
+    quiz: [
+      { stem: "A patient has persistent nasal obstruction and a positive modified-Cottle maneuver at the ULC–septal angle after a prior hump reduction. The most appropriate correction is:",
+        options: ["Inferior turbinate reduction", "Spreader grafts to reopen the internal nasal valve", "Alar batten grafts", "Septal perforation repair"],
+        correct: 1, explanation: "A positive Cottle at the upper-lateral-cartilage–septum angle localizes internal nasal-valve collapse — the narrowest part of the airway, often after hump reduction without middle-vault reconstruction. Spreader grafts reopen it. Batten grafts address the external (alar) valve, a different site." },
+      { stem: "Which is NOT one of the three major tip-support mechanisms?",
+        options: ["Intrinsic strength of the lower lateral cartilages", "Medial crural footplate attachment to the caudal septum", "Upper-to-lower lateral cartilage (scroll) attachment", "The dorsal nasal septum height"],
+        correct: 3, explanation: "The three major supports are the intrinsic lower lateral cartilages, the medial crural footplate–caudal septum attachment, and the upper-to-lower lateral cartilage (scroll). The dorsal septum contributes only minor tip support." },
+      { stem: "During cephalic trim of the lower lateral crura, the surgeon should preserve a rim strip of at least approximately:",
+        options: ["1–2 mm", "6–8 mm", "15 mm", "None — full transection is preferred"],
+        correct: 1, explanation: "Preserving a complete rim strip of at least ~6–8 mm maintains alar support; over-resection causes alar retraction/notching, a pinched tip, and external nasal-valve collapse." },
+      { stem: "Months after rhinoplasty a patient has a visible middle-vault narrowing with an inverted-V shadow and internal-valve obstruction after hump takedown. The most likely cause is:",
+        options: ["Pollybeak from under-resected dorsum", "Middle-vault collapse from upper-lateral-cartilage separation without spreader grafts", "Saddle nose from septal over-resection", "Rocker deformity"],
+        correct: 1, explanation: "An inverted-V deformity with internal-valve obstruction after hump reduction is middle-vault collapse — the upper lateral cartilages separated from the dorsal septum and were not reconstructed with spreader grafts. Pollybeak is supratip fullness and saddle is dorsal collapse — different problems." }
+    ],
+    signs: [
+      { name: "Positive Cottle / modified-Cottle", category: "clinical", description: "Lateral cheek traction (or endnasal support) relieves obstruction at the ULC–septal angle.", implication: "Internal nasal-valve collapse — treat with spreader grafts." },
+      { name: "Open-roof deformity", category: "clinical", description: "Flat, wide dorsum with palpable open bony edges after hump reduction.", implication: "Narrow the bony vault with medial + lateral osteotomies." },
+      { name: "Inverted-V deformity", category: "clinical", description: "Visible middle-vault narrowing/shadow after hump takedown.", implication: "Middle-vault collapse — reconstruct with spreader grafts." },
+      { name: "Pollybeak", category: "clinical", description: "Supratip fullness making the tip look ptotic.", implication: "Under-resected cartilaginous dorsum or supratip scar — revise dorsum / manage dead space." }
+    ],
+    podcastTitle: "Deep Dive · Primary Rhinoplasty",
+    podcastDuration: "~20 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy. I'm Elena." },
+      { speaker: "cohost", text: "And I'm Marcus. Today: primary rhinoplasty — arguably the most demanding operation in facial plastics, because you're changing shape without breaking two things: the tip's support and the nose's airway. There's a clean way to hold it: analyze first, know what holds the tip up, reshape the dorsum and tip without destabilizing them, and protect the valves. We'll walk each of those and name the classic deformities, then a case." },
+      { speaker: "host",   text: "Start on paper — the analysis." },
+      { speaker: "cohost", text: "Rhinoplasty is planned with angles and ratios. The nasolabial angle — between the columella and the upper lip — is about ninety-five to a hundred five degrees in women and ninety to ninety-five in men; the nasofrontal angle at the root is about a hundred fifteen to a hundred thirty. Tip projection is judged by the Goode ratio — roughly zero-point-five-five to zero-point-six. And the mental model for the tip is Anderson's tripod: the two lateral crura are two legs, the joined medial crura the third leg, and if you shorten or lengthen a leg you predictably change tip rotation and projection." },
+      { speaker: "host",   text: "Now the thing that makes rhinoplasty humbling — tip support." },
+      { speaker: "cohost", text: "You have to respect the support mechanisms or the tip drops months later. There are three MAJOR tip supports. One: the intrinsic strength — the size, shape, and resilience — of the lower lateral, the alar, cartilages themselves. Two: the attachment of the medial crural footplates to the caudal septum. Three: the attachment of the upper lateral cartilages to the lower lateral cartilages, the scroll region. The minor supports — dorsal septum, interdomal ligament, membranous septum, nasal spine, sesamoids, the skin envelope — help, but those three are the load-bearers. The rule: if your maneuver disrupts a major support, you rebuild support — a columellar strut, suture fixation — or the tip loses projection." },
+      { speaker: "host",   text: "Approach — open or closed?" },
+      { speaker: "cohost", text: "The closed, endonasal approach keeps every incision inside the nose — no columellar scar, less dissection, less tip edema, faster recovery — but you're working with less exposure. The open, external approach adds a small transcolumellar incision, the inverted-V, and gives you full binocular exposure to suture and graft precisely, at the cost of that little scar and more, longer-lasting tip swelling. Complex tips and revisions push you open; a conservative primary can be done closed." },
+      { speaker: "host",   text: "The dorsum. What happens when you take down a hump?" },
+      { speaker: "cohost", text: "You remove both the bony and the cartilaginous hump at the keystone, and taking down the bony part leaves an open roof — a flat, wide bridge with palpable open edges where the walls used to meet. You close that open roof by narrowing the bony vault with medial and lateral osteotomies. And here's the airway-saving step people forget: when you open the middle vault, you put spreader grafts between the dorsal septum and the upper lateral cartilages to rebuild it. That does two jobs at once — it prevents the inverted-V deformity and it keeps the internal nasal valve open." },
+      { speaker: "host",   text: "The tip — refine it without wrecking it." },
+      { speaker: "cohost", text: "You thin the tip with a cephalic trim of the lower lateral crura, but the cardinal safety rule is: preserve a complete rim strip of at least about six to eight millimeters. Take too much alar cartilage and you get alar retraction and notching, a pinched tip, and external-valve collapse — a cosmetic and a breathing disaster at once. Beyond trimming, you shape and support the tip with sutures — transdomal, interdomal, lateral crural — and grafts: a columellar strut for support, a shield or tip graft for definition, alar rim or contour grafts to stop retraction." },
+      { speaker: "host",   text: "Now the airway — the valves. Teach them precisely." },
+      { speaker: "cohost", text: "Two valves. The internal nasal valve is the angle between the caudal edge of the upper lateral cartilage and the septum, normally about ten to fifteen degrees — and it is the narrowest part of the entire nasal airway, so it's where obstruction lives. You localize it with a Cottle or modified-Cottle maneuver, and you treat its collapse with spreader grafts. The external nasal valve is out at the alar rim, the lower lateral cartilage; when it collapses inward on inspiration you support it with alar batten and rim grafts. And the overriding principle: function outranks cosmesis — you never destabilize a valve just to make the nose look smaller." },
+      { speaker: "host",   text: "Grafts and the named deformities to finish." },
+      { speaker: "cohost", text: "Graft material in order of preference: septal cartilage first, then auricular conchal cartilage, then costal rib for major reconstruction. And memorize the failures, because they're pure exam bait: the inverted-V is middle-vault collapse from the upper laterals separating off the septum without spreaders; the pollybeak is supratip fullness — the tip looks droopy under a full supratip — from under-resected cartilaginous dorsum or supratip scar; the saddle nose is dorsal collapse from over-resecting the dorsal septum and losing the L-strut; an unclosed open roof; alar retraction and a pinched tip from over-trimming; and the rocker deformity, when a lateral osteotomy is carried too high into the thick frontal bone and rocks." },
+      { speaker: "host",   text: "Let's do a case. A 24-year-old woman wants a smaller dorsal hump and a refined tip. She breathes fine now. You reduce the hump and do a cephalic trim. What must you do to protect her airway and avoid the classic deformities?" },
+      { speaker: "cohost", text: "Two moves. First, after I take the bony hump down I have an open roof, so I narrow the vault with medial and lateral osteotomies and I place spreader grafts in the middle vault — that closes the roof cosmetically, prevents an inverted-V, and keeps her internal valve, the narrowest segment, open. Second, on the tip I preserve at least six to eight millimeters of alar rim strip during the cephalic trim and support the tip with a columellar strut, so I don't create alar retraction, a pinched tip, or external-valve collapse. Refine, but rebuild support." },
+      { speaker: "host",   text: "A year later she comes back breathing worse through the nose, with a visible middle-third narrowing and an inverted-V shadow. What happened and what fixes it?" },
+      { speaker: "cohost", text: "That's middle-vault collapse — the upper lateral cartilages separated from the dorsal septum after the hump reduction and weren't spanned by spreader grafts, so the internal valve narrowed and you can see the inverted V. The fix is exactly what was missed: spreader grafts to reconstruct the middle vault and reopen the internal valve." },
+      { speaker: "host",   text: "Different patient: after rhinoplasty the tip looks like it droops with a full area just above it. Name it and its cause." },
+      { speaker: "cohost", text: "That's a pollybeak — supratip fullness. It's usually under-resected cartilaginous dorsum leaving the supratip too high, or scar and dead space collecting in the supratip; you correct it by lowering the cartilaginous dorsum appropriately and managing the supratip dead space, and it's distinct from a saddle, which is loss of dorsal height from over-resection." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: analyze with the angles and the Goode ratio, and think tripod. Two: three major tip supports — the lower laterals, the medial crural footplate to caudal septum, and the upper-to-lower scroll — reconstruct what you disrupt. Three: hump reduction leaves an open roof you close with osteotomies, and spreader grafts rebuild the middle vault to prevent an inverted-V and protect the internal valve." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: the internal valve is the narrowest airway, the ten-to-fifteen-degree upper-lateral-to-septum angle, positive on Cottle, treated with spreaders; the external valve is the alar rim, treated with battens — and preserve a six-to-eight-millimeter rim strip on cephalic trim. And five, the named deformities: inverted-V is middle-vault collapse, pollybeak is supratip fullness, saddle is dorsal over-resection, rocker is an osteotomy too high — and always, function outranks cosmesis." },
+      { speaker: "host",   text: "Analyze it, protect the tripod, close the roof, and guard the valve — a beautiful nose that can't breathe is a failed rhinoplasty." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
   26: {
     objectives: [
       "Describe the bony-cartilaginous septal anatomy and the blood supply that keeps the cartilage alive.",
