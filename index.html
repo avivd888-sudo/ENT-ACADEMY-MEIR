@@ -1373,6 +1373,37 @@
     .resume-card { flex-direction: column; align-items: stretch; }
     .resume-card .btn-primary { width: 100%; }
   }
+  /* Prominent "Continue where you left off" band — top of the home screen */
+  .continue-hero {
+    display: flex; align-items: center; gap: 18px;
+    background: linear-gradient(120deg, #0f766e 0%, #0e7490 55%, #2563eb 100%);
+    color: #fff;
+    border-radius: 16px;
+    padding: 18px 22px;
+    margin: -6px 0 18px;
+    cursor: pointer;
+    box-shadow: 0 10px 28px rgba(13,148,136,.28);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .continue-hero:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(13,148,136,.36); }
+  .continue-hero:focus-visible { outline: 3px solid #7dd3fc; outline-offset: 2px; }
+  .continue-hero-ico {
+    width: 54px; height: 54px; border-radius: 16px;
+    background: rgba(255,255,255,.16);
+    color: #fff; font-size: 26px;
+    display: grid; place-items: center; flex-shrink: 0;
+  }
+  .continue-hero-body { flex: 1; min-width: 0; }
+  .continue-hero-eyebrow { font-size: 11.5px; font-weight: 800; color: #d1fae5; text-transform: uppercase; letter-spacing: 1.1px; }
+  .continue-hero-title { font-family: var(--font-serif); font-size: 20px; color: #fff; margin: 3px 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .continue-hero-sub { font-size: 12.5px; color: #e0f2fe; text-transform: capitalize; }
+  .continue-hero-btn { background: #fff; color: #0f766e; font-weight: 800; flex-shrink: 0; }
+  .continue-hero-btn:hover { background: #ecfeff; }
+  @media (max-width: 640px) {
+    .continue-hero { flex-direction: column; align-items: stretch; text-align: left; }
+    .continue-hero-btn { width: 100%; }
+    .continue-hero-title { white-space: normal; }
+  }
 
   /* ====== Daily micro-challenge ====== */
   .challenge-card {
@@ -1690,6 +1721,10 @@
     opacity: 0;
     pointer-events: none;
   }
+  /* Bottom clearance so the fixed floating player and mobile tab bar never cover page buttons —
+     the content can always scroll above them. */
+  .main { padding-bottom: 104px; }
+  @media (max-width: 980px) { .main { padding-bottom: 168px; } }
   .fp-art {
     width: 44px; height: 44px;
     border-radius: 12px;
@@ -3310,6 +3345,15 @@
   .slide-body ul, .slide-body ol { padding-left: 22px; margin: 8px 0; }
   .slide-body li { margin-bottom: 5px; }
   .slide-body strong { color: var(--navy-800); }
+  /* Slides are a light "paper" surface — keep the text dark in BOTH light and dark mode, otherwise
+     dark-mode makes var(--text) light and the slide became light-on-light (unreadable). */
+  .slide-stage { color: #1e293b; }
+  .slide-body, .slide-body li, .slide-body p, .slide-body ol, .slide-body ul { color: #1e293b !important; }
+  .slide-body strong, .slide-stage strong { color: #0b2447 !important; }
+  .slide-stage h1, .slide-stage h2, .slide-stage h3, .slide-stage h4, .slide-title, .slide-eyebrow { color: #0f172a !important; }
+  [data-theme="dark"] .slide-stage { background: linear-gradient(135deg,#f7f8fb,#eceff5); border-color:#cbd5e1; }
+  [data-theme="dark"] .slide-body, [data-theme="dark"] .slide-body li, [data-theme="dark"] .slide-body p { color:#1e293b !important; }
+  [data-theme="dark"] .slide-stage h1,[data-theme="dark"] .slide-stage h2,[data-theme="dark"] .slide-stage h3,[data-theme="dark"] .slide-stage h4,[data-theme="dark"] .slide-title { color:#0f172a !important; }
   .slide-controls {
     display: flex;
     align-items: center;
@@ -3699,7 +3743,7 @@
 #back-fab.bfab-hidden{opacity:0;pointer-events:none;transform:translateX(-10px);}
 /* On desktop the persistent sidebar + breadcrumbs already provide navigation, so keep the
    back button for the mobile/tablet layouts where it's actually needed. */
-@media (min-width:981px){ #back-fab{display:none;} }
+@media (min-width:981px){ #back-fab{ top:auto; bottom:20px; left:20px; z-index:6000; } }
 </style>
 
 <script>
@@ -12848,7 +12892,9 @@ const CONTENT = {
       { q: 'Hallmark of relapsing polychondritis?', a: 'Auricular chondritis sparing the earlobe (which has no cartilage). Also saddle nose, laryngotracheal cartilage involvement — life-threatening airway disease.' },
       { q: 'What does macroglossia with tooth indentations suggest?', a: 'Amyloidosis. Get echocardiogram for cardiac amyloid. Biopsy with Congo red stain.' },
       { q: 'Most likely cause of laryngeal TB?', a: 'Reactivation of pulmonary TB with seeding via sputum. Hoarseness is the typical presentation. Biopsy with AFB stain + culture confirms.' },
-      { q: 'AML subtype most associated with gum infiltration?', a: 'AML M5 (monocytic) — gingival hyperplasia from leukemic infiltrate. Chloroma is a soft-tissue mass of myeloid blasts; can appear in nasal or oral cavity.' }
+      { q: 'AML subtype most associated with gum infiltration?', a: 'AML M5 (monocytic) — gingival hyperplasia from leukemic infiltrate. Chloroma is a soft-tissue mass of myeloid blasts; can appear in nasal or oral cavity.' },
+      { q: 'Features and antibody marker of EGPA (eosinophilic granulomatosis with polyangiitis, formerly Churg-Strauss)?', a: 'Three phases — allergic (adult-onset asthma, allergic rhinitis/nasal polyps), eosinophilic (peripheral and tissue eosinophilia), then vasculitic (mononeuritis multiplex, cardiac and pulmonary involvement). p-ANCA / MPO is positive in ~40%.' },
+      { q: 'Induction treatment for severe ANCA-associated vasculitis (e.g., GPA), and the key marker/trial?', a: 'Rituximab (anti-CD20) or cyclophosphamide, each with high-dose glucocorticoids. The RAVE trial showed rituximab non-inferior to cyclophosphamide (and preferred for relapsing disease). Confirm with ANCA (c-ANCA/PR3 for GPA) and biopsy.' }
     ],
     quiz: [
       { stem: 'A 45-year-old presents with chronic crusting in the nose, hoarseness, and worsening dyspnea on exertion. Flexible scope shows subglottic narrowing. Urinalysis shows microscopic hematuria. Most likely diagnosis:',
@@ -18001,6 +18047,7 @@ let state = {
   managerProgress: {}, // the manager's canonical progress — never overwritten by a doctor session
   chapterPdfs: {}, // { chapterNum: filename } — which chapters have a source PDF saved (blob in IndexedDB)
   lastLocation: null,     // { week, tab } — exact last study spot, for one-tap resume
+  lastPodcast: null,      // { week, at } — last podcast opened, for the Home "Resume podcast" band
   hasFullCummings: false, // manager uploaded the full licensed Cummings PDF once (stored in IndexedDB on this device)
   fullCummingsName: '',   // filename of the uploaded full book
   pageOverrides: {}, // { weekNum: pageNumber } — user's PDF calibration
@@ -18008,6 +18055,7 @@ let state = {
   // Podcast
   podcastWeek: 1,
   podcastTurn: -1,           // index of currently-speaking turn; -1 = stopped
+  podcastResume: {},         // { [week]: turnIndex } — exact paragraph to resume each podcast from
   podcastStatus: 'stopped',  // 'stopped' | 'playing' | 'paused'
   // Anatomy
   anatQuery: '',
@@ -18124,7 +18172,8 @@ let state = {
   // Smart Search
   smartSearchQuery: '',
   // Cross-chapter Practice Quiz
-  practiceConfig: { size: 20, source: 'all', style: 'mixed' }, // size 10/20/30/50; source 'all'|'completed'; style 'mixed'|'usmle'|'recall'
+  practiceConfig: { size: 20, source: 'completed', style: 'mixed', difficulty: 'all', weighted: true }, // source 'all'|'completed'|'cummings'|'exam'; difficulty 'all'|'easy'|'medium'|'hard'; weighted = surface harder/missed more often
+  qStats: {},            // per-question record { 'wn:qi': { s:seen, w:wrong } } → drives difficulty weighting
   practiceSession: null,   // { questions: [{wn, qi, q}], idx, answers: [], startedAt }
   practiceHistory: [],     // [{date, score, total, source}]
   // === STUDY TRACKING & GAMIFICATION ===
@@ -18252,7 +18301,8 @@ function loadStored() {
       state.projects = Array.isArray(parsed.projects) ? parsed.projects : [];
       state.chapterChats = parsed.chapterChats || {};
       state.practiceHistory = parsed.practiceHistory || [];
-      state.practiceConfig = parsed.practiceConfig || { size: 20, source: 'all', style: 'mixed' };
+      state.practiceConfig = Object.assign({ size: 20, source: 'completed', style: 'mixed', difficulty: 'all', weighted: true }, parsed.practiceConfig || {});
+      state.qStats = parsed.qStats || {};
       state.studyDays = parsed.studyDays || [];
       state.studyMinutes = parsed.studyMinutes || {};
       state.studyGoal = parsed.studyGoal || { chaptersPerWeek: 2, minutesPerDay: 30 };
@@ -18268,6 +18318,8 @@ function loadStored() {
       state.hasFullCummings = !!parsed.hasFullCummings;
       state.fullCummingsName = parsed.fullCummingsName || '';
       state.lastLocation = parsed.lastLocation || null;
+      state.lastPodcast = parsed.lastPodcast || null;
+      state.podcastResume = parsed.podcastResume || {};
       state.extendedPodcasts = (parsed.extendedPodcasts && typeof parsed.extendedPodcasts === 'object') ? parsed.extendedPodcasts : {};
       // Reset daily counter if a new day
       const today = new Date().toISOString().slice(0,10);
@@ -18391,6 +18443,7 @@ function persist() {
       chapterChats: state.chapterChats,
       practiceHistory: state.practiceHistory,
       practiceConfig: state.practiceConfig,
+      qStats: state.qStats,
       studyDays: state.studyDays,
       studyMinutes: state.studyMinutes,
       studyGoal: state.studyGoal,
@@ -18406,7 +18459,9 @@ function persist() {
       chapterPdfs: state.chapterPdfs,
       hasFullCummings: state.hasFullCummings,
       fullCummingsName: state.fullCummingsName,
-      lastLocation: state.lastLocation
+      lastLocation: state.lastLocation,
+      lastPodcast: state.lastPodcast,
+      podcastResume: state.podcastResume
     });
     // ALWAYS write the tiny critical bucket FIRST — keys, progress, sign-in. It's small enough
     // that it can't hit the ~5 MB quota, so even if the big blob below fails, the user never
@@ -18427,6 +18482,8 @@ function persist() {
     // Durability mirror: also write the snapshot to IndexedDB (far more eviction-resistant than
     // localStorage on Safari). On boot we auto-restore from here if localStorage was cleared.
     _scheduleBackupMirror(_payload);
+    // Cloud sync: debounced push so changes follow you to your other devices.
+    try { if (typeof _syncSchedulePush === 'function') _syncSchedulePush(); } catch(e){}
   } catch (e) { /* ignore */ }
 }
 /* The small, always-saved record: API keys, progress, and sign-in. Kept separate from the big
@@ -18814,11 +18871,22 @@ function render() {
     ${state.showDailyPractice ? renderDailyPractice() : ''}
   `;
   attachListeners();
+  try { if (typeof _initHighlightMenu === 'function') _initHighlightMenu(); } catch(e){}
+  try { if (typeof applyHighlights === 'function') applyHighlights(); } catch(e){}
+  // Self-heal a stuck page scroll: a modal/overlay locks body overflow, and if it ever closes via an
+  // unexpected path the lock could persist (scroll "sticks" until refresh). On every render, if none
+  // of the overlays are actually present, force scrolling back on.
+  try {
+    var _ovOpen = document.getElementById('entv-overlay') || document.getElementById('dr-overlay') || document.getElementById('ent-durability-modal');
+    document.body.style.overflow = _ovOpen ? 'hidden' : '';
+  } catch(e){}
   try { const _fab = document.getElementById('oe-fab'); if (_fab) _fab.style.display = ''; } catch(e){}
   // Refresh the persistent floating mini-player (lives outside #app so it survives renders)
   if (typeof updateFloatingPlayer === 'function') updateFloatingPlayer();
   if (typeof updateResumeFab === 'function') updateResumeFab();
   if (typeof updateBackFab === 'function') updateBackFab();
+  // Populate the built-in chapter PDF reader (canvas pages) when its modal is open.
+  try { if (typeof ensureChapReader === 'function') ensureChapReader(); } catch(e){}
   // Start the quiz timer ticker if needed
   if (typeof startQuizTimerTicker === 'function') startQuizTimerTicker();
   // Restore last visited Teaching scroll position if applicable
@@ -19196,18 +19264,45 @@ function renderChapterModal() {
   const fileInput = `<input id="chapter-pdf-input" type="file" accept="application/pdf,.pdf" style="display:none;" onchange="window.__pickChapterPdf(this)">`;
 
   if (blobReady) {
+    const useReader = state.chapterPdfFromBook && state.chapterReaderMode !== false;
+    const scale = Number(state.chapReaderScale) || 1.35;
+    if (useReader) {
+      // Built-in chapter reader: only this chapter's pages, scrollable, images included.
+      const nativePage = pageForChapter(num);
+      return `
+        <div class="pdf-modal">
+          <div class="pdf-modal-bar">
+            <span class="meta">Cummings Ch.${num}</span>
+            <span class="title">${escapeHTML(c.title)}</span>
+            <span class="pdf-hint" style="font-size:11.5px;color:rgba(255,255,255,.7);">Scroll to read · chapter only</span>
+            <button onclick="window.__chapZoom(-1)" title="Zoom out">−</button>
+            <button onclick="window.__chapZoom(1)" title="Zoom in">+</button>
+            <button data-action="chapter-pdf-replace" data-chapter="${num}">Use a per-chapter PDF</button>
+            <button onclick="window.__chapToggleViewer()" title="Open the full book in the browser's PDF viewer (search, print)">Browser viewer ↗</button>
+            <button data-action="close-chapter-modal">Close ✕</button>
+          </div>
+          ${fileInput}
+          <div id="chap-reader" class="pdf-modal-frame" data-chap="${num}" data-scale="${scale}"
+               style="overflow:auto;-webkit-overflow-scrolling:touch;background:#2a2f3a;padding:16px 10px;"></div>
+        </div>
+      `;
+    }
+    // Native browser PDF viewer (per-chapter PDFs, or the full book jumped to the chapter page).
+    const jump = state.chapterPdfFromBook && pageForChapter(num) ? ('#page=' + pageForChapter(num)) : '';
+    const src = state.chapterPdfUrl + (jump || (/#/.test(state.chapterPdfUrl) ? '' : '#search='));
     return `
       <div class="pdf-modal">
         <div class="pdf-modal-bar">
           <span class="meta">Cummings Ch.${num}${state.chapterPdfFromBook && pageForChapter(num) ? ' · p.' + pageForChapter(num) : ''}</span>
           <span class="title">${escapeHTML(c.title)}</span>
           <span class="pdf-hint" style="font-size:11.5px;color:rgba(255,255,255,.7);">🔎 search with Ctrl/⌘+F or the viewer toolbar</span>
+          ${state.chapterPdfFromBook ? `<button onclick="window.__chapToggleViewer()" title="Back to the chapter-only reader">📖 Chapter reader</button>` : ''}
           <button onclick="try{window.open(state.chapterPdfUrl,'_blank');}catch(e){}">Open in new tab ↗</button>
           <button data-action="chapter-pdf-replace" data-chapter="${num}">${state.chapterPdfFromBook ? 'Use a per-chapter PDF' : 'Replace'}</button>
           <button data-action="close-chapter-modal">Close ✕</button>
         </div>
         ${fileInput}
-        <iframe class="pdf-modal-frame" src="${state.chapterPdfUrl}${/#/.test(state.chapterPdfUrl) ? '' : '#search='}" title="${escapeHTML(c.title)}" allow="fullscreen"></iframe>
+        <iframe class="pdf-modal-frame" src="${src}" title="${escapeHTML(c.title)}" allow="fullscreen"></iframe>
       </div>
     `;
   }
@@ -19404,6 +19499,7 @@ function renderView() {
     case 'projects':      return !isManager() ? renderDashboard() : (state.activeProjectId ? renderProjectDetail() : renderProjectsList());
     case 'smart-search':  return renderSmartSearch();
     case 'practice':      return renderPractice();
+    case 'difficulty':    return renderDifficultyBrowser();
     case 'tumor-board':   return renderTumorBoard();
     case 'my-research':    return !isManager() ? renderDashboard() : renderMyResearch();
     case 'notebook':       return renderNotebook();
@@ -19605,24 +19701,44 @@ function renderDashboard() {
   const onFileProto = (typeof location !== 'undefined' && location.protocol === 'file:');
   const showInstall = !standalone && (isIOS() || onFileProto);
 
-  // --- RESUME CARD: pick up where you left off ---
+  // --- CONTINUE BANNER: pick up EXACTLY where you left off (chapter OR podcast) ---
+  // Drive off the true last location first (set on every tab/section/podcast visit), so it appears
+  // even if the user only listened to a podcast and never "completed" anything.
   const lastEntry = recent[0]; // [weekNum, progress]
-  const resumeWeek = lastEntry ? getWeek(Number(lastEntry[0])) : null;
-  const resumeProg = lastEntry ? lastEntry[1] : null;
+  const locWeekNum = (state.lastLocation && state.lastLocation.week) || (lastEntry ? Number(lastEntry[0]) : null);
+  const resumeWeek = locWeekNum ? getWeek(locWeekNum) : null;
+  const resumeProg = resumeWeek ? (state.progress[resumeWeek.week] || (lastEntry ? lastEntry[1] : null)) : null;
   const resumeTime = resumeProg && resumeProg.lastVisited ? new Date(resumeProg.lastVisited) : null;
   const resumeAgo = resumeTime ? humanTimeAgo(resumeTime) : '';
-  // Resume to the EXACT spot: the tab + section the user was last reading in this chapter.
-  const resumeTab = (state.lastLocation && state.lastLocation.week === (resumeWeek && resumeWeek.week) && state.lastLocation.tab) || 'teaching';
+  let resumeTab = (state.lastLocation && state.lastLocation.week === (resumeWeek && resumeWeek.week) && state.lastLocation.tab) || 'teaching';
   const resumeSection = (state.lastTeachingSection && resumeWeek && state.lastTeachingSection[resumeWeek.week]) || '';
-  const resumeHTML = resumeWeek ? `
-    <div class="resume-card" data-action="open-week-section" data-week="${resumeWeek.week}" data-tab="${resumeTab}" data-section="${resumeSection}" role="button" tabindex="0" aria-label="Resume Chapter ${resumeWeek.chapter || resumeWeek.week} — ${escapeAttr(resumeWeek.title)}">
-      <div class="resume-card-art" aria-hidden="true">▶</div>
-      <div class="resume-card-body">
-        <div class="resume-card-eyebrow">Pick up where you left off · ${resumeAgo}</div>
-        <div class="resume-card-title">Ch.${resumeWeek.chapter || resumeWeek.week} · ${escapeHTML(resumeWeek.title)}</div>
-        <div class="resume-card-sub">${getSection(resumeWeek.section).name}${resumeProg.completed ? ' · ✓ marked complete' : resumeProg.quizScore !== undefined ? ' · Quiz ' + resumeProg.quizScore + '/' + resumeProg.quizTotal : ' · In progress'}</div>
+  // Decide if the podcast was the most recent thing — if so, resume it directly (its own player view).
+  const lp = state.lastPodcast;
+  const _resumeMs = resumeTime ? resumeTime.getTime() : 0;
+  const podMoreRecent = lp && lp.week && (lp.at || 0) >= _resumeMs;
+  let podWeek = podMoreRecent ? getWeek(lp.week) : null;
+  const isPod = !!podWeek || resumeTab === 'podcast';
+  const targetWeek = podWeek || resumeWeek;
+  const _kind = isPod ? 'podcast' : (resumeTab === 'quiz' ? 'quiz' : resumeTab === 'flashcards' ? 'flashcards' : 'chapter');
+  const _verb = isPod ? 'Resume the podcast' : 'Continue where you left off';
+  const _icon = isPod ? '🎧' : '▶';
+  const _ago = (isPod && lp && lp.at) ? humanTimeAgo(new Date(lp.at)) : resumeAgo;
+  const _substatus = (!isPod && resumeProg && resumeProg.completed) ? '✓ marked complete'
+      : (!isPod && resumeProg && resumeProg.quizScore !== undefined) ? ('Quiz ' + resumeProg.quizScore + '/' + resumeProg.quizTotal)
+      : (isPod ? 'Listening' : 'In progress');
+  // Podcast → pod-select (opens the dedicated player). Otherwise → open-week-section (tab + anchor).
+  const _attrs = isPod
+    ? `data-action="pod-select" data-week="${targetWeek.week}"`
+    : `data-action="open-week-section" data-week="${targetWeek.week}" data-tab="${resumeTab}" data-section="${resumeSection}"`;
+  const resumeHTML = targetWeek ? `
+    <div class="continue-hero" ${_attrs} role="button" tabindex="0" aria-label="${escapeAttr(_verb)} — Chapter ${targetWeek.chapter || targetWeek.week}, ${escapeAttr(targetWeek.title)}">
+      <div class="continue-hero-ico" aria-hidden="true">${_icon}</div>
+      <div class="continue-hero-body">
+        <div class="continue-hero-eyebrow">${escapeHTML(_verb)}${_ago ? ' · ' + _ago : ''}</div>
+        <div class="continue-hero-title">Ch.${targetWeek.chapter || targetWeek.week} · ${escapeHTML(targetWeek.title)}</div>
+        <div class="continue-hero-sub">${escapeHTML(getSection(targetWeek.section).name)} · ${_kind} · ${escapeHTML(_substatus)}</div>
       </div>
-      <button class="btn btn-primary" data-action="open-week-section" data-week="${resumeWeek.week}" data-tab="${resumeTab}" data-section="${resumeSection}" aria-label="Continue chapter">Continue →</button>
+      <button class="btn continue-hero-btn" ${_attrs} aria-label="${escapeAttr(_verb)}">${isPod ? '🎧 Resume' : 'Continue'} →</button>
     </div>
   ` : '';
 
@@ -19706,12 +19822,12 @@ function renderDashboard() {
 
   return `
     ${heroHTML}
+    ${resumeHTML}
     ${statRowHTML}
 
     ${typeof renderDailyPracticeWidget==='function'?renderDailyPracticeWidget():''}
     ${typeof renderDailyReviewWidget==='function'?renderDailyReviewWidget():''}
 
-    ${resumeHTML}
     ${challengeHTML}
 
     ${!(state.openaiKey || state.elevenLabsKey) ? `
@@ -21223,12 +21339,7 @@ function applyExtraTeach() {
       if (!c || !Array.isArray(c.podcastScript) || !c.podcastScript.length || c.__teachInserted) return;
       var turns = EXTRA_TEACH[k].map(function(t){ return { speaker: (t.speaker === 'cohost' ? 'cohost' : 'host'), text: String(t.text || '').trim() }; }).filter(function(t){ return t.text; });
       if (!turns.length) return;
-      var idx = -1;
-      for (var i = 0; i < c.podcastScript.length; i++) {
-        var x = String(c.podcastScript[i].text || '');
-        if (/(here'?s|let'?s\s+(do|put|try|walk|work)|take|consider)\b[^.]{0,40}\bcase\b/i.test(x) || /\bclinical case\b/i.test(x)) { idx = i; break; }
-      }
-      if (idx < 0) idx = Math.max(0, c.podcastScript.length - 2);
+      var idx = _closingCaseIndex(c.podcastScript);
       c.podcastScript.splice.apply(c.podcastScript, [idx, 0].concat(turns));
       c.__teachInserted = true;
     });
@@ -21323,14 +21434,92 @@ function applyExtraTeach2(){
       if(!c||!Array.isArray(c.podcastScript)||!c.podcastScript.length||c.__teach2) return;
       var turns=EXTRA_TEACH2[k].map(function(t){ return { speaker:(t.speaker==='cohost'?'cohost':'host'), text:String(t.text||'').trim() }; }).filter(function(t){ return t.text; });
       if(!turns.length) return;
-      var idx=-1;
-      for(var i=0;i<c.podcastScript.length;i++){ var x=String(c.podcastScript[i].text||''); if(/(here'?s|let'?s\s+(do|put|try|walk|work)|take|consider)\b[^.]{0,40}\bcase\b/i.test(x)||/\bclinical case\b/i.test(x)){ idx=i; break; } }
-      if(idx<0) idx=Math.max(0,c.podcastScript.length-2);
+      var idx = _closingCaseIndex(c.podcastScript);
       c.podcastScript.splice.apply(c.podcastScript,[idx,0].concat(turns));
       c.__teach2=true;
     });
   }catch(e){ try{console.warn('applyExtraTeach2 failed',e);}catch(_){} }
 }
+
+/* ---- Right-click study highlighter ----
+   Right-click a selected term (or, with nothing selected, the line/block under the cursor) to toggle
+   a persistent yellow highlight for studying. Right-click an existing highlight to remove it. Stored
+   per chapter in its own localStorage bucket and re-applied after every render. */
+var _hlCache=null; var HL_KEY='ent-study-hl-v1';
+function _hlLoad(){ if(_hlCache) return _hlCache; try{ _hlCache=JSON.parse(localStorage.getItem(HL_KEY)||'{}')||{}; }catch(e){ _hlCache={}; } return _hlCache; }
+function _hlSave(){ try{ localStorage.setItem(HL_KEY, JSON.stringify(_hlLoad())); }catch(e){} }
+function _hlWeek(){ return state.selectedWeek || state.podcastWeek || 0; }
+function _getHL(wk){ var c=_hlLoad(); return c[wk]||[]; }
+function _addHL(wk,s){ s=String(s||'').replace(/\s+/g,' ').trim(); if(s.length<2||s.length>300) return; var c=_hlLoad(); c[wk]=c[wk]||[]; if(c[wk].indexOf(s)<0){ c[wk].push(s); _hlSave(); } }
+function _removeHL(wk,s){ var c=_hlLoad(); if(c[wk]){ c[wk]=c[wk].filter(function(x){return x!==s;}); _hlSave(); } }
+function _wrapText(root, term){
+  try{
+    var walker=document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode:function(n){
+      if(!n.nodeValue||n.nodeValue.indexOf(term)<0) return NodeFilter.FILTER_SKIP;
+      var p=n.parentNode; if(!p) return NodeFilter.FILTER_SKIP;
+      var t=p.nodeName; if(t==='MARK'||t==='SCRIPT'||t==='STYLE'||t==='INPUT'||t==='TEXTAREA'||t==='OPTION') return NodeFilter.FILTER_SKIP;
+      return NodeFilter.FILTER_ACCEPT;
+    }});
+    var nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(function(n){
+      var idx=n.nodeValue.indexOf(term); if(idx<0) return;
+      var after=n.splitText(idx); after.nodeValue=after.nodeValue.substring(term.length);
+      var mark=document.createElement('mark'); mark.className='study-hl'; mark.textContent=term; mark.setAttribute('data-hl',term); mark.title='Right-click to remove highlight';
+      n.parentNode.insertBefore(mark, after);
+    });
+  }catch(e){}
+}
+function applyHighlights(){
+  try{
+    var wk=_hlWeek(); if(!wk) return;
+    var strs=_getHL(wk); if(!strs.length) return;
+    var root=document.getElementById('main-content')||document.getElementById('app'); if(!root) return;
+    strs.slice().sort(function(a,b){return b.length-a.length;}).forEach(function(s){ _wrapText(root, s); });
+  }catch(e){}
+}
+function _initHighlightMenu(){
+  if(window.__hlMenuInit) return; window.__hlMenuInit=true;
+  try{
+    var st=document.createElement('style');
+    st.textContent='mark.study-hl{background:#fde68a;color:inherit;border-radius:3px;padding:0 1px;box-shadow:0 0 0 1px rgba(180,120,0,.25);cursor:pointer;}[data-theme="dark"] mark.study-hl{background:rgba(250,204,21,.32);color:#fde68a;}';
+    document.head.appendChild(st);
+  }catch(e){}
+  var app=document.getElementById('app'); if(!app) return;
+  app.addEventListener('contextmenu', function(e){
+    try{
+      var wk=_hlWeek(); if(!wk) return;
+      var mk=e.target.closest && e.target.closest('mark.study-hl');
+      if(mk){ e.preventDefault(); _removeHL(wk, mk.getAttribute('data-hl')); if(typeof setState==='function') setState({}); return; }
+      var sel=(window.getSelection && window.getSelection().toString()) || '';
+      sel=sel.replace(/\s+/g,' ').trim();
+      if(sel && sel.length>=2 && sel.length<=300){ e.preventDefault(); _addHL(wk, sel); try{ window.getSelection().removeAllRanges(); }catch(_){}; if(typeof appToast==='function') appToast('Highlighted for study'); if(typeof setState==='function') setState({}); return; }
+      var blk=e.target.closest && e.target.closest('.quiz-stem,.turn,li,p,.kp-item,.pearl-item,td,.slide-body');
+      if(blk){ var txt=(blk.textContent||'').replace(/\s+/g,' ').trim(); if(txt && txt.length>=2 && txt.length<=300){ e.preventDefault(); _addHL(wk, txt); if(typeof setState==='function') setState({}); } }
+    }catch(err){}
+  });
+}
+
+function _closingCaseIndex(ps){
+  if(!Array.isArray(ps)||!ps.length) return 0;
+  var start=Math.floor(ps.length*0.5);
+  for(var i=start;i<ps.length;i++){
+    var x=String((ps[i]&&ps[i].text)||'');
+    if(/\blet'?s\s+(do|put|try|walk|work)\b[^.]{0,40}\bcase\b/i.test(x)||/\bclinical case\b/i.test(x)||/\bcase:\b/i.test(x)||/\b\d{1,3}[-\s]year[-\s]old\b/i.test(x)) return i;
+  }
+  return Math.max(0, ps.length-2);
+}
+window.__readQuizQ=function(i){
+  try{
+    var qs=window.__activeQuizRef||[]; var q=qs[i]; if(!q||!Array.isArray(q.options)) return;
+    if(!('speechSynthesis' in window)){ if(typeof appToast==='function')appToast('Read-aloud is not supported on this browser.'); return; }
+    window.speechSynthesis.cancel();
+    var letters='ABCDEFGH';
+    var text=String(q.stem||'')+'. '+q.options.map(function(o,ix){return letters[ix]+'. '+String(o);}).join('. ');
+    text=text.replace(/<[^>]+>/g,' ');
+    var u=new SpeechSynthesisUtterance(text); u.rate=1.0; u.pitch=1.0; try{u.lang='en-US';}catch(e){}
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+};
 
 function applyClosingCases() {
   try {
@@ -22529,7 +22718,10 @@ function renderQuiz(asTab) {
     ` : '';
     return `
       <div class="quiz-q">
-        <div class="quiz-num">Question ${i+1}</div>
+        <div class="quiz-num" style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <span>Question ${i+1}</span>
+          <button class="btn btn-sm btn-light" onclick="window.__readQuizQ(${i})" title="Read this question and its options aloud" aria-label="Read question ${i+1} aloud" style="padding:3px 9px;font-size:12.5px;">🔊 Read</button>
+        </div>
         <p class="quiz-stem">${q.stem}</p>
         <div class="quiz-options">${optsHTML}</div>
         ${explain}
@@ -22611,6 +22803,8 @@ function renderResources() {
         <div style="margin-top:12px;font-size:12.5px;color:var(--text-soft);line-height:1.6;">You're in <strong>study mode</strong> — read, listen, and practice freely; your progress is saved under your name on this device. Editing the app's content is reserved for the manager.</div>
       `}
     </div>
+
+    ${renderSyncPanel()}
 
     <!-- ====== TOP: API KEYS — this is what most users come here for ====== -->
     <div style="background:linear-gradient(135deg,#4338ca 0%,#7c3aed 100%);color:#fff;border-radius:18px;padding:24px;margin-bottom:20px;">
@@ -22761,10 +22955,16 @@ function renderPodcast() {
       : state.openaiKey
       ? 'OpenAI HD voices — set your host & cohost in Settings → Voice Studio.'
       : 'Browser voice (robotic). Add an OpenAI or ElevenLabs key in Settings for HD narration.';
+    // "Resume from paragraph N" chip when there's a saved spot and we're not already playing.
+    var _resumeTurn = (state.podcastResume && typeof state.podcastResume[wn] === 'number') ? state.podcastResume[wn] : -1;
+    var resumeChip = (_resumeTurn > 0 && status !== 'playing')
+      ? `<span style="display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#ddd6fe;background:rgba(255,255,255,.10);padding:5px 10px;border-radius:999px;">▶ Resuming from paragraph ${_resumeTurn + 1} of ${c.podcastScript.length}<button data-action="pod-restart" data-week="${wn}" style="background:none;border:0;color:#fca5a5;font-size:12px;cursor:pointer;text-decoration:underline;padding:0;">start over</button></span>`
+      : '';
     var heroControls = `
       <div class="pod-controls">
         ${playBtn}
         ${stopBtn}
+        ${resumeChip}
         ${liveDot}
         <span style="margin-left:auto;font-size:12px;color:#c4b5fd;">${_engineHint}</span>
       </div>`;
@@ -23509,6 +23709,15 @@ const TTS = {
     }
     const turn = c.podcastScript[turnIndex];
     state.podcastTurn = turnIndex;
+    // Remember the exact paragraph so this podcast resumes here next time (persisted + synced).
+    try {
+      if (state.podcastWeek != null) {
+        if (!state.podcastResume) state.podcastResume = {};
+        // At the last turn we've effectively finished → clear so it starts fresh next time.
+        if (turnIndex >= c.podcastScript.length - 1) delete state.podcastResume[state.podcastWeek];
+        else state.podcastResume[state.podcastWeek] = turnIndex;
+      }
+    } catch(e){}
     // SURGICAL UPDATE — no full render(), so no flicker on every speaker change
     updatePodcastDOM();
     updateFloatingPlayer();
@@ -23704,6 +23913,7 @@ const TTS = {
     // state.podcastStatus after the await), and clearing the loader restores the ⏸/▶ control.
     state.podcastStatus = 'paused';
     state.podcastLoading = false;
+    try { persist(); } catch(e){}   // save the resume paragraph
     updatePodcastDOM();
     updateFloatingPlayer();
   },
@@ -23712,6 +23922,7 @@ const TTS = {
     if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     state.podcastStatus = 'stopped';
     state.podcastTurn = -1;
+    try { persist(); } catch(e){}   // keep the per-chapter resume point
     updatePodcastDOM();
     updateFloatingPlayer();
   },
@@ -26363,6 +26574,74 @@ function smartSearchIndex(q) {
    Random questions from all CONTENT chapters. Configurable size + source filter +
    style filter. Tracks history of last 10 sessions. */
 
+/* ===================== QUESTION DIFFICULTY + PERFORMANCE WEIGHTING =====================
+   Difficulty combines (a) a heuristic read of the question and (b) YOUR track record on it.
+   Harder / more-often-missed questions get a higher sampling weight, so practice sessions
+   surface them more frequently — you rehearse the dangerous ones more, the easy ones less. */
+function qidOf(wn, qi) { return wn + ':' + qi; }
+function _qStats() { if (!state.qStats) state.qStats = {}; return state.qStats; }
+function qStat(id) { var m = _qStats(); return m[id] || { s: 0, w: 0 }; }
+/* Record one answered question (correct true/false). Called from every quiz surface. */
+function recordAnswer(wn, qi, correct) {
+  try {
+    var m = _qStats(); var id = qidOf(wn, qi);
+    var r = m[id] || { s: 0, w: 0 };
+    r.s += 1; if (!correct) r.w += 1;
+    r.last = Date.now();
+    m[id] = r;
+  } catch(e){}
+}
+/* Heuristic 0..1 difficulty from the question text/shape (used before you've answered it). */
+function heurDiff(q) {
+  if (!q || !q.stem) return 0.4;
+  var s = String(q.stem);
+  var score = 0.30;
+  var len = s.length;
+  if (len > 260) score += 0.22; else if (len > 170) score += 0.12; else if (len < 90) score -= 0.08;
+  if (/\byear[\- ]?old\b|\bpresents with\b|\bpatient\b/i.test(s)) score += 0.16;   // vignette
+  if (/\bEXCEPT\b|\bnot\b|\bleast\b/i.test(s)) score += 0.14;                       // negative stem
+  if (/\bmost appropriate\b|\bbest next\b|\bnext step\b|\bmost likely\b|\binitial\b/i.test(s)) score += 0.10;
+  if (q.options && q.options.length >= 5) score += 0.06;
+  return Math.max(0, Math.min(1, score));
+}
+/* Combine heuristic + your miss-rate + SRS ease into one 0..1 score and a bucket + weight. */
+function qDifficulty(wn, qi, q) {
+  var id = qidOf(wn, qi);
+  var st = qStat(id);
+  var heur = heurDiff(q);
+  var score, missRate = 0;
+  if (st.s > 0) {
+    missRate = st.w / st.s;
+    score = 0.45 * heur + 0.55 * missRate;
+  } else {
+    score = heur;
+  }
+  // SRS ease (if practised): a low ease means you keep finding it hard.
+  try {
+    var rec = (typeof qsrsCard === 'function') ? qsrsCard(wn, qi) : null;
+    if (rec && typeof rec.ease === 'number' && rec.ease < 2.0) score = Math.min(1, score + 0.15);
+  } catch(e){}
+  var level = score >= 0.62 ? 'hard' : score >= 0.36 ? 'medium' : 'easy';
+  // Sampling weight: hard/medium/easy base, then a big boost for questions you actually miss.
+  var base = level === 'hard' ? 3 : level === 'medium' ? 2 : 1;
+  var weight = base + missRate * 3;
+  return { id: id, score: score, level: level, weight: weight, seen: st.s, wrong: st.w, missRate: missRate };
+}
+/* Weighted sampling WITHOUT replacement: higher-weight items are more likely to be picked. */
+function weightedSample(items, n, weightFn) {
+  var pool = items.slice();
+  var out = [];
+  n = Math.min(n, pool.length);
+  for (var k = 0; k < n; k++) {
+    var total = 0, i;
+    for (i = 0; i < pool.length; i++) total += Math.max(0.0001, weightFn(pool[i]));
+    var r = Math.random() * total, acc = 0, pick = pool.length - 1;
+    for (i = 0; i < pool.length; i++) { acc += Math.max(0.0001, weightFn(pool[i])); if (r <= acc) { pick = i; break; } }
+    out.push(pool[pick]); pool.splice(pick, 1);
+  }
+  return out;
+}
+
 function gatherAllQuestions(opts) {
   opts = opts || {};
   const out = [];
@@ -26401,18 +26680,29 @@ function gatherAllQuestions(opts) {
 }
 
 function startPracticeSession() {
-  const cfg = state.practiceConfig || { size: 20, source: 'all', style: 'mixed' };
-  const all = gatherAllQuestions(cfg);
+  const cfg = state.practiceConfig || { size: 20, source: 'completed', style: 'mixed', difficulty: 'all', weighted: true };
+  let all = gatherAllQuestions(cfg);
+  // "Studied chapters" is the default; if you haven't completed any yet, fall back to all so you're never stuck.
+  if (!all.length && cfg.source === 'completed') {
+    all = gatherAllQuestions(Object.assign({}, cfg, { source: 'all' }));
+    if (all.length) { try { appToast('No completed chapters yet — practising from all chapters for now.'); } catch(e){} }
+  }
+  // Difficulty filter (easy/medium/hard) — computed per question from heuristic + your record.
+  if (cfg.difficulty && cfg.difficulty !== 'all') {
+    all = all.filter(it => qDifficulty(it.wn, it.qi, it.q).level === cfg.difficulty);
+  }
   if (!all.length) {
-    alert('No questions available with the current filters. Try changing the source or style.');
+    alert('No questions available with the current filters. Try changing the source, difficulty, or style.');
     return;
   }
-  // Shuffle
-  for (let i = all.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [all[i], all[j]] = [all[j], all[i]];
+  let questions;
+  if (cfg.weighted === false) {
+    for (let i = all.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [all[i], all[j]] = [all[j], all[i]]; }
+    questions = all.slice(0, Math.min(cfg.size, all.length));
+  } else {
+    // Weighted draw: harder + more-often-missed questions appear more frequently.
+    questions = weightedSample(all, Math.min(cfg.size, all.length), it => qDifficulty(it.wn, it.qi, it.q).weight);
   }
-  const questions = all.slice(0, Math.min(cfg.size, all.length));
   state.practiceSession = {
     questions, idx: 0, answers: new Array(questions.length).fill(null),
     startedAt: Date.now(), config: { ...cfg }, submitted: false
@@ -27001,6 +27291,10 @@ function renderPractice() {
     return renderPracticeSession(session);
   }
   const cfg = state.practiceConfig || { size: 20, source: 'all', style: 'mixed' };
+  // Difficulty split for the CURRENTLY selected source, so the counts reflect what you'd practise.
+  const _poolForDiff = gatherAllQuestions({ source: cfg.source, style: 'mixed' });
+  const _diffCounts = { easy: 0, medium: 0, hard: 0 };
+  _poolForDiff.forEach(it => { const lv = qDifficulty(it.wn, it.qi, it.q).level; _diffCounts[lv]++; });
   const allCount = gatherAllQuestions({ source: 'all', style: 'mixed' }).length;
   const completedCount = gatherAllQuestions({ source: 'completed', style: 'mixed' }).length;
   const usmleCount = gatherAllQuestions({ source: 'all', style: 'usmle' }).length;
@@ -27045,9 +27339,26 @@ function renderPractice() {
         </div>
       </div>
 
+      <div style="margin-bottom:14px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Difficulty</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="${(cfg.difficulty||'all') === 'all' ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-difficulty" data-difficulty="all">All</button>
+          <button class="${cfg.difficulty === 'easy' ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-difficulty" data-difficulty="easy">🟢 Easy (${_diffCounts.easy})</button>
+          <button class="${cfg.difficulty === 'medium' ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-difficulty" data-difficulty="medium">🟠 Medium (${_diffCounts.medium})</button>
+          <button class="${cfg.difficulty === 'hard' ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-difficulty" data-difficulty="hard">🔴 Hard (${_diffCounts.hard})</button>
+        </div>
+      </div>
+
+      <label style="display:flex;align-items:center;gap:9px;margin-bottom:18px;cursor:pointer;font-size:13.5px;color:var(--text);">
+        <input type="checkbox" ${cfg.weighted !== false ? 'checked' : ''} data-action="practice-toggle-weighted" style="width:17px;height:17px;">
+        <span>Surface harder &amp; more-often-missed questions more frequently <span style="color:var(--text-soft);">(recommended — practises your weak spots)</span></span>
+      </label>
+
       <button class="btn btn-primary" style="font-size:16px;padding:14px 28px;" data-action="practice-start">
         🚀 Start ${cfg.size}-question session
       </button>
+
+      <button class="btn btn-ghost" style="font-size:13.5px;margin-left:8px;" data-action="nav" data-view="difficulty">📊 Browse questions by difficulty →</button>
     </div>
 
     ${history.length ? `
@@ -27076,6 +27387,76 @@ function renderPractice() {
         <p>Your session history will show here.</p>
       </div>
     `}
+  `;
+}
+
+/* Browse the whole question bank grouped by difficulty (easy / medium / hard), with YOUR accuracy
+   on each. Difficulty = heuristic read of the question blended with your own miss-rate + SRS ease. */
+function renderDifficultyBrowser() {
+  const cfg = state.practiceConfig || { source: 'completed', style: 'mixed' };
+  const src = cfg.source || 'completed';
+  let pool = gatherAllQuestions({ source: src, style: 'mixed' });
+  if (!pool.length && src === 'completed') pool = gatherAllQuestions({ source: 'all', style: 'mixed' });
+  const tagged = pool.map(it => ({ it, d: qDifficulty(it.wn, it.qi, it.q) }));
+  const buckets = { hard: [], medium: [], easy: [] };
+  tagged.forEach(t => buckets[t.d.level].push(t));
+  Object.keys(buckets).forEach(k => buckets[k].sort((a, b) => b.d.score - a.d.score));
+  const open = state.diffBucketOpen || 'hard';
+  const meta = {
+    hard:   { label: 'Hard',   emoji: '🔴', color: '#dc2626', bg: '#fef2f2' },
+    medium: { label: 'Medium', emoji: '🟠', color: '#b45309', bg: '#fffbeb' },
+    easy:   { label: 'Easy',   emoji: '🟢', color: '#15803d', bg: '#f0fdf4' }
+  };
+  const srcBtn = (val, label) => `<button class="${src === val ? 'btn btn-primary' : 'btn btn-ghost'}" data-action="practice-set-source" data-source="${val}" style="font-size:12.5px;">${label}</button>`;
+  const bucketCard = (key) => {
+    const m = meta[key]; const list = buckets[key]; const isOpen = open === key;
+    const rows = list.slice(0, 60).map(({ it, d }) => {
+      const acc = d.seen ? Math.round((1 - d.missRate) * 100) + '% (' + (d.seen - d.wrong) + '/' + d.seen + ')' : 'not tried yet';
+      const stem = String(it.q.stem || '').replace(/<[^>]+>/g, '');
+      const chap = it.source === 'exam' ? (it.chapterTitle || 'Past exam') : ('Ch.' + (it.chapterNum || '?') );
+      return `<div style="padding:9px 0;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;">
+        <span style="flex-shrink:0;font-size:11px;font-weight:700;color:${m.color};background:${m.bg};padding:2px 7px;border-radius:6px;">${chap}</span>
+        <div style="min-width:0;">
+          <div style="font-size:13px;line-height:1.5;color:var(--text);">${escapeHTML(stem.length > 160 ? stem.slice(0,160) + '…' : stem)}</div>
+          <div style="font-size:11.5px;color:var(--text-soft);margin-top:2px;">Your accuracy: ${acc}${d.wrong ? ' · missed ' + d.wrong + '×' : ''}</div>
+        </div>
+      </div>`;
+    }).join('');
+    return `
+      <div class="card" style="margin-bottom:14px;border-left:4px solid ${m.color};">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;cursor:pointer;" data-action="diff-toggle-bucket" data-bucket="${key}">
+          <div style="font-size:22px;">${m.emoji}</div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-family:var(--font-serif);font-size:19px;color:var(--navy-900);">${m.label} · ${list.length} questions</div>
+            <div style="font-size:12px;color:var(--text-soft);">${key === 'hard' ? 'Surfaced most often in weighted practice' : key === 'medium' ? 'Surfaced moderately often' : 'Surfaced least often'}</div>
+          </div>
+          <button class="btn btn-primary" data-action="practice-hard-now" data-difficulty="${key}" style="flex-shrink:0;">Practise ${m.label.toLowerCase()} →</button>
+          <span style="font-size:18px;color:var(--text-soft);flex-shrink:0;">${isOpen ? '▾' : '▸'}</span>
+        </div>
+        ${isOpen ? `<div style="margin-top:8px;max-height:520px;overflow:auto;">${rows || '<div style="padding:14px 0;color:var(--text-soft);font-size:13px;">No questions in this bucket for the current source.</div>'}${list.length > 60 ? `<div style="padding:10px 0;color:var(--text-soft);font-size:12px;">Showing the 60 hardest — practise the bucket to drill the rest.</div>` : ''}</div>` : ''}
+      </div>`;
+  };
+  return `
+    <div class="page-header">
+      <div>
+        <div class="breadcrumb"><span data-action="nav" data-view="practice" style="cursor:pointer;">Practice</span><span class="breadcrumb-dot"></span><span>By difficulty</span></div>
+        <h1 class="page-title">Questions by difficulty 📊</h1>
+        <p class="page-sub">Difficulty blends the question's shape with <strong>your own track record</strong> — ones you miss climb toward “hard”. In weighted practice, hard &amp; missed questions come up more often so you rehearse the dangerous ones.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text-soft);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Source</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;">
+        ${srcBtn('completed', 'Studied chapters')}
+        ${srcBtn('all', 'All chapters')}
+        ${srcBtn('cummings', '📘 Cummings')}
+        ${srcBtn('exam', '📝 שחזורי מבחן')}
+      </div>
+      <div style="font-size:12px;color:var(--text-soft);margin-top:10px;">🔴 ${buckets.hard.length} hard · 🟠 ${buckets.medium.length} medium · 🟢 ${buckets.easy.length} easy · ${pool.length} total</div>
+    </div>
+    ${bucketCard('hard')}
+    ${bucketCard('medium')}
+    ${bucketCard('easy')}
   `;
 }
 
@@ -27466,6 +27847,52 @@ function renderChatMsg(m) {
   `;
 }
 
+function renderSyncPanel() {
+  var c = (typeof syncCfg === 'function') ? syncCfg() : {};
+  var on = !!(c.enabled && c.id);
+  var status = c.status || (on ? 'Sync on.' : '');
+  var idHtml = on
+    ? `<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0;">
+         <code style="background:rgba(255,255,255,.15);padding:8px 12px;border-radius:8px;font-size:14px;letter-spacing:.5px;user-select:all;word-break:break-all;">${escapeHTML(c.id)}</code>
+         <button class="btn" style="background:rgba(255,255,255,.2);color:#fff;" onclick="window.__syncCopyId()">Copy ID</button>
+       </div>
+       <div style="font-size:12px;color:#d1fae5;line-height:1.5;">On your <strong>other</strong> device, open Settings → paste this ID under “Have a Sync ID?” → tap Pair. After that both stay in sync automatically.</div>`
+    : '';
+  return `
+    <div style="background:linear-gradient(135deg,#0f766e 0%,#0ea5e9 100%);color:#fff;border-radius:18px;padding:24px;margin-bottom:20px;">
+      <h2 style="margin:0 0 6px;font-family:var(--font-serif);font-size:24px;color:#fff;">🔄 Sync across your devices</h2>
+      <p style="margin:0 0 4px;font-size:14px;color:#e0f2fe;line-height:1.55;">Continue right where you left off on your phone or computer — progress, notes, highlights and settings follow you.</p>
+      <p style="margin:0 0 14px;font-size:12px;color:#bae6fd;line-height:1.5;">Private to you. Your API keys are <strong>never</strong> synced (they stay on each device), and the big Cummings PDF + downloaded audio stay per-device.</p>
+      ${on ? `
+        ${idHtml}
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn" style="background:#fff;color:#0f766e;font-weight:700;" onclick="window.__syncNow()">Sync now</button>
+          <button class="btn" style="background:rgba(255,255,255,.18);color:#fff;" onclick="window.__syncDisable()">Pause sync</button>
+        </div>
+        <div id="sync-status" style="font-size:12.5px;color:#d1fae5;margin-top:12px;">${escapeHTML(status)}</div>
+        <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,.2);padding-top:12px;">
+          <div style="font-size:12.5px;color:#e0f2fe;margin-bottom:6px;">Pairing a different device to another space? Paste its ID:</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input id="sync-id-input" type="text" placeholder="Sync ID" style="flex:1;min-width:180px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:8px;padding:9px 12px;font-size:13px;outline:none;">
+            <button class="btn" style="background:rgba(255,255,255,.22);color:#fff;" onclick="window.__syncPair()">Pair</button>
+          </div>
+        </div>
+      ` : `
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn" style="background:#fff;color:#0f766e;font-weight:700;" onclick="window.__syncEnableNew()">Turn on sync (this is my first device)</button>
+        </div>
+        <div style="margin-top:16px;border-top:1px solid rgba(255,255,255,.2);padding-top:12px;">
+          <div style="font-size:12.5px;color:#e0f2fe;margin-bottom:6px;">Already turned it on somewhere else? Paste the Sync ID it showed you:</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <input id="sync-id-input" type="text" placeholder="Sync ID from your other device" style="flex:1;min-width:200px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;border-radius:8px;padding:9px 12px;font-size:13px;outline:none;">
+            <button class="btn" style="background:rgba(255,255,255,.22);color:#fff;" onclick="window.__syncPair()">Pair</button>
+          </div>
+        </div>
+        <div id="sync-status" style="font-size:12.5px;color:#d1fae5;margin-top:12px;">${escapeHTML(status)}</div>
+      `}
+    </div>
+  `;
+}
 function renderApiSetup() {
   return `
     <div class="api-setup-card">
@@ -28337,7 +28764,9 @@ function updateBackFab(){
   try {
     var el = document.getElementById('back-fab');
     if (!el) return;
-    var show = __navStack.length > 0 && state.view && state.view !== 'dashboard' && !state.showAuthScreen;
+    // Persistent back control: visible on every screen except the dashboard/auth, even if the nav
+    // stack is empty (goBack() falls back to the dashboard). So a misclick is always one tap to undo.
+    var show = state.view && state.view !== 'dashboard' && !state.showAuthScreen;
     el.classList.toggle('bfab-hidden', !show);
   } catch (e) {}
 }
@@ -28402,6 +28831,15 @@ function attachListeners() {
           const pw = Number(el.dataset.week);
           try { if (typeof TTS !== 'undefined' && TTS.stop) TTS.stop(); } catch(_){}
           state.podcastWeek = pw;
+          state.lastPodcast = { week: pw, at: Date.now() };  // for the Home "Resume podcast" band
+          state.lastLocation = { week: pw, tab: 'podcast' };
+          // Resume from the exact paragraph you last reached in this chapter's podcast.
+          try {
+            var _rt = state.podcastResume && state.podcastResume[pw];
+            var _len = (CONTENT[pw] && CONTENT[pw].podcastScript || []).length;
+            state.podcastTurn = (typeof _rt === 'number' && _rt > 0 && _rt < _len - 1) ? _rt : -1;
+            state.podcastStatus = 'stopped';
+          } catch(e){ state.podcastTurn = -1; }
           setState({ view: 'podcast' });
           safeScrollTo(0);
           try { TTS.prefetchLeadIn(pw); } catch(_){}
@@ -28429,6 +28867,15 @@ function attachListeners() {
           state.lastSessionStart = Date.now();
           markStudyActivity(0);
           state.lastLocation = { week: wn, tab: tab };
+          if (section === 'teach-podcast') {
+            state.lastPodcast = { week: wn, at: Date.now() };
+            state.podcastWeek = wn;
+            try {
+              var _prt = state.podcastResume && state.podcastResume[wn];
+              var _plen = (CONTENT[wn] && CONTENT[wn].podcastScript || []).length;
+              if (state.podcastStatus !== 'playing') state.podcastTurn = (typeof _prt === 'number' && _prt > 0 && _prt < _plen - 1) ? _prt : -1;
+            } catch(e){}
+          }
           setState({ view: 'week', selectedWeek: wn, weekTab: tab, flashcardIndex: 0, slideIndex: 0, flashcardFlipped: false, quizAnswers: {}, quizSubmitted: false });
           // After render, reliably scroll to the section anchor inside the new tab (retries as it lays out).
           if (section) scrollToSectionWhenReady(section);
@@ -28528,6 +28975,7 @@ function attachListeners() {
           const correctIdx = (typeof item.q.correct === 'number') ? item.q.correct : 0;
           s.selected = opt; s.answered = true;
           s.results.push({ wn: item.wn, qi: item.qi, correct: opt === correctIdx });
+          try { recordAnswer(item.wn, item.qi, opt === correctIdx); } catch(e){}
           setState({ dailySession: s });
           break;
         }
@@ -28614,9 +29062,26 @@ function attachListeners() {
           state.practiceConfig = { ...state.practiceConfig, style: el.dataset.style };
           setState({});
           break;
+        case 'practice-set-difficulty':
+          state.practiceConfig = { ...state.practiceConfig, difficulty: el.dataset.difficulty };
+          setState({});
+          break;
+        case 'diff-toggle-bucket':
+          state.diffBucketOpen = (state.diffBucketOpen === el.dataset.bucket) ? '' : el.dataset.bucket;
+          setState({});
+          break;
+        case 'practice-toggle-weighted':
+          state.practiceConfig = { ...state.practiceConfig, weighted: !(state.practiceConfig && state.practiceConfig.weighted !== false) };
+          setState({});
+          break;
         case 'practice-start':
           startPracticeSession();
           break;
+        case 'practice-hard-now': {
+          state.practiceConfig = { ...state.practiceConfig, difficulty: (el.dataset.difficulty || 'hard'), weighted: true };
+          startPracticeSession();
+          break;
+        }
         case 'practice-exit':
           if (confirm('Exit this practice session? Your progress will be lost.')) {
             state.practiceSession = null;
@@ -28647,7 +29112,11 @@ function attachListeners() {
           if (!state.practiceSession) return;
           const s = state.practiceSession;
           let score = 0;
-          s.questions.forEach((q, i) => { if (s.answers[i] === q.q.correct) score++; });
+          s.questions.forEach((q, i) => {
+            const ok = s.answers[i] === q.q.correct;
+            if (ok) score++;
+            try { recordAnswer(q.wn, q.qi, ok); } catch(e){}
+          });
           s.submitted = true;
           state.practiceHistory = state.practiceHistory || [];
           state.practiceHistory.push({
@@ -28828,7 +29297,11 @@ function attachListeners() {
             : { weekNum: state.selectedWeek, indices: c.quiz.map((_, i) => i) };
           const activeQuiz = setObj.indices.map(idx => c.quiz[idx]);
           let score = 0;
-          activeQuiz.forEach((q, i) => { if (state.quizAnswers[i] === q.correct) score++; });
+          activeQuiz.forEach((q, i) => {
+            const ok = state.quizAnswers[i] === q.correct;
+            if (ok) score++;
+            try { recordAnswer(state.selectedWeek, setObj.indices[i], ok); } catch(e){}
+          });
           setQuizScore(state.selectedWeek, score, activeQuiz.length);
           setState({ quizSubmitted: true });
           // Scroll up to the results (the score banner renders at the top of the quiz) instead of
@@ -29052,6 +29525,7 @@ function attachListeners() {
           if (!isManager()) return;
           if (!confirm('Remove the Cummings PDF from this device? Chapters will fall back to per-chapter PDFs.')) return;
           try { if (typeof idbDel === 'function') idbDel('cummings-full'); } catch(e){}
+          try { if (typeof _resetBookPdf === 'function') _resetBookPdf(); } catch(e){}
           state.hasFullCummings = false; state.fullCummingsName = '';
           persist(); setState({});
           if (typeof appToast === 'function') appToast('Cummings PDF removed from this device.');
@@ -29658,6 +30132,7 @@ function attachListeners() {
           if (state.dailyChallenge.answers[qi]) break; // already answered this one
           const correct = (idx === q.correct);
           state.dailyChallenge.answers[qi] = { correct, picked: idx };
+          try { if (q._qid) { var _p = String(q._qid).split(':'); recordAnswer(Number(_p[0]), Number(_p[1]), correct); } } catch(e){}
           if (correct) state.dailyChallengeWins = (state.dailyChallengeWins || 0) + 1;
           setState({});
           break;
@@ -29707,11 +30182,25 @@ function attachListeners() {
           try { if (state.podcastWeek !== wk && typeof TTS !== 'undefined' && TTS.stop) TTS.stop(); } catch(_){}
           if (typeof pushNav === 'function') pushNav();
           state.podcastWeek = wk;
-          state.podcastTurn = -1;         // start from the beginning
+          // Resume from the saved paragraph (or the beginning if none / finished).
+          try {
+            var _wrt = state.podcastResume && state.podcastResume[wk];
+            var _wlen = (CONTENT[wk] && CONTENT[wk].podcastScript || []).length;
+            state.podcastTurn = (typeof _wrt === 'number' && _wrt > 0 && _wrt < _wlen - 1) ? _wrt : -1;
+          } catch(e){ state.podcastTurn = -1; }
           state.podcastStatus = 'stopped';
+          state.lastPodcast = { week: wk, at: Date.now() };
           setState({ view: 'podcast' });
           try { safeScrollTo(0); } catch(_){}
           try { TTS.play(); } catch(e){}
+          break;
+        }
+        case 'pod-restart': {
+          const rw = Number(el.dataset.week);
+          try { if (state.podcastResume) delete state.podcastResume[rw]; } catch(e){}
+          try { if (typeof TTS !== 'undefined' && TTS.stop) TTS.stop(); } catch(e){}
+          state.podcastTurn = -1;
+          setState({});
           break;
         }
         case 'pod-pause': TTS.pause(); break;
@@ -29751,8 +30240,13 @@ function attachListeners() {
   if (podSel) {
     podSel.addEventListener('change', e => {
       TTS.stop();
-      state.podcastWeek = Number(e.target.value);
-      state.podcastTurn = -1;
+      const _pw = Number(e.target.value);
+      state.podcastWeek = _pw;
+      try {
+        const _r = state.podcastResume && state.podcastResume[_pw];
+        const _l = (CONTENT[_pw] && CONTENT[_pw].podcastScript || []).length;
+        state.podcastTurn = (typeof _r === 'number' && _r > 0 && _r < _l - 1) ? _r : -1;
+      } catch(err){ state.podcastTurn = -1; }
       setState({});
     });
   }
@@ -29961,12 +30455,12 @@ function openChapterPdf(num) {
     if (state.hasFullCummings) {
       idbGet('cummings-full').then(function(book) {
         if (book && state.viewingChapter === num) {
-          const pg = pageForChapter(num);
-          let url = URL.createObjectURL(book);
-          if (pg) url += '#page=' + pg;       // native viewer jumps to the chapter page
-          state.chapterPdfUrl = url;
+          // Base blob URL (no #page) — used by the native "Open in browser viewer" fallback + new tab.
+          state.chapterPdfUrl = URL.createObjectURL(book);
           state.chapterPdfNum = num;
           state.chapterPdfFromBook = true;
+          // Default to the built-in chapter reader (split pages + scroll + images).
+          if (state.chapterReaderMode !== false) state.chapterReaderMode = true;
           setState({});
         }
       }).catch(function(){});
@@ -29979,7 +30473,12 @@ window.__pickChapterPdf = function(input) {
   const num = state.viewingChapter;
   const isPdf = (f.type === 'application/pdf') || /\.pdf$/i.test(f.name || '');
   if (!isPdf) { alert('Please choose a PDF file.'); input.value = ''; return; }
-  try { if (typeof idbPut === 'function') idbPut('chapterpdf-' + num, f).catch(function(){}); } catch(e){}
+  // Store a detached Blob (not the raw File handle) so it persists reliably in IndexedDB.
+  try {
+    var _rd = f.arrayBuffer ? f.arrayBuffer() : Promise.reject(new Error('no arrayBuffer'));
+    _rd.then(function(ab){ if (typeof idbPut === 'function') return idbPut('chapterpdf-' + num, new Blob([ab], { type: 'application/pdf' })); })
+       .catch(function(){ try { if (typeof idbPut === 'function') idbPut('chapterpdf-' + num, f).catch(function(){}); } catch(e){} });
+  } catch(e){ try { if (typeof idbPut === 'function') idbPut('chapterpdf-' + num, f).catch(function(){}); } catch(_){} }
   state.chapterPdfs = state.chapterPdfs || {};
   state.chapterPdfs[num] = f.name || ('chapter-' + num + '.pdf');
   if (state.chapterPdfUrl) { try { URL.revokeObjectURL(state.chapterPdfUrl); } catch(e){} }
@@ -29998,20 +30497,34 @@ window.__uploadFullCummings = function(input) {
   if (!isPdf) { alert('Please choose the Cummings PDF file.'); input.value = ''; return; }
   const mb = Math.round(f.size / (1024*1024));
   const btn = document.getElementById('full-cummings-status');
-  if (btn) btn.textContent = 'Saving ' + mb + ' MB… keep this tab open.';
-  Promise.resolve()
-    .then(function(){ if (typeof idbPut === 'function') return idbPut('cummings-full', f); throw new Error('storage unavailable'); })
-    .then(function(){
-      state.hasFullCummings = true;
-      state.fullCummingsName = f.name || 'Cummings.pdf';
-      persist();
-      setState({});
-      if (typeof appToast === 'function') appToast('✓ Cummings saved on this device (' + mb + ' MB). Every chapter now opens it at the right page.');
-    })
-    .catch(function(e){
-      alert('Could not save the PDF on this device' + (mb>400?(' — it may be too large for this browser ('+mb+' MB). On iPhone, storage is limited; try a smaller/compressed copy, or use the per-chapter PDF option.'):'') + '.\n\n' + ((e&&e.message)||e));
-      if (btn) btn.textContent = '';
-    });
+  if (btn) btn.textContent = 'Reading ' + mb + ' MB…';
+  // Ask the browser to make storage durable first — large blobs are refused more often without it.
+  try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch(e){}
+  // Read the file into a DETACHED Blob before storing. Storing the raw File handle directly is the
+  // usual cause of a large-PDF upload "silently" failing (some browsers can't structured-clone a
+  // disk-backed File into IndexedDB); an ArrayBuffer-backed Blob stores reliably.
+  const readAB = f.arrayBuffer ? f.arrayBuffer()
+    : new Promise(function(res, rej){ var r = new FileReader(); r.onload = function(){ res(r.result); }; r.onerror = function(){ rej(r.error || new Error('file read failed')); }; r.readAsArrayBuffer(f); });
+  readAB.then(function(ab){
+    if (btn) btn.textContent = 'Saving ' + mb + ' MB… keep this tab open.';
+    if (typeof idbPut !== 'function') throw new Error('storage unavailable');
+    var blob = new Blob([ab], { type: 'application/pdf' });
+    return idbPut('cummings-full', blob);
+  }).then(function(){
+    state.hasFullCummings = true;
+    state.fullCummingsName = f.name || 'Cummings.pdf';
+    persist();
+    setState({});
+    try{ _resetBookPdf(); prebuildChapterMap(); }catch(e){}   // split into chapters in the background
+    if (typeof appToast === 'function') appToast('✓ Cummings saved on this device (' + mb + ' MB). Splitting into chapters — each opens in a scrollable reader with images.');
+  }).catch(function(e){
+    var msg = (e && e.message) || String(e);
+    var quota = /quota|exceed|space|full|QuotaExceeded/i.test(msg) || mb > 500;
+    alert('Could not save the PDF on this device.\n\nReason: ' + msg +
+      (quota ? ('\n\nThis file (' + mb + ' MB) may exceed the browser storage limit. Try a more compressed copy (aim under ~300 MB), use a desktop browser (Chrome/Edge allow much more), or use the per-chapter PDF button to upload just the chapter you need.')
+             : '\n\nTry reloading the page and uploading again, or use the per-chapter PDF button.'));
+    if (btn) btn.textContent = '';
+  });
   input.value = '';
 };
 window.__projectRenameInput = function(v) { const p = activeProject(); if (p) p.name = v || 'Untitled project'; };
@@ -30074,6 +30587,175 @@ window.__readSourcePdf = async function(input) {
     alert('PDF extraction failed: ' + (e.message || String(e)));
   }
 };
+
+/* ===================== CHAPTER-SPLIT PDF READER =====================
+   After the full Cummings book is saved once, this splits it into chapters (using the PDF's own
+   embedded bookmarks/table-of-contents) and renders ONLY a chapter's page range as a smooth,
+   scrollable set of canvases — images included. Nothing is uploaded; it reads the user's own file. */
+var __bookPdfPromise = null;        // cached loaded pdf.js document of the full book
+var CHAP_MAP_KEY = 'cummings-chapmap-v1';
+function _loadChapMap(){ try{ return JSON.parse(localStorage.getItem(CHAP_MAP_KEY) || '{}') || {}; }catch(e){ return {}; } }
+function _saveChapMap(m){ try{ localStorage.setItem(CHAP_MAP_KEY, JSON.stringify(m || {})); }catch(e){} }
+function _resetBookPdf(){ __bookPdfPromise = null; try{ localStorage.removeItem(CHAP_MAP_KEY); }catch(e){} }
+function getBookPdf(){
+  if (__bookPdfPromise) return __bookPdfPromise;
+  __bookPdfPromise = (async function(){
+    var lib = await loadPdfJs();
+    if (typeof idbGet !== 'function') throw new Error('storage unavailable');
+    var blob = await idbGet('cummings-full');
+    if (!blob) throw new Error('book not saved on this device');
+    var ab = await blob.arrayBuffer();
+    return await lib.getDocument({ data: ab }).promise;
+  })();
+  __bookPdfPromise.catch(function(){ __bookPdfPromise = null; });
+  return __bookPdfPromise;
+}
+function _titleOverlap(target, cand){
+  var wa = target.split(' ').filter(function(x){ return x.length > 3; });
+  if (!wa.length) return 0;
+  var wb = {}; cand.split(' ').forEach(function(x){ wb[x] = 1; });
+  var hit = 0; wa.forEach(function(x){ if (wb[x]) hit++; });
+  return hit / wa.length;
+}
+/* Read the PDF's embedded outline (bookmarks) and resolve each to a physical page, then match
+   bookmarks to our curriculum chapters — giving an accurate chapter→page-range split. */
+async function buildChapterMapFromOutline(pdf){
+  var map = {};
+  try{
+    var outline = await pdf.getOutline();
+    if (!outline || !outline.length) return map;
+    var flat = [];
+    async function walk(items){
+      for (var i=0;i<items.length;i++){
+        var it = items[i], pageIndex = null;
+        try{
+          var dest = it.dest;
+          if (typeof dest === 'string') dest = await pdf.getDestination(dest);
+          if (dest && dest[0]) pageIndex = await pdf.getPageIndex(dest[0]);
+        }catch(e){}
+        if (pageIndex != null) flat.push({ title: String(it.title||'').trim(), page: pageIndex + 1 });
+        if (it.items && it.items.length) await walk(it.items);
+      }
+    }
+    await walk(outline);
+    if (!flat.length) return map;
+    flat.sort(function(a,b){ return a.page - b.page; });
+    CURRICULUM.forEach(function(w){
+      if (w.chapter == null) return;
+      var best = null;
+      for (var i=0;i<flat.length;i++){
+        var t = flat[i].title;
+        var m = t.match(/chapter\s+(\d+)/i) || t.match(/^\s*(\d+)[\s.:–\-]/);
+        if (m && parseInt(m[1],10) === w.chapter){ best = flat[i]; break; }
+      }
+      if (!best){
+        var target = String(w.title||'').toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+        var bestScore = 0;
+        flat.forEach(function(f){
+          var ft = f.title.toLowerCase().replace(/[^a-z0-9]+/g,' ').trim();
+          var sc = _titleOverlap(target, ft);
+          if (sc > bestScore){ bestScore = sc; best = f; }
+        });
+        if (bestScore < 0.5) best = null;
+      }
+      if (best) map[w.chapter] = { start: best.page, label: best.title };
+    });
+    var chs = Object.keys(map).map(Number).sort(function(a,b){ return a-b; });
+    for (var j=0;j<chs.length;j++){
+      var cur = map[chs[j]];
+      var nextStart = (j+1 < chs.length) ? map[chs[j+1]].start : (pdf.numPages + 1);
+      cur.end = Math.max(cur.start, nextStart - 1);
+    }
+  }catch(e){}
+  return map;
+}
+/* Kick off the split in the background right after upload, so the first chapter opens instantly. */
+function prebuildChapterMap(){
+  try{
+    getBookPdf().then(function(pdf){
+      var existing = _loadChapMap();
+      if (Object.keys(existing).length) return;
+      return buildChapterMapFromOutline(pdf).then(function(m){ _saveChapMap(m); });
+    }).catch(function(){});
+  }catch(e){}
+}
+async function _renderPdfPage(pdf, pageNum, canvas, scale){
+  try{
+    var page = await pdf.getPage(pageNum);
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var vp = page.getViewport({ scale: scale * dpr });
+    canvas.width = vp.width; canvas.height = vp.height;
+    await page.render({ canvasContext: canvas.getContext('2d'), viewport: vp }).promise;
+  }catch(e){}
+}
+/* Populate #chap-reader with the current chapter's pages. Guarded so repeated renders don't rebuild. */
+async function ensureChapReader(){
+  var host = document.getElementById('chap-reader');
+  if (!host) return;
+  var num = Number(host.getAttribute('data-chap'));
+  var scale = parseFloat(host.getAttribute('data-scale')) || 1.35;
+  var key = num + '@' + scale;
+  if (host.getAttribute('data-rendered') === key) return;
+  host.setAttribute('data-rendered', key);
+  host.innerHTML = '<div style="color:#cbd5e1;padding:48px 20px;text-align:center;font-size:14px;">Splitting the book &amp; loading chapter pages…</div>';
+  try{
+    var pdf = await getBookPdf();
+    var map = _loadChapMap();
+    if (!Object.keys(map).length){ map = await buildChapterMapFromOutline(pdf); _saveChapMap(map); }
+    var info = map[num], start, end, matched = false;
+    if (info && info.start){ start = info.start; end = info.end || info.start; matched = true; }
+    else {
+      start = pageForChapter(num) || 1;
+      var nextCh = CURRICULUM.filter(function(w){ return w.chapter != null && w.chapter > num; })
+        .sort(function(a,b){ return a.chapter - b.chapter; })[0];
+      var np = nextCh ? pageForChapter(nextCh.chapter) : null;
+      end = (np && np > start) ? (np - 1) : Math.min(pdf.numPages, start + 24);
+    }
+    start = Math.max(1, Math.min(start, pdf.numPages));
+    end = Math.max(start, Math.min(end, pdf.numPages));
+    // header
+    if (host.getAttribute('data-rendered') !== key) return; // superseded
+    host.innerHTML = '';
+    var banner = document.createElement('div');
+    banner.style.cssText = 'color:#93a4c2;font-size:12px;text-align:center;padding:6px 0 12px;';
+    banner.textContent = (matched ? 'Chapter split from the book’s table of contents · ' : 'Estimated range · ')
+      + 'pages ' + start + '–' + end + ' (' + (end - start + 1) + ' pp)';
+    host.appendChild(banner);
+    for (var p = start; p <= end; p++){
+      var wrap = document.createElement('div');
+      wrap.className = 'chap-page';
+      wrap.setAttribute('data-page', p);
+      wrap.style.cssText = 'margin:0 auto 14px;max-width:1000px;position:relative;';
+      var lbl = document.createElement('div');
+      lbl.style.cssText = 'position:absolute;top:6px;right:10px;font-size:10px;color:rgba(255,255,255,.55);background:rgba(0,0,0,.35);padding:1px 6px;border-radius:6px;';
+      lbl.textContent = 'p.' + p;
+      var cv = document.createElement('canvas');
+      cv.style.cssText = 'width:100%;height:auto;display:block;background:#fff;box-shadow:0 3px 14px rgba(0,0,0,.4);border-radius:2px;min-height:120px;';
+      wrap.appendChild(cv); wrap.appendChild(lbl);
+      host.appendChild(wrap);
+    }
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          var el = en.target; io.unobserve(el);
+          _renderPdfPage(pdf, Number(el.getAttribute('data-page')), el.querySelector('canvas'), scale);
+        }
+      });
+    }, { root: host, rootMargin: '800px 0px' });
+    Array.prototype.forEach.call(host.querySelectorAll('.chap-page'), function(el){ io.observe(el); });
+  }catch(e){
+    host.removeAttribute('data-rendered');
+    host.innerHTML = '<div style="color:#fca5a5;padding:44px 20px;text-align:center;font-size:14px;line-height:1.6;">Could not render the chapter pages here.<br>'
+      + escapeHTML(e.message || String(e)) + '<br><br>Use <strong>“Open in browser viewer”</strong> in the toolbar instead.</div>';
+  }
+}
+window.__chapZoom = function(dir){
+  var s = Number(state.chapReaderScale) || 1.35;
+  s = dir < 0 ? Math.max(0.7, s - 0.2) : Math.min(3.0, s + 0.2);
+  state.chapReaderScale = Math.round(s * 100) / 100;
+  setState({});
+};
+window.__chapToggleViewer = function(){ state.chapterReaderMode = !state.chapterReaderMode; setState({}); };
 
 /* ===================== TUMOR BOARD — SCAN → CLASSIFY → STAGE ===================== */
 function _tbScan(){ if(!state.tbScan) state.tbScan={text:'',fileName:'',imageData:null,imageMedia:'',loading:false,result:null,error:''}; return state.tbScan; }
@@ -30503,6 +31185,215 @@ async function _initDurability(){
   setTimeout(_showDurabilityModal, 3400); // let the self-heal restore land first
 }
 try{ _initDurability(); }catch(e){}
+
+/* ===================== CLOUD SYNC (web ↔ mobile, Spotify-style) =====================
+   Progress, settings, notes, highlights and resume-position follow you across devices.
+   Storage is a single anonymous JSON blob (jsonblob.com — no account, CORS-enabled). You pair
+   two devices with a short Sync ID. SECRETS ARE NEVER SYNCED: your API keys stay only on each
+   device (anyone with the ID could read the blob, so keys are deliberately excluded). The big
+   Cummings PDF and cached audio are per-device (too large for a sync blob). */
+var SYNC_CFG_KEY = 'ent-sync-cfg-v1';
+var SYNC_HL_KEY = 'ent-study-hl-v1';
+var SYNC_OPTRAT_KEY = 'ent-optrat-v1';
+var SYNC_API_BASE = 'https://jsonblob.com/api/jsonBlob';
+var __syncPushTimer = null;
+var __syncApplying = false;
+var __syncBusy = false;
+function syncCfg(){
+  try { return JSON.parse(localStorage.getItem(SYNC_CFG_KEY) || '{}') || {}; } catch(e){ return {}; }
+}
+function syncSaveCfg(c){ try { localStorage.setItem(SYNC_CFG_KEY, JSON.stringify(c || {})); } catch(e){} }
+function _syncDeviceId(){
+  var c = syncCfg();
+  if (!c.device){ c.device = 'd' + Math.random().toString(36).slice(2,8) + Date.now().toString(36).slice(-4); syncSaveCfg(c); }
+  return c.device;
+}
+function _lsGet(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+function _lsGetJSON(k){ try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch(e){ return null; } }
+var _SYNC_SECRET_FIELDS = ['apiKey','openaiKey','elevenLabsKey','managerCredId'];
+function _stripSecrets(obj){
+  if (!obj || typeof obj !== 'object') return obj;
+  var o = {}; Object.keys(obj).forEach(function(k){ if (_SYNC_SECRET_FIELDS.indexOf(k) < 0) o[k] = obj[k]; });
+  return o;
+}
+/* Build the syncable bundle from the durable localStorage buckets (secrets removed). */
+function syncCollect(){
+  var store = _lsGetJSON(STORE_KEY) || {};
+  var crit  = _lsGetJSON(CRIT_KEY) || {};
+  return {
+    v: 1,
+    updatedAt: Date.now(),
+    device: _syncDeviceId(),
+    store: _stripSecrets(store),
+    crit:  _stripSecrets(crit),
+    prog:  _lsGet(PROG_KEY) || '',
+    hl:    _lsGetJSON(SYNC_HL_KEY) || null,
+    optrat:_lsGetJSON(SYNC_OPTRAT_KEY) || null,
+    chapmap: _lsGetJSON(CHAP_MAP_KEY) || null
+  };
+}
+/* Union of two progress maps: any chapter/section marked done on EITHER device stays done. */
+function _mergeProgress(a, b){
+  var out = {}; a = a || {}; b = b || {};
+  Object.keys(a).forEach(function(k){ if (a[k]) out[k] = a[k]; });
+  Object.keys(b).forEach(function(k){ if (b[k]) out[k] = b[k]; });
+  return out;
+}
+/* Merge personal notes by key — keep the longer text on conflict so nothing is silently lost. */
+function _mergeNotes(a, b){
+  var out = {}; a = a || {}; b = b || {};
+  var keys = {}; Object.keys(a).forEach(function(k){ keys[k]=1; }); Object.keys(b).forEach(function(k){ keys[k]=1; });
+  Object.keys(keys).forEach(function(k){
+    var va = a[k], vb = b[k];
+    if (va == null) { out[k] = vb; return; }
+    if (vb == null) { out[k] = va; return; }
+    out[k] = (String(vb).length >= String(va).length) ? vb : va;
+  });
+  return out;
+}
+/* Apply a remote bundle into local storage, merging progress/notes so nothing regresses. */
+function syncApply(remote){
+  if (!remote || typeof remote !== 'object') return false;
+  __syncApplying = true;
+  try {
+    var localStore = _lsGetJSON(STORE_KEY) || {};
+    var rStore = remote.store || {};
+    // Remote wins for most fields; secrets kept from local; progress + notes merged (union).
+    var merged = Object.assign({}, localStore, _stripSecrets(rStore));
+    _SYNC_SECRET_FIELDS.forEach(function(f){ if (localStore[f]) merged[f] = localStore[f]; });
+    merged.managerProgress = _mergeProgress(localStore.managerProgress, rStore.managerProgress);
+    merged.progress = merged.managerProgress;
+    // Merge each doctor's progress bucket
+    var cp = {}; var lcp = localStore.clientProgress || {}; var rcp = rStore.clientProgress || {};
+    var names = {}; Object.keys(lcp).forEach(function(n){ names[n]=1; }); Object.keys(rcp).forEach(function(n){ names[n]=1; });
+    Object.keys(names).forEach(function(n){
+      var lb = lcp[n] || {}, rb = rcp[n] || {};
+      cp[n] = Object.assign({}, lb, rb, { progress: _mergeProgress(lb.progress, rb.progress) });
+    });
+    merged.clientProgress = cp;
+    merged.personalNotes = _mergeNotes(localStore.personalNotes, rStore.personalNotes);
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(merged)); } catch(e){}
+    // Critical bucket (keep local secrets, merge progress)
+    var localCrit = _lsGetJSON(CRIT_KEY) || {};
+    var mCrit = Object.assign({}, localCrit, _stripSecrets(remote.crit || {}));
+    _SYNC_SECRET_FIELDS.forEach(function(f){ if (localCrit[f]) mCrit[f] = localCrit[f]; });
+    mCrit.managerProgress = _mergeProgress(localCrit.managerProgress, (remote.crit||{}).managerProgress);
+    try { localStorage.setItem(CRIT_KEY, JSON.stringify(mCrit)); } catch(e){}
+    // Progress mirror (union at the string/JSON level)
+    if (remote.prog) {
+      var lp = _lsGetJSON(PROG_KEY) || {}; var rp = {};
+      try { rp = JSON.parse(remote.prog) || {}; } catch(e){ rp = {}; }
+      try { localStorage.setItem(PROG_KEY, JSON.stringify(_mergeProgress(lp, rp))); } catch(e){}
+    }
+    if (remote.hl)     { var lhl = _lsGetJSON(SYNC_HL_KEY) || {}; try { localStorage.setItem(SYNC_HL_KEY, JSON.stringify(Object.assign({}, lhl, remote.hl))); } catch(e){} }
+    if (remote.optrat) { try { localStorage.setItem(SYNC_OPTRAT_KEY, JSON.stringify(remote.optrat)); } catch(e){} }
+    if (remote.chapmap && !_lsGetJSON(CHAP_MAP_KEY)) { try { localStorage.setItem(CHAP_MAP_KEY, JSON.stringify(remote.chapmap)); } catch(e){} }
+    // Reload state from the merged storage and repaint.
+    try {
+      loadStored();
+      if (typeof isClient === 'function' && isClient() && typeof bindProgressForUser === 'function') bindProgressForUser();
+      if (typeof restoreProgressMirror === 'function') restoreProgressMirror();
+      if (typeof setState === 'function') setState({});
+    } catch(e){}
+    return true;
+  } finally { setTimeout(function(){ __syncApplying = false; }, 50); }
+}
+function _syncSetStatus(txt){
+  var c = syncCfg(); c.status = txt; c.statusAt = Date.now(); syncSaveCfg(c);
+  try { var el = document.getElementById('sync-status'); if (el) el.textContent = txt; } catch(e){}
+}
+/* Pull the remote bundle and apply it if newer than what we last saw. */
+async function syncPull(opts){
+  var c = syncCfg();
+  if (!c.enabled || !c.id) return;
+  if (__syncBusy) return;
+  __syncBusy = true;
+  try {
+    _syncSetStatus('Checking cloud…');
+    var res = await fetch(SYNC_API_BASE + '/' + encodeURIComponent(c.id), { method:'GET', headers:{ 'Accept':'application/json' } });
+    if (res.status === 404) { _syncSetStatus('Sync ID not found — check it on the other device.'); return; }
+    if (!res.ok) { _syncSetStatus('Cloud read failed (' + res.status + ').'); return; }
+    var remote = await res.json();
+    if (!remote || !remote.updatedAt) { _syncSetStatus('No data in the cloud yet.'); return; }
+    var force = opts && opts.force;
+    var newer = remote.updatedAt > (c.lastSeen || 0);
+    var otherDevice = remote.device !== _syncDeviceId();
+    if (force || (newer && otherDevice)) {
+      syncApply(remote);
+      c = syncCfg(); c.lastSeen = remote.updatedAt; syncSaveCfg(c);
+      _syncSetStatus('✓ Updated from another device · ' + new Date().toLocaleTimeString());
+    } else {
+      c = syncCfg(); c.lastSeen = Math.max(c.lastSeen || 0, remote.updatedAt); syncSaveCfg(c);
+      _syncSetStatus('✓ Up to date · ' + new Date().toLocaleTimeString());
+    }
+  } catch(e){ _syncSetStatus('Cloud unreachable — will retry.'); }
+  finally { __syncBusy = false; }
+}
+/* Push the local bundle to the cloud (debounced from persist()). */
+async function syncPush(){
+  var c = syncCfg();
+  if (!c.enabled || !c.id) return;
+  if (__syncApplying) return;
+  try {
+    var bundle = syncCollect();
+    var res = await fetch(SYNC_API_BASE + '/' + encodeURIComponent(c.id), {
+      method:'PUT', headers:{ 'Content-Type':'application/json', 'Accept':'application/json' }, body: JSON.stringify(bundle)
+    });
+    if (res.ok) { c = syncCfg(); c.lastSeen = bundle.updatedAt; c.lastPush = bundle.updatedAt; syncSaveCfg(c); _syncSetStatus('✓ Saved to cloud · ' + new Date().toLocaleTimeString()); }
+    else { _syncSetStatus('Cloud save failed (' + res.status + ').'); }
+  } catch(e){ _syncSetStatus('Cloud unreachable — will retry.'); }
+}
+function _syncSchedulePush(){
+  var c = syncCfg();
+  if (!c.enabled || !c.id || __syncApplying) return;
+  if (__syncPushTimer) clearTimeout(__syncPushTimer);
+  __syncPushTimer = setTimeout(function(){ syncPush(); }, 2500);
+}
+/* Enable sync: create a fresh cloud blob (new pairing) and store its ID. */
+async function syncEnableNew(){
+  try {
+    _syncSetStatus('Creating your private sync space…');
+    var bundle = syncCollect();
+    var res = await fetch(SYNC_API_BASE, { method:'POST', headers:{ 'Content-Type':'application/json', 'Accept':'application/json' }, body: JSON.stringify(bundle) });
+    if (!res.ok) { _syncSetStatus('Could not create sync (' + res.status + ').'); alert('Could not start cloud sync (HTTP ' + res.status + '). Check your connection and try again.'); return; }
+    var loc = res.headers.get('Location') || res.headers.get('Content-Location') || '';
+    var id = loc ? loc.split('/').pop() : '';
+    if (!id) { _syncSetStatus('Sync created but no ID returned.'); alert('Sync was created but the ID could not be read in this browser. Try again, or use a desktop browser.'); return; }
+    var c = syncCfg(); c.enabled = true; c.id = id; c.lastSeen = bundle.updatedAt; c.lastPush = bundle.updatedAt; syncSaveCfg(c);
+    _syncSetStatus('✓ Sync on. Enter this ID on your other device.');
+    if (typeof setState === 'function') setState({});
+  } catch(e){ _syncSetStatus('Failed to start sync.'); alert('Could not start cloud sync: ' + (e.message || e)); }
+}
+/* Pair THIS device to an existing Sync ID from another device, then pull. */
+async function syncPairWithId(id){
+  id = String(id || '').trim();
+  if (!id) { alert('Paste the Sync ID from your other device first.'); return; }
+  var c = syncCfg(); c.enabled = true; c.id = id; c.lastSeen = 0; syncSaveCfg(c);
+  _syncSetStatus('Pairing…');
+  await syncPull({ force: true });
+  if (typeof setState === 'function') setState({});
+}
+function syncDisable(){
+  var c = syncCfg(); c.enabled = false; syncSaveCfg(c);
+  _syncSetStatus('Sync paused on this device.');
+  if (typeof setState === 'function') setState({});
+}
+window.__syncEnableNew = function(){ syncEnableNew(); };
+window.__syncPair = function(){ try { var el = document.getElementById('sync-id-input'); syncPairWithId(el ? el.value : ''); } catch(e){} };
+window.__syncNow = function(){ syncPull({ force:false }).then(function(){ syncPush(); }); };
+window.__syncDisable = function(){ syncDisable(); };
+window.__syncCopyId = function(){ try { var c = syncCfg(); if (c.id && navigator.clipboard) { navigator.clipboard.writeText(c.id); appToast && appToast('Sync ID copied.'); } } catch(e){} };
+/* Pull once shortly after boot, then keep light polling so the other device's changes appear. */
+function _syncBootPull(){
+  var c = syncCfg();
+  if (!c.enabled || !c.id) return;
+  setTimeout(function(){ syncPull({ force:false }); }, 1200);
+  try { if (window.__syncPoll) clearInterval(window.__syncPoll); } catch(e){}
+  window.__syncPoll = setInterval(function(){ if (!document.hidden) syncPull({ force:false }); }, 45000);
+  // Also pull the moment the app regains focus (you switched from desktop to phone).
+  try { document.addEventListener('visibilitychange', function(){ if (!document.hidden) syncPull({ force:false }); }); } catch(e){}
+}
+try { _syncBootPull(); } catch(e){}
 (function(){
   var run = false;
   function go(){
