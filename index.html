@@ -799,12 +799,17 @@
   .week-card.state-held:hover { opacity: .85; }
   .week-card.state-held .week-num { background: #d1d5db; color: #6b7280; }
   .wc-hold {
-    flex-shrink: 0; width: 30px; height: 30px; border-radius: 8px;
-    border: 1px solid var(--border); background: var(--card); color: var(--text-soft);
-    font-size: 13px; cursor: pointer; display: grid; place-items: center; line-height: 1;
+    position: absolute; top: 12px; right: 14px;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--card); color: var(--text-soft);
+    font-size: 13px; cursor: pointer; display: grid; place-items: center; line-height: 1; padding: 0;
+    transition: all .15s ease; z-index: 2;
   }
-  .wc-hold:hover { border-color: #f59e0b; color: #b45309; }
-  .wc-hold.is-held { background: #fef3c7; border-color: #fcd34d; color: #92400e; }
+  .wc-hold:hover { border-color: #f59e0b; color: #b45309; transform: scale(1.08); }
+  .wc-hold.is-held { background: #f59e0b; border-color: #f59e0b; color: #fff; }
+  @media (max-width:720px){ .wc-hold { width: 34px; height: 34px; top: 10px; right: 12px; } }
+  /* keep the status badge clear of the top-right hold button */
+  .week-card .week-status { margin-right: 34px; }
   .week-card.state-empty {
     background: var(--card-soft);
     opacity: .72;
@@ -17291,6 +17296,289 @@ const CONTENT = {
 
 
   /* ============== UNIT 53 — LARYNGEAL PARALYSIS (Cummings Ch. 56) ============== */
+  44: {
+    objectives: [
+      "Classify CSF rhinorrhea by cause — traumatic (accidental and iatrogenic) and nontraumatic (high- and normal-pressure).",
+      "Confirm CSF with beta-2-transferrin and localize the defect with CT and MRI/MR cisternography.",
+      "Link spontaneous CSF leaks to idiopathic intracranial hypertension and the lateral sphenoid recess.",
+      "Choose between conservative management and endoscopic repair, and describe multilayer grafting.",
+      "Recognize meningitis risk and the need to treat elevated intracranial pressure to prevent recurrence."
+    ],
+    summary: `
+      <h4>1. What it is and why it matters</h4>
+      <p>CSF rhinorrhea is <strong>cerebrospinal fluid escaping through a skull-base defect (dura + bone) into the nose</strong>. It matters because a persistent leak is an <strong>open door to the intracranial space</strong> — the main danger is <strong>ascending meningitis</strong> (and, less often, pneumocephalus). Presentation is <strong>clear, watery, usually unilateral rhinorrhea</strong> that is <strong>positional</strong> (worse leaning forward), often <strong>salty or metallic</strong> tasting.</p>
+      <h4>2. Causes</h4>
+      <ul>
+        <li><strong>Traumatic — the most common overall.</strong> <strong>Accidental</strong> skull-base fractures (cribriform, ethmoid roof, sphenoid, frontal), and <strong>iatrogenic</strong> injury during <strong>endoscopic sinus or skull-base/pituitary surgery</strong>.</li>
+        <li><strong>Nontraumatic, high-pressure</strong> — <strong>idiopathic intracranial hypertension (IIH)</strong> is the key association with <strong>spontaneous</strong> leaks (classically an <strong>obese woman</strong>, with an <strong>empty sella</strong> and raised opening pressure); also tumors and hydrocephalus. These leak through thinned bone and <strong>recur</strong> if the pressure isn't treated.</li>
+        <li><strong>Nontraumatic, normal-pressure</strong> — congenital defects and erosive lesions.</li>
+      </ul>
+      <h4>3. Where they leak</h4>
+      <p>The weak points: the <strong>cribriform plate</strong> (its thin <strong>lateral lamella</strong>), the <strong>ethmoid roof (fovea ethmoidalis)</strong>, the <strong>sphenoid</strong> — especially the <strong>lateral recess</strong> through a persistent <strong>lateral craniopharyngeal (Sternberg) canal</strong>, a favored site in IIH — and the <strong>frontal</strong>. Spontaneous leaks often present with a <strong>meningoencephalocele</strong> at these sites.</p>
+      <h4>4. Diagnosis — confirm, then localize</h4>
+      <p><strong>First confirm the fluid is CSF</strong>: send it for <strong>beta-2-transferrin</strong>, a protein essentially unique to CSF (also perilymph and aqueous humor) — highly sensitive and specific; <strong>beta-trace protein</strong> is an alternative. (Bedside glucose testing is unreliable.) <strong>Then localize</strong>: <strong>high-resolution CT</strong> shows the bony defect; <strong>MRI / MR cisternography</strong> shows a meningoencephalocele and the fluid column; <strong>CT cisternography</strong> (intrathecal contrast) can catch an <strong>active</strong> leak; and <strong>intrathecal fluorescein</strong> is used <strong>intraoperatively</strong> to pinpoint the site (low-dose, off-label).</p>
+      <h4>5. Management</h4>
+      <p><strong>Some traumatic leaks close spontaneously</strong> with <strong>conservative measures</strong> — bed rest, head-of-bed elevation, stool softeners, avoiding nose-blowing/straining, and sometimes a <strong>lumbar drain</strong> — often within about a week. <strong>Antibiotic prophylaxis is controversial and not routinely recommended</strong>; ensure <strong>pneumococcal vaccination</strong>. <strong>Endoscopic repair</strong> is the definitive treatment for persistent, spontaneous, or large defects and has a <strong>high success rate (&gt;90%)</strong>: a <strong>multilayer graft</strong> (free mucosa, fascia, fat "bath-plug," or a <strong>pedicled nasoseptal flap</strong> for larger defects). Crucially, in <strong>IIH-associated leaks you must lower the intracranial pressure</strong> — <strong>acetazolamide, weight loss, and CSF diversion/shunting</strong> — or the repair fails and the leak recurs.</p>
+      <h4>6. The through-line</h4>
+      <p>Confirm it is CSF with beta-2-transferrin, localize the defect, repair persistent leaks endoscopically with a multilayer technique, and <strong>always ask whether raised intracranial pressure is driving a spontaneous leak</strong> — because treating the pressure is what makes the repair last.</p>
+    `,
+    keyPoints: [
+      { category: "Causes", items: [
+        "Traumatic is most common: accidental skull-base fracture and iatrogenic (ESS, skull-base/pituitary surgery).",
+        "Spontaneous leaks ↔ idiopathic intracranial hypertension (obese woman, empty sella); recur unless ICP is treated."
+      ]},
+      { category: "Sites", items: [
+        "Cribriform lateral lamella, ethmoid roof (fovea), sphenoid lateral recess (Sternberg canal — favored in IIH), frontal.",
+        "Spontaneous leaks often present as a meningoencephalocele."
+      ]},
+      { category: "Diagnosis", items: [
+        "Confirm CSF with beta-2-transferrin (beta-trace protein alternative); glucose testing unreliable.",
+        "Localize: high-res CT (bone), MRI/MR cisternography (encephalocele), CT cisternography (active leak), intrathecal fluorescein intraoperatively."
+      ]},
+      { category: "Management", items: [
+        "Some traumatic leaks close conservatively (bed rest, HOB elevation, stool softeners, ± lumbar drain); antibiotic prophylaxis not routine; vaccinate.",
+        "Endoscopic multilayer repair >90% success (mucosa/fascia/fat, nasoseptal flap for large defects); in IIH lower ICP (acetazolamide, weight loss, shunt) or it recurs. Untreated leak → meningitis risk."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 47 · Cerebrospinal Fluid Rhinorrhea", subtitle: "Cummings 8e · Chapter 47", body: "<p style='font-size:18px;line-height:1.55;'>Confirm it's CSF, localize the defect, repair persistent leaks endoscopically — and treat the pressure that drives spontaneous leaks.</p>" },
+      { title: "Presentation", body: "<ul><li>Clear, watery, usually <strong>unilateral</strong> rhinorrhea.</li><li><strong>Positional</strong> (worse leaning forward), salty/metallic.</li><li>Main danger: <strong>ascending meningitis</strong>.</li></ul>" },
+      { title: "Traumatic causes", body: "<ul><li>Most common overall.</li><li><strong>Accidental</strong>: skull-base fractures (cribriform, ethmoid roof, sphenoid, frontal).</li><li><strong>Iatrogenic</strong>: ESS, skull-base/pituitary surgery.</li></ul>" },
+      { title: "Spontaneous & IIH", body: "<ul><li><strong>Idiopathic intracranial hypertension</strong> — obese woman, empty sella, raised pressure.</li><li>Leaks through thinned bone; <strong>recur unless ICP treated</strong>.</li></ul>" },
+      { title: "Where they leak", body: "<ul><li>Cribriform <strong>lateral lamella</strong>; ethmoid roof (fovea).</li><li>Sphenoid <strong>lateral recess</strong> (Sternberg canal — IIH favorite).</li><li>Often a <strong>meningoencephalocele</strong>.</li></ul>" },
+      { title: "Confirm it's CSF", body: "<ul><li><strong>Beta-2-transferrin</strong> — sensitive/specific (beta-trace protein alternative).</li><li>Glucose testing unreliable.</li></ul>" },
+      { title: "Localize the defect", body: "<ul><li>High-res <strong>CT</strong> — bony defect.</li><li><strong>MRI / MR cisternography</strong> — encephalocele, fluid column.</li><li>CT cisternography (active leak); intrathecal <strong>fluorescein</strong> intraoperatively.</li></ul>" },
+      { title: "Conservative management", body: "<ul><li>Bed rest, head-up, stool softeners, no nose-blowing; ± lumbar drain.</li><li>Many traumatic leaks close in ~1 week.</li><li>Antibiotic prophylaxis not routine; vaccinate (pneumococcus).</li></ul>" },
+      { title: "Endoscopic repair", body: "<ul><li>Definitive for persistent/spontaneous/large leaks — <strong>&gt;90% success</strong>.</li><li>Multilayer: mucosa, fascia, fat 'bath-plug'; <strong>nasoseptal flap</strong> for large defects.</li><li>In IIH: <strong>lower the pressure</strong> (acetazolamide, weight loss, shunt).</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Beta-2-transferrin confirms CSF; then localize with CT and MRI.</li><li>Endoscopic multilayer repair is >90% successful.</li><li>Spontaneous leaks mean check for IIH — treat the pressure or it recurs.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Skull-base weak points", body: "<ul><li><strong>Cribriform lateral lamella</strong> — thinnest, common leak site.</li><li><strong>Fovea ethmoidalis</strong> (ethmoid roof).</li><li><strong>Sphenoid lateral recess</strong> — Sternberg (lateral craniopharyngeal) canal, favored in IIH.</li></ul>" },
+      { title: "Encephalocele vs meningocele", body: "<ul><li><strong>Meningocele</strong> — meninges + CSF herniate through the defect.</li><li><strong>Meningoencephalocele</strong> — brain tissue as well; common with spontaneous leaks.</li></ul>" }
+    ],
+    pearls: [
+      "The first step with suspected CSF rhinorrhea is to confirm the fluid is CSF with beta-2-transferrin (or beta-trace protein) — bedside glucose testing is unreliable.",
+      "Spontaneous CSF leaks are strongly associated with idiopathic intracranial hypertension — classically an obese woman with an empty sella — and they recur unless the raised intracranial pressure is treated.",
+      "The lateral recess of the sphenoid, via a persistent lateral craniopharyngeal (Sternberg) canal, is a favored site for spontaneous, IIH-related leaks and often harbors a meningoencephalocele.",
+      "Many traumatic CSF leaks close with conservative measures — bed rest, head-of-bed elevation, stool softeners, avoiding straining, and sometimes a lumbar drain — often within about a week.",
+      "Endoscopic multilayer repair has a success rate above 90%, using free mucosa, fascia, fat 'bath-plug' grafts, and a pedicled nasoseptal flap for larger defects.",
+      "Routine prophylactic antibiotics are not recommended for CSF leaks, but the persistent open communication carries a real risk of ascending meningitis, so persistent leaks should be repaired and patients vaccinated against pneumococcus."
+    ],
+    flashcards: [
+      { q: "How do you confirm that clear nasal fluid is CSF?", a: "Send it for beta-2-transferrin, a protein essentially unique to CSF (also found in perilymph and aqueous humor), which is highly sensitive and specific; beta-trace protein is an alternative. Bedside glucose or the 'halo/ring sign' on tissue are unreliable and should not be relied upon." },
+      { q: "What is the most common cause of CSF rhinorrhea, and its subtypes?", a: "Trauma is most common — accidental skull-base fractures (cribriform, ethmoid roof, sphenoid, frontal) and iatrogenic injury during endoscopic sinus surgery or skull-base/pituitary surgery. Nontraumatic causes are high-pressure (IIH, tumors, hydrocephalus) and normal-pressure (congenital, erosive)." },
+      { q: "Why are spontaneous CSF leaks important to recognize?", a: "Because they are strongly associated with idiopathic intracranial hypertension (classically an obese woman with an empty sella and raised opening pressure). The elevated pressure thins the skull base and, if not treated, causes the repair to fail and the leak to recur." },
+      { q: "Which skull-base sites are typical for CSF leaks?", a: "The thin lateral lamella of the cribriform plate, the ethmoid roof (fovea ethmoidalis), the sphenoid — particularly its lateral recess through a persistent lateral craniopharyngeal (Sternberg) canal, favored in IIH — and the frontal region. Spontaneous leaks often present with a meningoencephalocele." },
+      { q: "How is a CSF leak localized once confirmed?", a: "High-resolution CT identifies the bony defect; MRI/MR cisternography shows a meningoencephalocele and the CSF column; CT cisternography with intrathecal contrast can demonstrate an active leak; and low-dose intrathecal fluorescein is used intraoperatively to pinpoint the exact site." },
+      { q: "When is conservative management appropriate and what does it involve?", a: "Many traumatic leaks close spontaneously, so conservative care is reasonable initially: bed rest, head-of-bed elevation, stool softeners, avoiding nose-blowing and straining, and sometimes a lumbar drain to divert CSF. Closure often occurs within about a week; persistent leaks are repaired." },
+      { q: "Describe endoscopic repair of a CSF leak.", a: "A multilayer closure of the defect with a high success rate (>90%): free mucosal grafts, fascia (e.g., fascia lata), fat 'bath-plug' grafts, and, for larger defects, a pedicled vascularized nasoseptal flap. The graft re-establishes a watertight barrier between the intracranial space and the nose." },
+      { q: "What extra step is essential for an IIH-associated leak?", a: "Lowering the intracranial pressure — acetazolamide, weight loss, and CSF diversion or shunting when needed. Without treating the pressure, even a technically perfect repair tends to fail and the leak recurs." }
+    ],
+    quiz: [
+      { stem: "A patient has clear, unilateral, positional nasal drainage after a facial fracture. What is the best test to confirm it is CSF?",
+        options: ["Bedside glucose oxidase strip", "Beta-2-transferrin assay", "Nasal culture", "The tissue 'halo/ring' sign"],
+        correct: 1, explanation: "Beta-2-transferrin is highly sensitive and specific for CSF and is the confirmatory test. Bedside glucose (option 1) is unreliable (contaminated by mucus/blood). A nasal culture (option 3) doesn't identify CSF. The halo/ring sign (option 4) is nonspecific and cannot confirm CSF." },
+      { stem: "An obese woman presents with spontaneous, unilateral watery rhinorrhea and an empty sella on imaging. Which underlying condition must be addressed to prevent recurrence?",
+        options: ["Allergic rhinitis", "Idiopathic intracranial hypertension", "Chronic rhinosinusitis", "Vasomotor rhinitis"],
+        correct: 1, explanation: "Spontaneous CSF leaks in this demographic are driven by idiopathic intracranial hypertension; unless the raised pressure is treated (acetazolamide, weight loss, shunt), the repair fails and the leak recurs. Allergic (option 1), chronic rhinosinusitis (option 3), and vasomotor rhinitis (option 4) are non-CSF nasal conditions and do not explain a beta-2-transferrin–positive leak." },
+      { stem: "Which site is characteristically involved in spontaneous, IIH-related CSF leaks?",
+        options: ["The maxillary sinus floor", "The lateral recess of the sphenoid (Sternberg canal)", "The inferior turbinate", "The nasal septum"],
+        correct: 1, explanation: "The lateral recess of the sphenoid, via a persistent lateral craniopharyngeal (Sternberg) canal, is a favored site for spontaneous IIH leaks, often with a meningoencephalocele. The maxillary floor (option 1), inferior turbinate (option 3), and nasal septum (option 4) are not skull-base CSF-leak sites." },
+      { stem: "A traumatic CSF leak is diagnosed. Which is the appropriate initial management for many such leaks?",
+        options: ["Immediate craniotomy", "Conservative measures (bed rest, head elevation, stool softeners, ± lumbar drain)", "Routine long-term prophylactic antibiotics", "Bilateral nasal packing under pressure"],
+        correct: 1, explanation: "Many traumatic leaks close spontaneously, so conservative measures are appropriate first, often achieving closure within about a week. Immediate craniotomy (option 1) is overly aggressive for most. Routine prophylactic antibiotics (option 3) are controversial and not recommended. Pressurized packing (option 4) does not repair a skull-base leak and could force air intracranially." },
+      { stem: "What is the definitive treatment for a persistent or spontaneous CSF leak, and its typical success rate?",
+        options: ["Observation indefinitely", "Endoscopic multilayer repair, >90% success", "Radiotherapy", "Topical antibiotics"],
+        correct: 1, explanation: "Endoscopic multilayer repair (mucosa, fascia, fat, nasoseptal flap for large defects) is definitive with a success rate above 90%. Indefinite observation (option 1) leaves an open route for meningitis. Radiotherapy (option 3) and topical antibiotics (option 4) have no role in closing a skull-base defect." },
+      { stem: "During endoscopic repair, which technique helps precisely localize the leak site intraoperatively?",
+        options: ["Intrathecal fluorescein", "Serum IgE measurement", "Peripheral blood eosinophil count", "Sweat chloride test"],
+        correct: 0, explanation: "Low-dose intrathecal fluorescein stains the CSF and pinpoints the defect intraoperatively. Serum IgE (option 1) and eosinophil counts (option 2) assess allergy/type 2 inflammation, not a leak site. Sweat chloride (option 3) screens for cystic fibrosis, unrelated to localizing a CSF leak." }
+    ],
+    signs: [
+      { name: "Unilateral positional clear rhinorrhea", category: "clinical", description: "Watery drip from one side, worse leaning forward, salty/metallic.", implication: "Suspect CSF leak — confirm with beta-2-transferrin." },
+      { name: "Spontaneous leak in an obese woman", category: "clinical", description: "Non-traumatic CSF rhinorrhea with an empty sella on imaging.", implication: "Idiopathic intracranial hypertension — treat pressure or the repair recurs." },
+      { name: "Meningoencephalocele on MRI", category: "clinical", description: "Herniation of meninges ± brain through a skull-base defect.", implication: "Localizes a spontaneous leak — plan endoscopic multilayer repair." },
+      { name: "Beta-2-transferrin positive", category: "lab", description: "CSF-specific protein detected in the nasal fluid.", implication: "Confirms CSF rhinorrhea." },
+      { name: "Sphenoid lateral-recess defect (Sternberg canal)", category: "clinical", description: "Bony dehiscence in the lateral sphenoid on CT.", implication: "Classic IIH leak site — address ICP alongside repair." }
+    ],
+    podcastTitle: "Deep Dive · Cerebrospinal Fluid Rhinorrhea",
+    podcastDuration: "~18 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. Today: cerebrospinal fluid rhinorrhea — a leak of brain fluid into the nose. Marcus, why does this small stream of clear fluid deserve a whole chapter?" },
+      { speaker: "cohost", text: "Because it's an open door to the intracranial space. The fluid itself is trivial in volume, but the defect connects the nose to the meninges, so the real danger is ascending meningitis, and occasionally air tracking in — pneumocephalus. Clinically it's clear, watery, usually unilateral rhinorrhea that's positional — worse when the patient leans forward — and patients often describe a salty or metallic taste as it drips down the throat." },
+      { speaker: "host",   text: "Let's classify the causes." },
+      { speaker: "cohost", text: "Trauma is the most common overall, and it splits two ways: accidental skull-base fractures — cribriform, ethmoid roof, sphenoid, frontal — and iatrogenic injury, which is us, during endoscopic sinus surgery or skull-base and pituitary surgery. Then the nontraumatic group. The high-pressure ones are the key: idiopathic intracranial hypertension — classically an obese woman with an empty sella and a raised opening pressure — plus tumors and hydrocephalus. And normal-pressure nontraumatic leaks from congenital defects or erosion." },
+      { speaker: "host",   text: "You're emphasizing IIH. Why?" },
+      { speaker: "cohost", text: "Because spontaneous leaks — the ones with no trauma and no surgery — are now understood to be, very often, a manifestation of idiopathic intracranial hypertension. The chronically elevated pressure slowly thins and erodes the skull base until it blows through, frequently with a meningoencephalocele. The clinical trap is fixing the hole and ignoring the pressure — do that, and it recurs. So a spontaneous leak should always make you ask about IIH." },
+      { speaker: "host",   text: "Where do they leak?" },
+      { speaker: "cohost", text: "The weak points of the skull base. The lateral lamella of the cribriform plate — the thinnest spot. The ethmoid roof, the fovea ethmoidalis. The sphenoid, and specifically its lateral recess through a persistent lateral craniopharyngeal canal — Sternberg's canal — which is the classic site for IIH-related spontaneous leaks. And the frontal region. At these sites you often find not just a hole but a meningoencephalocele." },
+      { speaker: "host",   text: "Now the work-up. First question — is it even CSF?" },
+      { speaker: "cohost", text: "Right, you confirm before you chase. The test is beta-2-transferrin — a protein essentially unique to CSF, also found in perilymph and aqueous humor — highly sensitive and specific. Beta-trace protein is an alternative. What you do not rely on is bedside glucose, which is unreliable, or the old halo-ring sign on tissue, which is nonspecific. Confirm with beta-2-transferrin, full stop." },
+      { speaker: "host",   text: "And once confirmed, how do you localize it?" },
+      { speaker: "cohost", text: "A staged imaging approach. High-resolution CT shows the bony defect. MRI, and MR cisternography, show a meningoencephalocele and the fluid column tracking through. CT cisternography — with intrathecal contrast — can catch an active leak. And intraoperatively, low-dose intrathecal fluorescein stains the CSF green and lets you pinpoint the exact site while you're repairing it. You match the study to the question: bone on CT, soft tissue and encephalocele on MRI." },
+      { speaker: "host",   text: "Management. Who gets to heal on their own?" },
+      { speaker: "cohost", text: "Many traumatic leaks close spontaneously, so it's reasonable to start conservative: bed rest, head-of-bed elevation, stool softeners, no nose-blowing or straining, and sometimes a lumbar drain to divert CSF and let the defect seal — often within about a week. Prophylactic antibiotics are actually controversial and not routinely recommended; what you should do is make sure the patient is vaccinated against pneumococcus. If a leak is persistent, spontaneous, or large, you repair it." },
+      { speaker: "host",   text: "And the repair?" },
+      { speaker: "cohost", text: "Endoscopic, and it works — success rates above ninety percent. The principle is a multilayer closure: free mucosal grafts, fascia, a fat bath-plug graft for the right defect, and for larger holes a pedicled, vascularized nasoseptal flap. You rebuild a watertight barrier between the intracranial space and the nose. And the non-negotiable add-on for the spontaneous, IIH-driven leaks — lower the intracranial pressure. Acetazolamide, weight loss, and CSF diversion or a shunt when needed. Skip that and your beautiful repair leaks again." },
+      { speaker: "host",   text: "Let's do a case. A 34-year-old woman with a high BMI has three months of clear watery dripping from the left nostril, worse leaning forward, no trauma. Walk it through." },
+      { speaker: "cohost", text: "No trauma, unilateral, positional, clear fluid, in an obese woman — this is a spontaneous CSF leak and I'm already thinking idiopathic intracranial hypertension. First I confirm it's CSF with beta-2-transferrin. Then I localize: high-resolution CT for the bony defect and MRI or MR cisternography, which I'd expect to show a meningoencephalocele, quite possibly in the lateral sphenoid recess. I'd measure the opening pressure. Then the plan is an endoscopic multilayer repair — likely a nasoseptal flap given a sphenoid defect — plus treating the intracranial pressure with acetazolamide and weight management, and a shunt if the pressure stays high. Fix the hole and the pressure together." },
+      { speaker: "host",   text: "Change it: a patient two weeks after a road-traffic accident with an anterior skull-base fracture has a low-flow CSF leak and is otherwise well. Different plan?" },
+      { speaker: "cohost", text: "Yes — this is a traumatic leak, and many of these close on their own. I'd manage conservatively first: bed rest, head elevation, stool softeners, avoid straining and nose-blowing, consider a lumbar drain, and vaccinate. I'd watch closely for meningitis. If it hasn't sealed after an adequate conservative trial, then I localize and do an endoscopic repair. The difference from the last case is that here the pressure is normal, so I don't need to treat ICP — closure alone is durable." },
+      { speaker: "host",   text: "One more, quick: a resident wants to send prophylactic antibiotics for every CSF leak. Correct them." },
+      { speaker: "cohost", text: "Routine prophylactic antibiotics aren't recommended — the evidence doesn't support them and they don't reliably prevent meningitis. The right moves are to close a persistent leak, keep a high index of suspicion for meningitis and treat it aggressively if it develops, and ensure pneumococcal vaccination. Definitive repair, not standing antibiotics, is what protects the patient." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: CSF rhinorrhea is clear, unilateral, positional fluid whose danger is ascending meningitis. Two: trauma — accidental and iatrogenic — is the most common cause, and spontaneous leaks mean idiopathic intracranial hypertension until proven otherwise. Three: confirm it's CSF with beta-2-transferrin, then localize with high-resolution CT and MRI or MR cisternography, and use intrathecal fluorescein intraoperatively." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: many traumatic leaks close conservatively — bed rest, head elevation, stool softeners, a lumbar drain — and prophylactic antibiotics are not routine, but vaccinate. Five: persistent, spontaneous, or large leaks get an endoscopic multilayer repair with over ninety-percent success, and in IIH you must lower the intracranial pressure with acetazolamide, weight loss, and diversion, or the leak recurs." },
+      { speaker: "host",   text: "Confirm it's CSF, localize it, repair it in layers — and never forget the pressure behind a spontaneous leak." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  45: {
+    objectives: [
+      "Explain the sino-orbital anatomic interface and how disease crosses the lamina papyracea.",
+      "Distinguish preseptal from postseptal orbital infection and stage complications with the Chandler classification.",
+      "Identify the vision-threatening signs — proptosis, ophthalmoplegia, reduced color vision, and an afferent pupillary defect.",
+      "Decide when orbital complications of sinusitis need surgical drainage versus intravenous antibiotics.",
+      "Describe elective sino-orbital procedures — orbital decompression for thyroid eye disease and endoscopic DCR — and recognize silent sinus syndrome."
+    ],
+    summary: `
+      <h4>1. The interface</h4>
+      <p>The <strong>lamina papyracea</strong> — the paper-thin medial orbital wall — and the orbital floor separate the <strong>ethmoid and maxillary sinuses</strong> from the orbit. Because the bone is so thin and traversed by vessels, <strong>infection, mucoceles, and tumors cross readily between sinus and orbit</strong>, and the same corridor is used deliberately for <strong>endoscopic orbital decompression and lacrimal surgery</strong>.</p>
+      <h4>2. Orbital complications of sinusitis — Chandler classification</h4>
+      <p>Orbital infection is usually a complication of <strong>ethmoid sinusitis</strong>, most often in <strong>children</strong>. Stage it by <strong>Chandler</strong>:</p>
+      <ul>
+        <li><strong>I — Preseptal cellulitis</strong>: infection <strong>anterior to the orbital septum</strong>; eyelid swelling/erythema, <strong>no proptosis, normal vision and eye movement</strong>.</li>
+        <li><strong>II — Orbital (postseptal) cellulitis</strong>: <strong>proptosis and chemosis</strong>, painful/limited eye movement, but no drainable pus.</li>
+        <li><strong>III — Subperiosteal abscess</strong>: pus <strong>between the lamina papyracea and the periorbita</strong>, displacing the globe (often <strong>inferolaterally</strong>).</li>
+        <li><strong>IV — Orbital abscess</strong>: pus <strong>within the orbital fat</strong>; severe proptosis, <strong>ophthalmoplegia, and vision loss</strong>.</li>
+        <li><strong>V — Cavernous sinus thrombosis</strong>: <strong>bilateral</strong> signs, multiple <strong>cranial-nerve palsies (III, IV, V1, VI)</strong>, and systemic toxicity.</li>
+      </ul>
+      <h4>3. The line that changes everything — pre- vs post-septal</h4>
+      <p>The <strong>orbital septum</strong> is the barrier. <strong>Preseptal</strong> disease is superficial and low-risk; <strong>postseptal</strong> disease is an <strong>emergency</strong>. The postseptal red flags: <strong>proptosis, pain on eye movement, ophthalmoplegia, decreased visual acuity, reduced color vision (an early, sensitive sign), and a relative afferent pupillary defect</strong> (marking optic-nerve compromise). Any of these mandates urgent imaging and treatment.</p>
+      <h4>4. Work-up and management</h4>
+      <p><strong>CT of the orbit and sinuses with contrast</strong> detects a subperiosteal or orbital abscess and the sinus source. Treatment by stage:</p>
+      <ul>
+        <li><strong>Preseptal</strong> — oral or IV antibiotics depending on severity; close follow-up.</li>
+        <li><strong>Postseptal cellulitis</strong> — admit for <strong>IV antibiotics</strong> and <strong>serial vision/eye-movement checks</strong>.</li>
+        <li><strong>Subperiosteal / orbital abscess</strong> — <strong>surgical drainage</strong> (endoscopic ± external), especially with <strong>vision changes, a large abscess, failure to improve in 24–48 h, or in an older child/adult</strong>. A <strong>small medial subperiosteal abscess in a young child with normal vision</strong> may be trialed on IV antibiotics with very close monitoring.</li>
+        <li><strong>Orbital compartment syndrome</strong> (a tense, proptotic orbit threatening the optic nerve) — emergent <strong>lateral canthotomy and inferior cantholysis</strong>.</li>
+      </ul>
+      <h4>5. The elective sino-orbital operations</h4>
+      <p>The same interface enables planned surgery: <strong>endoscopic orbital decompression</strong> (removing the lamina papyracea ± orbital floor) for <strong>thyroid eye disease (Graves orbitopathy)</strong> with compressive optic neuropathy or severe proptosis; <strong>endoscopic dacryocystorhinostomy (DCR)</strong> for <strong>nasolacrimal-duct obstruction</strong> (epiphora); and endoscopic approaches to selected orbital and orbital-apex lesions. Recognize <strong>silent sinus syndrome</strong> — chronic maxillary atelectasis with a collapsing sinus and <strong>painless enophthalmos and hypoglobus</strong>.</p>
+    `,
+    keyPoints: [
+      { category: "Interface", items: [
+        "Lamina papyracea (medial wall) and orbital floor separate ethmoid/maxillary sinuses from orbit — thin bone lets infection/tumor cross.",
+        "Same corridor used for endoscopic orbital decompression and lacrimal surgery."
+      ]},
+      { category: "Chandler stages", items: [
+        "I preseptal (no proptosis) · II postseptal cellulitis (proptosis, chemosis) · III subperiosteal abscess · IV orbital abscess · V cavernous sinus thrombosis (bilateral, CN III/IV/V1/VI).",
+        "Orbital infection usually from ethmoid sinusitis, most often in children."
+      ]},
+      { category: "Vision red flags", items: [
+        "Postseptal = emergency: proptosis, pain on eye movement, ophthalmoplegia, ↓acuity, ↓COLOR vision (early sensitive sign), relative afferent pupillary defect.",
+        "CT orbit/sinuses with contrast to find abscess."
+      ]},
+      { category: "Management", items: [
+        "Preseptal → antibiotics; postseptal cellulitis → IV antibiotics + serial vision checks; subperiosteal/orbital abscess → drainage (vision change, large, no improvement 24–48h, older child/adult).",
+        "Orbital compartment syndrome → lateral canthotomy + cantholysis. Elective: orbital decompression (thyroid eye disease), endoscopic DCR; silent sinus syndrome = painless enophthalmos."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 48 · Sino-Orbital Interface", subtitle: "Cummings 8e · Chapter 48", body: "<p style='font-size:18px;line-height:1.55;'>Thin bone, big consequences — stage orbital infection, catch the vision red flags, and know the elective decompression and lacrimal operations.</p>" },
+      { title: "The anatomy", body: "<ul><li><strong>Lamina papyracea</strong> (medial wall) + orbital floor separate ethmoid/maxillary sinuses from orbit.</li><li>Thin bone → infection, mucocele, tumor cross easily.</li></ul>" },
+      { title: "Chandler I–II", body: "<ul><li><strong>I Preseptal</strong>: lid swelling, <strong>no proptosis</strong>, normal vision/movement.</li><li><strong>II Postseptal cellulitis</strong>: proptosis, chemosis, painful movement — no drainable pus.</li></ul>" },
+      { title: "Chandler III–V", body: "<ul><li><strong>III Subperiosteal abscess</strong>: pus lamina–periorbita, globe displaced inferolaterally.</li><li><strong>IV Orbital abscess</strong>: pus in orbital fat; ophthalmoplegia, vision loss.</li><li><strong>V Cavernous sinus thrombosis</strong>: bilateral, CN III/IV/V1/VI, sepsis.</li></ul>" },
+      { title: "Pre- vs post-septal", body: "<ul><li>Orbital <strong>septum</strong> is the barrier.</li><li>Preseptal = superficial; <strong>postseptal = emergency</strong>.</li></ul>" },
+      { title: "Vision red flags", body: "<ul><li>Proptosis, pain on eye movement, ophthalmoplegia.</li><li>↓ acuity, <strong>↓ color vision</strong> (early), <strong>relative afferent pupillary defect</strong>.</li></ul>" },
+      { title: "Work-up & antibiotics", body: "<ul><li><strong>CT orbit + sinuses with contrast</strong> — find abscess + source.</li><li>Preseptal → antibiotics; postseptal cellulitis → IV antibiotics + serial vision checks.</li></ul>" },
+      { title: "When to drain", body: "<ul><li>Subperiosteal/orbital abscess → drainage if vision change, large abscess, no improvement 24–48h, or older child/adult.</li><li>Small medial SPA, young child, normal vision → trial IV antibiotics + close watch.</li></ul>" },
+      { title: "Elective sino-orbital surgery", body: "<ul><li><strong>Orbital decompression</strong> — thyroid eye disease (compressive neuropathy/proptosis).</li><li><strong>Endoscopic DCR</strong> — nasolacrimal-duct obstruction.</li><li><strong>Silent sinus syndrome</strong> — painless enophthalmos/hypoglobus.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Separate preseptal from postseptal — the septum is the line.</li><li>Color vision and an afferent pupillary defect are the sensitive optic-nerve warnings.</li><li>Abscess with vision change → drain; orbital compartment syndrome → canthotomy.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Orbital septum", body: "<ul><li>Fibrous barrier from the orbital rim to the tarsal plates.</li><li>Divides <strong>preseptal</strong> (superficial) from <strong>postseptal</strong> (orbital) space — the key clinical dividing line.</li></ul>" },
+      { title: "Decompression corridor", body: "<ul><li>Endoscopic removal of the <strong>lamina papyracea ± orbital floor</strong> lets orbital contents prolapse into the ethmoid/maxillary space.</li><li>Basis of decompression for thyroid eye disease.</li></ul>" }
+    ],
+    pearls: [
+      "The orbital septum is the dividing line: preseptal cellulitis is superficial and low-risk, whereas any postseptal (orbital) involvement — proptosis, painful or limited eye movement, or vision change — is an emergency.",
+      "Reduced color vision is an early, sensitive sign of optic-nerve compromise, and a relative afferent pupillary defect signals significant optic-nerve dysfunction — both demand urgent action.",
+      "The Chandler classification stages orbital complications of sinusitis: I preseptal, II orbital cellulitis, III subperiosteal abscess, IV orbital abscess, and V cavernous sinus thrombosis.",
+      "Orbital complications most often arise from ethmoid sinusitis in children, and a subperiosteal abscess classically displaces the globe inferolaterally.",
+      "A subperiosteal or orbital abscess generally needs surgical drainage — especially with vision changes, a large abscess, failure to improve in 24–48 hours, or in an older child or adult — though a small medial abscess in a young child with normal vision may be trialed on IV antibiotics with close monitoring.",
+      "Silent sinus syndrome is chronic maxillary atelectasis producing painless enophthalmos and hypoglobus as the collapsing sinus draws the orbital floor downward."
+    ],
+    flashcards: [
+      { q: "What anatomic structure separates preseptal from postseptal orbital infection, and why does it matter?", a: "The orbital septum, a fibrous sheet from the orbital rim to the tarsal plates. Preseptal (anterior to it) infection is superficial with lid swelling but normal vision and eye movement; postseptal (behind it) infection involves the orbit itself — proptosis, painful movement, and potential vision loss — and is an emergency." },
+      { q: "List the Chandler classification of orbital complications of sinusitis.", a: "I preseptal cellulitis; II orbital (postseptal) cellulitis with proptosis and chemosis; III subperiosteal abscess (pus between the lamina papyracea and periorbita); IV orbital abscess (pus in the orbital fat, with ophthalmoplegia and vision loss); and V cavernous sinus thrombosis (bilateral signs, cranial-nerve III/IV/V1/VI palsies, sepsis)." },
+      { q: "Which examination findings signal optic-nerve compromise in orbital infection?", a: "Decreased visual acuity, reduced color vision (an early and sensitive sign), and a relative afferent pupillary defect, along with proptosis and ophthalmoplegia. Any of these means postseptal, vision-threatening disease requiring urgent imaging and treatment." },
+      { q: "What is the usual source and demographic of orbital cellulitis?", a: "It is usually a complication of ethmoid sinusitis (the ethmoid is separated from the orbit by only the thin lamina papyracea) and occurs most often in children. A subperiosteal abscess typically displaces the globe inferolaterally." },
+      { q: "When does a subperiosteal or orbital abscess require surgical drainage?", a: "When there are vision changes or an afferent pupillary defect, a large abscess, failure to improve on IV antibiotics within 24–48 hours, or the patient is an older child or adult. A small medial subperiosteal abscess in a young child with normal vision may be trialed on IV antibiotics with very close monitoring." },
+      { q: "What is orbital compartment syndrome and its immediate treatment?", a: "A tense, proptotic orbit with rising intraorbital pressure that threatens the optic nerve (from abscess, hematoma, or edema). It is an emergency treated with immediate lateral canthotomy and inferior cantholysis to decompress the orbit, with ophthalmology involvement." },
+      { q: "What is endoscopic orbital decompression used for?", a: "For thyroid eye disease (Graves orbitopathy) with compressive optic neuropathy or severe proptosis: the lamina papyracea and often the orbital floor are removed so the orbital contents can prolapse into the ethmoid/maxillary space, relieving pressure and reducing proptosis." },
+      { q: "What is silent sinus syndrome?", a: "Chronic maxillary atelectasis: a chronically obstructed, negatively pressured maxillary sinus collapses inward, drawing the orbital floor down and producing painless enophthalmos and hypoglobus, often noticed as facial or ocular asymmetry without acute infection." }
+    ],
+    quiz: [
+      { stem: "A child with ethmoid sinusitis has eyelid swelling but normal vision, no proptosis, and full painless eye movements. This is:",
+        options: ["Orbital (postseptal) cellulitis", "Preseptal cellulitis", "Subperiosteal abscess", "Cavernous sinus thrombosis"],
+        correct: 1, explanation: "Lid swelling with no proptosis and normal, painless eye movements and vision is preseptal cellulitis (Chandler I). Postseptal cellulitis (option 1) would show proptosis and painful movement. A subperiosteal abscess (option 3) displaces the globe. Cavernous sinus thrombosis (option 4) is bilateral with multiple cranial-nerve palsies and sepsis." },
+      { stem: "Which finding is the most sensitive early warning of optic-nerve compromise in orbital cellulitis?",
+        options: ["Eyelid erythema", "Reduced color vision", "Tearing", "Nasal congestion"],
+        correct: 1, explanation: "Reduced color vision is an early, sensitive marker of optic-nerve dysfunction and mandates urgent action. Eyelid erythema (option 1) is a superficial sign present even in preseptal disease. Tearing (option 3) and nasal congestion (option 4) are nonspecific and do not indicate optic-nerve compromise." },
+      { stem: "A 14-year-old has proptosis, ophthalmoplegia, decreasing acuity, and a CT showing a large medial subperiosteal abscess. The best management is:",
+        options: ["Oral antibiotics and outpatient follow-up", "Surgical drainage (endoscopic ± external) with IV antibiotics", "Observation for 72 hours", "Topical decongestant only"],
+        correct: 1, explanation: "A large subperiosteal abscess with vision changes in an older child requires surgical drainage plus IV antibiotics. Oral antibiotics with outpatient follow-up (option 1) are unsafe with vision loss. Prolonged observation (option 3) risks permanent optic-nerve damage. Topical decongestant alone (option 4) does not address the abscess." },
+      { stem: "Bilateral orbital signs with palsies of cranial nerves III, IV, V1, and VI plus systemic toxicity indicate which Chandler stage?",
+        options: ["Stage II (orbital cellulitis)", "Stage V (cavernous sinus thrombosis)", "Stage I (preseptal)", "Stage III (subperiosteal abscess)"],
+        correct: 1, explanation: "Bilateral findings with multiple cranial-nerve palsies (III, IV, V1, VI) and sepsis are cavernous sinus thrombosis, Chandler V. Orbital cellulitis (option 1) and subperiosteal abscess (option 3) are typically unilateral without this cranial-nerve cluster. Preseptal disease (option 3, stage I) has no orbital signs at all." },
+      { stem: "Endoscopic orbital decompression (removing the lamina papyracea ± orbital floor) is most commonly indicated for:",
+        options: ["Allergic rhinitis", "Thyroid eye disease with compressive optic neuropathy or severe proptosis", "Simple preseptal cellulitis", "Epistaxis"],
+        correct: 1, explanation: "Orbital decompression relieves proptosis and compressive optic neuropathy in thyroid eye disease (Graves orbitopathy). Allergic rhinitis (option 1) and epistaxis (option 4) are unrelated. Preseptal cellulitis (option 3) is treated with antibiotics, not decompression." },
+      { stem: "A patient has painless progressive enophthalmos with downward displacement of the globe and a chronically opacified, collapsed maxillary sinus. The diagnosis is:",
+        options: ["Orbital abscess", "Silent sinus syndrome (chronic maxillary atelectasis)", "Cavernous sinus thrombosis", "Preseptal cellulitis"],
+        correct: 1, explanation: "Painless enophthalmos and hypoglobus with a collapsed, chronically obstructed maxillary sinus is silent sinus syndrome. An orbital abscess (option 1) is acute and painful with proptosis, not enophthalmos. Cavernous sinus thrombosis (option 2) is a septic emergency. Preseptal cellulitis (option 4) is superficial lid infection, not globe displacement." }
+    ],
+    signs: [
+      { name: "Proptosis with painful eye movement", category: "clinical", description: "Forward globe displacement and pain/limitation on gaze.", implication: "Postseptal (orbital) involvement — emergency; image and treat." },
+      { name: "Reduced color vision / afferent pupillary defect", category: "clinical", description: "Desaturated color perception or a relative afferent pupillary defect.", implication: "Optic-nerve compromise — urgent decompression/drainage." },
+      { name: "Globe displaced inferolaterally", category: "clinical", description: "Downward-and-out globe position in orbital infection.", implication: "Medial subperiosteal abscess from ethmoid sinusitis." },
+      { name: "Bilateral orbital signs + CN III/IV/V1/VI palsies", category: "clinical", description: "Bilateral proptosis/ophthalmoplegia with multiple cranial-nerve deficits and sepsis.", implication: "Cavernous sinus thrombosis (Chandler V) — critical." },
+      { name: "Painless enophthalmos + collapsed maxillary sinus", category: "clinical", description: "Sunken globe with chronic maxillary atelectasis on CT.", implication: "Silent sinus syndrome — endoscopic maxillary antrostomy ± floor reconstruction." }
+    ],
+    podcastTitle: "Deep Dive · Sino-Orbital Interface",
+    podcastDuration: "~19 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. Today: the sino-orbital interface — where the sinuses and the eye share a paper-thin wall, for better and for worse. Marcus, set the anatomy." },
+      { speaker: "cohost", text: "The medial orbital wall is the lamina papyracea — literally 'paper layer' — and the orbital floor sits above the maxillary sinus. Both are thin and pierced by vessels, so the ethmoid and maxillary sinuses are only a wafer of bone away from the orbit. That's why infection, mucoceles, and tumors cross so easily between sinus and orbit — and it's also the corridor we use on purpose for orbital decompression and lacrimal surgery." },
+      { speaker: "host",   text: "Let's take the big clinical problem — orbital complications of sinusitis. How do you stage them?" },
+      { speaker: "cohost", text: "With the Chandler classification, five stages. One is preseptal cellulitis — infection anterior to the orbital septum, so you get eyelid swelling and redness but no proptosis, and vision and eye movements are normal. Two is orbital, or postseptal, cellulitis — now there's proptosis and chemosis and painful, limited eye movement, but no drainable pus yet. Three is a subperiosteal abscess — pus between the lamina papyracea and the periorbita, pushing the globe, classically down and out. Four is an orbital abscess — pus within the orbital fat itself, with ophthalmoplegia and vision loss. And five is cavernous sinus thrombosis — bilateral signs, palsies of cranial nerves three, four, V1, and six, and a septic, toxic patient." },
+      { speaker: "host",   text: "You keep coming back to one anatomic line. Say why it's everything." },
+      { speaker: "cohost", text: "The orbital septum. It's the fibrous barrier from the orbital rim to the tarsal plates, and it's the line between safe and dangerous. Preseptal disease is superficial — you can often treat it with antibiotics. Postseptal disease is an emergency. So the entire bedside job is deciding: is this in front of the septum or behind it?" },
+      { speaker: "host",   text: "And how do you tell, clinically?" },
+      { speaker: "cohost", text: "You look for the postseptal red flags: proptosis, pain on eye movement, ophthalmoplegia, decreasing visual acuity, and two subtle but crucial ones — reduced color vision, which is an early and sensitive sign of optic-nerve stress, and a relative afferent pupillary defect, which tells you the optic nerve is genuinely compromised. If any of those are present, you're postseptal until proven otherwise, and you move fast." },
+      { speaker: "host",   text: "Who gets this, and how do you image it?" },
+      { speaker: "cohost", text: "It's usually a complication of ethmoid sinusitis, and most often in children, because the ethmoid is right there behind the lamina. The imaging is a CT of the orbit and sinuses with contrast — it shows you whether there's a drainable subperiosteal or orbital abscess and confirms the sinus source." },
+      { speaker: "host",   text: "Now management by stage." },
+      { speaker: "cohost", text: "Preseptal cellulitis — oral or IV antibiotics depending on severity, with close follow-up. Postseptal cellulitis without an abscess — admit for IV antibiotics and, critically, serial vision and eye-movement checks, because it can progress. When there's a subperiosteal or orbital abscess, the default is surgical drainage — endoscopic, sometimes with an external approach — especially if there are vision changes, a large abscess, no improvement on IV antibiotics within twenty-four to forty-eight hours, or the patient is an older child or an adult. The one exception is a small medial subperiosteal abscess in a young child with completely normal vision, which you can trial on IV antibiotics with very close monitoring." },
+      { speaker: "host",   text: "And if the orbit is about to lose the nerve?" },
+      { speaker: "cohost", text: "That's orbital compartment syndrome — a tense, proptotic orbit with rising pressure choking the optic nerve, whether from abscess, hematoma, or edema. It's the same emergency we discussed in sinus surgery: immediate lateral canthotomy and inferior cantholysis to decompress the orbit, with ophthalmology. Minutes matter." },
+      { speaker: "host",   text: "Switch to the elective side of the interface." },
+      { speaker: "cohost", text: "Same corridor, planned surgery. Endoscopic orbital decompression — removing the lamina papyracea and often the orbital floor so the orbital contents can prolapse medially — is the operation for thyroid eye disease, Graves orbitopathy, when there's compressive optic neuropathy or disfiguring proptosis. Endoscopic dacryocystorhinostomy, DCR, opens the lacrimal sac into the nose for nasolacrimal-duct obstruction with epiphora. And there are endoscopic approaches to selected orbital and orbital-apex lesions. One entity to recognize is silent sinus syndrome — chronic maxillary atelectasis, where a chronically obstructed, negative-pressure maxillary sinus collapses and pulls the orbital floor down, giving painless enophthalmos and hypoglobus." },
+      { speaker: "host",   text: "Let's do a case. A 9-year-old with a few days of sinusitis now has a red, swollen eye, it's pushed forward and down-and-out, moving it hurts, and the acuity is dropping. What's your sequence?" },
+      { speaker: "cohost", text: "Proptosis, inferolateral globe displacement, painful movement, and falling acuity is postseptal disease with a likely medial subperiosteal abscess from ethmoid sinusitis. I check color vision and the pupil for an afferent defect, admit and start IV antibiotics immediately, and get a contrast CT of the orbit and sinuses. Given a large abscess with vision changes in an older child, this is a drainage case — endoscopic drainage of the abscess and the ethmoid source — not a watch-and-wait. Ophthalmology is involved throughout." },
+      { speaker: "host",   text: "Change it: same age, tiny medial subperiosteal collection, but vision and color vision are completely normal and the eye moves well. Reframe." },
+      { speaker: "cohost", text: "Now I have room to be conservative. A small medial subperiosteal abscess in a young child with normal vision and motility can be trialed on IV antibiotics with very close monitoring — serial acuity, color vision, pupil, and proptosis checks. If anything worsens or it doesn't improve in twenty-four to forty-eight hours, I drain. The child's normal optic-nerve function is what buys the trial." },
+      { speaker: "host",   text: "One more: an adult with prominent bulging eyes, lid retraction, and compressive optic neuropathy from Graves disease. Where does the interface help?" },
+      { speaker: "cohost", text: "This is elective territory — endoscopic orbital decompression. I remove the lamina papyracea and orbital floor so the swollen orbital contents can herniate into the ethmoid and maxillary space, relieving pressure on the optic nerve and reducing the proptosis. It's the interface used deliberately to save vision and restore the eye's position, coordinated with the ophthalmology and endocrine teams." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: the sinuses and orbit share a paper-thin wall — the lamina papyracea and orbital floor — so disease crosses easily. Two: the orbital septum divides preseptal, superficial disease from postseptal, emergency disease. Three: stage with Chandler — preseptal, orbital cellulitis, subperiosteal abscess, orbital abscess, cavernous sinus thrombosis — and watch color vision and the pupil for optic-nerve compromise." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: image with contrast CT; treat preseptal with antibiotics, postseptal cellulitis with IV antibiotics and serial checks, and drain a subperiosteal or orbital abscess when there are vision changes, a large collection, no improvement in one to two days, or an older child or adult — and decompress a tense orbit with canthotomy and cantholysis. Five: the same interface serves elective surgery — orbital decompression for thyroid eye disease and endoscopic DCR for tearing — and remember silent sinus syndrome as painless enophthalmos from a collapsing maxillary sinus." },
+      { speaker: "host",   text: "Find the septum, respect the optic nerve, and use the same corridor to drain pus or to save an eye." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
   53: {
     objectives: [
       'Describe the neuroanatomy of the laryngeal nerves and their innervation pattern.',
@@ -21507,7 +21795,7 @@ function renderCurriculum() {
     <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 14px;font-size:13px;color:var(--text-soft);">
       <span>⏸ <strong>${held}</strong> chapter${held===1?'':'s'} on hold${held?' (dimmed below)':''}.</span>
       ${held ? `<button class="btn btn-ghost btn-sm" data-action="toggle-hide-held">${state.hideHeld ? '👁 Show held' : '🙈 Hide held'}</button>` : ''}
-      <span style="color:var(--text-faint);">Use ⏸ on any chapter to park it as lower-priority.</span>
+      <span style="color:var(--text-faint);">Tap the ⏸ at the top-right of any chapter card to park it as lower-priority (it dims and is skipped by “Up next”).</span>
     </div>`; })()}
 
     ${sectionGroups.map(({sec, weeks}) => `
