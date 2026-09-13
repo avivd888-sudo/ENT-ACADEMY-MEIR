@@ -21944,9 +21944,11 @@ function renderDashboard() {
       : (!isPod && resumeProg && resumeProg.quizScore !== undefined) ? ('Quiz ' + resumeProg.quizScore + '/' + resumeProg.quizTotal)
       : (isPod ? 'Listening' : 'In progress');
   // Podcast → pod-select (opens the dedicated player). Otherwise → open-week-section (tab + anchor).
-  const _attrs = isPod
+  // NOTE: guard on targetWeek FIRST — a brand-new user (no progress, no last podcast) has targetWeek=null,
+  // and touching targetWeek.week here (before the resumeHTML guard) crashed the whole Home view.
+  const _attrs = !targetWeek ? '' : (isPod
     ? `data-action="pod-select" data-week="${targetWeek.week}"`
-    : `data-action="open-week-section" data-week="${targetWeek.week}" data-tab="${resumeTab}" data-section="${resumeSection}"`;
+    : `data-action="open-week-section" data-week="${targetWeek.week}" data-tab="${resumeTab}" data-section="${resumeSection}"`);
   const resumeHTML = targetWeek ? `
     <div class="continue-hero" ${_attrs} role="button" tabindex="0" aria-label="${escapeAttr(_verb)} — Chapter ${targetWeek.chapter || targetWeek.week}, ${escapeAttr(targetWeek.title)}">
       <div class="continue-hero-ico" aria-hidden="true">${_icon}</div>
