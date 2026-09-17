@@ -20580,7 +20580,13 @@ function persist() {
       // Manager (or signed-out) edits the canonical record.
       state.managerProgress = state.progress;
     }
-    const _payload = JSON.stringify({
+    // Write the tiny critical bucket (keys + progress + sign-in) FIRST — BEFORE building the big
+    // payload — so that even if JSON.stringify below throws (a bad/oversized field), progress and
+    // keys are already saved. This was the recurring "memory doesn't save" bug: the big stringify
+    // ran first, and any failure there skipped _writeCritical() entirely.
+    _writeCritical();
+    let _payload = null;
+    try { _payload = JSON.stringify({
       // Top-level `progress` always mirrors the MANAGER record (backward-compat + canonical).
       progress: state.managerProgress || {},
       managerProgress: state.managerProgress || {},
@@ -20636,26 +20642,24 @@ function persist() {
       lastLocation: state.lastLocation,
       lastPodcast: state.lastPodcast,
       podcastResume: state.podcastResume
-    });
-    // ALWAYS write the tiny critical bucket FIRST — keys, progress, sign-in. It's small enough
-    // that it can't hit the ~5 MB quota, so even if the big blob below fails, the user never
-    // loses their API key or study progress across updates. This is the durability guarantee.
-    _writeCritical();
+    }); } catch (_pe) { _payload = null; /* big blob failed to serialize — critical bucket already saved above */ }
     // Full snapshot. If it overflows quota, retry without the big regenerable fields so the
     // rest still saves instead of the whole write failing silently.
-    try {
-      localStorage.setItem(STORE_KEY, _payload);
-    } catch (quotaErr) {
+    if (_payload) {
       try {
-        const _trimmed = JSON.parse(_payload);
-        delete _trimmed.generatedContent; delete _trimmed.extendedPodcasts;
-        delete _trimmed.chapterChats;     delete _trimmed.advisorMessages;
-        localStorage.setItem(STORE_KEY, JSON.stringify(_trimmed));
-      } catch (e2) { /* critical bucket already saved above — safe to continue */ }
+        localStorage.setItem(STORE_KEY, _payload);
+      } catch (quotaErr) {
+        try {
+          const _trimmed = JSON.parse(_payload);
+          delete _trimmed.generatedContent; delete _trimmed.extendedPodcasts;
+          delete _trimmed.chapterChats;     delete _trimmed.advisorMessages;
+          localStorage.setItem(STORE_KEY, JSON.stringify(_trimmed));
+        } catch (e2) { /* critical bucket already saved above — safe to continue */ }
+      }
+      // Durability mirror: also write the snapshot to IndexedDB (far more eviction-resistant than
+      // localStorage on Safari). On boot we auto-restore from here if localStorage was cleared.
+      _scheduleBackupMirror(_payload);
     }
-    // Durability mirror: also write the snapshot to IndexedDB (far more eviction-resistant than
-    // localStorage on Safari). On boot we auto-restore from here if localStorage was cleared.
-    _scheduleBackupMirror(_payload);
     // Cloud sync: debounced push so changes follow you to your other devices.
     try { if (typeof _syncSchedulePush === 'function') _syncSchedulePush(); } catch(e){}
   } catch (e) { /* ignore */ }
