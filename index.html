@@ -15723,6 +15723,414 @@ const CONTENT = {
       { speaker: "cohost", text: "That's the chapter." }
     ]
   },
+  70: {
+    objectives: [
+      "Describe the cancer-immunity cycle and the three phases of immunoediting (elimination, equilibrium, escape).",
+      "Explain the immune checkpoints CTLA-4 (priming) and PD-1/PD-L1 (effector) and how tumors exploit them.",
+      "State the role of anti-PD-1 checkpoint inhibitors in recurrent/metastatic HNSCC and how PD-L1 CPS guides therapy.",
+      "Explain cetuximab (anti-EGFR) and emerging immunotherapies (vaccines, adoptive cell therapy, oncolytic viruses).",
+      "Recognize and manage immune-related adverse events (irAEs) with corticosteroids."
+    ],
+    summary: `
+      <h4>1. The cancer-immunity cycle and immunoediting</h4>
+      <p>The immune system continuously surveys for tumors. <strong>Immunoediting</strong> has three phases: <strong>elimination</strong> (immune destruction of nascent tumor), <strong>equilibrium</strong> (a dormant standoff that also selects for less-immunogenic clones), and <strong>escape</strong> (the tumor evades immunity and grows clinically). Effective antitumor immunity requires the <strong>cancer-immunity cycle</strong>: tumor antigen release → uptake and presentation by <strong>dendritic cells</strong> → T-cell priming in the lymph node → trafficking and infiltration → recognition of tumor via <strong>MHC/HLA</strong> → <strong>CD8+ cytotoxic T-cell</strong> killing (with help from CD4+ T cells and NK cells).</p>
+      <h4>2. How tumors evade the immune system</h4>
+      <p>Tumors escape by <strong>downregulating MHC class I</strong> (hiding antigen), creating an <strong>immunosuppressive microenvironment</strong> (regulatory T cells [Tregs], myeloid-derived suppressor cells [MDSCs], tumor-associated macrophages, suppressive cytokines), and — centrally — by engaging <strong>immune checkpoints</strong> that switch T cells off.</p>
+      <h4>3. The checkpoints — CTLA-4 and PD-1/PD-L1</h4>
+      <ul>
+        <li><strong>CTLA-4</strong> acts early, during <strong>T-cell priming in the lymph node</strong>, outcompeting the costimulatory CD28 signal — the brake on activation. Blocked by <strong>ipilimumab</strong>.</li>
+        <li><strong>PD-1</strong> (on T cells) binding <strong>PD-L1</strong> (often expressed on tumor cells and the microenvironment) acts later, in the <strong>effector phase within the tumor</strong>, producing <strong>T-cell exhaustion</strong>. This is the dominant axis in head and neck cancer. Blocked by <strong>anti-PD-1 (pembrolizumab, nivolumab)</strong> or anti-PD-L1 agents.</li>
+      </ul>
+      <h4>4. Checkpoint inhibitors in HNSCC</h4>
+      <p><strong>Anti-PD-1 antibodies are standard for recurrent/metastatic HNSCC.</strong> <strong>Pembrolizumab</strong> (alone or with platinum-based chemotherapy) is a <strong>first-line</strong> option for recurrent/metastatic disease, with the <strong>PD-L1 Combined Positive Score (CPS)</strong> guiding whether single-agent immunotherapy is appropriate (higher CPS favors pembrolizumab monotherapy). <strong>Nivolumab</strong> improves survival after <strong>platinum failure</strong>. Responses can be durable, though only a minority respond. Anti-CTLA-4 is less established in head and neck.</p>
+      <h4>5. EGFR-targeted therapy and other immunotherapies</h4>
+      <p><strong>Cetuximab</strong>, a monoclonal antibody against the <strong>epidermal growth factor receptor (EGFR)</strong> (overexpressed in most HNSCC), is used <strong>with radiation</strong> (improving survival in locally advanced disease) or with chemotherapy in recurrent/metastatic disease. Investigational approaches include <strong>therapeutic vaccines</strong> (notably HPV-targeted), <strong>adoptive cell therapy</strong> (tumor-infiltrating lymphocytes, CAR-T — still largely experimental in solid head-and-neck tumors), and <strong>oncolytic viruses</strong>.</p>
+      <h4>6. Immune-related adverse events (irAEs)</h4>
+      <p>Checkpoint inhibitors cause a distinctive toxicity profile from <strong>unleashed autoimmunity</strong>, not the cytopenias of chemotherapy: <strong>colitis, pneumonitis, thyroiditis and other endocrinopathies (hypophysitis, adrenal insufficiency, type 1 diabetes), dermatitis, and hepatitis</strong>. Management is prompt recognition and <strong>corticosteroids</strong> (escalating immunosuppression for severe cases), with hormone replacement for endocrinopathies. Any new symptom in a patient on immunotherapy should raise an irAE.</p>
+    `,
+    keyPoints: [
+      { category: "Immunoediting", items: [
+        "Three phases: elimination → equilibrium (selects less-immunogenic clones) → escape.",
+        "Cancer-immunity cycle: antigen → dendritic-cell presentation → T-cell priming → infiltration → MHC recognition → CD8+ killing."
+      ]},
+      { category: "Checkpoints", items: [
+        "CTLA-4 = priming phase (lymph node), blocked by ipilimumab. PD-1/PD-L1 = effector phase (tumor) → T-cell exhaustion; dominant axis in H&N.",
+        "Tumor evasion: ↓MHC I, Tregs/MDSCs/TAMs, suppressive cytokines, checkpoint engagement."
+      ]},
+      { category: "Therapy in HNSCC", items: [
+        "Anti-PD-1 (pembrolizumab, nivolumab) = standard for recurrent/metastatic HNSCC; PD-L1 CPS guides pembrolizumab ± chemo first-line; nivolumab after platinum failure.",
+        "Cetuximab (anti-EGFR) with radiation (locally advanced) or chemo (R/M). Vaccines/adoptive cell therapy/oncolytic viruses are investigational."
+      ]},
+      { category: "irAEs / markers", items: [
+        "irAEs = autoimmune: colitis, pneumonitis, thyroiditis/endocrinopathy, dermatitis, hepatitis → corticosteroids (+ hormone replacement).",
+        "Biomarkers: PD-L1 CPS, HPV/p16 status, tumor mutational burden."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 73 · Tumor Immunology and Immunotherapy", subtitle: "Cummings 8e · Chapter 73", body: "<p style='font-size:18px;line-height:1.55;'>Release the brakes — checkpoint inhibitors restore antitumor T-cell activity, now standard in recurrent/metastatic HNSCC.</p>" },
+      { title: "Immunoediting", body: "<ul><li><strong>Elimination</strong> — immune destruction.</li><li><strong>Equilibrium</strong> — dormant; selects less-immunogenic clones.</li><li><strong>Escape</strong> — tumor evades and grows.</li></ul>" },
+      { title: "Cancer-immunity cycle", body: "<ul><li>Antigen release → <strong>dendritic-cell</strong> presentation.</li><li>T-cell priming (lymph node) → trafficking/infiltration.</li><li>MHC/HLA recognition → <strong>CD8+</strong> killing (+ CD4, NK).</li></ul>" },
+      { title: "Immune evasion", body: "<ul><li>↓ <strong>MHC class I</strong> (antigen hiding).</li><li>Tregs, MDSCs, tumor-associated macrophages.</li><li>Immune <strong>checkpoint</strong> engagement.</li></ul>" },
+      { title: "CTLA-4 vs PD-1/PD-L1", body: "<ul><li><strong>CTLA-4</strong> — priming phase, lymph node (ipilimumab).</li><li><strong>PD-1/PD-L1</strong> — effector phase, in tumor → T-cell exhaustion.</li><li>PD-1/PD-L1 is the dominant H&N axis.</li></ul>" },
+      { title: "Checkpoint inhibitors in HNSCC", body: "<ul><li><strong>Pembrolizumab</strong> ± chemo — first-line recurrent/metastatic (PD-L1 <strong>CPS</strong> guides).</li><li><strong>Nivolumab</strong> — after platinum failure.</li><li>Durable responses in a minority.</li></ul>" },
+      { title: "EGFR — cetuximab", body: "<ul><li>Anti-EGFR monoclonal (EGFR overexpressed in most HNSCC).</li><li>With <strong>radiation</strong> (locally advanced) or chemo (R/M).</li></ul>" },
+      { title: "Emerging immunotherapy", body: "<ul><li>Therapeutic vaccines (HPV-targeted).</li><li>Adoptive cell therapy (TILs, CAR-T) — investigational.</li><li>Oncolytic viruses.</li></ul>" },
+      { title: "Immune-related adverse events", body: "<ul><li>Colitis, pneumonitis, <strong>thyroiditis/endocrinopathy</strong>, dermatitis, hepatitis.</li><li>Autoimmune — NOT chemo cytopenias.</li><li>Treat with <strong>corticosteroids</strong> (+ hormone replacement).</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>PD-1/PD-L1 is the key H&N checkpoint; anti-PD-1 is standard for R/M HNSCC.</li><li>PD-L1 CPS guides pembrolizumab ± chemo first-line; nivolumab post-platinum.</li><li>Any new symptom on immunotherapy = suspect an irAE → steroids.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Where each checkpoint acts", body: "<ul><li><strong>CTLA-4</strong> — in the lymph node during priming (CD28/B7 competition).</li><li><strong>PD-1/PD-L1</strong> — in the tumor during the effector phase (exhaustion).</li></ul>" },
+      { title: "Key immune players", body: "<ul><li><strong>CD8+ cytotoxic T cells</strong> — the killers; need MHC I display.</li><li><strong>Dendritic cells</strong> — present antigen and prime T cells.</li><li><strong>Tregs / MDSCs</strong> — suppress the response (tumor's allies).</li></ul>" }
+    ],
+    pearls: [
+      "Immunoediting proceeds through elimination, equilibrium, and escape — and the equilibrium phase actively selects for less-immunogenic tumor clones, shaping the cancer that eventually emerges.",
+      "CTLA-4 brakes T-cell priming in the lymph node (blocked by ipilimumab), whereas PD-1 binding PD-L1 exhausts effector T cells within the tumor — and the PD-1/PD-L1 axis is the dominant target in head and neck cancer.",
+      "Anti-PD-1 antibodies (pembrolizumab, nivolumab) are standard in recurrent/metastatic HNSCC: pembrolizumab with or without platinum chemotherapy is first-line (guided by the PD-L1 Combined Positive Score), and nivolumab improves survival after platinum failure.",
+      "Cetuximab is a monoclonal antibody against EGFR, which is overexpressed in most HNSCC, and improves survival when combined with radiation in locally advanced disease.",
+      "Immune-related adverse events reflect unleashed autoimmunity — colitis, pneumonitis, thyroiditis and other endocrinopathies, dermatitis, and hepatitis — and are treated with corticosteroids (plus hormone replacement for endocrinopathies), distinct from chemotherapy's cytopenias.",
+      "Only a minority of patients respond to checkpoint inhibitors, but responses can be durable, which is why predictive biomarkers like PD-L1 CPS, HPV status, and tumor mutational burden are used to select patients."
+    ],
+    flashcards: [
+      { q: "What are the three phases of cancer immunoediting?", a: "Elimination (the immune system destroys nascent tumor cells), equilibrium (a dormant balance in which the tumor is controlled but immune pressure selects for less-immunogenic clones), and escape (the edited tumor evades immunity and grows into clinically apparent cancer)." },
+      { q: "Outline the cancer-immunity cycle.", a: "Tumor antigens are released and taken up by dendritic cells, which present them and prime T cells in the lymph node; activated T cells traffic to and infiltrate the tumor, recognize tumor cells via MHC/HLA-presented antigen, and CD8+ cytotoxic T cells kill them (with help from CD4+ T cells and NK cells). Each step can be a point of failure or therapeutic intervention." },
+      { q: "How do CTLA-4 and PD-1/PD-L1 differ in where and when they act?", a: "CTLA-4 acts early during T-cell priming in the lymph node, competing with CD28 for B7 and braking activation (blocked by ipilimumab). PD-1 on T cells binding PD-L1 (on tumor/microenvironment) acts later in the effector phase within the tumor, causing T-cell exhaustion; it is the dominant checkpoint in head and neck cancer, blocked by anti-PD-1 (pembrolizumab, nivolumab) or anti-PD-L1 agents." },
+      { q: "What is the role of anti-PD-1 therapy in recurrent/metastatic HNSCC?", a: "Anti-PD-1 antibodies are standard: pembrolizumab, alone or with platinum-based chemotherapy, is a first-line option for recurrent/metastatic disease, with the PD-L1 Combined Positive Score (CPS) guiding single-agent use; nivolumab improves survival after platinum failure. Responses occur in a minority but can be durable." },
+      { q: "What is the PD-L1 Combined Positive Score (CPS) used for?", a: "It quantifies PD-L1 expression on tumor and immune cells relative to viable tumor cells and is used as a predictive biomarker to select patients for pembrolizumab in recurrent/metastatic HNSCC — a higher CPS supports single-agent anti-PD-1 therapy." },
+      { q: "How does cetuximab work and when is it used in HNSCC?", a: "Cetuximab is a monoclonal antibody against the epidermal growth factor receptor (EGFR), which is overexpressed in most HNSCC. It is used with radiation in locally advanced disease (improving survival) and with chemotherapy in recurrent/metastatic disease; it is a targeted therapy, not a checkpoint inhibitor." },
+      { q: "List the common immune-related adverse events and their management.", a: "Colitis (diarrhea), pneumonitis, endocrinopathies (thyroiditis, hypophysitis, adrenal insufficiency, type 1 diabetes), dermatitis, and hepatitis, among others. They result from unleashed autoimmunity and are managed by holding the drug and giving corticosteroids (escalating immunosuppression if severe), with hormone replacement for endocrine toxicities." },
+      { q: "Name investigational immunotherapy approaches in head and neck cancer.", a: "Therapeutic cancer vaccines (notably HPV E6/E7-targeted vaccines), adoptive cell therapy with tumor-infiltrating lymphocytes or CAR-T cells (still largely experimental in solid head-and-neck tumors), and oncolytic viruses — generally used in trials rather than as standard care." }
+    ],
+    quiz: [
+      { stem: "Which immune checkpoint axis is the principal target of approved immunotherapy in recurrent/metastatic head and neck squamous cell carcinoma?",
+        options: ["CTLA-4", "PD-1/PD-L1", "CD28/B7", "MHC class II"],
+        correct: 1, explanation: "The PD-1/PD-L1 axis, which exhausts effector T cells within the tumor, is the dominant target in HNSCC and is blocked by pembrolizumab and nivolumab. CTLA-4 (option 1) is less established in head and neck. CD28/B7 (option 3) is the costimulatory pathway CTLA-4 opposes, not a drug target here. MHC class II (option 4) is an antigen-presentation molecule, not a checkpoint." },
+      { stem: "A patient with recurrent/metastatic HNSCC is being considered for first-line pembrolizumab. Which biomarker most guides whether single-agent anti-PD-1 is appropriate?",
+        options: ["Serum calcium", "PD-L1 Combined Positive Score (CPS)", "Carcinoembryonic antigen (CEA)", "Alpha-fetoprotein"],
+        correct: 1, explanation: "The PD-L1 CPS is the predictive biomarker guiding pembrolizumab use in R/M HNSCC; higher CPS supports single-agent therapy. Serum calcium (option 1) relates to hypercalcemia of malignancy, not immunotherapy selection. CEA (option 3) and AFP (option 4) are tumor markers for colorectal/hepatocellular and germ-cell tumors, not HNSCC immunotherapy." },
+      { stem: "A patient on pembrolizumab develops new watery diarrhea and abdominal pain. The most likely cause and initial management are:",
+        options: ["Chemotherapy-induced neutropenia — growth factors", "Immune-mediated colitis — hold the drug and start corticosteroids", "Bowel obstruction — nasogastric decompression", "C. difficile only — no change to therapy"],
+        correct: 1, explanation: "New colitis in a patient on a checkpoint inhibitor is an immune-related adverse event; management is to hold the drug and start corticosteroids (after excluding infection). Pembrolizumab is not a cytotoxic chemo causing neutropenia (option 1). There's no feature of obstruction (option 3), and while C. difficile should be excluded, the classic checkpoint-colitis picture is immune-mediated and steroid-responsive (option 4 is incomplete/incorrect)." },
+      { stem: "Which statement about CTLA-4 is correct?",
+        options: ["It acts in the tumor during the effector phase", "It brakes T-cell priming in the lymph node and is blocked by ipilimumab", "It is the main checkpoint target in HNSCC", "It is a tumor antigen"],
+        correct: 1, explanation: "CTLA-4 acts early, braking T-cell priming in the lymph node by outcompeting CD28, and is blocked by ipilimumab. It does not act in the tumor effector phase (option 1 — that is PD-1/PD-L1). It is not the main HNSCC target (option 3 — PD-1/PD-L1 is). It is a receptor, not a tumor antigen (option 4)." },
+      { stem: "Cetuximab exerts its anti-tumor effect by targeting:",
+        options: ["PD-1", "The epidermal growth factor receptor (EGFR)", "VEGF", "CTLA-4"],
+        correct: 1, explanation: "Cetuximab is a monoclonal antibody against EGFR, which is overexpressed in most HNSCC, and is used with radiation or chemotherapy. It does not target PD-1 (option 1), VEGF (option 3 — that is bevacizumab), or CTLA-4 (option 4 — that is ipilimumab)." },
+      { stem: "Which mechanism allows a tumor to hide from CD8+ cytotoxic T cells?",
+        options: ["Upregulation of MHC class I", "Downregulation of MHC class I and recruitment of regulatory T cells", "Increased dendritic-cell antigen presentation", "Enhanced NK-cell activity"],
+        correct: 1, explanation: "Tumors escape by downregulating MHC class I (so CD8+ T cells can't see presented antigen) and by recruiting immunosuppressive cells like Tregs and MDSCs. Upregulating MHC I (option 1), increasing dendritic presentation (option 3), and enhancing NK activity (option 4) would all strengthen, not evade, antitumor immunity." }
+    ],
+    signs: [
+      { name: "New diarrhea/colitis on checkpoint inhibitor", category: "clinical", description: "Watery diarrhea and abdominal pain in a patient on anti-PD-1/anti-CTLA-4 therapy.", implication: "Immune-related colitis — hold drug, exclude infection, start corticosteroids." },
+      { name: "New dyspnea/cough on immunotherapy", category: "clinical", description: "Progressive shortness of breath with ground-glass infiltrates.", implication: "Immune-related pneumonitis — hold drug, corticosteroids." },
+      { name: "Fatigue with abnormal thyroid/cortisol", category: "clinical", description: "Endocrine symptoms during checkpoint therapy.", implication: "Immune endocrinopathy (thyroiditis, hypophysitis, adrenal insufficiency) — hormone replacement ± steroids." },
+      { name: "PD-L1 Combined Positive Score (CPS)", category: "lab", description: "Immunohistochemical score of PD-L1 on tumor + immune cells per viable tumor cells.", implication: "Predictive biomarker — guides pembrolizumab in recurrent/metastatic HNSCC." },
+      { name: "EGFR overexpression", category: "lab", description: "High EGFR expression, common in HNSCC.", implication: "Rationale for cetuximab with radiation or chemotherapy." }
+    ],
+    podcastTitle: "Deep Dive · Tumor Immunology and Immunotherapy",
+    podcastDuration: "~20 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. You're starting head and neck, and we're opening with the molecular and immunologic foundation: tumor immunology and immunotherapy. Marcus, why start an oncology rotation here?" },
+      { speaker: "cohost", text: "Because immunotherapy has rewritten the treatment of recurrent and metastatic head and neck cancer, and you can't understand the drugs without the biology. The core idea is that the immune system is constantly editing tumors. That's immunoediting, in three phases: elimination, where the immune system destroys nascent tumor cells; equilibrium, a long dormant standoff where the tumor is controlled but immune pressure selects for less-immunogenic clones; and escape, where the edited tumor finally evades immunity and grows into a clinical cancer. The cancer you see has already survived the immune system's audit." },
+      { speaker: "host",   text: "Walk me through the normal cancer-immunity cycle, because the drugs each target a step." },
+      { speaker: "cohost", text: "A tumor cell dies and releases antigens; a dendritic cell picks them up, matures, and presents them to prime T cells in the lymph node; those activated T cells traffic to the tumor and infiltrate it; they recognize the tumor through MHC, specifically MHC class one displaying the antigen; and then CD8 cytotoxic T cells kill, with help from CD4 T cells and NK cells. Every one of those steps is a place the tumor can sabotage and a place a therapy can intervene." },
+      { speaker: "host",   text: "So how does the tumor sabotage it?" },
+      { speaker: "cohost", text: "Three big ways. It downregulates MHC class one, so even infiltrating T cells can't see the antigen — it hides. It builds an immunosuppressive microenvironment, recruiting regulatory T cells, myeloid-derived suppressor cells, and tumor-associated macrophages, and secreting suppressive cytokines. And most importantly for therapy, it engages immune checkpoints — molecular off-switches that shut the T cells down." },
+      { speaker: "host",   text: "The checkpoints are the heart of it. Contrast the two." },
+      { speaker: "cohost", text: "CTLA-4 acts early, in the priming phase in the lymph node — it outcompetes the costimulatory CD28 signal, so it's a brake on T-cell activation. You block it with ipilimumab. PD-1, on the T cell, binds PD-L1, which tumors and the microenvironment express, and it acts later, in the effector phase right in the tumor, driving the T cells into exhaustion. That PD-1/PD-L1 axis is the dominant one in head and neck cancer, and you block it with anti-PD-1 antibodies like pembrolizumab and nivolumab. The soundbite: CTLA-4 is priming in the node, PD-1/PD-L1 is effector in the tumor." },
+      { speaker: "host",   text: "Now the clinical payoff — how are checkpoint inhibitors used in HNSCC?" },
+      { speaker: "cohost", text: "Anti-PD-1 is standard for recurrent or metastatic disease. Pembrolizumab, alone or combined with platinum-based chemotherapy, is a first-line option, and the PD-L1 Combined Positive Score — the CPS — guides whether you can use single-agent immunotherapy: a higher CPS supports pembrolizumab monotherapy, while lower scores push you toward adding chemo. Nivolumab improves survival after platinum failure. The important counseling point is that only a minority of patients respond — but when they do, the responses can be remarkably durable, which is different from the temporary responses of cytotoxic chemo." },
+      { speaker: "host",   text: "Where does cetuximab fit, since it's not a checkpoint drug?" },
+      { speaker: "cohost", text: "Right — cetuximab is a targeted therapy, a monoclonal antibody against EGFR, the epidermal growth factor receptor, which is overexpressed in most head and neck squamous cell carcinomas. Its classic use is with radiation in locally advanced disease, where it improved survival, and it's also used with chemotherapy in recurrent or metastatic disease. Keep it mentally separate from the checkpoint inhibitors — different target, different toxicity." },
+      { speaker: "host",   text: "And the experimental frontier?" },
+      { speaker: "cohost", text: "Therapeutic vaccines, especially HPV-targeted vaccines against the E6 and E7 oncoproteins; adoptive cell therapy, like tumor-infiltrating lymphocytes and CAR-T, which is still largely experimental in solid head and neck tumors; and oncolytic viruses. These are mostly trial territory right now, but they're where the field is heading." },
+      { speaker: "host",   text: "Let's hit the toxicity that's unique to immunotherapy." },
+      { speaker: "cohost", text: "Immune-related adverse events — irAEs. Because you've taken the brakes off the immune system, you get autoimmunity, not the cytopenias of chemo. The big ones: colitis with diarrhea, pneumonitis, endocrinopathies — thyroiditis, hypophysitis, adrenal insufficiency, even new type 1 diabetes — dermatitis, and hepatitis. The management principle is prompt recognition and corticosteroids, escalating immunosuppression for severe cases, and hormone replacement for the endocrine ones. The clinical rule to internalize: any new symptom in a patient on a checkpoint inhibitor is an irAE until proven otherwise." },
+      { speaker: "host",   text: "Let's do a case. A 62-year-old with recurrent metastatic HNSCC after prior chemoradiation, now with lung metastases, is referred for systemic therapy. PD-L1 CPS comes back high. What's the approach, and what do you warn him about?" },
+      { speaker: "cohost", text: "Recurrent/metastatic disease with a high PD-L1 CPS is a strong setting for first-line pembrolizumab — potentially as a single agent given the high CPS, or with platinum chemotherapy depending on disease burden and pace. I counsel him that only a subset respond but responses can be durable, and crucially I educate him and his team about irAEs — any new diarrhea, cough and breathlessness, profound fatigue, or rash needs urgent evaluation, because early steroids for colitis or pneumonitis or hormone replacement for an endocrinopathy can be lifesaving. That counseling is as important as the prescription." },
+      { speaker: "host",   text: "Twist: three months in, he develops worsening watery diarrhea and crampy abdominal pain. Walk it." },
+      { speaker: "cohost", text: "That's immune-mediated colitis until proven otherwise. I hold the pembrolizumab, exclude infection including C. difficile, and start corticosteroids; if he doesn't respond quickly I escalate immunosuppression. What I don't do is dismiss it as a stomach bug and keep dosing — untreated checkpoint colitis can progress to perforation. The same vigilance applies if instead he'd developed dyspnea and ground-glass infiltrates, which would be pneumonitis, also steroid-treated." },
+      { speaker: "host",   text: "One more, quick: a resident assumes cetuximab and pembrolizumab work the same way. Correct them." },
+      { speaker: "cohost", text: "Different mechanisms entirely. Cetuximab blocks EGFR — a growth-signaling receptor on the tumor — and its toxicity is things like an acneiform rash and hypomagnesemia. Pembrolizumab blocks PD-1 to reactivate T cells, and its toxicities are autoimmune irAEs. One targets the tumor's growth signal; the other releases the immune brake. Conflating them leads to the wrong biomarker and the wrong toxicity monitoring." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: immunoediting runs elimination, equilibrium, escape — and equilibrium selects less-immunogenic clones. Two: CTLA-4 brakes priming in the lymph node, PD-1/PD-L1 exhausts effector T cells in the tumor, and PD-1/PD-L1 is the dominant head-and-neck axis. Three: anti-PD-1 — pembrolizumab and nivolumab — is standard for recurrent/metastatic HNSCC, with PD-L1 CPS guiding first-line pembrolizumab and nivolumab used after platinum failure." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: cetuximab is a separate anti-EGFR targeted therapy used with radiation or chemo, and vaccines, adoptive cell therapy, and oncolytic viruses remain investigational. Five: immune-related adverse events are autoimmune — colitis, pneumonitis, endocrinopathies, dermatitis, hepatitis — and any new symptom on a checkpoint inhibitor means suspect an irAE and treat with corticosteroids." },
+      { speaker: "host",   text: "Release the brakes, watch for the autoimmune backlash, and let the biomarkers pick the patient." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  71: {
+    objectives: [
+      "Explain field cancerization and multistep carcinogenesis in head and neck squamous cell carcinoma (HNSCC).",
+      "List the key genetic alterations in HPV-negative HNSCC (TP53, CDKN2A/p16 loss, cyclin D1, EGFR).",
+      "Contrast the molecular biology of HPV-positive and HPV-negative cancers, including E6/E7 and p16 overexpression.",
+      "Describe tobacco/alcohol carcinogenesis and the hallmarks of invasion and metastasis.",
+      "Use molecular markers (p16/HPV, TP53, EGFR, PD-L1) for prognosis and treatment selection."
+    ],
+    summary: `
+      <h4>1. Field cancerization</h4>
+      <p><strong>Slaughter's field cancerization</strong>: carcinogen exposure (tobacco, alcohol) damages the <strong>entire mucosal field</strong>, not just one spot, so the whole upper aerodigestive tract is primed. This explains <strong>multiple primary tumors, "second field" lesions, and local recurrences</strong>, and the lifelong risk of new cancers in these patients.</p>
+      <h4>2. Multistep carcinogenesis</h4>
+      <p>HNSCC develops through an accumulation of genetic hits driving a histologic progression: <strong>normal epithelium → hyperplasia → dysplasia → carcinoma in situ → invasive carcinoma</strong>. It is the <strong>accumulation</strong> of alterations — activating oncogenes and inactivating tumor suppressors — not any single mutation, that produces cancer.</p>
+      <h4>3. The key alterations in HPV-negative HNSCC</h4>
+      <ul>
+        <li><strong>TP53 mutation</strong> — the <strong>most common</strong> alteration, strongly linked to <strong>tobacco</strong>; loss of the "guardian of the genome" removes the G1 checkpoint and apoptosis control.</li>
+        <li><strong>CDKN2A (p16/INK4a) loss</strong> — inactivation of a tumor suppressor that normally restrains CDK4/6-cyclin D1 and the cell cycle.</li>
+        <li><strong>Cyclin D1 (CCND1) amplification</strong> — drives cell-cycle progression.</li>
+        <li><strong>EGFR overexpression/amplification</strong> — a growth-signaling receptor (the cetuximab target) associated with worse outcome.</li>
+        <li>Plus <strong>PIK3CA</strong>, <strong>NOTCH1</strong>, and characteristic losses at <strong>9p21, 3p, 17p</strong>.</li>
+      </ul>
+      <h4>4. HPV-positive versus HPV-negative — two different diseases</h4>
+      <p><strong>HPV-positive</strong> cancers (mainly oropharyngeal) are driven by two viral oncoproteins: <strong>E6 degrades p53</strong> and <strong>E7 inactivates the retinoblastoma (Rb) protein</strong>. Because Rb normally suppresses p16, loss of functional Rb releases that brake and causes <strong>p16 OVERexpression</strong> — which is why <strong>p16 immunohistochemistry is the clinical surrogate for HPV</strong>. HPV+ tumors have <strong>wild-type TP53</strong> and a <strong>better prognosis</strong>. <strong>HPV-negative</strong> cancers (tobacco/alcohol) carry <strong>TP53 mutation and p16 LOSS</strong>, show field cancerization, and have a <strong>worse prognosis</strong>.</p>
+      <h4>5. Carcinogenesis and the metastatic cascade</h4>
+      <p><strong>Tobacco and alcohol act synergistically</strong>; tobacco carcinogens form <strong>DNA adducts</strong> that cause the mutations above. Progression to invasion/metastasis uses the cancer hallmarks: sustained proliferative signaling, evasion of growth suppressors and apoptosis, <strong>angiogenesis</strong>, <strong>epithelial-mesenchymal transition (EMT)</strong> enabling invasion, and spread to regional <strong>cervical lymph nodes</strong> (the dominant route in HNSCC) before distant sites.</p>
+      <h4>6. Markers that change management</h4>
+      <p><strong>p16/HPV status</strong> is the single most important prognostic marker in oropharyngeal cancer (and drives separate AJCC 8th-edition staging). <strong>TP53 mutation</strong> marks aggressive HPV-negative disease; <strong>EGFR</strong> overexpression supports cetuximab; <strong>PD-L1</strong> guides immunotherapy. Understanding the biology directly selects therapy and predicts outcome.</p>
+    `,
+    keyPoints: [
+      { category: "Field & multistep", items: [
+        "Field cancerization (Slaughter): the whole mucosal field is carcinogen-damaged → multiple primaries, second fields, recurrences.",
+        "Multistep: normal → hyperplasia → dysplasia → carcinoma in situ → invasive; it's the ACCUMULATION of hits."
+      ]},
+      { category: "HPV-negative genetics", items: [
+        "TP53 mutation = most common, tobacco-linked (loss of the genome guardian). CDKN2A/p16 LOSS; cyclin D1 (CCND1) amplification.",
+        "EGFR overexpression (cetuximab target, worse outcome); also PIK3CA, NOTCH1; losses at 9p21/3p/17p."
+      ]},
+      { category: "HPV+ vs HPV−", items: [
+        "HPV+: E6 degrades p53, E7 inactivates Rb → p16 OVERexpression (p16 IHC = HPV surrogate); wild-type TP53; BETTER prognosis.",
+        "HPV−: TP53 mutation + p16 LOSS; tobacco/alcohol; field cancerization; WORSE prognosis."
+      ]},
+      { category: "Carcinogenesis / markers", items: [
+        "Tobacco + alcohol synergistic; carcinogen DNA adducts. Invasion via angiogenesis + EMT; spreads to cervical nodes first.",
+        "Markers: p16/HPV (prognosis + AJCC 8 staging), TP53 (aggressive HPV−), EGFR (cetuximab), PD-L1 (immunotherapy)."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 74 · Biology of Head and Neck Cancers", subtitle: "Cummings 8e · Chapter 74", body: "<p style='font-size:18px;line-height:1.55;'>HPV-positive and HPV-negative HNSCC are two different diseases — in biology, markers, and prognosis.</p>" },
+      { title: "Field cancerization", body: "<ul><li>Carcinogens damage the <strong>whole mucosal field</strong>.</li><li>→ multiple primaries, second fields, recurrences.</li><li>Lifelong risk of new cancers.</li></ul>" },
+      { title: "Multistep carcinogenesis", body: "<ul><li>Normal → hyperplasia → dysplasia → carcinoma in situ → invasive.</li><li>It's the <strong>accumulation</strong> of genetic hits.</li></ul>" },
+      { title: "HPV-negative genetics", body: "<ul><li><strong>TP53 mutation</strong> — most common, tobacco-linked.</li><li><strong>CDKN2A/p16 loss</strong>; cyclin D1 amplification.</li><li><strong>EGFR</strong> overexpression (cetuximab target).</li></ul>" },
+      { title: "HPV+ oncoproteins", body: "<ul><li><strong>E6</strong> degrades <strong>p53</strong>.</li><li><strong>E7</strong> inactivates <strong>Rb</strong>.</li><li>Rb loss → <strong>p16 OVERexpression</strong> (p16 IHC = HPV surrogate).</li></ul>" },
+      { title: "HPV+ vs HPV−", body: "<ul><li><strong>HPV+</strong>: wild-type TP53, p16 high, better prognosis.</li><li><strong>HPV−</strong>: TP53 mutation, p16 loss, worse prognosis, field cancerization.</li></ul>" },
+      { title: "Carcinogenesis", body: "<ul><li>Tobacco + alcohol <strong>synergistic</strong>.</li><li>Carcinogen <strong>DNA adducts</strong> → mutations.</li></ul>" },
+      { title: "Invasion & metastasis", body: "<ul><li>Hallmarks: proliferation, apoptosis evasion, <strong>angiogenesis</strong>.</li><li><strong>EMT</strong> enables invasion.</li><li>Spreads to <strong>cervical lymph nodes</strong> first.</li></ul>" },
+      { title: "Markers that change care", body: "<ul><li><strong>p16/HPV</strong> — prognosis + separate AJCC 8 staging.</li><li><strong>TP53</strong> — aggressive HPV−. <strong>EGFR</strong> — cetuximab. <strong>PD-L1</strong> — immunotherapy.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Field cancerization → multiple primaries; carcinogenesis is multistep.</li><li>HPV− = TP53 mutation + p16 loss (worse); HPV+ = E6/E7 → p16 overexpression, wild-type p53 (better).</li><li>p16/HPV is the key prognostic marker and drives separate staging.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "The HPV oncoprotein logic", body: "<ul><li><strong>E6 → p53 degradation</strong> (loses apoptosis/checkpoint).</li><li><strong>E7 → Rb inactivation</strong> (releases E2F, drives cycle).</li><li>Rb loss de-represses <strong>p16 → overexpression</strong> (the stain we use).</li></ul>" },
+      { title: "Routes of spread", body: "<ul><li>Local invasion via EMT; lymphatic spread to <strong>cervical nodes</strong> (predominant).</li><li>Distant (lung, bone, liver) later, more with advanced/HPV− disease.</li></ul>" }
+    ],
+    pearls: [
+      "Field cancerization means the entire carcinogen-exposed mucosa is abnormal, explaining multiple primary tumors, second-field lesions, and local recurrences — so these patients need lifelong surveillance of the whole upper aerodigestive tract.",
+      "HNSCC is a multistep process (hyperplasia → dysplasia → carcinoma in situ → invasive) driven by the accumulation of genetic alterations rather than any single mutation.",
+      "TP53 mutation is the most common and tobacco-associated alteration in HPV-negative HNSCC, with CDKN2A/p16 loss, cyclin D1 amplification, and EGFR overexpression also characteristic.",
+      "In HPV-positive cancer, E6 degrades p53 and E7 inactivates Rb; loss of Rb de-represses p16, causing p16 overexpression — which is why p16 immunohistochemistry is the clinical surrogate for HPV and why these tumors retain wild-type TP53.",
+      "HPV-positive oropharyngeal cancer has a markedly better prognosis than HPV-negative (tobacco/alcohol) disease, which is why they are staged separately in AJCC 8th edition.",
+      "Tobacco and alcohol act synergistically, carcinogen DNA adducts drive the mutations, and HNSCC spreads predominantly to cervical lymph nodes before distant sites."
+    ],
+    flashcards: [
+      { q: "What is field cancerization and what does it explain?", a: "Slaughter's concept that carcinogen exposure (tobacco, alcohol) damages the entire mucosal field of the upper aerodigestive tract, not just one site. It explains multiple primary tumors, 'second field' lesions, local recurrences, and the lifelong risk of new cancers, and it justifies wide surveillance." },
+      { q: "Describe the multistep histologic progression of HNSCC.", a: "Normal epithelium progresses through hyperplasia, dysplasia (mild → severe), carcinoma in situ, and finally invasive carcinoma, driven by the stepwise accumulation of oncogene activation and tumor-suppressor loss. No single mutation is sufficient; it is the accumulation that produces malignancy." },
+      { q: "What are the key genetic alterations in HPV-negative HNSCC?", a: "TP53 mutation (most common, tobacco-linked loss of the genome guardian), CDKN2A/p16 (INK4a) loss, cyclin D1 (CCND1) amplification, and EGFR overexpression/amplification, along with PIK3CA and NOTCH1 mutations and losses at chromosomes 9p21, 3p, and 17p." },
+      { q: "How do HPV E6 and E7 cause cancer, and why is p16 overexpressed?", a: "E6 targets p53 for degradation (removing apoptosis and the G1 checkpoint) and E7 inactivates the retinoblastoma (Rb) protein (releasing E2F to drive the cell cycle). Because functional Rb normally suppresses p16, loss of Rb de-represses p16, producing p16 overexpression — the basis for p16 immunohistochemistry as an HPV surrogate." },
+      { q: "Contrast HPV-positive and HPV-negative HNSCC biology and prognosis.", a: "HPV-positive (mainly oropharyngeal): driven by E6/E7, wild-type TP53, p16 overexpressed, better prognosis and treatment response. HPV-negative (tobacco/alcohol): TP53 mutation, p16 loss, field cancerization, worse prognosis. They behave as two distinct diseases and are staged separately in AJCC 8th edition." },
+      { q: "How do tobacco and alcohol contribute to carcinogenesis?", a: "They act synergistically to multiply risk. Tobacco carcinogens form DNA adducts that cause the mutations (e.g., TP53) underlying HPV-negative HNSCC, and alcohol acts as a solvent/co-carcinogen and via acetaldehyde. Their combined exposure drives field cancerization." },
+      { q: "Which molecular markers alter management in HNSCC?", a: "p16/HPV status (the key prognostic marker in oropharyngeal cancer, driving separate AJCC 8 staging and de-escalation considerations), TP53 mutation (marks aggressive HPV-negative disease), EGFR overexpression (supports cetuximab), and PD-L1 (guides checkpoint immunotherapy)." },
+      { q: "What is epithelial-mesenchymal transition (EMT) and its role?", a: "EMT is a reversible program in which epithelial tumor cells lose cell-cell adhesion and polarity and acquire migratory, invasive mesenchymal properties. It facilitates local invasion and entry into lymphatics/vasculature, contributing to the metastatic spread of HNSCC to cervical nodes and beyond." }
+    ],
+    quiz: [
+      { stem: "Which single genetic alteration is the most common in HPV-negative (tobacco-related) HNSCC?",
+        options: ["EGFR amplification", "TP53 mutation", "PIK3CA mutation", "Cyclin D1 amplification"],
+        correct: 1, explanation: "TP53 mutation is the most common and strongly tobacco-linked alteration in HPV-negative HNSCC, removing the genome guardian's checkpoint and apoptotic control. EGFR amplification (option 1), PIK3CA (option 3), and cyclin D1 amplification (option 4) all occur but are less universal than TP53 loss." },
+      { stem: "Why is p16 overexpressed in HPV-positive head and neck cancer?",
+        options: ["HPV E6 directly upregulates p16", "E7 inactivates Rb, releasing the normal Rb-mediated suppression of p16", "p16 is mutated to a constitutively active form", "Tobacco induces p16 transcription"],
+        correct: 1, explanation: "E7 inactivates Rb; because functional Rb normally suppresses p16, its loss de-represses p16, causing overexpression — the basis for p16 IHC as an HPV surrogate. E6 degrades p53, not upregulates p16 (option 1). p16 is overexpressed wild-type, not a constitutively active mutant (option 3). Tobacco is associated with p16 LOSS in HPV-negative disease (option 4)." },
+      { stem: "A patient has multiple synchronous squamous cancers across the upper aerodigestive tract after decades of smoking. This pattern is best explained by:",
+        options: ["Field cancerization", "A single metastatic clone", "HPV infection", "A germline BRCA mutation"],
+        correct: 0, explanation: "Carcinogen damage to the entire mucosal field (field cancerization) produces multiple independent primaries. A single metastatic clone (option 1) would not create separate mucosal primaries. HPV (option 2) typically produces a single oropharyngeal primary and is not the smoker's multifocal pattern. Germline BRCA (option 3) is not a driver of HNSCC field disease." },
+      { stem: "Which statement correctly contrasts HPV-positive and HPV-negative HNSCC?",
+        options: ["HPV-positive tumors have mutated TP53 and worse prognosis", "HPV-positive tumors have wild-type TP53, p16 overexpression, and better prognosis", "HPV-negative tumors overexpress p16 and respond better to therapy", "Both have identical staging in AJCC 8th edition"],
+        correct: 1, explanation: "HPV-positive tumors retain wild-type TP53, overexpress p16, and carry a better prognosis. Option 1 is backwards (HPV-negative tumors have mutated TP53 and worse prognosis). HPV-negative tumors show p16 LOSS, not overexpression (option 3). AJCC 8th edition created a SEPARATE staging system for p16-positive oropharyngeal cancer, so the staging is not identical (option 4)." },
+      { stem: "EGFR overexpression in HNSCC is clinically relevant mainly because it:",
+        options: ["Indicates HPV positivity", "Provides a target for cetuximab and is associated with worse outcome", "Confirms a benign lesion", "Predicts response to anti-PD-1 therapy"],
+        correct: 1, explanation: "EGFR is overexpressed in most HNSCC, correlates with worse outcome, and is the target of cetuximab. It does not indicate HPV positivity (option 1), has nothing to do with benignity (option 3), and PD-L1 (not EGFR) predicts anti-PD-1 response (option 4)." },
+      { stem: "Which process most directly enables tumor cells to invade and enter lymphatics in HNSCC?",
+        options: ["Increased apoptosis", "Epithelial-mesenchymal transition (EMT)", "Upregulation of p53", "Enhanced DNA repair"],
+        correct: 1, explanation: "EMT lets epithelial cells lose adhesion/polarity and acquire migratory, invasive properties, promoting invasion and lymphatic spread to cervical nodes. Increased apoptosis (option 1) and upregulated p53 (option 3) would suppress the tumor, and enhanced DNA repair (option 4) would reduce mutation accumulation — none promote invasion." }
+    ],
+    signs: [
+      { name: "p16 overexpression on IHC", category: "lab", description: "Strong, diffuse nuclear and cytoplasmic p16 staining.", implication: "Surrogate for HPV-positive (oropharyngeal) cancer — better prognosis; confirm with HPV testing as needed." },
+      { name: "TP53 mutation", category: "lab", description: "Inactivating mutation of the TP53 tumor suppressor.", implication: "Characteristic of HPV-negative, tobacco-related HNSCC — aggressive biology." },
+      { name: "Multiple synchronous mucosal primaries", category: "clinical", description: "Several independent squamous cancers in the aerodigestive tract.", implication: "Field cancerization — panendoscopy and lifelong surveillance." },
+      { name: "EGFR overexpression", category: "lab", description: "High EGFR expression on the tumor.", implication: "Worse outcome; rationale for cetuximab." },
+      { name: "p16 loss (CDKN2A inactivation)", category: "lab", description: "Absent p16 expression.", implication: "HPV-negative pathway — part of cell-cycle dysregulation." }
+    ],
+    podcastTitle: "Deep Dive · Biology of Head and Neck Cancers",
+    podcastDuration: "~20 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. Continuing your head and neck foundation: the biology of head and neck cancers. Marcus, the single biggest conceptual message?" },
+      { speaker: "cohost", text: "That head and neck squamous cell carcinoma is really two different diseases — HPV-positive and HPV-negative — with different biology, different markers, and different prognosis. If you only remember one thing, remember that split. But let's build to it, starting with field cancerization." },
+      { speaker: "host",   text: "Define field cancerization." },
+      { speaker: "cohost", text: "It's Slaughter's classic concept: the carcinogens — tobacco and alcohol — don't damage just one spot, they damage the entire mucosal field of the upper aerodigestive tract. So the whole lining is primed. That's why these patients get multiple primary tumors, 'second field' lesions, and local recurrences, and why they carry a lifelong risk of new cancers. Clinically it's why you panendoscope and survey widely — the one tumor you can see sits in a field of abnormal mucosa." },
+      { speaker: "host",   text: "And how does a cancer actually develop in that field?" },
+      { speaker: "cohost", text: "Multistep carcinogenesis. The epithelium progresses histologically from normal to hyperplasia to dysplasia — mild up to severe — to carcinoma in situ, and finally invasive carcinoma. And the engine underneath is the accumulation of genetic hits: you activate oncogenes and you inactivate tumor suppressors, and it's the accumulation, not any single mutation, that tips it into cancer." },
+      { speaker: "host",   text: "Give me the key alterations in the HPV-negative, smoking-driven tumors." },
+      { speaker: "cohost", text: "The headline is TP53 — mutation of the guardian of the genome is the most common alteration and it's tightly linked to tobacco. Lose p53 and you lose the G1 checkpoint and apoptosis. Then CDKN2A, which encodes p16, is lost — that's a tumor suppressor that normally restrains the cell cycle. Cyclin D1, CCND1, is amplified, pushing the cycle forward. EGFR, the epidermal growth factor receptor, is overexpressed — that's the cetuximab target and it predicts worse outcome. And there are others — PIK3CA, NOTCH1 — and losses at 9p21, 3p, 17p." },
+      { speaker: "host",   text: "Now the HPV-positive side — the oncoprotein story." },
+      { speaker: "cohost", text: "Two viral oncoproteins do the work. E6 degrades p53 — so instead of mutating TP53, the virus just destroys the protein, which is why HPV-positive tumors keep wild-type TP53. E7 inactivates the retinoblastoma protein, Rb. And here's the elegant bit that explains the stain we use: normally functional Rb suppresses p16, so when E7 knocks out Rb, you release that brake and p16 gets overexpressed. That's why p16 immunohistochemistry — strong diffuse staining — is the clinical surrogate for HPV. So HPV-positive equals wild-type p53 and high p16; HPV-negative equals mutated p53 and lost p16. They're mirror images." },
+      { speaker: "host",   text: "And the prognostic punchline?" },
+      { speaker: "cohost", text: "HPV-positive oropharyngeal cancer has a markedly better prognosis and responds better to treatment than HPV-negative tobacco-alcohol disease. That difference is so large that AJCC eighth edition created a completely separate staging system for p16-positive oropharyngeal cancer — the same anatomic extent stages lower when it's HPV-driven. We'll dig into that epidemiology in the next chapter." },
+      { speaker: "host",   text: "Fill in the carcinogenesis and spread." },
+      { speaker: "cohost", text: "Tobacco and alcohol act synergistically — together they multiply risk far beyond either alone. Tobacco carcinogens form DNA adducts that cause the mutations like TP53. Then progression to invasion and metastasis runs the cancer hallmarks: sustained proliferative signaling, evasion of growth suppressors and apoptosis, angiogenesis to feed the tumor, and epithelial-mesenchymal transition — EMT — where the epithelial cells lose their adhesion and polarity and become migratory and invasive. And the dominant route of spread in head and neck cancer is to the cervical lymph nodes first, distant metastasis later." },
+      { speaker: "host",   text: "Tie it to the markers that actually change what we do." },
+      { speaker: "cohost", text: "Four. p16 and HPV status — the single most important prognostic marker in oropharyngeal cancer, and it drives the separate staging and the whole conversation about treatment de-escalation. TP53 mutation marks the aggressive HPV-negative tumors. EGFR overexpression is the rationale for cetuximab. And PD-L1 guides checkpoint immunotherapy. So the biology isn't academic — it picks the therapy and predicts the outcome." },
+      { speaker: "host",   text: "Let's do a case. A 68-year-old with a 50-pack-year smoking history and heavy alcohol use has a tongue cancer, and on panendoscopy you find a separate early cancer in the hypopharynx. Interpret the biology." },
+      { speaker: "cohost", text: "Two separate primaries in a heavy smoker-drinker is field cancerization in action — the whole mucosa is carcinogen-damaged, so these are independent primaries, not one metastasizing to the other. I'd expect HPV-negative biology: mutated TP53, p16 loss, aggressive behavior, and a worse prognosis. Practically, that means thorough panendoscopy to find all synchronous lesions, biopsy each, and lifelong surveillance because he'll keep generating new cancers in that field. The biology directly shapes the extent of the work-up." },
+      { speaker: "host",   text: "Contrast: a 54-year-old never-smoker with a tonsil cancer and a cystic neck node; p16 comes back strongly positive. Reframe." },
+      { speaker: "cohost", text: "That's the other disease entirely — HPV-positive oropharyngeal cancer. Strong p16 means E6 and E7 are driving it, with wild-type TP53, and it carries a much better prognosis. It gets staged on the separate AJCC eighth-edition p16-positive system, which downstages compared to the HPV-negative scheme, and it's the population where de-escalation of treatment is being studied to reduce toxicity. Same anatomic site as a smoker's tumor could be, completely different biology and outlook." },
+      { speaker: "host",   text: "One more, quick: a resident says 'p16 loss means HPV-positive.' Correct them." },
+      { speaker: "cohost", text: "It's the opposite. HPV-positive tumors OVERexpress p16 — strong diffuse staining — because E7 knocks out Rb and releases p16. p16 LOSS is the HPV-negative, tobacco pathway, part of CDKN2A inactivation. Flipping those gets the diagnosis, the prognosis, and the staging system all wrong." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: field cancerization means the whole mucosa is damaged — expect multiple primaries and survey widely. Two: carcinogenesis is multistep — hyperplasia to dysplasia to carcinoma in situ to invasive — from accumulated genetic hits. Three: HPV-negative disease is defined by TP53 mutation and p16 loss, plus cyclin D1 amplification and EGFR overexpression, and behaves aggressively." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: HPV-positive disease is driven by E6 degrading p53 and E7 inactivating Rb, which causes p16 overexpression — the surrogate marker — with wild-type TP53 and a better prognosis, staged separately in AJCC 8. Five: tobacco and alcohol are synergistic carcinogens, spread is to cervical nodes first via EMT and angiogenesis, and the markers that change management are p16/HPV, TP53, EGFR, and PD-L1." },
+      { speaker: "host",   text: "Two diseases, one site — let HPV status and the molecular markers tell you which one you're treating." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  72: {
+    objectives: [
+      "Describe the rising incidence of HPV-positive oropharyngeal cancer and the declining HPV-negative (tobacco) cancers.",
+      "State the risk-factor profile — HPV16, sexual exposure, younger non-smoking men — and the typical presentation.",
+      "Use p16 immunohistochemistry (with HPV confirmation) and know the separate AJCC 8th-edition staging for p16-positive oropharyngeal cancer.",
+      "Recognize the cystic cervical nodal metastasis and why an adult neck 'cyst' is cancer until proven otherwise.",
+      "Explain HPV vaccination as primary prevention and the principle behind treatment de-escalation (and the cetuximab caution)."
+    ],
+    summary: `
+      <h4>1. An epidemic that changed head and neck cancer</h4>
+      <p>Over recent decades the incidence of <strong>HPV-positive oropharyngeal squamous cell carcinoma (OPSCC)</strong> — especially of the <strong>tonsil and base of tongue</strong> — has <strong>risen sharply</strong>, while traditional <strong>tobacco-related (HPV-negative)</strong> cancers have declined with falling smoking rates. In many developed countries HPV now causes the <strong>majority of oropharyngeal cancers</strong>.</p>
+      <h4>2. The virus and the risk profile</h4>
+      <p><strong>HPV16</strong> accounts for roughly <strong>90%</strong> of HPV-positive OPSCC. Transmission is <strong>sexual</strong> (oral sex; risk rises with the number of lifetime oral-sex partners). The typical patient is <strong>younger, more often male, white, of higher socioeconomic status, and a never- or light-smoker</strong> — a different demographic from the older heavy-smoker/drinker of HPV-negative disease.</p>
+      <h4>3. Why it is staged differently</h4>
+      <p>Because HPV-positive OPSCC responds so much better to treatment and has a far superior prognosis, <strong>AJCC 8th edition created a SEPARATE staging system for p16-positive oropharyngeal cancer</strong> — the same anatomic/nodal extent is assigned a <strong>lower stage</strong> than in the HPV-negative scheme, reflecting the better outcomes. <strong>p16 immunohistochemistry</strong> is the practical surrogate marker (strong diffuse staining), ideally <strong>confirmed with HPV DNA/RNA (ISH or PCR)</strong> in ambiguous cases.</p>
+      <h4>4. The classic presentation — a cystic neck node</h4>
+      <p>HPV-positive OPSCC often has a <strong>small, occult primary</strong> in the tonsil crypts or tongue base but presents with a <strong>cystic cervical lymph-node metastasis</strong> (commonly level II). This is a crucial trap: a <strong>cystic neck mass in an adult (especially &gt;40)</strong> must be treated as <strong>metastatic cancer until proven otherwise</strong> — do NOT assume it is a benign branchial cleft cyst. Work-up is <strong>FNA</strong> (with p16/HPV testing), exam/endoscopy, and <strong>PET-CT</strong>, with tonsillectomy/tongue-base mapping to find the primary.</p>
+      <h4>5. Prevention and modifiers</h4>
+      <p><strong>HPV vaccination (9-valent, e.g., Gardasil 9)</strong> is <strong>primary prevention</strong> — it prevents the causative infections and is expected to reduce future HPV-associated cancers (with herd effects). <strong>Smoking still matters</strong>: a significant smoking history worsens prognosis even in HPV-positive disease and influences staging/treatment discussions.</p>
+      <h4>6. De-escalation — the active research question</h4>
+      <p>Because HPV-positive patients do so well and are often young, trials seek to <strong>de-escalate therapy to reduce long-term toxicity</strong> (dysphagia, xerostomia) while preserving the excellent cure rates. A key lesson: <strong>do NOT substitute cetuximab for cisplatin to "lighten" chemoradiation</strong> — <strong>RTOG 1016 showed cetuximab was inferior to cisplatin</strong> in HPV-positive disease. De-escalation must be done within trials, not by assumption.</p>
+    `,
+    keyPoints: [
+      { category: "Epidemiology", items: [
+        "HPV-positive oropharyngeal cancer (tonsil, base of tongue) is rising and now causes the majority of OPSCC in developed countries; HPV-negative (tobacco) cancers are declining.",
+        "HPV16 ≈ 90% of HPV+ OPSCC; sexual (oral) transmission; risk ↑ with number of oral-sex partners."
+      ]},
+      { category: "Who gets it", items: [
+        "Typical patient: younger, male, white, higher socioeconomic status, never/light smoker — distinct from the older heavy smoker/drinker of HPV− disease.",
+        "p16 IHC = surrogate marker (strong diffuse); confirm with HPV DNA/RNA (ISH/PCR) if ambiguous."
+      ]},
+      { category: "Staging & presentation", items: [
+        "AJCC 8th edition: SEPARATE staging for p16-positive oropharyngeal cancer — downstaged vs HPV− (better outcomes).",
+        "Classic: small/occult tonsil or tongue-base primary + CYSTIC cervical node (level II). Adult cystic neck mass = cancer until proven otherwise (not branchial cyst)."
+      ]},
+      { category: "Prevention / treatment", items: [
+        "HPV vaccination (9-valent) = primary prevention (herd effects). Smoking worsens prognosis even in HPV+.",
+        "De-escalation is investigational; RTOG 1016 — cetuximab INFERIOR to cisplatin in HPV+ (don't substitute)."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 75 · Epidemiology of HPV-Positive H&N Cancer", subtitle: "Cummings 8e · Chapter 75", body: "<p style='font-size:18px;line-height:1.55;'>HPV-positive oropharyngeal cancer is rising, better-prognosis, and staged separately — and an adult cystic neck node is cancer until proven otherwise.</p>" },
+      { title: "The epidemic", body: "<ul><li>HPV+ oropharyngeal cancer (tonsil, base of tongue) rising sharply.</li><li>HPV− (tobacco) cancers declining.</li><li>HPV now causes the majority of OPSCC in developed countries.</li></ul>" },
+      { title: "The virus & transmission", body: "<ul><li><strong>HPV16</strong> ≈ 90% of HPV+ OPSCC.</li><li>Sexual (oral) transmission.</li><li>Risk ↑ with number of oral-sex partners.</li></ul>" },
+      { title: "Who gets it", body: "<ul><li>Younger, more often male, white.</li><li>Higher socioeconomic status.</li><li>Never/light smoker — unlike the HPV− heavy smoker/drinker.</li></ul>" },
+      { title: "p16 / HPV testing", body: "<ul><li><strong>p16 IHC</strong> = surrogate (strong, diffuse staining).</li><li>Confirm with HPV DNA/RNA (ISH or PCR) if ambiguous.</li></ul>" },
+      { title: "Separate AJCC 8 staging", body: "<ul><li>p16-positive OPSCC staged on its OWN system.</li><li>Downstaged vs HPV− (reflecting far better outcomes).</li></ul>" },
+      { title: "Classic presentation", body: "<ul><li>Small/occult primary (tonsil crypts, tongue base).</li><li><strong>Cystic cervical node</strong> (level II).</li><li>Adult cystic neck mass = <strong>cancer until proven otherwise</strong>.</li></ul>" },
+      { title: "Work-up", body: "<ul><li>FNA (with p16/HPV testing) — not excisional biopsy.</li><li>Exam + endoscopy; PET-CT.</li><li>Tonsillectomy / tongue-base mapping for the primary.</li></ul>" },
+      { title: "Prevention & de-escalation", body: "<ul><li><strong>HPV vaccination</strong> (9-valent) = primary prevention.</li><li>Smoking still worsens HPV+ prognosis.</li><li>De-escalation = trials only; <strong>RTOG 1016: cetuximab inferior to cisplatin</strong>.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>HPV+ OPSCC: rising, HPV16, younger non-smokers, better prognosis, separate AJCC 8 staging.</li><li>Adult cystic neck node = metastatic cancer until proven otherwise — FNA + p16.</li><li>Vaccinate to prevent; de-escalate only in trials; don't swap cisplatin for cetuximab.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Where the primary hides", body: "<ul><li>Tonsil crypts and tongue-base lymphoid tissue conceal small primaries.</li><li>Rich oropharyngeal lymphatics → early level II nodal spread, often cystic.</li></ul>" },
+      { title: "Cystic node vs branchial cyst", body: "<ul><li>A new cystic lateral neck mass in an adult &gt;40 is a metastatic HPV+ node until excluded.</li><li>Excising it as a 'branchial cyst' risks seeding and delay — do FNA + p16 first.</li></ul>" }
+    ],
+    pearls: [
+      "HPV-positive oropharyngeal cancer (tonsil and tongue base) is rising and now causes the majority of oropharyngeal cancers in developed countries, while tobacco-related HPV-negative cancers decline.",
+      "HPV16 causes about 90% of HPV-positive oropharyngeal cancer, which is sexually (orally) transmitted and typically affects younger, non-smoking men of higher socioeconomic status.",
+      "A cystic cervical lymph node in an adult over 40 is a metastatic (often HPV-positive) squamous cancer until proven otherwise — never assume a branchial cleft cyst; evaluate with FNA plus p16/HPV testing, not excisional biopsy.",
+      "p16 immunohistochemistry is the clinical surrogate for HPV, confirmed with HPV DNA/RNA testing when ambiguous, and AJCC 8th edition stages p16-positive oropharyngeal cancer on a separate, downstaged system reflecting its better prognosis.",
+      "HPV vaccination (9-valent) is primary prevention expected to reduce future HPV-associated cancers, and a significant smoking history worsens prognosis even in HPV-positive disease.",
+      "Treatment de-escalation is investigational and must be done within trials; RTOG 1016 showed that substituting cetuximab for cisplatin in chemoradiation is inferior for HPV-positive disease."
+    ],
+    flashcards: [
+      { q: "How has the epidemiology of oropharyngeal cancer changed?", a: "HPV-positive oropharyngeal squamous cell carcinoma — especially of the tonsil and base of tongue — has risen sharply and now accounts for the majority of oropharyngeal cancers in many developed countries, while tobacco-related HPV-negative cancers have declined with falling smoking rates." },
+      { q: "Which HPV type and transmission route dominate HPV-positive oropharyngeal cancer, and who is the typical patient?", a: "HPV16 causes about 90% of cases, transmitted sexually through oral sex (risk increases with the number of lifetime oral-sex partners). The typical patient is younger, more often male, white, of higher socioeconomic status, and a never- or light-smoker — distinct from the older heavy smoker/drinker of HPV-negative disease." },
+      { q: "Why does HPV-positive oropharyngeal cancer have its own AJCC 8th-edition staging?", a: "Because it responds far better to treatment and has a markedly superior prognosis, AJCC 8 created a separate staging system for p16-positive oropharyngeal cancer in which the same anatomic and nodal extent is assigned a lower stage than in the HPV-negative scheme, reflecting the better outcomes." },
+      { q: "What is the classic presentation of HPV-positive oropharyngeal cancer?", a: "A small or occult primary in the tonsil crypts or base of tongue that presents with a cystic cervical lymph-node metastasis, commonly at level II. The cystic node can be mistaken for a benign branchial cleft cyst." },
+      { q: "Why must an adult cystic lateral neck mass not be assumed benign?", a: "Because in an adult (especially over 40) a new cystic lateral neck mass is a metastatic squamous cancer — often HPV-positive from an occult oropharyngeal primary — until proven otherwise. It should be evaluated with FNA and p16/HPV testing, exam/endoscopy, and PET-CT, not excised as a presumed branchial cyst (which risks tumor spillage and delay)." },
+      { q: "How is HPV status determined in the clinic?", a: "p16 immunohistochemistry (strong, diffuse nuclear and cytoplasmic staining) is the surrogate marker, used because it is widely available and reliable in the oropharynx; in ambiguous cases it is confirmed with direct HPV testing (DNA or E6/E7 RNA by in-situ hybridization or PCR)." },
+      { q: "What is the role of HPV vaccination in head and neck cancer?", a: "The 9-valent HPV vaccine is primary prevention: by preventing the causative HPV infections (including HPV16/18) it is expected to reduce the future incidence of HPV-associated cancers, including oropharyngeal cancer, with additional herd-immunity benefits." },
+      { q: "What did RTOG 1016 teach about treatment de-escalation?", a: "That you cannot simply substitute cetuximab for cisplatin to lighten chemoradiation in HPV-positive oropharyngeal cancer — cetuximab was inferior to cisplatin. De-escalation strategies must be tested within clinical trials rather than assumed to be safe." }
+    ],
+    quiz: [
+      { stem: "A 55-year-old never-smoker has a painless, cystic lateral neck mass at level II. The most appropriate next step is:",
+        options: ["Reassure — it is a branchial cleft cyst", "FNA with p16/HPV testing and work-up for an oropharyngeal primary", "Excisional biopsy of the mass", "A course of antibiotics and observation"],
+        correct: 1, explanation: "A cystic lateral neck mass in an adult is metastatic squamous cancer (often HPV-positive) until proven otherwise; evaluate with FNA plus p16/HPV testing and search for an oropharyngeal primary. Assuming a branchial cyst (option 1) misses cancer. Excisional biopsy (option 3) risks tumor spillage and compromises later treatment. Antibiotics/observation (option 4) dangerously delays diagnosis." },
+      { stem: "Which HPV type causes the large majority of HPV-positive oropharyngeal cancers?",
+        options: ["HPV6", "HPV16", "HPV11", "HPV18"],
+        correct: 1, explanation: "HPV16 causes roughly 90% of HPV-positive oropharyngeal cancer. HPV6 and HPV11 (options 1 and 3) are low-risk types causing recurrent respiratory papillomatosis and genital warts, not oropharyngeal cancer. HPV18 (option 4) is high-risk and important in cervical cancer but a minor contributor in the oropharynx compared with HPV16." },
+      { stem: "Why does AJCC 8th edition stage p16-positive oropharyngeal cancer separately from HPV-negative disease?",
+        options: ["HPV-positive disease is more aggressive and needs higher stages", "HPV-positive disease has a much better prognosis, so the same extent is downstaged", "There is no prognostic difference", "Only to track incidence"],
+        correct: 1, explanation: "HPV-positive oropharyngeal cancer has a markedly better prognosis, so AJCC 8 assigns the same anatomic/nodal extent a lower stage than in the HPV-negative system. It is not more aggressive (option 1), the prognostic difference is large (option 3), and the separation is for accurate prognostication/treatment, not merely incidence tracking (option 4)." },
+      { stem: "Which patient profile is most typical for HPV-positive oropharyngeal cancer?",
+        options: ["An older woman with a 60-pack-year smoking history", "A younger non-smoking man of higher socioeconomic status", "An elderly heavy drinker with a hypopharyngeal mass", "A child with recurrent papillomas"],
+        correct: 1, explanation: "HPV-positive oropharyngeal cancer typically affects younger, non-smoking men of higher socioeconomic status. The heavy smoker (option 1) and heavy drinker with hypopharyngeal disease (option 3) fit the HPV-negative tobacco/alcohol profile. A child with recurrent papillomas (option 4) has low-risk HPV6/11 respiratory papillomatosis, not oropharyngeal cancer." },
+      { stem: "What did RTOG 1016 establish about cetuximab in HPV-positive oropharyngeal cancer?",
+        options: ["Cetuximab is superior to cisplatin", "Cetuximab is inferior to cisplatin and should not be substituted to de-escalate", "Cetuximab eliminates the need for radiation", "Cetuximab cures HPV-positive disease alone"],
+        correct: 1, explanation: "RTOG 1016 showed cetuximab was inferior to cisplatin when substituted in chemoradiation for HPV-positive disease, so you should not swap cisplatin for cetuximab to lighten treatment. It is not superior (option 1), does not replace radiation (option 3), and is not a stand-alone cure (option 4)." },
+      { stem: "Which intervention is primary prevention for HPV-associated oropharyngeal cancer?",
+        options: ["Annual chest X-ray", "HPV (9-valent) vaccination", "Prophylactic tonsillectomy", "Routine PET-CT screening"],
+        correct: 1, explanation: "The 9-valent HPV vaccine prevents the causative infections and is primary prevention for HPV-associated cancers. Chest X-ray (option 1) and PET-CT (option 3) are not screening/prevention tools here, and prophylactic tonsillectomy (option 2) is not a recommended prevention strategy." }
+    ],
+    signs: [
+      { name: "Cystic lateral neck mass in an adult", category: "clinical", description: "Painless, fluctuant level II neck mass in a patient over 40.", implication: "Metastatic (often HPV+) squamous cancer until proven otherwise — FNA + p16, not excision." },
+      { name: "Strong diffuse p16 on IHC", category: "lab", description: "Block-positive p16 staining in an oropharyngeal tumor/node.", implication: "Surrogate for HPV-positive OPSCC — favorable prognosis; use AJCC 8 p16+ staging." },
+      { name: "Occult primary with nodal disease", category: "clinical", description: "Neck metastasis with no obvious mucosal primary on initial exam.", implication: "Search tonsil crypts/tongue base (PET-CT, tonsillectomy, mapping biopsies)." },
+      { name: "Non-smoker with oropharyngeal cancer", category: "clinical", description: "Younger patient, little/no tobacco, tonsil or tongue-base tumor.", implication: "Suspect HPV-positive disease — test p16/HPV." }
+    ],
+    podcastTitle: "Deep Dive · Epidemiology of HPV-Positive H&N Cancer",
+    podcastDuration: "~19 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. Third of your head and neck foundation chapters: the epidemiology of HPV-positive head and neck cancer. Marcus, why does this one matter so much on a clinical rotation?" },
+      { speaker: "cohost", text: "Because it changed the face of the disease, and because it contains one of the highest-yield clinical traps in all of head and neck — the adult cystic neck node. But start with the epidemiology. Over the last few decades, HPV-positive oropharyngeal cancer — the tonsil and the base of tongue — has risen sharply, while the old tobacco-driven, HPV-negative cancers have been falling as smoking declines. In many developed countries HPV now causes the majority of oropharyngeal cancers. It's an epidemic that quietly replaced one disease with another." },
+      { speaker: "host",   text: "Which virus, and how is it spread?" },
+      { speaker: "cohost", text: "HPV16 is the dominant type — about ninety percent of HPV-positive oropharyngeal cancer. Transmission is sexual, through oral sex, and the risk rises with the number of lifetime oral-sex partners. And the demographic is strikingly different from the classic head and neck patient: younger, more often male, white, higher socioeconomic status, and a never- or light-smoker. So the sixty-year-old smoker-drinker is the HPV-negative picture; the healthy fifty-something non-smoker is the HPV-positive one." },
+      { speaker: "host",   text: "Why do we stage it separately?" },
+      { speaker: "cohost", text: "Because HPV-positive oropharyngeal cancer responds so much better to treatment and has a far superior prognosis that the old staging overcalled it. So AJCC eighth edition built a completely separate staging system for p16-positive oropharyngeal cancer — the same anatomic and nodal extent is assigned a lower stage than in the HPV-negative scheme, because the outcomes are so much better. And the practical marker is p16 immunohistochemistry — strong, diffuse staining is the surrogate for HPV, confirmed with direct HPV DNA or RNA testing when it's ambiguous." },
+      { speaker: "host",   text: "Now the trap you promised." },
+      { speaker: "cohost", text: "The cystic neck node. HPV-positive oropharyngeal cancer often has a tiny, occult primary hiding in the tonsil crypts or tongue base, and it presents as a cystic cervical lymph-node metastasis, classically at level two. That cystic node looks and feels exactly like a benign branchial cleft cyst — and that's the trap. The rule you must burn in: a cystic lateral neck mass in an adult, especially over forty, is metastatic cancer until proven otherwise. You do not reassure them, and you do not take it out as a 'branchial cyst.' You do an FNA with p16 and HPV testing, examine and scope the oropharynx, get a PET-CT, and go after the primary with tonsillectomy and tongue-base mapping." },
+      { speaker: "host",   text: "Why is excisional biopsy of that node the wrong move?" },
+      { speaker: "cohost", text: "Because if it's cancer, open excision can spill tumor into the neck, disrupt the tissue planes, and compromise the definitive treatment, and it delays the real work-up. FNA gives you the diagnosis with p16 status and no spillage. Open the neck only in a planned, definitive way once you know what you're dealing with." },
+      { speaker: "host",   text: "Prevention and the modifiers?" },
+      { speaker: "cohost", text: "Primary prevention is the HPV vaccine — the nine-valent Gardasil 9 — which prevents the causative infections, including HPV16 and 18, and is expected to drive down future HPV-associated cancers, with herd-immunity benefits across the population. And one important modifier: smoking still matters even in HPV-positive disease. A significant smoking history worsens the prognosis of an otherwise favorable HPV-positive cancer and factors into treatment discussions, so you don't give a pure 'good prognosis' message to a heavy smoker with HPV-positive disease." },
+      { speaker: "host",   text: "And the de-escalation story — where the field is going." },
+      { speaker: "cohost", text: "Because these patients do so well and are often young, they live for decades with the long-term toxicity of aggressive chemoradiation — bad dysphagia, dry mouth. So trials are testing de-escalation: can we reduce treatment intensity and spare toxicity while keeping the excellent cure rates? The crucial cautionary tale is RTOG 1016: it tested swapping cisplatin for cetuximab to lighten the regimen, and cetuximab turned out to be inferior. So the lesson is that de-escalation must be proven in trials — you do not freelance it by substituting a 'gentler' drug and assuming equivalence." },
+      { speaker: "host",   text: "Let's do a case. A 53-year-old man, never smoked, notices a painless lump in the side of his neck that's been there a month. On exam it's a soft, cystic level II mass; the oropharynx looks unremarkable at first glance. Walk it." },
+      { speaker: "cohost", text: "This is the classic HPV-positive presentation and the cystic-node trap. I do not call it a branchial cyst. I perform an FNA and send it for cytology with p16 and HPV testing, do a careful oropharyngeal exam and flexible endoscopy focusing on the tonsils and tongue base, and get a PET-CT to localize an occult primary and assess the neck and distant sites. If FNA is p16-positive squamous carcinoma with no obvious primary, I proceed to exam under anesthesia with directed and tongue-base mapping biopsies and tonsillectomy to find the primary. And because it's p16-positive, I stage it on the separate AJCC eighth-edition system and counsel a favorable prognosis — tempered by his smoking status, which here is favorable since he never smoked." },
+      { speaker: "host",   text: "Twist: a well-meaning colleague already excised the node a week ago and it came back as p16-positive squamous carcinoma. What's the issue?" },
+      { speaker: "cohost", text: "That's exactly the error the cystic-node rule exists to prevent. Excising it first spilled tumor and violated the neck before staging, which can worsen outcomes and complicate definitive surgery or radiation planning. Now I still have to find and treat the oropharyngeal primary and manage the neck definitively, but from a compromised starting point. The teaching point for the rotation: adult cystic neck node equals FNA and work-up, never up-front excision." },
+      { speaker: "host",   text: "One more, quick: a resident wants to swap cisplatin for cetuximab in a young HPV-positive patient 'to be gentler.' Correct them." },
+      { speaker: "cohost", text: "RTOG 1016 settled that — cetuximab was inferior to cisplatin in HPV-positive disease, so substituting it to de-escalate reduces cure, not just toxicity. If you want to de-escalate, you do it on a clinical trial with a validated approach, not by assuming a targeted agent is a safe swap for cisplatin." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: HPV-positive oropharyngeal cancer is rising and now causes most oropharyngeal cancer in developed countries, while tobacco-related disease declines. Two: HPV16 causes about ninety percent, it's orally transmitted, and the patient is typically a younger non-smoking man of higher socioeconomic status. Three: p16 IHC is the surrogate marker, and AJCC eighth edition stages p16-positive oropharyngeal cancer separately and lower because the prognosis is so much better." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: the classic presentation is an occult tonsil or tongue-base primary with a cystic level-two neck node — and an adult cystic neck mass is cancer until proven otherwise, worked up with FNA and p16, never up-front excision. Five: the HPV vaccine is primary prevention, smoking still worsens HPV-positive prognosis, and de-escalation belongs in trials — RTOG 1016 showed cetuximab is inferior to cisplatin, so don't substitute it." },
+      { speaker: "host",   text: "Rising, orally transmitted, better-prognosis, staged separately — and never, ever call an adult cystic neck node benign." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
   83: {
     objectives: [
       'List the major histologic subtypes of malignant salivary tumors and their typical behavior.',
