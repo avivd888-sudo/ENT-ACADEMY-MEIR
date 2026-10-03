@@ -16131,6 +16131,422 @@ const CONTENT = {
       { speaker: "cohost", text: "That's the chapter." }
     ]
   },
+  73: {
+    objectives: [
+      "Explain how ionizing radiation damages DNA and the role of the oxygen effect.",
+      "Apply the 5 R's of radiobiology (repair, repopulation, reoxygenation, redistribution, radiosensitivity).",
+      "State conventional fractionation and dose levels (gross, high-risk adjuvant, elective nodal) and altered-fractionation concepts.",
+      "List indications for adjuvant radiation and when to add concurrent chemotherapy (positive margins, extranodal extension).",
+      "Prevent and manage radiation toxicities — mucositis, xerostomia, and osteoradionecrosis (dental clearance first)."
+    ],
+    summary: `
+      <h4>1. The physics and the mechanism</h4>
+      <p>Radiotherapy uses <strong>ionizing radiation</strong> — most commonly high-energy <strong>photons (X-rays from a linear accelerator)</strong>, sometimes <strong>electrons</strong> (superficial targets) or <strong>protons</strong> (whose <strong>Bragg peak</strong> deposits dose at a set depth and spares tissue beyond). Dose is measured in <strong>gray (Gy)</strong> (joules/kg). Radiation kills cells by <strong>DNA damage</strong> — a small amount <strong>directly</strong> and most <strong>indirectly</strong> via <strong>free radicals/reactive oxygen species</strong> that produce lethal <strong>double-strand breaks</strong>. <strong>Oxygen "fixes" (makes permanent) the damage</strong> — so <strong>hypoxic cells are radioresistant</strong> (the oxygen effect).</p>
+      <h4>2. The 5 R's of radiobiology</h4>
+      <ul>
+        <li><strong>Repair</strong> — normal cells repair sublethal damage between fractions better than tumor; fractionation exploits this.</li>
+        <li><strong>Repopulation</strong> — surviving tumor cells proliferate; <strong>accelerated repopulation</strong> late in a course is why you <strong>must not prolong overall treatment time</strong>.</li>
+        <li><strong>Reoxygenation</strong> — hypoxic (resistant) tumor cells reoxygenate between fractions, becoming sensitive.</li>
+        <li><strong>Redistribution</strong> — cells redistribute into radiosensitive phases (<strong>M and G2 sensitive; late S resistant</strong>).</li>
+        <li><strong>Radiosensitivity</strong> — intrinsic differences between tissues/tumors.</li>
+      </ul>
+      <h4>3. Fractionation and dose</h4>
+      <p><strong>Conventional fractionation</strong> is about <strong>2 Gy/day, 5 days/week</strong>. Typical totals: <strong>~70 Gy to gross disease</strong>, <strong>~60 Gy to the high-risk post-op bed</strong>, and <strong>~50 Gy to elective (clinically negative) nodal regions</strong>. <strong>Altered fractionation</strong> improves the therapeutic ratio: <strong>hyperfractionation</strong> (more, smaller fractions to a higher total, sparing late effects) and <strong>accelerated fractionation</strong> (shorter overall time to overcome repopulation).</p>
+      <h4>4. Techniques and combination with chemotherapy</h4>
+      <p><strong>Intensity-modulated radiotherapy (IMRT)</strong> shapes dose to spare the <strong>parotid glands and spinal cord</strong> (reducing <strong>xerostomia</strong>), aided by <strong>image guidance (IGRT)</strong>, VMAT, and proton therapy. <strong>Concurrent chemoradiation</strong> with <strong>cisplatin</strong> (a radiosensitizer) is standard for locally advanced disease; <strong>cetuximab-RT</strong> is an alternative but is <strong>inferior in HPV-positive disease</strong>.</p>
+      <h4>5. Indications — definitive and adjuvant</h4>
+      <p>Radiation is used <strong>definitively</strong> (organ preservation, e.g., larynx), <strong>adjuvantly after surgery</strong>, and for <strong>palliation</strong>. <strong>Adjuvant RT</strong> is indicated for adverse features: <strong>positive/close margins, extranodal extension (ENE), multiple positive nodes, T3/T4, perineural or lymphovascular invasion</strong>. <strong>Add concurrent chemotherapy</strong> to adjuvant RT when there are <strong>positive margins or extranodal extension</strong> — the two strongest indications for chemoradiation after surgery.</p>
+      <h4>6. Toxicity — and preventing osteoradionecrosis</h4>
+      <p><strong>Acute</strong>: mucositis, dermatitis, dysgeusia, odynophagia, fatigue. <strong>Late</strong>: <strong>xerostomia</strong> (parotid), fibrosis, dysphagia/stricture, <strong>hypothyroidism</strong>, <strong>osteoradionecrosis (ORN) of the mandible</strong>, carotid stenosis, trismus, and second malignancy. The key prevention point: <strong>complete a dental evaluation and any needed extractions BEFORE radiation</strong>, with fluoride prophylaxis — extractions in irradiated bone precipitate ORN. Established ORN is managed with conservative care, pentoxifylline-tocopherol, and sometimes hyperbaric oxygen or surgery. Arrange <strong>nutrition (consider PEG)</strong> and a <strong>thyroid baseline</strong> before treatment.</p>
+    `,
+    keyPoints: [
+      { category: "Physics/mechanism", items: [
+        "Photons (linac) common; electrons superficial; protons = Bragg peak (spare distal tissue). Dose in gray (Gy).",
+        "Kills via DNA double-strand breaks (mostly indirect via free radicals); OXYGEN fixes damage → hypoxic cells are radioRESISTANT."
+      ]},
+      { category: "5 R's", items: [
+        "Repair (sublethal, between fractions), Repopulation (don't prolong treatment — accelerated repopulation), Reoxygenation (hypoxic→sensitive).",
+        "Redistribution (M/G2 sensitive, late S resistant), intrinsic Radiosensitivity."
+      ]},
+      { category: "Fractionation/dose", items: [
+        "Conventional ~2 Gy/day ×5/wk: ~70 Gy gross, ~60 Gy high-risk bed, ~50 Gy elective nodes.",
+        "Hyperfractionation (more/smaller, higher total); accelerated (shorter overall time). IMRT spares parotid/cord (↓xerostomia). Cisplatin concurrent standard."
+      ]},
+      { category: "Indications/toxicity", items: [
+        "Adjuvant RT for +/close margins, ENE, multiple nodes, T3/T4, PNI/LVI. ADD concurrent chemo for positive margins OR extranodal extension.",
+        "Acute: mucositis. Late: xerostomia, fibrosis, hypothyroidism, osteoradionecrosis. PREVENT ORN with dental clearance/extractions BEFORE RT + fluoride."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 76 · Radiotherapy for H&N — Physics & Radiobiology", subtitle: "Cummings 8e · Chapter 76", body: "<p style='font-size:18px;line-height:1.55;'>DNA double-strand breaks, the oxygen effect, the 5 R's — and the clinical rules of dose, chemoradiation, and toxicity prevention.</p>" },
+      { title: "Physics", body: "<ul><li>Photons (linac), electrons (superficial), protons (<strong>Bragg peak</strong>).</li><li>Dose = <strong>gray (Gy)</strong> = J/kg.</li></ul>" },
+      { title: "Mechanism & oxygen effect", body: "<ul><li>DNA <strong>double-strand breaks</strong> — mostly indirect via free radicals.</li><li><strong>Oxygen fixes damage</strong> → hypoxic cells are radioRESISTANT.</li></ul>" },
+      { title: "The 5 R's", body: "<ul><li><strong>Repair</strong> sublethal damage between fractions.</li><li><strong>Repopulation</strong> — don't prolong treatment.</li><li><strong>Reoxygenation</strong>; <strong>Redistribution</strong> (M/G2 sensitive); <strong>Radiosensitivity</strong>.</li></ul>" },
+      { title: "Fractionation & dose", body: "<ul><li>Conventional ~<strong>2 Gy/day ×5/wk</strong>.</li><li>~70 Gy gross · ~60 Gy high-risk bed · ~50 Gy elective nodes.</li></ul>" },
+      { title: "Altered fractionation", body: "<ul><li><strong>Hyperfractionation</strong>: more, smaller fractions, higher total.</li><li><strong>Accelerated</strong>: shorter overall time (overcome repopulation).</li></ul>" },
+      { title: "Techniques", body: "<ul><li><strong>IMRT</strong> spares parotid + spinal cord → less xerostomia.</li><li>IGRT, VMAT, proton therapy.</li></ul>" },
+      { title: "Combine with chemo", body: "<ul><li><strong>Concurrent cisplatin</strong> (radiosensitizer) — standard for locally advanced.</li><li>Cetuximab-RT alternative but inferior in HPV+.</li></ul>" },
+      { title: "Indications", body: "<ul><li>Definitive (organ preservation), adjuvant, palliative.</li><li>Adjuvant RT: +/close margins, <strong>ENE</strong>, multiple nodes, T3/T4, PNI/LVI.</li><li><strong>Add chemo for positive margins OR extranodal extension.</strong></li></ul>" },
+      { title: "Toxicity & ORN prevention", body: "<ul><li>Acute: mucositis, dermatitis, odynophagia.</li><li>Late: <strong>xerostomia</strong>, fibrosis, hypothyroidism, <strong>osteoradionecrosis</strong>.</li><li><strong>Dental clearance + extractions BEFORE RT</strong>; fluoride; nutrition; thyroid baseline.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Oxygen fixes DNA damage → hypoxia = radioresistance; the 5 R's govern fractionation.</li><li>Add concurrent chemo to adjuvant RT for positive margins or extranodal extension.</li><li>Prevent osteoradionecrosis with dental clearance/extractions BEFORE radiation.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Sparing critical structures", body: "<ul><li><strong>Parotid</strong> sparing with IMRT reduces xerostomia.</li><li><strong>Spinal cord</strong> tolerance limits posterior-neck dose.</li><li>Mandible dose + dental disease → osteoradionecrosis risk.</li></ul>" },
+      { title: "Cell-cycle radiosensitivity", body: "<ul><li>Most sensitive: <strong>M and G2</strong>.</li><li>Most resistant: <strong>late S phase</strong>.</li><li>Redistribution between fractions catches cells in sensitive phases.</li></ul>" }
+    ],
+    pearls: [
+      "Radiation kills cells mainly through indirect DNA damage from free radicals producing double-strand breaks, and oxygen 'fixes' that damage — so hypoxic tumor cells are radioresistant (the oxygen effect).",
+      "The 5 R's — repair, repopulation, reoxygenation, redistribution, radiosensitivity — explain fractionation; accelerated repopulation means you must not prolong the overall treatment time.",
+      "Conventional fractionation is roughly 2 Gy per day, five days a week, giving about 70 Gy to gross disease, 60 Gy to the high-risk postoperative bed, and 50 Gy to electively treated nodal regions.",
+      "Add concurrent chemotherapy (cisplatin) to adjuvant radiation when there are positive margins or extranodal extension — the two strongest indications for postoperative chemoradiation.",
+      "IMRT spares the parotid glands and spinal cord, reducing xerostomia, and cisplatin is the standard concurrent radiosensitizer (cetuximab-RT is inferior in HPV-positive disease).",
+      "Prevent osteoradionecrosis of the mandible by completing dental evaluation and any necessary extractions before radiation, with fluoride prophylaxis — extractions in already-irradiated bone are a classic precipitant."
+    ],
+    flashcards: [
+      { q: "How does ionizing radiation kill cells, and why are hypoxic cells resistant?", a: "It causes DNA damage — a small fraction directly and most indirectly through free radicals/reactive oxygen species that create lethal double-strand breaks. Oxygen 'fixes' (makes permanent) the free-radical damage, so in its absence the damage is more readily repaired; hypoxic cells are therefore radioresistant (the oxygen effect)." },
+      { q: "What are the 5 R's of radiobiology?", a: "Repair (of sublethal damage between fractions, favoring normal tissue), Repopulation (tumor cell proliferation, with accelerated repopulation meaning treatment should not be prolonged), Reoxygenation (hypoxic resistant cells become oxygenated and sensitive between fractions), Redistribution (cells move into radiosensitive phases — M and G2 sensitive, late S resistant), and Radiosensitivity (intrinsic tissue/tumor differences)." },
+      { q: "State conventional fractionation and the typical dose levels in head and neck radiotherapy.", a: "About 2 Gy per fraction, once daily, five days per week. Typical totals: approximately 70 Gy to gross tumor, 60 Gy to the high-risk postoperative bed, and 50 Gy to elective (clinically uninvolved) nodal regions." },
+      { q: "When is concurrent chemotherapy added to postoperative (adjuvant) radiation?", a: "For the two strongest adverse features — positive (or involved) surgical margins and extranodal (extracapsular) extension of nodal disease. Radiation alone is used for other adverse features such as multiple positive nodes, T3/T4 disease, perineural, or lymphovascular invasion." },
+      { q: "What is the difference between hyperfractionation and accelerated fractionation?", a: "Hyperfractionation delivers more, smaller fractions to a higher total dose (exploiting the repair difference to spare late-responding normal tissue while increasing tumor dose). Accelerated fractionation shortens the overall treatment time to overcome tumor repopulation, usually with more than one fraction per day." },
+      { q: "How is osteoradionecrosis of the mandible prevented?", a: "By completing a dental evaluation and performing any needed extractions or dental work BEFORE radiotherapy (allowing healing first), plus lifelong fluoride prophylaxis and meticulous oral hygiene. Extractions in already-irradiated, hypovascular bone are a classic trigger, so they are avoided or managed very cautiously." },
+      { q: "What late toxicities follow head and neck radiation?", a: "Xerostomia (parotid injury), tissue fibrosis, dysphagia and pharyngoesophageal stricture, hypothyroidism, osteoradionecrosis of the mandible, carotid artery stenosis, trismus, and a small risk of radiation-induced second malignancy. Pre-treatment planning includes nutrition (possible PEG) and a thyroid baseline." },
+      { q: "How does IMRT improve head and neck radiotherapy?", a: "Intensity-modulated radiotherapy conforms the high-dose region tightly to the target while sparing adjacent critical structures — especially the parotid glands (reducing xerostomia) and the spinal cord — improving the therapeutic ratio and quality of life, often combined with image guidance (IGRT)." }
+    ],
+    quiz: [
+      { stem: "Why are hypoxic tumor cells relatively resistant to conventional radiotherapy?",
+        options: ["Hypoxia speeds DNA repair enzymes", "Oxygen is required to 'fix' free-radical DNA damage, so its absence makes damage reparable", "Hypoxic cells have more oxygen radicals", "Hypoxia increases cell-cycle redistribution"],
+        correct: 1, explanation: "Oxygen makes free-radical-induced DNA damage permanent ('oxygen fixation'); without oxygen the damage is more readily repaired, so hypoxic cells are radioresistant. Hypoxia does not speed repair enzymes (option 1) or generate more radicals (option 3), and it does not favorably increase redistribution (option 4)." },
+      { stem: "A head and neck radiotherapy course is being planned. Which principle argues against unnecessary treatment breaks that prolong overall time?",
+        options: ["Repair", "Accelerated repopulation", "Reoxygenation", "Redistribution"],
+        correct: 1, explanation: "Accelerated repopulation — surviving tumor cells proliferating faster late in a course — means prolonging overall treatment time lets the tumor regrow, reducing control. Repair (option 1) and reoxygenation (option 3) and redistribution (option 4) are other R's but are not the reason to avoid prolonging treatment." },
+      { stem: "After resection of an oral cavity cancer, pathology shows a positive margin and extranodal extension. The best adjuvant treatment is:",
+        options: ["Observation", "Radiation alone", "Concurrent chemoradiation (cisplatin)", "Chemotherapy alone"],
+        correct: 2, explanation: "Positive margins and extranodal extension are the two strongest indications to add concurrent chemotherapy (cisplatin) to postoperative radiation. Observation (option 1) undertreats high-risk disease. Radiation alone (option 2) is used for other adverse features but is insufficient with these two. Chemotherapy alone (option 4) is not definitive locoregional therapy here." },
+      { stem: "Which measure most reduces the risk of mandibular osteoradionecrosis?",
+        options: ["Prophylactic antibiotics during radiation", "Dental evaluation and necessary extractions BEFORE radiotherapy", "Extractions during the final week of radiation", "Avoiding fluoride to reduce mucositis"],
+        correct: 1, explanation: "Completing dental assessment and extractions before radiation (so bone can heal) plus fluoride prophylaxis prevents osteoradionecrosis. Prophylactic antibiotics (option 1) don't prevent ORN. Extractions during/after radiation in irradiated bone (option 3) precipitate ORN. Fluoride is protective, so avoiding it (option 4) is wrong." },
+      { stem: "Which radiotherapy technique most directly reduces xerostomia in head and neck cancer?",
+        options: ["3D conformal to maximize dose everywhere", "Intensity-modulated radiotherapy (IMRT) sparing the parotid glands", "Electron beam to the whole neck", "Prolonging the fractionation schedule"],
+        correct: 1, explanation: "IMRT conforms dose to spare the parotid glands, reducing xerostomia. Maximizing dose everywhere (option 1) increases toxicity. Whole-neck electrons (option 3) are not a standard definitive technique and wouldn't selectively spare parotids. Prolonging fractionation (option 4) risks repopulation and doesn't spare the glands." },
+      { stem: "Protons differ from photons in head and neck radiotherapy mainly because they:",
+        options: ["Deliver no dose to the tumor", "Deposit dose at a defined depth (Bragg peak), sparing tissue beyond the target", "Cannot be focused", "Are measured in a different unit than gray"],
+        correct: 1, explanation: "Protons deposit most energy at a defined depth (the Bragg peak) with little exit dose, sparing tissues beyond the target. They do treat the tumor (option 1), can be focused/planned (option 3), and dose is still measured in gray (option 4)." }
+    ],
+    signs: [
+      { name: "Exposed, non-healing mandibular bone post-RT", category: "clinical", description: "Painful exposed bone in a previously irradiated mandible, often after an extraction.", implication: "Osteoradionecrosis — conservative care, pentoxifylline-tocopherol, ± hyperbaric O2/surgery; prevent with pre-RT dental clearance." },
+      { name: "Severe xerostomia after radiation", category: "clinical", description: "Dry mouth from parotid injury.", implication: "Late RT toxicity — mitigated by IMRT parotid sparing; sialogogues/saliva substitutes." },
+      { name: "Confluent mucositis during treatment", category: "clinical", description: "Painful oral/pharyngeal mucosal breakdown mid-course.", implication: "Acute toxicity — nutrition/pain support; avoid treatment breaks (repopulation)." },
+      { name: "New hypothyroidism after neck RT", category: "lab", description: "Elevated TSH months to years after radiation.", implication: "Radiation-induced hypothyroidism — monitor thyroid function and replace." },
+      { name: "Extranodal extension on pathology", category: "lab", description: "Tumor extending through the nodal capsule.", implication: "Strong indication to add concurrent chemotherapy to adjuvant radiation." }
+    ],
+    podcastTitle: "Deep Dive · Radiotherapy for H&N — Physics & Radiobiology",
+    podcastDuration: "~20 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. On your head and neck rotation you'll co-manage a lot of radiation patients, so today it's the physics, the radiobiology, and the clinical rules of radiotherapy. Marcus, start with how radiation actually kills a cell." },
+      { speaker: "cohost", text: "It damages DNA. A small amount is direct, but most of the killing is indirect — the radiation ionizes water to make free radicals, reactive oxygen species, and those produce the lethal lesion, the double-strand break. And here's the concept that ties biology to the clinic: oxygen fixes that damage. Oxygen makes the free-radical injury permanent, so without oxygen the cell can repair it. That means hypoxic tumor cells are radioresistant — the oxygen effect — and it's why a bulky, necrotic, hypoxic tumor core is hard to sterilize." },
+      { speaker: "host",   text: "And the physics side, briefly?" },
+      { speaker: "cohost", text: "Most head and neck treatment uses high-energy photons from a linear accelerator. Electrons are for superficial targets. Protons are special because of the Bragg peak — they dump their dose at a defined depth and then stop, sparing tissue beyond the target, which is attractive near the brainstem or spinal cord. Dose is measured in gray, joules per kilogram." },
+      { speaker: "host",   text: "The 5 R's — walk me through them and why each matters." },
+      { speaker: "cohost", text: "Repair: normal cells repair sublethal damage between daily fractions better than tumor cells, so splitting the dose into fractions spares normal tissue — that's the whole rationale for fractionation. Repopulation: surviving tumor cells keep dividing, and there's accelerated repopulation late in a course, which is exactly why you must not let the overall treatment time drag out with breaks. Reoxygenation: between fractions, previously hypoxic resistant cells get oxygen and become sensitive. Redistribution: cells move through the cycle into radiosensitive phases — M and G2 are sensitive, late S is resistant. And Radiosensitivity: the intrinsic differences between tissues and tumors." },
+      { speaker: "host",   text: "Give me the dose and fractionation numbers to actually remember." },
+      { speaker: "cohost", text: "Conventional fractionation is about two gray a day, five days a week. The totals worth memorizing: roughly seventy gray to gross disease, about sixty gray to the high-risk postoperative bed, and about fifty gray to elective nodal regions you're treating prophylactically. Then altered fractionation tweaks the therapeutic ratio — hyperfractionation gives more, smaller fractions to a higher total dose while sparing late effects, and accelerated fractionation shortens the overall time to beat repopulation." },
+      { speaker: "host",   text: "Techniques and combining with chemo?" },
+      { speaker: "cohost", text: "IMRT — intensity-modulated radiotherapy — is the workhorse, because it conforms the dose and spares the parotid glands and spinal cord, which dramatically cuts xerostomia. Add image guidance, VMAT, proton therapy in selected cases. And for locally advanced disease you give concurrent chemoradiation, with cisplatin as the standard radiosensitizer. Cetuximab plus radiation is an alternative, but remember from the last chapters it's inferior in HPV-positive disease." },
+      { speaker: "host",   text: "Now the clinical decision residents get pimped on — when to add chemo to post-op radiation." },
+      { speaker: "cohost", text: "Adjuvant radiation itself is indicated for adverse pathologic features: positive or close margins, extranodal extension, multiple positive nodes, T3 or T4 disease, perineural invasion, lymphovascular invasion. But the specific trigger to ADD concurrent chemotherapy to that radiation is two features: positive margins or extranodal extension. Those two upgrade you from radiation alone to chemoradiation. If you remember one decision rule from this chapter, it's that one — positive margins or extranodal extension means add cisplatin." },
+      { speaker: "host",   text: "Toxicity — split acute from late." },
+      { speaker: "cohost", text: "Acute, during and just after treatment: mucositis, skin dermatitis, loss of taste, painful swallowing, fatigue. Late, months to years out: xerostomia from parotid injury, tissue fibrosis, dysphagia and strictures, hypothyroidism, carotid stenosis, trismus, a small second-malignancy risk, and the big one for us — osteoradionecrosis of the mandible." },
+      { speaker: "host",   text: "And the prevention point for osteoradionecrosis is a classic exam and clinical pearl." },
+      { speaker: "cohost", text: "Dental clearance before radiation. You get a dental evaluation and do any needed extractions and dental work before treatment starts, so the bone heals while it's still well-vascularized, and you put the patient on lifelong fluoride and meticulous oral hygiene. The classic precipitant of osteoradionecrosis is an extraction in already-irradiated, hypovascular bone — that's the scenario you design the pre-treatment dental visit to avoid. Established osteoradionecrosis is managed conservatively with pentoxifylline and tocopherol, sometimes hyperbaric oxygen, and surgery for refractory cases. And before treatment you also sort out nutrition — consider a feeding tube — and get a baseline thyroid level." },
+      { speaker: "host",   text: "Let's do a case. A patient has an oral cavity squamous cancer resected; final pathology shows a positive deep margin and extranodal extension in a neck node. What's the adjuvant plan and the pre-treatment checklist?" },
+      { speaker: "cohost", text: "Positive margin plus extranodal extension is the textbook indication for postoperative concurrent chemoradiation — radiation to about sixty to sixty-six gray to the high-risk bed with concurrent cisplatin, not radiation alone. Before it starts, the checklist: dental evaluation and any extractions done up front with fluoride trays, a nutrition assessment and likely a PEG given the mucositis ahead, a baseline TSH, audiogram and renal function because of the cisplatin, and IMRT planning to spare the parotids and cord. And I'd stress not prolonging the course — keep it on schedule to avoid repopulation." },
+      { speaker: "host",   text: "Twist: two years later he needs a lower molar out and the dentist is about to extract it in the irradiated field. Flag the risk." },
+      { speaker: "cohost", text: "That's the osteoradionecrosis setup — extracting a tooth from previously irradiated, hypovascular mandible. Ideally that tooth would have been dealt with before radiation. Now you proceed with extreme caution: atraumatic technique, antibiotics, consideration of pentoxifylline-tocopherol and, in high-risk cases, hyperbaric oxygen protocols, and close follow-up for non-healing exposed bone. The whole scenario underlines why pre-radiation dental clearance is non-negotiable." },
+      { speaker: "host",   text: "One more, quick: a resident wants to give the patient a two-week treatment break for bad mucositis. Counsel them." },
+      { speaker: "cohost", text: "Avoid it if at all possible. Prolonging the overall treatment time lets accelerated repopulation regrow the tumor and lowers control. You manage the mucositis aggressively — pain control, nutrition, mucosal care — and keep the course on track rather than pausing. Supportive care, not a break, is the answer." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: radiation kills via DNA double-strand breaks, mostly through free radicals, and oxygen fixes the damage — so hypoxia means radioresistance. Two: the 5 R's are repair, repopulation, reoxygenation, redistribution, radiosensitivity, and accelerated repopulation is why you don't prolong treatment. Three: conventional fractionation is about two gray a day to roughly seventy gross, sixty high-risk bed, fifty elective nodes." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: add concurrent cisplatin to adjuvant radiation for positive margins or extranodal extension, and use IMRT to spare the parotids and cord. Five: anticipate toxicity — acute mucositis, late xerostomia, fibrosis, hypothyroidism — and prevent osteoradionecrosis with dental clearance and extractions before radiation plus fluoride, while arranging nutrition and a thyroid baseline." },
+      { speaker: "host",   text: "Oxygen fixes the damage, the 5 R's shape the schedule, and dental clearance protects the jaw." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  74: {
+    objectives: [
+      "Define the settings of systemic therapy in HNSCC — induction, concurrent, adjuvant, and recurrent/metastatic.",
+      "Identify cisplatin as the standard concurrent radiosensitizer and know its dosing and major toxicities.",
+      "Describe induction TPF and when induction chemotherapy is (and isn't) used.",
+      "Explain cetuximab (anti-EGFR) and checkpoint immunotherapy in recurrent/metastatic disease.",
+      "Select carboplatin or alternatives when cisplatin is contraindicated and monitor for drug-specific toxicities."
+    ],
+    summary: `
+      <h4>1. The four settings of systemic therapy</h4>
+      <ul>
+        <li><strong>Induction (neoadjuvant)</strong> — chemotherapy before definitive treatment, classically <strong>TPF (docetaxel + cisplatin + 5-fluorouracil)</strong>.</li>
+        <li><strong>Concurrent chemoradiation</strong> — chemotherapy given <strong>with radiation</strong> as a radiosensitizer; the standard for locally advanced disease.</li>
+        <li><strong>Adjuvant</strong> — concurrent chemoradiation <strong>after surgery</strong> for high-risk pathology (positive margins or extranodal extension).</li>
+        <li><strong>Recurrent/metastatic (R/M)</strong> — palliative systemic therapy, now led by <strong>immunotherapy</strong>.</li>
+      </ul>
+      <h4>2. Cisplatin — the backbone</h4>
+      <p><strong>Cisplatin is the standard concurrent radiosensitizer</strong>, typically <strong>high-dose 100 mg/m² every 3 weeks</strong> during radiation (weekly schedules are also used). Concurrent chemoradiation improves <strong>locoregional control and organ preservation</strong> over radiation alone or sequential therapy. Its toxicities are classic and testable: <strong>nephrotoxicity</strong> (needs aggressive hydration), <strong>ototoxicity</strong> (high-frequency sensorineural hearing loss, tinnitus — baseline and monitoring audiograms), <strong>peripheral neuropathy</strong>, and it is <strong>highly emetogenic</strong> (antiemetic prophylaxis), plus myelosuppression and electrolyte wasting.</p>
+      <h4>3. Carboplatin and the other cytotoxics</h4>
+      <p><strong>Carboplatin</strong> is the main alternative when cisplatin is contraindicated (renal impairment, hearing loss, neuropathy, poor performance status); it is <strong>more myelosuppressive but less nephro-, oto-, and neurotoxic</strong>. Other agents: <strong>5-fluorouracil</strong>, <strong>taxanes (docetaxel, paclitaxel)</strong>, and <strong>methotrexate</strong> (older palliative single agent).</p>
+      <h4>4. Induction chemotherapy — role and controversy</h4>
+      <p><strong>Induction TPF</strong> can shrink/downstage tumors and reduce distant metastases, but it has <strong>not clearly improved overall survival</strong> versus upfront concurrent chemoradiation and adds toxicity. It is <strong>selectively</strong> used (e.g., very bulky disease, to reduce distant spread, or for larynx-preservation sequencing), not a routine first step for most locally advanced disease.</p>
+      <h4>5. Targeted therapy and immunotherapy</h4>
+      <p><strong>Cetuximab</strong>, the anti-<strong>EGFR</strong> monoclonal antibody, is used with radiation (locally advanced) or chemotherapy (R/M); its distinctive toxicities are an <strong>acneiform rash</strong>, <strong>hypomagnesemia</strong>, and <strong>infusion reactions</strong> — but it is <strong>inferior to cisplatin</strong> as a radiosensitizer in HPV-positive disease (RTOG 1016). In <strong>recurrent/metastatic</strong> disease, <strong>anti-PD-1 immunotherapy (pembrolizumab, nivolumab)</strong> is now standard: <strong>pembrolizumab ± platinum/5-FU is first-line</strong> (guided by PD-L1 CPS), and <strong>nivolumab</strong> is used after platinum failure.</p>
+      <h4>6. Choosing and monitoring</h4>
+      <p><strong>Concurrent chemoradiation with cisplatin</strong> is the default for locally advanced disease and for high-risk adjuvant settings; <strong>switch to carboplatin or cetuximab</strong> when cisplatin is contraindicated (never swap cisplatin for cetuximab merely to "de-escalate" HPV+ disease). Before and during cisplatin, monitor <strong>renal function, audiograms, neuropathy, and electrolytes (Mg, K)</strong>, with hydration and antiemetics.</p>
+    `,
+    keyPoints: [
+      { category: "Settings", items: [
+        "Induction (TPF = docetaxel + cisplatin + 5-FU); concurrent chemoradiation (standard for locally advanced); adjuvant (high-risk pathology); recurrent/metastatic (immunotherapy-led).",
+        "Concurrent chemoRT > sequential for locoregional control + organ preservation."
+      ]},
+      { category: "Cisplatin", items: [
+        "Standard concurrent radiosensitizer — high-dose 100 mg/m² q3wk (or weekly).",
+        "Toxicities: nephrotoxic (hydrate), ototoxic (audiograms — high-frequency SNHL), neuropathy, highly emetogenic, electrolyte wasting (Mg/K)."
+      ]},
+      { category: "Alternatives / induction", items: [
+        "Carboplatin if cisplatin contraindicated: MORE myelosuppression, LESS nephro/oto/neuro. Also 5-FU, taxanes, methotrexate.",
+        "Induction TPF downstages/reduces distant mets but no clear OS benefit vs upfront chemoRT — used selectively."
+      ]},
+      { category: "Targeted / immunotherapy", items: [
+        "Cetuximab (anti-EGFR): acneiform rash, hypomagnesemia, infusion reactions; inferior to cisplatin in HPV+ (RTOG 1016).",
+        "R/M: anti-PD-1 standard — pembrolizumab ± platinum/5-FU first-line (PD-L1 CPS); nivolumab after platinum failure."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 77 · Chemotherapy & Targeted Agents for HNSCC", subtitle: "Cummings 8e · Chapter 77", body: "<p style='font-size:18px;line-height:1.55;'>Cisplatin is the concurrent backbone; immunotherapy leads recurrent/metastatic disease — match the drug to the setting.</p>" },
+      { title: "Four settings", body: "<ul><li><strong>Induction</strong> (TPF).</li><li><strong>Concurrent</strong> chemoradiation (standard, locally advanced).</li><li><strong>Adjuvant</strong> (high-risk pathology).</li><li><strong>Recurrent/metastatic</strong> (immunotherapy-led).</li></ul>" },
+      { title: "Cisplatin — the backbone", body: "<ul><li>Standard concurrent radiosensitizer.</li><li>High-dose <strong>100 mg/m² q3wk</strong> (or weekly).</li><li>Improves locoregional control + organ preservation.</li></ul>" },
+      { title: "Cisplatin toxicities", body: "<ul><li><strong>Nephrotoxic</strong> (hydrate).</li><li><strong>Ototoxic</strong> — high-frequency SNHL, tinnitus (audiograms).</li><li>Peripheral neuropathy; highly emetogenic; Mg/K wasting.</li></ul>" },
+      { title: "Carboplatin & others", body: "<ul><li><strong>Carboplatin</strong> if cisplatin contraindicated — MORE myelosuppression, LESS nephro/oto/neuro.</li><li>5-FU, taxanes (docetaxel/paclitaxel), methotrexate.</li></ul>" },
+      { title: "Induction TPF", body: "<ul><li>Docetaxel + cisplatin + 5-FU.</li><li>Downstages, reduces distant mets.</li><li><strong>No clear OS benefit</strong> vs upfront chemoRT — selective use.</li></ul>" },
+      { title: "Cetuximab (anti-EGFR)", body: "<ul><li>With radiation (locally advanced) or chemo (R/M).</li><li>Rash (acneiform), <strong>hypomagnesemia</strong>, infusion reactions.</li><li>Inferior to cisplatin in HPV+ (RTOG 1016).</li></ul>" },
+      { title: "Immunotherapy (R/M)", body: "<ul><li>Anti-PD-1 is standard for recurrent/metastatic.</li><li><strong>Pembrolizumab ± platinum/5-FU first-line</strong> (PD-L1 CPS).</li><li>Nivolumab after platinum failure.</li></ul>" },
+      { title: "Choosing & monitoring", body: "<ul><li>Default: concurrent cisplatin-RT (locally advanced / high-risk adjuvant).</li><li>Cisplatin contraindicated → carboplatin or cetuximab (not a de-escalation swap in HPV+).</li><li>Monitor renal, audiogram, neuropathy, Mg/K; hydrate; antiemetics.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Cisplatin 100 mg/m² is the standard concurrent radiosensitizer — watch nephro/oto/neuro toxicity.</li><li>Induction TPF is selective (no clear OS benefit); carboplatin when cisplatin is contraindicated.</li><li>R/M disease = anti-PD-1 first-line (pembrolizumab ± chemo); cetuximab is EGFR-targeted, not a checkpoint drug.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Why concurrent beats sequential", body: "<ul><li>Chemotherapy radiosensitizes tumor cells during each fraction (cell-cycle effects, impaired repair, reoxygenation).</li><li>Concurrent delivery maximizes locoregional control and organ preservation vs giving them in sequence.</li></ul>" },
+      { title: "Cisplatin vs carboplatin profile", body: "<ul><li><strong>Cisplatin</strong>: nephro/oto/neurotoxic, highly emetogenic, potent.</li><li><strong>Carboplatin</strong>: myelosuppressive, better tolerated in renal/hearing/neuropathy issues.</li></ul>" }
+    ],
+    pearls: [
+      "Cisplatin is the standard concurrent radiosensitizer in head and neck cancer, typically high-dose 100 mg/m² every three weeks, and concurrent chemoradiation improves locoregional control and organ preservation over radiation alone or sequential therapy.",
+      "Cisplatin's testable toxicities are nephrotoxicity (needs hydration), ototoxicity with high-frequency sensorineural hearing loss and tinnitus (baseline and monitoring audiograms), peripheral neuropathy, high emetogenicity, and electrolyte wasting (magnesium, potassium).",
+      "Carboplatin is the main substitute when cisplatin is contraindicated — it is more myelosuppressive but less nephrotoxic, ototoxic, and neurotoxic.",
+      "Induction TPF (docetaxel, cisplatin, 5-fluorouracil) can downstage tumors and reduce distant metastases but has not clearly improved overall survival versus upfront concurrent chemoradiation, so it is used selectively.",
+      "Cetuximab targets EGFR and causes an acneiform rash, hypomagnesemia, and infusion reactions, but it is inferior to cisplatin as a radiosensitizer in HPV-positive disease (RTOG 1016) and should not be substituted to de-escalate.",
+      "In recurrent/metastatic HNSCC, anti-PD-1 immunotherapy is standard: pembrolizumab with or without platinum/5-fluorouracil is first-line (guided by the PD-L1 combined positive score), and nivolumab is used after platinum failure."
+    ],
+    flashcards: [
+      { q: "What are the four settings of systemic therapy in HNSCC?", a: "Induction (neoadjuvant chemotherapy before definitive treatment, e.g., TPF), concurrent chemoradiation (chemotherapy with radiation as a radiosensitizer — the standard for locally advanced disease), adjuvant (concurrent chemoradiation after surgery for high-risk pathology), and recurrent/metastatic (palliative systemic therapy, now led by immunotherapy)." },
+      { q: "What is the standard concurrent radiosensitizer and its dosing?", a: "Cisplatin, classically high-dose 100 mg/m² every three weeks during radiation (weekly lower-dose schedules are also used). Concurrent cisplatin-radiation improves locoregional control and organ preservation compared with radiation alone or sequential treatment." },
+      { q: "List cisplatin's major toxicities and the monitoring they require.", a: "Nephrotoxicity (requires aggressive IV hydration and renal monitoring), ototoxicity causing high-frequency sensorineural hearing loss and tinnitus (baseline and serial audiograms), peripheral neuropathy, high emetogenicity (antiemetic prophylaxis), myelosuppression, and electrolyte wasting (magnesium and potassium)." },
+      { q: "When is carboplatin used instead of cisplatin, and how does its profile differ?", a: "When cisplatin is contraindicated — renal impairment, pre-existing hearing loss, neuropathy, or poor performance status. Carboplatin is more myelosuppressive (dose-limiting thrombocytopenia/neutropenia) but less nephrotoxic, ototoxic, and neurotoxic than cisplatin." },
+      { q: "What is TPF, and what is the role and controversy of induction chemotherapy?", a: "TPF is docetaxel, cisplatin, and 5-fluorouracil, the classic induction regimen. Induction can shrink/downstage tumors and reduce distant metastases, but it has not clearly improved overall survival compared with upfront concurrent chemoradiation and adds toxicity, so it is reserved for selected cases (bulky disease, high distant-metastasis risk, or certain larynx-preservation strategies)." },
+      { q: "How does cetuximab work and what are its characteristic toxicities?", a: "Cetuximab is a monoclonal antibody against EGFR, used with radiation (locally advanced) or chemotherapy (recurrent/metastatic). Its characteristic toxicities are an acneiform (papulopustular) skin rash, hypomagnesemia, and infusion reactions. It is inferior to cisplatin as a radiosensitizer in HPV-positive disease." },
+      { q: "What is the role of immunotherapy in recurrent/metastatic HNSCC?", a: "Anti-PD-1 antibodies are standard. Pembrolizumab, alone or with platinum plus 5-fluorouracil, is first-line (guided by the PD-L1 combined positive score), and nivolumab improves survival after platinum failure. Responses occur in a minority but can be durable." },
+      { q: "Why is concurrent chemoradiation preferred over sequential chemotherapy then radiation for locally advanced disease?", a: "Because giving chemotherapy concurrently radiosensitizes the tumor during each radiation fraction (through cell-cycle effects, impaired DNA repair, and reoxygenation), yielding better locoregional control and organ preservation than delivering the two modalities in sequence." }
+    ],
+    quiz: [
+      { stem: "Which agent is the standard concurrent radiosensitizer for locally advanced HNSCC?",
+        options: ["Methotrexate", "Cisplatin", "Bevacizumab", "Gemcitabine"],
+        correct: 1, explanation: "Cisplatin (classically 100 mg/m² every 3 weeks) is the standard concurrent radiosensitizer and improves locoregional control and organ preservation. Methotrexate (option 1) is an older palliative single agent. Bevacizumab (option 3, anti-VEGF) and gemcitabine (option 4) are not standard radiosensitizers in HNSCC." },
+      { stem: "A patient on concurrent cisplatin-radiation develops rising creatinine, tinnitus, and high-frequency hearing loss. These reflect which drug's toxicity, and what monitoring is key?",
+        options: ["Cetuximab — monitor magnesium", "Cisplatin — monitor renal function and audiograms", "Carboplatin — monitor platelets", "5-FU — monitor mucositis"],
+        correct: 1, explanation: "Nephrotoxicity and ototoxicity (high-frequency SNHL, tinnitus) are hallmark cisplatin toxicities, requiring renal function monitoring/hydration and baseline and serial audiograms. Cetuximab (option 1) causes rash/hypomagnesemia, carboplatin (option 3) is mainly myelosuppressive, and 5-FU (option 4) causes mucositis/diarrhea — none match this renal-plus-otologic picture." },
+      { stem: "A patient needs concurrent chemoradiation but has significant renal impairment and pre-existing hearing loss. The most appropriate chemotherapy substitution is:",
+        options: ["Higher-dose cisplatin", "Carboplatin", "No chemotherapy is possible", "Induction TPF"],
+        correct: 1, explanation: "Carboplatin is the standard substitute when cisplatin is contraindicated by renal impairment or hearing loss, being less nephrotoxic and ototoxic (though more myelosuppressive). Higher-dose cisplatin (option 1) worsens the contraindicated toxicities. Chemoradiation is still possible (option 3 is false), and induction TPF (option 4) contains cisplatin and does not solve the contraindication." },
+      { stem: "Which statement about induction (neoadjuvant) TPF chemotherapy is correct?",
+        options: ["It clearly improves overall survival over upfront chemoradiation and is routine", "It can downstage tumors and reduce distant metastases but has not clearly improved overall survival vs upfront chemoradiation", "It replaces the need for radiation", "It is contraindicated in all patients"],
+        correct: 1, explanation: "Induction TPF can downstage disease and reduce distant metastases but has not clearly improved overall survival versus upfront concurrent chemoradiation, so it is used selectively. It is not routine with a proven survival benefit (option 1), does not replace radiation (option 3), and is not universally contraindicated (option 4)." },
+      { stem: "Which toxicities are characteristic of cetuximab?",
+        options: ["Nephrotoxicity and ototoxicity", "Acneiform rash and hypomagnesemia", "Hemorrhagic cystitis", "Pulmonary fibrosis"],
+        correct: 1, explanation: "Cetuximab (anti-EGFR) characteristically causes an acneiform skin rash, hypomagnesemia, and infusion reactions. Nephro/ototoxicity (option 1) are cisplatin effects. Hemorrhagic cystitis (option 3) is associated with cyclophosphamide/ifosfamide, and pulmonary fibrosis (option 4) with bleomycin — not cetuximab." },
+      { stem: "For first-line treatment of recurrent/metastatic HNSCC, the current standard is:",
+        options: ["Methotrexate monotherapy", "Pembrolizumab (± platinum/5-FU), guided by PD-L1 CPS", "Induction TPF", "Cetuximab-radiation"],
+        correct: 1, explanation: "Anti-PD-1 therapy leads recurrent/metastatic HNSCC: pembrolizumab, alone or with platinum/5-FU, is first-line, guided by the PD-L1 combined positive score. Methotrexate (option 1) is an older palliative agent. Induction TPF (option 3) and cetuximab-radiation (option 4) are locoregional/curative-intent strategies, not first-line R/M therapy." }
+    ],
+    signs: [
+      { name: "Rising creatinine on cisplatin", category: "lab", description: "Nephrotoxicity during cisplatin chemoradiation.", implication: "Hold/adjust, hydrate; consider switch to carboplatin." },
+      { name: "High-frequency SNHL / tinnitus on cisplatin", category: "clinical", description: "Ototoxic hearing loss during treatment.", implication: "Cisplatin ototoxicity — audiogram monitoring; consider carboplatin." },
+      { name: "Acneiform facial rash on systemic therapy", category: "clinical", description: "Papulopustular rash (often correlates with response).", implication: "Cetuximab (anti-EGFR) toxicity — also check magnesium." },
+      { name: "Hypomagnesemia", category: "lab", description: "Low magnesium during cetuximab or cisplatin therapy.", implication: "Drug-induced electrolyte wasting — replace and monitor." },
+      { name: "PD-L1 CPS result", category: "lab", description: "PD-L1 combined positive score on R/M tumor tissue.", implication: "Guides first-line pembrolizumab ± chemotherapy." }
+    ],
+    podcastTitle: "Deep Dive · Chemotherapy and Targeted Agents for HNSCC",
+    podcastDuration: "~19 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. Continuing head and neck: the systemic therapy — chemotherapy and targeted agents. Marcus, frame it by setting, because the same drug means different things in different contexts." },
+      { speaker: "cohost", text: "Exactly. There are four settings. Induction, or neoadjuvant — chemo before definitive treatment, classically the TPF regimen: docetaxel, cisplatin, and 5-fluorouracil. Concurrent chemoradiation — chemo given with radiation as a radiosensitizer, and that's the standard of care for locally advanced disease. Adjuvant — concurrent chemoradiation after surgery for high-risk pathology, meaning positive margins or extranodal extension. And recurrent or metastatic disease — palliative systemic therapy, which is now led by immunotherapy. Keep those four buckets separate." },
+      { speaker: "host",   text: "Start with the backbone drug." },
+      { speaker: "cohost", text: "Cisplatin. It's the standard concurrent radiosensitizer, classically high-dose, a hundred milligrams per meter squared every three weeks during radiation, though weekly lower-dose schedules are common too. The key principle is that concurrent chemoradiation beats radiation alone and beats giving the two in sequence — better locoregional control and better organ preservation. The chemo sensitizes the tumor during each fraction." },
+      { speaker: "host",   text: "And cisplatin's toxicities, because they're classic exam fodder and real clinical issues." },
+      { speaker: "cohost", text: "Four to lock in. Nephrotoxicity — so you hydrate aggressively and watch renal function. Ototoxicity — high-frequency sensorineural hearing loss and tinnitus, so you get baseline and monitoring audiograms. Peripheral neuropathy. And it's highly emetogenic, so strong antiemetic prophylaxis. Plus myelosuppression and electrolyte wasting, especially magnesium and potassium. Nephro, oto, neuro, emetogenic — that's cisplatin." },
+      { speaker: "host",   text: "When cisplatin isn't an option?" },
+      { speaker: "cohost", text: "Carboplatin is the main substitute — when the patient has renal impairment, pre-existing hearing loss, neuropathy, or poor performance status. The trade-off is that carboplatin is more myelosuppressive — thrombocytopenia and neutropenia are dose-limiting — but it's less nephrotoxic, ototoxic, and neurotoxic. Other cytotoxics in the toolkit are 5-fluorouracil, the taxanes docetaxel and paclitaxel, and older methotrexate for palliation." },
+      { speaker: "host",   text: "Induction chemo — people argue about it. Where does it stand?" },
+      { speaker: "cohost", text: "Induction TPF can shrink and downstage tumors and reduce distant metastases, which sounds great, but the hard truth is it has not clearly improved overall survival compared with just going straight to concurrent chemoradiation, and it adds toxicity and can delay definitive treatment. So it's used selectively — very bulky disease, a high risk of distant spread, or certain larynx-preservation sequencing strategies — not as a routine first step for most locally advanced patients." },
+      { speaker: "host",   text: "Now targeted therapy and immunotherapy." },
+      { speaker: "cohost", text: "Cetuximab is the anti-EGFR monoclonal antibody — EGFR is overexpressed in most head and neck squamous cancers. It's used with radiation in locally advanced disease or with chemo in recurrent/metastatic disease. Its signature toxicities are an acneiform rash — which actually tends to correlate with response — hypomagnesemia, and infusion reactions. But remember the key caveat: as a radiosensitizer it's inferior to cisplatin in HPV-positive disease, from RTOG 1016, so you don't swap cisplatin for cetuximab just to lighten treatment. And in recurrent or metastatic disease, anti-PD-1 immunotherapy is now standard: pembrolizumab, alone or with platinum and 5-FU, is first-line, guided by the PD-L1 combined positive score, and nivolumab is used after platinum failure." },
+      { speaker: "host",   text: "How do you choose, and what do you monitor?" },
+      { speaker: "cohost", text: "Default for locally advanced disease and for high-risk adjuvant settings is concurrent cisplatin-radiation. If cisplatin is contraindicated, you move to carboplatin or cetuximab — but never swap cisplatin for cetuximab in HPV-positive disease merely to de-escalate. Monitoring on cisplatin: renal function, audiograms, neuropathy exams, and electrolytes — magnesium and potassium — with hydration and antiemetics built in." },
+      { speaker: "host",   text: "Let's do a case. A patient with locally advanced laryngeal cancer wants organ preservation. Renal function and hearing are normal. What systemic therapy, and what's the pre-treatment work-up?" },
+      { speaker: "cohost", text: "Organ-preservation for locally advanced larynx is concurrent chemoradiation with high-dose cisplatin as the radiosensitizer — that's the standard that preserves the larynx while treating the cancer. Before starting, I check renal function and get a baseline audiogram given cisplatin's oto- and nephrotoxicity, set up aggressive hydration and antiemetics, baseline electrolytes including magnesium, plus the radiation-side prep from the last chapter — dental clearance, nutrition, thyroid baseline. I keep induction TPF off the routine path here since it doesn't clearly add survival." },
+      { speaker: "host",   text: "Twist: midway his creatinine climbs and his audiogram shows new high-frequency loss. Adjust." },
+      { speaker: "cohost", text: "That's cisplatin nephro- and ototoxicity declaring itself. I'd hold and reassess, optimize hydration, and if he can't safely continue cisplatin, switch the concurrent agent to carboplatin, which spares the kidneys and hearing at the cost of more myelosuppression — so then I watch his counts. The goal is to keep the concurrent chemoradiation going with a tolerable drug rather than abandon chemo and lose the radiosensitization." },
+      { speaker: "host",   text: "One more, quick: a different patient has lung metastases from HNSCC. First-line systemic therapy?" },
+      { speaker: "cohost", text: "Recurrent/metastatic disease — this is immunotherapy territory. I'd test the PD-L1 combined positive score and start pembrolizumab, alone if the CPS is high or with platinum and 5-FU depending on disease burden, as first-line. Cytotoxic-only regimens are no longer the default here, and cetuximab is a targeted add-on, not the first-line immunotherapy." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: four settings — induction, concurrent, adjuvant, recurrent/metastatic — and concurrent chemoradiation beats sequential for locally advanced disease. Two: cisplatin, about a hundred milligrams per meter squared every three weeks, is the standard radiosensitizer, with nephro-, oto-, and neurotoxicity and high emetogenicity. Three: carboplatin is the substitute when cisplatin is contraindicated — more myelosuppressive, less nephro/oto/neuro." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: induction TPF downstages and reduces distant mets but hasn't clearly improved survival over upfront chemoradiation, so it's selective. Five: cetuximab is anti-EGFR with rash and hypomagnesemia and is inferior to cisplatin in HPV-positive disease, while recurrent/metastatic disease is led by anti-PD-1 — pembrolizumab, with or without chemo, guided by PD-L1 CPS, and nivolumab after platinum failure." },
+      { speaker: "host",   text: "Cisplatin concurrently, carboplatin when you must, and immunotherapy for the metastatic patient." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  75: {
+    objectives: [
+      "Describe the phases of wound healing — hemostasis, inflammation, proliferation, and remodeling — and final tensile strength.",
+      "Classify skin flaps by blood supply (random vs axial), movement, and tissue composition.",
+      "Explain flap physiology — the subdermal plexus, angiosomes, the delay phenomenon, and distal necrosis.",
+      "Identify factors that impair healing and flap survival — smoking, radiation, diabetes, malnutrition, and tension.",
+      "Monitor a free flap and distinguish venous congestion from arterial insufficiency for salvage."
+    ],
+    summary: `
+      <h4>1. The phases of wound healing</h4>
+      <ul>
+        <li><strong>Hemostasis</strong> (immediate) — vasoconstriction, platelet plug, fibrin clot.</li>
+        <li><strong>Inflammation</strong> (0–3 days) — neutrophils then macrophages (the key orchestrating cell) debride and release growth factors.</li>
+        <li><strong>Proliferation</strong> (~3 days–3 weeks) — <strong>fibroplasia</strong> (fibroblasts lay type III collagen), <strong>angiogenesis</strong>, granulation tissue, and <strong>epithelialization</strong>.</li>
+        <li><strong>Remodeling/maturation</strong> (weeks to ~1 year) — <strong>type III collagen is replaced by type I</strong> and cross-linked; the wound regains at most about <strong>80% of original tensile strength</strong>.</li>
+      </ul>
+      <h4>2. Classifying skin flaps</h4>
+      <p><strong>By blood supply:</strong> a <strong>random-pattern flap</strong> lives off the <strong>subdermal plexus</strong> with no named vessel (length limited by a width ratio, conventionally up to ~3:1 on the well-vascularized face); an <strong>axial-pattern flap</strong> is based on a <strong>named artery</strong> (e.g., the paramedian forehead flap on the supratrochlear artery, the deltopectoral flap), allowing greater length. <strong>By movement:</strong> advancement, rotation, transposition (rhombic, bilobed, Z-plasty), and interpolated. <strong>By tissue:</strong> fasciocutaneous, muscle/myocutaneous, osseous (bone-containing), and <strong>free flaps</strong> (detached and re-anastomosed microvascularly).</p>
+      <h4>3. Flap physiology</h4>
+      <p>Skin perfusion is organized into <strong>angiosomes</strong> (Taylor) — territories supplied by a source artery, linked by <strong>choke vessels</strong> to neighbors. The <strong>delay phenomenon</strong> — partially raising/dividing a flap's supply days before transfer — <strong>conditions the flap to survive on a reduced blood supply</strong> by dilating choke vessels, improving distal survival. Flap failure characteristically begins <strong>distally</strong> (the part farthest from the pedicle), where perfusion pressure is lowest. <strong>Venous congestion</strong> (impaired outflow) is a more common cause of flap compromise than arterial insufficiency.</p>
+      <h4>4. What impairs healing and flap survival</h4>
+      <p><strong>Smoking</strong> is the biggest modifiable risk — nicotine causes vasoconstriction and markedly increases flap necrosis (counsel cessation before elective reconstruction). <strong>Radiation</strong> leaves tissue <strong>hypovascular, hypocellular, and hypoxic (the "3 H's")</strong>, impairing healing. Add <strong>diabetes, malnutrition</strong> (albumin/prealbumin, vitamin C and zinc for collagen synthesis), <strong>infection</strong>, <strong>excess tension</strong>, <strong>corticosteroids</strong>, and <strong>prior surgery/scarring</strong>.</p>
+      <h4>5. Free-flap monitoring and salvage</h4>
+      <p>Free flaps are monitored closely in the early postoperative period by <strong>color, capillary refill, temperature, turgor, and Doppler signal</strong> (and implantable/handheld Doppler, tissue oximetry). Distinguish the two failure modes:</p>
+      <ul>
+        <li><strong>Venous congestion</strong> — flap is <strong>blue/dusky, swollen, with brisk (fast) capillary refill and dark bleeding on pinprick</strong>; outflow problem (the more common early failure).</li>
+        <li><strong>Arterial insufficiency</strong> — flap is <strong>pale/mottled, cool, with sluggish or absent capillary refill and no bleeding</strong> on pinprick.</li>
+      </ul>
+      <p>Either demands <strong>urgent re-exploration</strong> to salvage the anastomosis; <strong>leeches</strong> can temporize venous congestion. The first 24–72 hours are the highest-risk window.</p>
+      <h4>6. The reconstructive mindset</h4>
+      <p>Choose along the <strong>reconstructive ladder/elevator</strong>, matching tissue and vascularity to the defect, and optimize the host — <strong>stop smoking, correct nutrition, control diabetes, respect irradiated tissue</strong>, and avoid tension — because the physiology of perfusion and healing determines whether a technically perfect flap actually survives.</p>
+    `,
+    keyPoints: [
+      { category: "Healing phases", items: [
+        "Hemostasis → inflammation (0–3d, macrophage is key cell) → proliferation (~3d–3wk: fibroplasia/type III collagen, angiogenesis, epithelialization) → remodeling (collagen III→I, up to 1 yr).",
+        "Wound regains at most ~80% of original tensile strength."
+      ]},
+      { category: "Flap classification", items: [
+        "Blood supply: random (subdermal plexus, width-limited ~3:1 on face) vs axial (named artery — e.g., paramedian forehead on supratrochlear).",
+        "Movement: advancement/rotation/transposition/interpolated. Tissue: fasciocutaneous, myocutaneous, osseous, free (microvascular)."
+      ]},
+      { category: "Physiology", items: [
+        "Angiosomes (source artery territories) linked by choke vessels. Delay phenomenon conditions a flap to survive on reduced supply (dilates choke vessels).",
+        "Necrosis starts DISTALLY (lowest perfusion). Venous congestion is a more common failure mode than arterial insufficiency."
+      ]},
+      { category: "Risks / monitoring", items: [
+        "Impairers: SMOKING (biggest modifiable — vasoconstriction/necrosis), radiation (hypovascular/hypocellular/hypoxic 'three H's'), diabetes, malnutrition, tension, steroids.",
+        "Free flap: venous congestion = blue/swollen, brisk refill, dark bleeding; arterial = pale/cool, no refill/bleeding → urgent re-exploration; leeches temporize venous congestion."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 78 · Skin Flap Physiology and Wound Healing", subtitle: "Cummings 8e · Chapter 78", body: "<p style='font-size:18px;line-height:1.55;'>Perfusion is destiny — understand wound-healing phases, flap blood supply, and how to catch a failing flap early.</p>" },
+      { title: "Wound-healing phases", body: "<ul><li><strong>Hemostasis</strong> (clot).</li><li><strong>Inflammation</strong> (0–3d; macrophage = key cell).</li><li><strong>Proliferation</strong> (~3d–3wk; collagen III, angiogenesis, epithelialization).</li><li><strong>Remodeling</strong> (III→I collagen, ~1 yr).</li></ul>" },
+      { title: "Tensile strength", body: "<ul><li>Collagen type III (early) → type I (remodeled, cross-linked).</li><li>Wound regains at most ~<strong>80%</strong> of original strength.</li></ul>" },
+      { title: "Flaps by blood supply", body: "<ul><li><strong>Random</strong> — subdermal plexus, no named vessel, width-limited (~3:1 face).</li><li><strong>Axial</strong> — named artery (paramedian forehead/supratrochlear, deltopectoral).</li></ul>" },
+      { title: "Flaps by movement & tissue", body: "<ul><li>Movement: advancement, rotation, transposition (rhombic, bilobed, Z-plasty), interpolated.</li><li>Tissue: fasciocutaneous, myocutaneous, osseous, <strong>free</strong>.</li></ul>" },
+      { title: "Angiosomes & delay", body: "<ul><li><strong>Angiosomes</strong> — source-artery territories linked by <strong>choke vessels</strong>.</li><li><strong>Delay phenomenon</strong> — conditions a flap to survive on reduced supply.</li><li>Necrosis starts <strong>distally</strong>.</li></ul>" },
+      { title: "What impairs survival", body: "<ul><li><strong>Smoking</strong> — biggest modifiable (vasoconstriction, necrosis).</li><li><strong>Radiation</strong> — hypovascular/hypocellular/hypoxic (3 H's).</li><li>Diabetes, malnutrition, tension, steroids, infection.</li></ul>" },
+      { title: "Free-flap monitoring", body: "<ul><li>Color, capillary refill, temperature, turgor, Doppler.</li><li>Highest-risk window: first 24–72 h.</li></ul>" },
+      { title: "Congestion vs insufficiency", body: "<ul><li><strong>Venous congestion</strong>: blue/swollen, brisk refill, dark bleeding (more common).</li><li><strong>Arterial insufficiency</strong>: pale/cool, no refill, no bleeding.</li><li>Either → <strong>urgent re-exploration</strong>; leeches temporize congestion.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Healing: hemostasis→inflammation→proliferation→remodeling; ~80% final strength.</li><li>Random (plexus) vs axial (named artery); delay improves distal survival.</li><li>Smoking & radiation impair flaps; venous congestion (blue, brisk refill) > arterial — re-explore urgently.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Random vs axial supply", body: "<ul><li><strong>Random</strong>: perfused by the dermal/subdermal plexus — length depends on a safe width ratio.</li><li><strong>Axial</strong>: a named artery runs along the flap axis — supports a long, narrow flap.</li></ul>" },
+      { title: "Angiosome / choke vessels", body: "<ul><li>Each source artery supplies an <strong>angiosome</strong>; adjacent angiosomes connect through <strong>choke vessels</strong>.</li><li>The delay phenomenon dilates choke vessels so a flap can capture a neighboring territory.</li></ul>" }
+    ],
+    pearls: [
+      "Wound healing proceeds through hemostasis, inflammation (macrophage is the key orchestrating cell), proliferation (fibroplasia with type III collagen, angiogenesis, epithelialization), and remodeling (type III collagen replaced by cross-linked type I), with the wound regaining at most about 80% of original tensile strength.",
+      "A random-pattern flap is perfused by the subdermal plexus and is limited by a length-to-width ratio (up to about 3:1 on the well-vascularized face), whereas an axial-pattern flap is based on a named artery and can be longer and narrower.",
+      "The delay phenomenon conditions a flap to survive on a reduced blood supply by dilating choke vessels, improving survival of the distal portion, which is the part most prone to necrosis.",
+      "Smoking is the single biggest modifiable risk for flap necrosis through nicotine-induced vasoconstriction, and irradiated tissue is hypovascular, hypocellular, and hypoxic (the 'three H's'), both markedly impairing healing.",
+      "Venous congestion is a more common cause of flap compromise than arterial insufficiency: a congested flap is blue, swollen, with brisk capillary refill and dark bleeding on pinprick, whereas an arterially insufficient flap is pale, cool, with sluggish/absent refill and no bleeding.",
+      "A compromised free flap needs urgent re-exploration to salvage the anastomosis, and leeches can temporize venous congestion while definitive management is arranged."
+    ],
+    flashcards: [
+      { q: "What are the phases of wound healing and the final tensile strength?", a: "Hemostasis (vasoconstriction, platelet plug, fibrin clot), inflammation (0–3 days; neutrophils then macrophages, the key orchestrating cell), proliferation (~3 days–3 weeks; fibroblasts deposit type III collagen, angiogenesis, granulation, epithelialization), and remodeling/maturation (weeks to a year; type III collagen replaced by cross-linked type I). The healed wound regains at most about 80% of original tensile strength." },
+      { q: "How do random-pattern and axial-pattern flaps differ?", a: "A random-pattern flap is perfused by the subdermal (dermal) plexus with no named vessel, so its survivable length is limited by a length-to-width ratio (conventionally up to ~3:1 on the face). An axial-pattern flap is based on a specific named artery running along its axis (e.g., paramedian forehead flap on the supratrochlear artery), allowing a longer, narrower, more reliable flap." },
+      { q: "What is the delay phenomenon?", a: "Partially raising or dividing part of a flap's blood supply days before definitive transfer, which conditions the flap to survive on a reduced blood supply — largely by dilating choke vessels between angiosomes — and improves survival of the distal flap that would otherwise be at risk of necrosis." },
+      { q: "What are angiosomes and choke vessels?", a: "An angiosome (Taylor) is a three-dimensional territory of tissue supplied by a single source artery (and its vein). Adjacent angiosomes are connected by reduced-caliber 'choke' vessels; these choke vessels dilate (e.g., after a surgical delay) to let a flap capture perfusion from a neighboring angiosome." },
+      { q: "Which factors most impair wound healing and flap survival?", a: "Smoking (the biggest modifiable risk — nicotine vasoconstriction causing necrosis), prior radiation (hypovascular, hypocellular, hypoxic tissue — the 'three H's'), diabetes, malnutrition (low albumin/prealbumin; vitamin C and zinc deficiency impair collagen synthesis), infection, excessive wound tension, corticosteroids, and prior surgery/scarring." },
+      { q: "How do you distinguish venous congestion from arterial insufficiency in a free flap?", a: "Venous congestion: the flap is blue/dusky and swollen, with brisk (rapid) capillary refill and dark bleeding on pinprick (an outflow problem, and the more common early failure). Arterial insufficiency: the flap is pale/mottled and cool, with sluggish or absent capillary refill and no bleeding on pinprick. Both require urgent re-exploration." },
+      { q: "Where does flap necrosis characteristically begin and why?", a: "At the distal portion of the flap — the part farthest from the pedicle — because perfusion pressure is lowest there. This is why axial supply, the delay phenomenon, and avoiding excessive length (in random flaps) all aim to protect the distal flap." },
+      { q: "What is the role of leeches and the timing of free-flap monitoring?", a: "Medicinal leeches (which secrete hirudin, an anticoagulant) can temporize venous congestion by decompressing the flap while definitive salvage is arranged. Free flaps are monitored most intensively in the first 24–72 hours, the highest-risk window, using color, capillary refill, temperature, turgor, and Doppler signal." }
+    ],
+    quiz: [
+      { stem: "A free flap becomes blue and swollen with brisk capillary refill and dark blood on pinprick. This indicates:",
+        options: ["Arterial insufficiency", "Venous congestion", "Normal healing", "Infection only"],
+        correct: 1, explanation: "Blue, swollen flap with brisk refill and dark bleeding is venous congestion — an outflow problem and the more common early failure mode — requiring urgent re-exploration (leeches can temporize). Arterial insufficiency (option 1) is pale, cool, with no refill or bleeding. These findings are not normal (option 3), and while infection matters, the picture is classic venous congestion (option 4)." },
+      { stem: "Which factor is the single most important modifiable risk for skin-flap necrosis?",
+        options: ["Mild hypertension", "Smoking (nicotine-induced vasoconstriction)", "Age over 50", "Male sex"],
+        correct: 1, explanation: "Smoking causes nicotine-mediated vasoconstriction and dramatically increases flap necrosis, and it is modifiable — so cessation before elective reconstruction is key. Mild hypertension (option 1), age (option 3), and sex (option 4) are not the dominant modifiable flap-failure risk." },
+      { stem: "A random-pattern skin flap derives its blood supply from:",
+        options: ["A named axial artery", "The subdermal (dermal) plexus", "A microvascular anastomosis", "Direct bone perforators"],
+        correct: 1, explanation: "A random-pattern flap is perfused by the subdermal plexus with no named vessel, so its length is limited by a width ratio. A named axial artery (option 1) defines an axial flap. A microvascular anastomosis (option 3) defines a free flap. Bone perforators (option 4) relate to osseous flaps." },
+      { stem: "What does the delay phenomenon accomplish?",
+        options: ["It weakens the flap before transfer", "It conditions the flap to survive on a reduced blood supply by dilating choke vessels", "It removes the need for a pedicle", "It speeds epithelialization only"],
+        correct: 1, explanation: "Partially dividing the supply before transfer dilates choke vessels between angiosomes, conditioning the flap to survive on reduced perfusion and improving distal survival. It strengthens, not weakens, flap viability (option 1), does not eliminate the pedicle (option 3), and is about perfusion, not merely epithelialization (option 4)." },
+      { stem: "Irradiated tissue heals poorly because it is:",
+        options: ["Hypervascular and hypercellular", "Hypovascular, hypocellular, and hypoxic (the 'three H's')", "Rich in choke vessels", "High in type I collagen"],
+        correct: 1, explanation: "Radiation produces hypovascular, hypocellular, hypoxic tissue (the 'three H's'), which impairs healing and flap take. It is not hypervascular/hypercellular (option 1). It does not enrich choke vessels (option 3), and it degrades, rather than enriches, the healing collagen response (option 4)." },
+      { stem: "Approximately what fraction of original tensile strength does a healed wound ultimately regain?",
+        options: ["About 50%", "About 80%", "100%", "About 20%"],
+        correct: 1, explanation: "After remodeling (type III collagen replaced by cross-linked type I over up to a year), a wound regains at most about 80% of original tensile strength. It does not reach the original 100% (option 3), and 50% (option 1) or 20% (option 4) understate the eventual remodeled strength." }
+    ],
+    signs: [
+      { name: "Blue, swollen flap with brisk refill", category: "clinical", description: "Dusky, engorged flap, rapid capillary refill, dark pinprick bleeding.", implication: "Venous congestion — urgent re-exploration; leeches temporize." },
+      { name: "Pale, cool flap with no refill/bleeding", category: "clinical", description: "White/mottled, cold flap, absent capillary refill, no pinprick bleeding.", implication: "Arterial insufficiency — urgent re-exploration of the anastomosis." },
+      { name: "Distal flap tip necrosis", category: "clinical", description: "Blackened necrosis at the end farthest from the pedicle.", implication: "Perfusion lowest distally — excessive length/random supply or tension." },
+      { name: "Irradiated recipient bed", category: "clinical", description: "Fibrotic, hypovascular previously irradiated tissue.", implication: "Impaired healing (three H's) — favor vascularized/free tissue, meticulous technique." },
+      { name: "Active smoking before reconstruction", category: "clinical", description: "Ongoing nicotine use pre-/post-op.", implication: "Major modifiable flap-necrosis risk — counsel cessation." }
+    ],
+    podcastTitle: "Deep Dive · Skin Flap Physiology and Wound Healing",
+    podcastDuration: "~19 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. On head and neck you'll live with reconstruction, so today it's wound healing and skin-flap physiology — why a technically perfect flap lives or dies. Marcus, start with the healing phases." },
+      { speaker: "cohost", text: "Four phases. Hemostasis first — vasoconstriction, a platelet plug, a fibrin clot. Then inflammation, zero to about three days — neutrophils arrive, then macrophages, and the macrophage is the key orchestrating cell, debriding and releasing growth factors. Then proliferation, roughly day three to three weeks — fibroblasts lay down type three collagen, that's fibroplasia, plus angiogenesis, granulation tissue, and epithelialization resurfacing the wound. And finally remodeling, or maturation, from weeks out to about a year, where that type three collagen is replaced by cross-linked type one. The number to remember: the healed wound regains at most about eighty percent of its original tensile strength — it never gets back to a hundred." },
+      { speaker: "host",   text: "Now classify flaps, because the blood supply drives everything." },
+      { speaker: "cohost", text: "Three axes. By blood supply: a random-pattern flap lives off the subdermal plexus with no named vessel, so its safe length is limited by a length-to-width ratio — conventionally up to about three to one on the face because the face is so well vascularized. An axial-pattern flap is based on a specific named artery running along its axis — like the paramedian forehead flap on the supratrochlear artery, or the deltopectoral flap — which lets you make it longer and narrower and more reliable. By movement: advancement, rotation, transposition — rhombic, bilobed, Z-plasty — and interpolated. And by tissue: fasciocutaneous, muscle or myocutaneous, osseous when you need bone, and free flaps, which are detached and re-anastomosed under the microscope." },
+      { speaker: "host",   text: "Give me the physiology concepts — angiosomes and the delay phenomenon." },
+      { speaker: "cohost", text: "Taylor's angiosome concept: the body's surface is a mosaic of territories, each an angiosome supplied by one source artery, and neighboring angiosomes are linked by reduced-caliber choke vessels. The delay phenomenon exploits that: if you partially raise or divide part of a flap's blood supply days before you actually transfer it, you condition the flap to survive on a reduced supply — the choke vessels dilate, letting the flap capture a neighboring angiosome — and the distal part survives better. And that's the key vulnerability: flap necrosis characteristically starts distally, farthest from the pedicle, where the perfusion pressure is lowest." },
+      { speaker: "host",   text: "What wrecks healing and flap survival?" },
+      { speaker: "cohost", text: "Top of the modifiable list: smoking. Nicotine is a vasoconstrictor and it dramatically increases flap necrosis — so you counsel cessation before elective reconstruction, and it genuinely changes outcomes. Radiation is the other big one on head and neck: irradiated tissue is hypovascular, hypocellular, and hypoxic — the three H's — so it heals badly and takes flaps poorly. Then diabetes, malnutrition — check albumin and prealbumin, and remember vitamin C and zinc are needed for collagen synthesis — infection, excessive wound tension, corticosteroids, and previously operated, scarred tissue." },
+      { speaker: "host",   text: "Free-flap monitoring is a daily ward task. How do you do it, and how do you tell the two failure modes apart?" },
+      { speaker: "cohost", text: "You monitor closely in the first twenty-four to seventy-two hours — that's the highest-risk window — checking color, capillary refill, temperature, turgor, and the Doppler signal, with implantable or handheld Dopplers and sometimes tissue oximetry. Then the crucial distinction. Venous congestion — an outflow problem, and actually the more common early failure — the flap is blue or dusky, swollen, with brisk, fast capillary refill, and when you prick it you get dark blood quickly. Arterial insufficiency — an inflow problem — the flap is pale or mottled, cool, with sluggish or absent capillary refill, and no bleeding on pinprick. Either one is an emergency and the answer is urgent re-exploration to salvage the anastomosis. Leeches can buy you time in venous congestion by decompressing the flap — they secrete hirudin, an anticoagulant." },
+      { speaker: "host",   text: "Let's do a case. Post-op day two after a free flap for an oral cavity reconstruction, the nurse calls: the flap looks blue and swollen, and on pinprick there's rapid dark bleeding. Walk it." },
+      { speaker: "cohost", text: "Blue, swollen, brisk refill, dark pinprick bleeding is venous congestion — the outflow is obstructed, maybe a kinked or thrombosed venous anastomosis or a tight closure. This is an emergency: I take the patient back urgently to re-explore and revise the venous anastomosis, release any compression, and salvage the flap, because the sooner you re-establish outflow the better the survival. While mobilizing to the OR, leeches can temporize by decompressing the congested flap. What I don't do is watch it overnight — the window for salvage is short." },
+      { speaker: "host",   text: "Contrast: same timeframe but the flap is pale, cool, and doesn't bleed when pricked. Reframe." },
+      { speaker: "cohost", text: "That's arterial insufficiency — no inflow. Pale, cool, no capillary refill, no bleeding. Also an emergency, also urgent re-exploration, but now you're looking at the arterial anastomosis — thrombosis, spasm, a technical problem. Leeches won't help here because the problem is inflow, not outflow. Same urgency, different vessel to fix." },
+      { speaker: "host",   text: "One more, quick: a patient scheduled for an elective local flap reconstruction is a heavy smoker. Counsel them." },
+      { speaker: "cohost", text: "Smoking is the biggest modifiable risk for flap necrosis, through nicotine vasoconstriction, so I strongly counsel cessation before elective reconstruction — ideally several weeks before and after surgery — because it meaningfully lowers the chance of losing the flap. For a random-pattern flap especially, where you're already relying on the subdermal plexus, smoking can tip the distal flap into necrosis." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: wound healing is hemostasis, inflammation with the macrophage as key cell, proliferation with type three collagen, and remodeling to cross-linked type one — regaining at most about eighty percent tensile strength. Two: random-pattern flaps live off the subdermal plexus and are width-limited; axial flaps are based on a named artery and can be longer. Three: angiosomes are source-artery territories linked by choke vessels, and the delay phenomenon dilates those choke vessels to improve distal flap survival." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: smoking is the biggest modifiable risk for flap necrosis and irradiated tissue is hypovascular, hypocellular, and hypoxic — optimize the host before you operate. Five: monitor free flaps closely in the first one to three days, and distinguish venous congestion — blue, swollen, brisk refill, dark bleeding, more common — from arterial insufficiency — pale, cool, no refill or bleeding — with either demanding urgent re-exploration and leeches able to temporize venous congestion." },
+      { speaker: "host",   text: "Perfusion is destiny — know the supply, protect the distal flap, optimize the host, and act fast when a flap turns." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
   83: {
     objectives: [
       'List the major histologic subtypes of malignant salivary tumors and their typical behavior.',
