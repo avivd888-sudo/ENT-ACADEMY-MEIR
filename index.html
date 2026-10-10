@@ -3678,6 +3678,34 @@
     background: var(--bg-mute); padding: 1px 5px; border-radius: 4px;
     font-size: 12px;
   }
+  /* ---- Curriculum quick-scroll side rail (jump to the middle of the book in one tap) ---- */
+  .chapter-rail {
+    position: fixed; right: 14px; top: 50%; transform: translateY(-50%);
+    z-index: 60; display: flex; flex-direction: column; gap: 6px;
+    background: var(--card); border: 1px solid var(--border); border-radius: 999px;
+    padding: 8px 6px; box-shadow: 0 6px 24px rgba(11,30,54,.14);
+  }
+  .chapter-rail-label { font-size: 9.5px; letter-spacing: .04em; text-transform: uppercase;
+    color: var(--text-faint); text-align: center; margin-bottom: 1px; }
+  .chapter-rail button {
+    border: none; background: var(--bg-mute); color: var(--navy-900);
+    width: 42px; height: 34px; border-radius: 999px; cursor: pointer;
+    font-size: 13px; font-weight: 700; line-height: 1; transition: background .15s, transform .1s;
+  }
+  .chapter-rail button:hover { background: var(--accent, #4338ca); color: #fff; }
+  .chapter-rail button:active { transform: scale(.94); }
+  .chapter-rail button.rail-ends { font-size: 15px; background: transparent; height: 28px; }
+  .wk-flash { animation: wkFlash 1.3s ease-out; }
+  @keyframes wkFlash {
+    0% { box-shadow: 0 0 0 0 rgba(67,56,202,.0); }
+    15% { box-shadow: 0 0 0 4px rgba(67,56,202,.45); }
+    100% { box-shadow: 0 0 0 0 rgba(67,56,202,0); }
+  }
+  @media (max-width: 720px) {
+    .chapter-rail { right: 8px; padding: 6px 5px; gap: 5px; }
+    .chapter-rail button { width: 38px; height: 30px; font-size: 12px; }
+    .chapter-rail-label { display: none; }
+  }
 </style>
 <style id="loader-v2-css">
 .boot-loader{background:#0b1e36 !important;background-image:radial-gradient(120% 120% at 30% 0%,#1b2a52 0%,#0b1424 55%,#070b14 100%) !important;}
@@ -16547,6 +16575,411 @@ const CONTENT = {
       { speaker: "cohost", text: "That's the chapter." }
     ]
   },
+  76: {
+    objectives: [
+      "Define microvascular free tissue transfer and its role in head and neck reconstruction.",
+      "Select the workhorse free flaps by defect — radial forearm, anterolateral thigh, fibula, and others.",
+      "State the preoperative checks for key donor sites (Allen test, CT angiography of the legs).",
+      "Identify recipient vessels and the principles of a safe microvascular anastomosis.",
+      "Monitor a free flap and manage compromise (venous congestion vs arterial insufficiency) for salvage."
+    ],
+    summary: `
+      <h4>1. What free tissue transfer is</h4>
+      <p>A <strong>free flap</strong> is tissue detached with its own <strong>artery and vein (pedicle)</strong> and transferred to a distant defect, where the vessels are <strong>re-anastomosed microsurgically</strong> to recipient vessels. It is the <strong>workhorse of modern head and neck reconstruction</strong>, restoring lining, bulk, and bone with reliable, well-vascularized tissue — <strong>success rates exceed 95%</strong> in experienced hands.</p>
+      <h4>2. The workhorse flaps — match tissue to defect</h4>
+      <ul>
+        <li><strong>Radial forearm free flap (RFFF)</strong> — <strong>thin, pliable, fasciocutaneous</strong> on the <strong>radial artery</strong> with a long pedicle; ideal for <strong>oral-cavity/oropharyngeal lining, tongue, and the pharynx</strong>. <strong>Do an Allen test first</strong> (confirm ulnar collateral flow before sacrificing the radial artery).</li>
+        <li><strong>Anterolateral thigh (ALT)</strong> — versatile <strong>fasciocutaneous/myocutaneous perforator flap</strong> on the <strong>descending branch of the lateral circumflex femoral artery</strong>; large skin paddle, can be bulky or thinned, low donor morbidity — good for <strong>larger soft-tissue defects and pharyngeal reconstruction (tubed)</strong>.</li>
+        <li><strong>Fibula free flap</strong> — <strong>osteocutaneous</strong> on the <strong>peroneal artery</strong>; the <strong>first choice for mandibular reconstruction</strong> (long segment of bone that tolerates multiple osteotomies and accepts <strong>dental implants</strong>). <strong>Get CT angiography of the legs first</strong> to confirm three-vessel runoff (avoid harvesting if peroneal-dependent foot).</li>
+        <li><strong>Scapular/parascapular (subscapular system)</strong> — bone and skin with independent components for complex composite defects; <strong>jejunal or tubed ALT / gastro-omental</strong> for <strong>pharyngoesophageal</strong> reconstruction; <strong>latissimus dorsi, rectus abdominis</strong> for large-volume coverage.</li>
+      </ul>
+      <h4>3. Recipient vessels and anastomosis</h4>
+      <p>Common recipient <strong>arteries</strong> are branches of the <strong>external carotid — the facial and superior thyroid arteries</strong> (and the transverse cervical artery in a vessel-depleted/irradiated neck); recipient <strong>veins</strong> are the <strong>internal or external jugular</strong> system. Principles: a <strong>two-team approach</strong> (ablation and harvest simultaneously), adequate <strong>pedicle length and geometry</strong>, and <strong>no kinking, tension, or compression</strong> of the anastomosis.</p>
+      <h4>4. The vessel-depleted and irradiated neck</h4>
+      <p>Prior surgery and radiation can leave few usable recipient vessels and fibrotic, fragile tissue. Solutions include using the <strong>transverse cervical vessels</strong>, the contralateral neck, or <strong>vein grafts</strong> to reach healthy inflow/outflow. Irradiated recipient vessels and beds raise the risk of thrombosis and wound-healing problems.</p>
+      <h4>5. Monitoring and salvage</h4>
+      <p>Monitor intensively in the <strong>first 24–72 hours</strong> (highest-risk window) by <strong>color, capillary refill, temperature, turgor, and Doppler</strong> (handheld or implantable), with tissue oximetry for buried flaps. Distinguish the failure modes: <strong>venous congestion</strong> (blue, swollen, brisk refill, dark bleeding — the more common early failure) versus <strong>arterial insufficiency</strong> (pale, cool, no refill, no bleeding). Either requires <strong>urgent re-exploration</strong> of the anastomosis; <strong>leeches</strong> can temporize venous congestion. Early recognition is what salvages a flap.</p>
+      <h4>6. Choosing the flap — a quick map</h4>
+      <p><strong>Mandible → fibula.</strong> <strong>Thin oral/tongue lining → radial forearm.</strong> <strong>Large soft-tissue volume → ALT (or latissimus/rectus).</strong> <strong>Pharyngoesophageal (circumferential) → jejunum or tubed ALT.</strong> Factor in donor morbidity, pedicle length, and the patient's vessels and comorbidities, and optimize the host (stop smoking, correct nutrition) as in the flap-physiology chapter.</p>
+    `,
+    keyPoints: [
+      { category: "Concept", items: [
+        "Free flap = tissue with its own artery/vein transferred and re-anastomosed microsurgically; workhorse of H&N reconstruction, >95% success.",
+        "Two-team approach; adequate pedicle length/geometry; no kinking/tension/compression."
+      ]},
+      { category: "Workhorse flaps", items: [
+        "Radial forearm (radial artery): thin/pliable lining — oral/tongue/pharynx; ALLEN TEST first.",
+        "ALT (descending branch lateral circumflex femoral): versatile large soft tissue, low donor morbidity. Fibula (peroneal): MANDIBLE — long bone, osteotomies, implants; CT angiography legs first."
+      ]},
+      { category: "Recipient / depleted neck", items: [
+        "Recipient arteries: facial, superior thyroid (external carotid branches); transverse cervical in depleted neck. Veins: internal/external jugular.",
+        "Irradiated/vessel-depleted neck → transverse cervical vessels, contralateral neck, or vein grafts; higher thrombosis/healing risk."
+      ]},
+      { category: "Monitoring/salvage", items: [
+        "Highest risk first 24–72 h: color, refill, temperature, Doppler (implantable), oximetry (buried flaps).",
+        "Venous congestion (blue, swollen, brisk refill, dark bleeding — more common) vs arterial (pale, cool, no refill/bleeding) → urgent re-exploration; leeches temporize congestion."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 79 · Free Tissue Transfer", subtitle: "Cummings 8e · Chapter 79", body: "<p style='font-size:18px;line-height:1.55;'>Match the flap to the defect, respect the pedicle and recipient vessels, and catch a failing flap in the first 72 hours.</p>" },
+      { title: "What it is", body: "<ul><li>Tissue + its own artery/vein, re-anastomosed microsurgically.</li><li>Workhorse of H&N reconstruction; <strong>>95% success</strong>.</li></ul>" },
+      { title: "Radial forearm (RFFF)", body: "<ul><li>Thin, pliable, fasciocutaneous; <strong>radial artery</strong>, long pedicle.</li><li>Oral cavity/tongue/pharynx lining.</li><li><strong>Allen test first.</strong></li></ul>" },
+      { title: "Anterolateral thigh (ALT)", body: "<ul><li>Versatile perforator flap; descending branch lateral circumflex femoral.</li><li>Large skin paddle, can thin; low donor morbidity.</li><li>Large soft tissue; tubed for pharynx.</li></ul>" },
+      { title: "Fibula free flap", body: "<ul><li>Osteocutaneous; <strong>peroneal artery</strong>.</li><li><strong>First choice for mandible</strong> — osteotomies + dental implants.</li><li><strong>CT angiography of the legs first.</strong></li></ul>" },
+      { title: "Other flaps", body: "<ul><li>Scapular/parascapular (subscapular) — composite.</li><li>Jejunum / tubed ALT / gastro-omental — pharyngoesophageal.</li><li>Latissimus, rectus — large volume.</li></ul>" },
+      { title: "Recipient vessels", body: "<ul><li>Arteries: <strong>facial, superior thyroid</strong> (ext. carotid); transverse cervical if depleted.</li><li>Veins: internal/external jugular.</li><li>Two-team approach; avoid kinking/tension.</li></ul>" },
+      { title: "Vessel-depleted / irradiated neck", body: "<ul><li>Few usable vessels, fibrotic tissue.</li><li>Use transverse cervical vessels, contralateral neck, or <strong>vein grafts</strong>.</li><li>Higher thrombosis/healing risk.</li></ul>" },
+      { title: "Monitoring & salvage", body: "<ul><li>First 24–72 h: color, refill, temp, Doppler, oximetry.</li><li><strong>Venous congestion</strong>: blue/swollen, brisk refill, dark bleeding (more common).</li><li><strong>Arterial</strong>: pale/cool, no refill/bleeding. → urgent re-exploration; leeches temporize.</li></ul>" },
+      { title: "Flap-selection map", body: "<ol style='font-size:16px;'><li>Mandible → fibula.</li><li>Thin oral/tongue lining → radial forearm.</li><li>Large soft-tissue volume → ALT (latissimus/rectus).</li><li>Pharyngoesophageal → jejunum or tubed ALT.</li></ol>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Fibula for mandible, radial forearm for thin lining, ALT for volume, jejunum/tubed ALT for pharynx.</li><li>Allen test before RFFF; CT angiography of legs before fibula.</li><li>Monitor 72 h; venous congestion (blue, brisk refill) is the common early failure — re-explore.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Flap pedicles", body: "<ul><li>Radial forearm → <strong>radial artery</strong>.</li><li>ALT → <strong>descending branch of the lateral circumflex femoral artery</strong>.</li><li>Fibula → <strong>peroneal artery</strong>.</li></ul>" },
+      { title: "Recipient vessels in the neck", body: "<ul><li>Arteries: facial, superior thyroid, lingual (external carotid branches); transverse cervical as backup.</li><li>Veins: internal jugular and its branches, external jugular.</li></ul>" }
+    ],
+    pearls: [
+      "A free flap transfers tissue with its own artery and vein, re-anastomosed microsurgically, and is the workhorse of head and neck reconstruction with success rates above 95% in experienced hands.",
+      "The fibula free flap (peroneal artery) is the first choice for mandibular reconstruction because its long bone tolerates multiple osteotomies and accepts dental implants — obtain CT angiography of the legs first to confirm adequate runoff.",
+      "The radial forearm free flap provides thin, pliable lining for the oral cavity, tongue, and pharynx and requires an Allen test beforehand to confirm ulnar collateral flow before sacrificing the radial artery.",
+      "The anterolateral thigh flap is a versatile perforator flap (descending branch of the lateral circumflex femoral artery) for large soft-tissue defects and, tubed, for pharyngeal reconstruction, with low donor-site morbidity.",
+      "Common recipient vessels are external carotid branches (facial and superior thyroid arteries) and the jugular veins; in a vessel-depleted or irradiated neck, use the transverse cervical vessels, the contralateral neck, or vein grafts.",
+      "Free flaps are monitored most intensively in the first 24–72 hours; venous congestion (blue, swollen, brisk capillary refill, dark bleeding) is the more common early failure and, like arterial insufficiency, demands urgent re-exploration, with leeches able to temporize congestion."
+    ],
+    flashcards: [
+      { q: "What is a free (microvascular) flap and why is it central to head and neck reconstruction?", a: "It is tissue harvested with its own artery and vein (pedicle) and transferred to a distant defect, where the vessels are re-anastomosed under the microscope to recipient vessels. It reliably restores lining, soft-tissue bulk, and bone with well-vascularized tissue (success >95% in experienced hands), making it the workhorse of modern head and neck reconstruction." },
+      { q: "Which free flap is first choice for mandibular reconstruction, and what must you check first?", a: "The fibula free flap, based on the peroneal artery, because its long segment of bone tolerates multiple osteotomies for contouring and accepts dental implants. Obtain CT angiography of the legs preoperatively to confirm three-vessel runoff and avoid harvesting a peroneal artery that the foot depends on." },
+      { q: "What is the radial forearm free flap used for, and what preoperative test is required?", a: "It provides thin, pliable fasciocutaneous tissue on the radial artery with a long pedicle — ideal for oral-cavity/tongue and pharyngeal lining. An Allen test is required first to confirm adequate ulnar/palmar-arch collateral flow before sacrificing the radial artery." },
+      { q: "Describe the anterolateral thigh (ALT) flap and its advantages.", a: "A versatile fasciocutaneous/myocutaneous perforator flap based on the descending branch of the lateral circumflex femoral artery. It offers a large skin paddle that can be bulky or thinned, a long pedicle, and low donor-site morbidity, and it can be tubed for pharyngeal (circumferential) reconstruction." },
+      { q: "Which recipient vessels are typically used for head and neck free flaps?", a: "Recipient arteries are usually external carotid branches — the facial and superior thyroid arteries (and the transverse cervical artery in a vessel-depleted neck) — and recipient veins are the internal or external jugular system. A two-team approach and attention to pedicle length/geometry (no kinking or tension) are key." },
+      { q: "How do you handle reconstruction in a vessel-depleted, irradiated neck?", a: "Prior surgery/radiation leaves few usable, often fibrotic vessels, so you look beyond the usual recipients — the transverse cervical vessels, the contralateral neck, or vein grafts to reach healthy inflow/outflow. Expect higher rates of thrombosis and wound-healing problems and plan accordingly." },
+      { q: "How do you monitor a free flap and distinguish the two failure modes?", a: "Monitor intensively in the first 24–72 hours by color, capillary refill, temperature, turgor, and Doppler (handheld or implantable), with tissue oximetry for buried flaps. Venous congestion is blue/dusky, swollen, with brisk refill and dark pinprick bleeding (the more common early failure); arterial insufficiency is pale/cool with sluggish or absent refill and no bleeding. Both need urgent re-exploration." },
+      { q: "Give the quick flap-selection map by defect.", a: "Mandible → fibula (osteocutaneous). Thin oral-cavity/tongue lining → radial forearm. Large soft-tissue volume → anterolateral thigh (or latissimus dorsi/rectus). Circumferential pharyngoesophageal defect → jejunum or tubed ALT (or gastro-omental). Always weigh donor morbidity, pedicle length, and patient vessels/comorbidities." }
+    ],
+    quiz: [
+      { stem: "A segmental mandibulectomy defect needs bony reconstruction that will accept dental implants. The best free flap is:",
+        options: ["Radial forearm", "Fibula", "Jejunum", "Latissimus dorsi"],
+        correct: 1, explanation: "The fibula free flap provides a long segment of vascularized bone that tolerates osteotomies and accepts dental implants — first choice for mandibular reconstruction. The radial forearm (option 1) is thin soft tissue (limited bone). Jejunum (option 2) is for pharyngoesophageal reconstruction. Latissimus (option 3) is bulk soft tissue, not segmental bone." },
+      { stem: "Which preoperative test is essential before harvesting a radial forearm free flap?",
+        options: ["CT angiography of the legs", "Allen test", "Audiogram", "Pulmonary function test"],
+        correct: 1, explanation: "The Allen test confirms ulnar/palmar-arch collateral flow before sacrificing the radial artery, protecting hand perfusion. CT angiography of the legs (option 1) is for the fibula flap. An audiogram (option 2) and PFTs (option 3) are unrelated to radial forearm harvest." },
+      { stem: "A free flap on postoperative day 1 is blue and swollen with brisk capillary refill and dark bleeding on pinprick. This indicates:",
+        options: ["Arterial insufficiency", "Venous congestion", "Normal flap", "Hematoma only"],
+        correct: 1, explanation: "Blue, swollen, brisk refill with dark bleeding is venous congestion — the more common early failure — requiring urgent re-exploration (leeches can temporize). Arterial insufficiency (option 1) is pale/cool with no refill or bleeding. These findings are not normal (option 2), and while a hematoma can contribute, the picture is classic venous congestion (option 3)." },
+      { stem: "Which vessels are the typical recipient artery choices for a head and neck free flap?",
+        options: ["Internal carotid artery", "Facial and superior thyroid arteries (external carotid branches)", "Vertebral artery", "Ophthalmic artery"],
+        correct: 1, explanation: "Branches of the external carotid — notably the facial and superior thyroid arteries — are the usual recipient arteries (transverse cervical as backup). The internal carotid (option 1), vertebral (option 2), and ophthalmic (option 3) arteries are not used as free-flap recipients." },
+      { stem: "Before harvesting a fibula free flap, which study is mandatory?",
+        options: ["Allen test", "CT angiography of the lower extremities", "Barium swallow", "Thyroid ultrasound"],
+        correct: 1, explanation: "CT angiography of the legs confirms adequate three-vessel runoff so you do not harvest a peroneal artery on which the foot depends. The Allen test (option 1) is for the radial forearm flap. A barium swallow (option 2) and thyroid ultrasound (option 3) are unrelated to fibula harvest." },
+      { stem: "In a heavily irradiated, previously operated (vessel-depleted) neck, a reasonable strategy for recipient vessels is to:",
+        options: ["Abort reconstruction", "Use the transverse cervical vessels, the contralateral neck, or vein grafts", "Anastomose to the internal carotid artery", "Rely on random-pattern local flaps only"],
+        correct: 1, explanation: "When usual recipients are scarred or absent, use the transverse cervical vessels, go to the contralateral neck, or interpose vein grafts to reach healthy inflow/outflow. Aborting (option 1) is unnecessary. The internal carotid (option 2) is not used as a recipient. Random local flaps alone (option 3) are often inadequate and unreliable in an irradiated field." }
+    ],
+    signs: [
+      { name: "Blue, swollen flap with brisk refill", category: "clinical", description: "Dusky, engorged free flap, rapid refill, dark pinprick bleeding.", implication: "Venous congestion — urgent re-exploration; leeches temporize." },
+      { name: "Pale, cool flap, no refill/bleeding", category: "clinical", description: "White, cold flap with absent capillary refill and no pinprick bleeding.", implication: "Arterial insufficiency — urgent re-exploration of the arterial anastomosis." },
+      { name: "Abnormal Allen test", category: "clinical", description: "Delayed palmar reperfusion after radial artery occlusion.", implication: "Inadequate ulnar collateral — do NOT harvest a radial forearm flap." },
+      { name: "Peroneal-dependent foot on CTA", category: "lab", description: "Legs angiography showing the foot relies on the peroneal artery.", implication: "Avoid fibula harvest on that side (risk of foot ischemia)." },
+      { name: "Vessel-depleted irradiated neck", category: "clinical", description: "Few usable, fibrotic recipient vessels after prior surgery/radiation.", implication: "Use transverse cervical vessels, contralateral neck, or vein grafts." }
+    ],
+    podcastTitle: "Deep Dive · Free Tissue Transfer",
+    podcastDuration: "~19 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. Head and neck reconstruction lives and dies on free tissue transfer, so today it's the free flaps — which to pick, how to plumb them, and how to catch a failing one. Marcus, define it." },
+      { speaker: "cohost", text: "A free flap is tissue — skin, fascia, muscle, bone, or a combination — harvested with its own artery and vein, its pedicle, completely detached, and then transferred to the defect where you re-anastomose those vessels under the microscope to recipient vessels in the neck. It's the workhorse of modern head and neck reconstruction, and in experienced hands success rates are above ninety-five percent. The art is matching the right tissue to the defect." },
+      { speaker: "host",   text: "Walk the workhorses, and tie each to a defect and a caveat." },
+      { speaker: "cohost", text: "Four to know cold. The radial forearm free flap — thin, pliable fasciocutaneous tissue on the radial artery with a long pedicle — is perfect for lining the oral cavity, the tongue, the pharynx. The caveat: do an Allen test first, because you're sacrificing the radial artery and you need to confirm the ulnar artery can perfuse the hand. The anterolateral thigh, the ALT — a versatile perforator flap on the descending branch of the lateral circumflex femoral — gives a big skin paddle you can leave bulky or thin out, with low donor morbidity, great for larger soft-tissue defects and, tubed, for the pharynx. The fibula free flap — osteocutaneous on the peroneal artery — is the first choice for the mandible, because it's a long piece of bone you can osteotomize to shape the jaw and it accepts dental implants. The caveat there: CT angiography of the legs first, to make sure you're not taking a peroneal artery the foot depends on." },
+      { speaker: "host",   text: "And the others?" },
+      { speaker: "cohost", text: "The subscapular system — scapular and parascapular flaps — gives you bone plus skin with independent components for complex composite defects. For the pharyngoesophagus, especially a circumferential defect, you use a jejunal free flap or a tubed ALT, or a gastro-omental flap. And for large-volume coverage you've got the latissimus dorsi and the rectus abdominis. But the big four — radial forearm, ALT, fibula, and jejunum for the pharynx — carry most of the exam and most of the practice." },
+      { speaker: "host",   text: "Where do you plug them in — recipient vessels?" },
+      { speaker: "cohost", text: "On the arterial side, branches of the external carotid — most commonly the facial and the superior thyroid arteries, and the transverse cervical artery as a backup in a depleted neck. On the venous side, the internal or external jugular system. You run a two-team approach — one team ablating, one harvesting — to save time, and you obsess over pedicle length and geometry so the anastomosis isn't kinked, under tension, or compressed when you inset the flap. A beautiful flap on a kinked pedicle still fails." },
+      { speaker: "host",   text: "The irradiated, re-operated neck is a recurring nightmare. How do you handle it?" },
+      { speaker: "cohost", text: "That's the vessel-depleted neck — prior surgery and radiation have used up or scarred the usual recipient vessels, and the tissue is fibrotic and fragile. Your moves are to reach for the transverse cervical vessels, go to the contralateral neck, or interpose vein grafts to bridge to healthy inflow and outflow. You go in expecting higher rates of thrombosis and wound-healing trouble, and you plan your recipient vessels before you commit." },
+      { speaker: "host",   text: "Monitoring — the ward reality, and the same split from flap physiology." },
+      { speaker: "cohost", text: "You watch the flap most intensively in the first twenty-four to seventy-two hours, the highest-risk window, checking color, capillary refill, temperature, turgor, and the Doppler signal, with implantable Dopplers and tissue oximetry for buried flaps you can't see. And you distinguish the two failures. Venous congestion — the more common early one — the flap is blue and swollen, with brisk, fast capillary refill and dark blood on pinprick; that's an outflow problem. Arterial insufficiency — the flap is pale and cool, with sluggish or absent refill and no bleeding; that's inflow. Either one is an emergency and the answer is urgent re-exploration of the anastomosis. Leeches can buy time in venous congestion. Early recognition is the whole game in salvage." },
+      { speaker: "host",   text: "Let's do a case — essentially a reconstruction you'll scrub on. A patient needs a segmental mandibulectomy for cancer, and the surgeon asks what you'd reconstruct with and what you'd check first." },
+      { speaker: "cohost", text: "Segmental mandible defect means bone, and the first choice is a fibula free flap on the peroneal artery — a long vascularized bone I can osteotomize to recreate the mandibular contour and later place dental implants, with a skin paddle for lining if needed. Before harvest I get CT angiography of both legs to confirm three-vessel runoff, so I don't take a peroneal artery the foot relies on. In the neck I'd plan recipient vessels — facial or superior thyroid artery and a jugular vein — and run a two-team approach. Postop, intensive flap monitoring for the first three days, ready to re-explore for congestion or arterial failure." },
+      { speaker: "host",   text: "Change it: the defect is a thin through-and-through of the buccal mucosa and tongue, no bone. Reframe." },
+      { speaker: "cohost", text: "No bone, thin pliable lining needed — that's the radial forearm free flap's sweet spot: thin, foldable, long pedicle, perfect for intraoral lining and tongue. I'd do an Allen test first to confirm the hand's collateral circulation before sacrificing the radial artery. If I needed more bulk, say for a larger tongue defect, I'd consider an ALT instead." },
+      { speaker: "host",   text: "One more, quick: post-op day one the implantable Doppler goes silent and the flap looks pale and cool with no bleeding on pinprick. What is it and what do you do?" },
+      { speaker: "cohost", text: "Pale, cool, no refill, no bleeding, lost Doppler is arterial insufficiency — the inflow has failed, likely an arterial thrombosis or kink. That's an immediate return to the OR to re-explore and revise the arterial anastomosis. Speed matters; the longer the flap is ischemic the lower the salvage. Leeches wouldn't help here because the problem is inflow, not outflow." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: a free flap is tissue transferred on its own pedicle and re-anastomosed microsurgically — the workhorse of head and neck reconstruction. Two: fibula for the mandible, radial forearm for thin oral and tongue lining, ALT for large soft-tissue volume, jejunum or tubed ALT for the pharyngoesophagus. Three: Allen test before a radial forearm flap, CT angiography of the legs before a fibula." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: recipient vessels are external carotid branches — facial and superior thyroid — and the jugular veins, and in a vessel-depleted irradiated neck use the transverse cervical vessels, the contralateral side, or vein grafts. Five: monitor intensively for the first seventy-two hours and distinguish venous congestion — blue, swollen, brisk refill, dark bleeding, the common early failure — from arterial insufficiency — pale, cool, no refill or bleeding — with either demanding urgent re-exploration and leeches temporizing congestion." },
+      { speaker: "host",   text: "Match the flap to the defect, protect the pedicle, and never miss a failing flap in the first three days." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  77: {
+    objectives: [
+      "Distinguish palliative care from hospice and explain why early integration belongs alongside curative treatment.",
+      "Recognize the specific sources of suffering in advanced head and neck cancer and manage the major symptoms.",
+      "Lead a goals-of-care conversation and break bad news using a structured framework (SPIKES).",
+      "State hospice eligibility and the role of the multidisciplinary palliative team.",
+      "Manage the dying head and neck patient — airway, secretions, and carotid blowout."
+    ],
+    summary: `
+      <h4>1. Palliative care is not hospice</h4>
+      <p><strong>Palliative care</strong> is specialized care focused on <strong>symptom relief and quality of life</strong>, delivered <strong>alongside curative or life-prolonging treatment, from the time of diagnosis</strong> and at <strong>any stage</strong> of disease. <strong>Hospice</strong> is a subset for patients near the end of life (generally a <strong>prognosis of ≤6 months</strong>) who have chosen <strong>comfort-focused care</strong> over disease-directed treatment. <strong>Early integration</strong> of palliative care improves quality of life, mood, and symptom control — and in some cancers has been associated with <strong>longer survival</strong>. It is complementary to cure, not a surrender.</p>
+      <h4>2. Why head and neck cancer suffers uniquely</h4>
+      <p>These tumors and their treatment attack the functions that define daily human life: <strong>eating and swallowing</strong> (dysphagia, aspiration, dependence on a feeding tube), <strong>breathing</strong> (airway obstruction, tracheostomy), <strong>speech and communication</strong>, and <strong>appearance</strong> (disfigurement, social isolation). Add <strong>pain</strong> (often severe and mixed nociceptive/neuropathic), <strong>copious secretions</strong>, <strong>xerostomia</strong>, <strong>fistulae</strong>, the threat of <strong>carotid blowout</strong>, and a population with high rates of <strong>tobacco and alcohol use, depression, and limited social support</strong>. The symptom burden is among the highest in oncology.</p>
+      <h4>3. Managing the major symptoms</h4>
+      <p><strong>Pain:</strong> follow the <strong>WHO analgesic ladder</strong>, use <strong>opioids</strong> without fear for moderate-to-severe pain (with a bowel regimen), and add <strong>neuropathic agents</strong> (gabapentinoids, TCAs) for the burning/lancinating component. <strong>Dyspnea:</strong> opioids, oxygen if hypoxic, positioning; address reversible causes. <strong>Secretions:</strong> antimuscarinics (<strong>glycopyrrolate</strong>, scopolamine), suction, repositioning. <strong>Nausea:</strong> choose the antiemetic by mechanism. <strong>Mucositis/xerostomia, nutrition, mood</strong>, and spiritual distress are all addressed by the team.</p>
+      <h4>4. Communication and goals of care</h4>
+      <p>Honest, structured communication is a procedure with its own technique. Break bad news with <strong>SPIKES</strong> — <strong>S</strong>etting, <strong>P</strong>erception (what the patient already understands), <strong>I</strong>nvitation (how much they want to know), <strong>K</strong>nowledge (deliver clearly, no jargon, warning shot first), <strong>E</strong>motions (respond with empathy), <strong>S</strong>trategy/Summary (next steps). Use <strong>ask–tell–ask</strong> and align treatment with the patient's <strong>values and goals</strong>, not reflexively with maximal intervention. Document <strong>advance directives</strong>, identify the <strong>surrogate/health-care proxy</strong>, and revisit goals as disease evolves. Prognostication should be honest and framed in ranges.</p>
+      <h4>5. The multidisciplinary team and hospice</h4>
+      <p>Palliative care is a team sport: the <strong>palliative medicine service</strong>, <strong>speech-language pathology</strong> (swallow, communication), <strong>nutrition</strong> (PEG/feeding decisions), <strong>social work</strong> (resources, substance use, caregiver support), <strong>chaplaincy</strong>, pain specialists, and nursing. <strong>Hospice</strong> enrollment (prognosis ≤6 months, comfort goals) brings these services to the home or facility and supports the family through death and bereavement.</p>
+      <h4>6. The dying patient — airway, secretions, carotid blowout</h4>
+      <p>At the end of life, manage <strong>terminal secretions</strong> (the "death rattle") with antimuscarinics and repositioning rather than aggressive suctioning, and relieve <strong>air hunger</strong> with opioids. <strong>Carotid blowout</strong> — rupture of the carotid, often after radiation, flap breakdown, or tumor erosion — may announce itself with a <strong>sentinel (herald) bleed</strong>. In a patient still pursuing cure or control, this is an emergency for <strong>pressure, resuscitation, and emergent endovascular or surgical intervention</strong>. In an actively dying, comfort-focused patient, a massive blowout is managed with <strong>comfort measures</strong> — rapid-acting sedation (e.g., midazolam), opioids, someone present, and <strong>dark towels</strong> to mask the blood — prepared for in advance when the risk is known.</p>
+    `,
+    keyPoints: [
+      { category: "Concept", items: [
+        "Palliative care = symptom/quality-of-life care at ANY stage, ALONGSIDE curative treatment, from diagnosis; not the same as hospice.",
+        "Hospice = comfort-focused care for prognosis ≤6 months who forgo disease-directed treatment. Early palliative integration improves QoL/mood (and sometimes survival)."
+      ]},
+      { category: "H&N-specific suffering", items: [
+        "Attacks eating/swallowing, breathing, speech/communication, appearance; severe mixed pain, secretions, xerostomia, fistula, carotid blowout.",
+        "High rates of tobacco/alcohol use, depression, limited social support → highest symptom burden in oncology."
+      ]},
+      { category: "Symptoms", items: [
+        "Pain: WHO ladder + opioids (with bowel regimen) + neuropathic agents (gabapentinoids/TCAs).",
+        "Secretions: glycopyrrolate/scopolamine. Dyspnea: opioids ± O2. Antiemetic by mechanism."
+      ]},
+      { category: "Communication / dying patient", items: [
+        "Break bad news with SPIKES (Setting, Perception, Invitation, Knowledge, Emotions, Strategy); ask–tell–ask; align with patient values; document advance directive + surrogate.",
+        "Carotid blowout: sentinel bleed warning → emergent intervention if curative; comfort measures (midazolam, opioids, dark towels, presence) if actively dying."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 80 · Integrating Palliative and Curative Care", subtitle: "Cummings 8e · Chapter 80", body: "<p style='font-size:18px;line-height:1.55;'>Palliative care runs alongside cure from day one — relieving the uniquely heavy symptom burden of head and neck cancer and guiding goals of care.</p>" },
+      { title: "Palliative ≠ hospice", body: "<ul><li><strong>Palliative</strong>: symptom/QoL care, any stage, alongside curative treatment, from diagnosis.</li><li><strong>Hospice</strong>: comfort-focused, prognosis ≤6 months, forgoing disease-directed treatment.</li><li>Early integration improves QoL, mood, sometimes survival.</li></ul>" },
+      { title: "Why H&N suffers uniquely", body: "<ul><li>Hits eating/swallowing, breathing, speech, appearance.</li><li>Severe mixed pain, secretions, xerostomia, fistula.</li><li>Tobacco/alcohol, depression, limited support.</li></ul>" },
+      { title: "Pain", body: "<ul><li>WHO analgesic ladder.</li><li>Opioids for moderate–severe (with bowel regimen).</li><li>Neuropathic agents (gabapentinoids, TCAs) for burning/lancinating pain.</li></ul>" },
+      { title: "Other symptoms", body: "<ul><li>Dyspnea: opioids ± oxygen, positioning.</li><li>Secretions: glycopyrrolate, scopolamine, suction.</li><li>Nausea: antiemetic chosen by mechanism.</li><li>Nutrition, xerostomia, mood addressed by team.</li></ul>" },
+      { title: "SPIKES — breaking bad news", body: "<ol style='font-size:15px;'><li><strong>S</strong>etting — privacy, sit down.</li><li><strong>P</strong>erception — what do they already know?</li><li><strong>I</strong>nvitation — how much do they want to know?</li><li><strong>K</strong>nowledge — clear, no jargon, warning shot.</li><li><strong>E</strong>motions — respond with empathy.</li><li><strong>S</strong>trategy/Summary — next steps.</li></ol>" },
+      { title: "Goals of care", body: "<ul><li>Ask–tell–ask; align with patient values, not reflexive maximal treatment.</li><li>Document advance directive; identify surrogate/proxy.</li><li>Prognosticate honestly, in ranges; revisit as disease evolves.</li></ul>" },
+      { title: "The team & hospice", body: "<ul><li>Palliative medicine, SLP, nutrition, social work, chaplaincy, pain, nursing.</li><li>Hospice: ≤6 months, comfort goals, home/facility + bereavement support.</li></ul>" },
+      { title: "The dying patient", body: "<ul><li>Terminal secretions: antimuscarinics + positioning, not aggressive suction.</li><li>Air hunger: opioids.</li><li>Presence, dignity, family support.</li></ul>" },
+      { title: "Carotid blowout", body: "<ul><li>Carotid rupture after radiation/flap breakdown/tumor erosion; <strong>sentinel bleed</strong> warns.</li><li>Curative patient → pressure, resuscitation, emergent endovascular/surgical repair.</li><li>Actively dying → comfort: midazolam, opioids, dark towels, presence.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Palliative care is alongside cure from diagnosis — not giving up; hospice is the ≤6-month comfort subset.</li><li>H&N has oncology's highest symptom burden — pain (WHO ladder + opioids + neuropathic), secretions (glycopyrrolate), nutrition, mood.</li><li>SPIKES for bad news; a sentinel bleed warns of carotid blowout — intervene if curative, comfort (dark towels, sedation) if dying.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Carotid blowout substrate", body: "<ul><li>Common/internal/external carotid eroded by tumor or exposed by flap breakdown, especially in an <strong>irradiated, previously dissected neck</strong>.</li><li>A <strong>sentinel (herald) bleed</strong> — transient oral/stomal/wound bleeding — precedes catastrophic rupture.</li></ul>" }
+    ],
+    pearls: [
+      "Palliative care is specialized symptom- and quality-of-life care delivered alongside curative treatment at any stage from diagnosis, and is distinct from hospice, which is comfort-focused care for patients with a prognosis of about six months or less who forgo disease-directed therapy.",
+      "Early integration of palliative care improves quality of life, mood, and symptom control and in some cancers is associated with longer survival — it is complementary to cure, not a withdrawal of treatment.",
+      "Head and neck cancer carries one of the highest symptom burdens in oncology because it attacks swallowing, breathing, speech, and appearance and is accompanied by severe mixed pain, secretions, xerostomia, fistulae, carotid-blowout risk, and high rates of tobacco/alcohol use and depression.",
+      "Cancer pain is managed with the WHO analgesic ladder, opioids for moderate-to-severe pain (always with a bowel regimen), and neuropathic agents such as gabapentinoids or tricyclics for the burning, lancinating component.",
+      "Break bad news with the SPIKES framework — Setting, Perception, Invitation, Knowledge, Emotions, Strategy/Summary — and align care with the patient's values and goals rather than defaulting to maximal intervention, documenting an advance directive and surrogate.",
+      "A sentinel (herald) bleed warns of impending carotid blowout; in a patient still pursuing cure it is a surgical/endovascular emergency, whereas in an actively dying, comfort-focused patient it is managed with pre-planned comfort measures including rapid sedation, opioids, presence, and dark towels to mask the blood."
+    ],
+    flashcards: [
+      { q: "How does palliative care differ from hospice?", a: "Palliative care is specialized care focused on symptom relief and quality of life that can be delivered at ANY stage of illness, alongside curative or life-prolonging treatment, starting at diagnosis. Hospice is a subset of palliative care for patients near the end of life (prognosis generally ≤6 months) who have chosen comfort-focused care over disease-directed treatment." },
+      { q: "Why is early integration of palliative care recommended rather than waiting until treatment fails?", a: "Because introducing palliative care early — alongside curative treatment — improves quality of life, mood, and symptom control, reduces aggressive end-of-life interventions, and in some cancers has been associated with longer survival. It is complementary to cure, not a sign of giving up." },
+      { q: "What makes the symptom burden of head and neck cancer uniquely severe?", a: "The disease and its treatment attack the core functions of daily life — eating/swallowing, breathing, speech/communication, and appearance — and add severe mixed nociceptive/neuropathic pain, copious secretions, xerostomia, fistulae, and carotid-blowout risk, in a population with high rates of tobacco/alcohol use, depression, and limited social support." },
+      { q: "Outline the approach to cancer pain in a head and neck patient.", a: "Follow the WHO analgesic ladder, escalating to opioids for moderate-to-severe pain (paired with a scheduled bowel regimen to prevent constipation), and add neuropathic agents — gabapentinoids or tricyclic antidepressants — for the burning, lancinating component. Reassess frequently and treat total pain, including psychological and spiritual distress." },
+      { q: "What are the steps of the SPIKES protocol for breaking bad news?", a: "Setting (privacy, sit down, minimize interruptions); Perception (ask what the patient already understands); Invitation (ask how much they want to know); Knowledge (deliver information clearly, no jargon, give a warning shot); Emotions (respond to the patient's emotions with empathy); Strategy/Summary (lay out next steps and a plan)." },
+      { q: "How do you manage terminal secretions (the 'death rattle') and air hunger in a dying patient?", a: "Terminal secretions are managed with antimuscarinic agents (glycopyrrolate, scopolamine) and repositioning rather than aggressive suctioning, which can distress the patient. Air hunger (dyspnea) is relieved with opioids, supplemented by oxygen if hypoxic, positioning, and a fan/airflow and reassurance." },
+      { q: "A head and neck cancer patient has a brief episode of bleeding from the wound/stoma that stops. What does this represent and what do you do?", a: "This is a sentinel (herald) bleed warning of impending carotid blowout. In a patient still pursuing cure or disease control, it mandates urgent evaluation and emergent intervention — angiography with endovascular stenting/embolization or surgical management — because catastrophic rupture may follow. In an actively dying, comfort-focused patient, you prepare pre-planned comfort measures instead." },
+      { q: "Who makes up the multidisciplinary palliative team for head and neck cancer, and what does each contribute?", a: "Palliative medicine (symptom control, goals of care), speech-language pathology (swallowing and communication), nutrition (PEG/feeding decisions), social work (resources, substance-use and caregiver support), chaplaincy (spiritual care), pain specialists, and nursing. Hospice brings these services to the home or facility with bereavement support for the family." }
+    ],
+    quiz: [
+      { stem: "Which statement best distinguishes palliative care from hospice?",
+        options: ["They are identical terms", "Palliative care is symptom/quality-of-life care given at any stage alongside curative treatment, while hospice is comfort-focused care for prognosis ≤6 months", "Palliative care is only for the last days of life", "Hospice can be combined with curative chemotherapy"],
+        correct: 1, explanation: "Palliative care runs alongside curative treatment at any stage from diagnosis; hospice is the end-of-life subset (≤6 months, comfort goals, forgoing disease-directed treatment). They are not identical (option 0), palliative care is not limited to the last days (option 2), and hospice generally means forgoing curative chemotherapy (option 3)." },
+      { stem: "A head and neck cancer patient has severe burning, lancinating pain in the tongue base. Beyond opioids, the most appropriate addition is:",
+        options: ["A gabapentinoid or tricyclic antidepressant", "A bisphosphonate", "An antihistamine", "A proton pump inhibitor"],
+        correct: 0, explanation: "Burning, lancinating pain is neuropathic and responds to neuropathic agents — gabapentinoids (gabapentin/pregabalin) or tricyclics — added to opioids. A bisphosphonate (option 1) targets bone metastases, an antihistamine (option 2) and a PPI (option 3) do not treat neuropathic pain." },
+      { stem: "When breaking bad news with SPIKES, the step that comes BEFORE delivering the information (Knowledge) is to:",
+        options: ["Summarize next steps", "Assess the patient's Perception and Invitation (what they know and want to know)", "Respond to emotions", "Arrange hospice"],
+        correct: 1, explanation: "In SPIKES, after Setting you assess Perception (what the patient already understands) and Invitation (how much they want to know) before delivering Knowledge. Summarizing next steps (option 0) and responding to emotions (option 2) come after Knowledge; arranging hospice (option 3) is not a SPIKES step." },
+      { stem: "A patient near the end of life has noisy upper-airway secretions ('death rattle'). The most appropriate management is:",
+        options: ["Aggressive deep suctioning every 15 minutes", "Antimuscarinic agents (e.g., glycopyrrolate) and repositioning", "Intubation", "Broad-spectrum antibiotics"],
+        correct: 1, explanation: "Terminal secretions are best managed with antimuscarinics (glycopyrrolate, scopolamine) and repositioning. Aggressive suctioning (option 0) distresses the patient, and intubation (option 2) or antibiotics (option 3) are inappropriate for comfort-focused end-of-life care." },
+      { stem: "A patient with a radiated, flap-reconstructed neck has a brief episode of bleeding from the wound that stops spontaneously. This is most concerning for:",
+        options: ["Normal healing", "A sentinel bleed heralding carotid blowout", "A simple nosebleed", "Chyle leak"],
+        correct: 1, explanation: "Transient bleeding from an irradiated, operated neck is a sentinel (herald) bleed warning of impending carotid blowout and demands urgent evaluation. It is not normal healing (option 0) or a simple epistaxis (option 2); a chyle leak (option 3) produces milky lymphatic fluid, not blood." },
+      { stem: "Which is the best initial description of goal-concordant care in advanced head and neck cancer?",
+        options: ["Always pursue maximal intervention regardless of prognosis", "Align treatment decisions with the patient's values and goals after honest communication", "Defer all decisions to the family", "Avoid discussing prognosis to preserve hope"],
+        correct: 1, explanation: "Goal-concordant care aligns treatment with the patient's own values and goals following honest, structured communication. Reflexive maximal intervention (option 0), deferring entirely to family (option 2), and withholding prognosis (option 3) all fail to center the informed patient." }
+    ],
+    signs: [
+      { name: "Sentinel (herald) bleed", category: "clinical", description: "Transient, self-limited bleeding from the wound, stoma, or mouth in an irradiated/operated neck.", implication: "Warns of impending carotid blowout — urgent evaluation; intervene if curative, pre-plan comfort if dying." },
+      { name: "Death rattle (terminal secretions)", category: "clinical", description: "Noisy upper-airway secretions in an actively dying patient.", implication: "Antimuscarinics (glycopyrrolate/scopolamine) + repositioning, not aggressive suctioning." },
+      { name: "Neuropathic pain quality", category: "clinical", description: "Burning, lancinating, electric pain rather than dull aching.", implication: "Add gabapentinoid or tricyclic to the opioid regimen." },
+      { name: "High symptom burden / distress screen", category: "clinical", description: "Dysphagia, dyspnea, disfigurement, depression, substance use clustering in H&N cancer.", implication: "Trigger early multidisciplinary palliative referral." }
+    ],
+    podcastTitle: "Deep Dive · Integrating Palliative and Curative Care",
+    podcastDuration: "~18 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome back to ENT Academy — I'm Elena, with Marcus. This one isn't a procedure, but it may be the chapter that matters most to patients: integrating palliative care with curative care in head and neck cancer. Marcus, clear up the biggest misconception first." },
+      { speaker: "cohost", text: "The biggest misconception is that palliative care equals hospice equals giving up. It doesn't. Palliative care is specialized care focused on symptom relief and quality of life, and it's delivered at any stage of illness, alongside curative or life-prolonging treatment, starting right at diagnosis. Hospice is a specific subset — it's for patients near the end of life, generally a prognosis of six months or less, who've chosen comfort-focused care over disease-directed treatment. So all hospice is palliative, but most palliative care is not hospice. And the data matter: integrating palliative care early improves quality of life and mood, and in some cancers it's actually been associated with longer survival. It runs with cure, not against it." },
+      { speaker: "host",   text: "Why does head and neck cancer in particular demand this?" },
+      { speaker: "cohost", text: "Because of all cancers, head and neck attacks the functions that make us human on a daily basis. It takes away eating and swallowing — patients end up aspirating or dependent on a feeding tube. It threatens breathing — airway obstruction, tracheostomy. It takes speech and communication. And it disfigures the face, which drives profound social isolation. Layer on top severe pain that's often mixed — part nociceptive, part neuropathic — plus copious secretions, dry mouth, fistulae, the ever-present threat of carotid blowout, and a patient population with high rates of tobacco and alcohol use, depression, and thin social support. The symptom burden is among the very highest in all of oncology." },
+      { speaker: "host",   text: "Let's get practical on symptoms. Start with pain." },
+      { speaker: "cohost", text: "Pain follows the WHO analgesic ladder. You step up from non-opioids to weak to strong opioids as needed, and you do not under-treat — use opioids for moderate-to-severe cancer pain, and always pair them with a scheduled bowel regimen because opioid constipation is guaranteed. The key head-and-neck nuance is the neuropathic component — that burning, lancinating, electric pain from tumor or treatment hitting nerves. For that you add a neuropathic agent: a gabapentinoid like gabapentin or pregabalin, or a tricyclic. And you treat total pain — the psychological and spiritual distress that amplifies the physical." },
+      { speaker: "host",   text: "The other symptoms?" },
+      { speaker: "cohost", text: "Dyspnea — air hunger — is relieved with opioids, oxygen if they're hypoxic, positioning, a fan, reassurance. Secretions — a huge problem here — you dry up with antimuscarinics like glycopyrrolate or scopolamine, plus suction and repositioning. Nausea, you pick the antiemetic by mechanism. And then nutrition decisions, xerostomia, mucositis, mood — all of it gets shared out across the team. Which is the point: nobody manages this alone." },
+      { speaker: "host",   text: "Communication is a skill people assume they just have. Give us the framework." },
+      { speaker: "cohost", text: "Breaking bad news is a procedure with a technique, and the classic framework is SPIKES. S — Setting: privacy, sit down, turn off the pager, have the family there if the patient wants. P — Perception: ask what they already understand before you say anything. I — Invitation: ask how much they want to know. K — Knowledge: deliver it clearly, no jargon, and fire a warning shot first — 'I'm afraid I have some serious news.' E — Emotions: when they react, respond with empathy, not more data. S — Strategy and Summary: lay out the plan and next steps. Alongside that, use ask–tell–ask, and anchor everything to the patient's values and goals rather than reflexively defaulting to maximal intervention. Document an advance directive, identify the surrogate, and revisit goals as the disease changes." },
+      { speaker: "host",   text: "Let's do a case. A patient with recurrent, incurable oropharyngeal cancer, previously radiated, is admitted with pain and weight loss. The attending asks how you'd approach them." },
+      { speaker: "cohost", text: "First, I'd reframe this as early, integrated palliative care — not an either/or. I'd do a structured goals-of-care conversation using SPIKES and ask–tell–ask to understand what he knows, what he wants, and what matters to him. On symptoms: optimize pain with the WHO ladder, opioids with a bowel regimen, and a gabapentinoid for the neuropathic tongue-base pain; address nutrition realistically — discuss whether a feeding tube serves his goals rather than reflexively placing one; dry secretions with glycopyrrolate; screen and treat depression. I'd bring in the full team — palliative medicine, speech, nutrition, social work, chaplaincy. And because he's radiated with recurrent disease, I'd have carotid blowout on my radar and know his goals in advance so I'm ready either way." },
+      { speaker: "host",   text: "Expand on that last point — carotid blowout. This is the head-and-neck emergency that forces the palliative-versus-curative question in real time." },
+      { speaker: "cohost", text: "Carotid blowout is rupture of the carotid artery — usually in an irradiated, previously dissected neck, where tumor erosion or flap breakdown exposes the vessel. It often announces itself with a sentinel or herald bleed: a transient, self-limited bleed from the wound, the stoma, or the mouth that stops on its own. That's your warning. Now the management forks on goals. If the patient is still pursuing cure or disease control, a sentinel bleed is an emergency — pressure, resuscitate, and get emergent angiography for endovascular stenting or embolization, or surgical management, before the catastrophic rupture. But if the patient is actively dying and comfort-focused, a massive blowout is managed with comfort measures you've prepared in advance: rapid-acting sedation like midazolam, opioids for distress, someone staying at the bedside, and dark-colored towels to mask the blood so the scene is less traumatic for everyone. Knowing the goals before it happens is what lets you do the right thing in the moment." },
+      { speaker: "host",   text: "And the dying patient more broadly — secretions and air hunger." },
+      { speaker: "cohost", text: "At the very end, terminal secretions — the so-called death rattle — are managed with antimuscarinics and repositioning, not aggressive deep suctioning, which just distresses the patient and the family. Air hunger is relieved with opioids. And a lot of the work is non-pharmacologic: presence, dignity, explaining to the family what's happening and that the sounds don't mean the patient is suffering. Hospice supports all of this at home or in a facility, and carries the family through bereavement." },
+      { speaker: "host",   text: "Give me the takeaways." },
+      { speaker: "cohost", text: "One: palliative care is symptom and quality-of-life care delivered alongside curative treatment at any stage from diagnosis — it is not hospice and it is not giving up; hospice is the end-of-life, comfort-focused, roughly six-months-or-less subset. Two: head and neck cancer carries one of the highest symptom burdens in oncology because it attacks swallowing, breathing, speech, and appearance — so manage pain with the WHO ladder plus opioids plus neuropathic agents, dry secretions with glycopyrrolate, and lean on the whole team." },
+      { speaker: "host",   text: "And three." },
+      { speaker: "cohost", text: "Three: communicate with structure — SPIKES for bad news, ask–tell–ask, align with the patient's values, document the advance directive and surrogate — and know that a sentinel bleed heralds carotid blowout, which you treat as an emergency if the patient is curative and with pre-planned comfort measures, including sedation and dark towels, if the patient is actively dying." },
+      { speaker: "host",   text: "Running palliative care alongside cure from the first day isn't surrender — for head and neck patients it's often the most important thing we do." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  82: {
+    objectives: [
+      "Apply the salivary 'rule of 80s' and recognize benign vs malignant clinical features.",
+      "Characterize pleomorphic adenoma (don't enucleate; malignant transformation risk) and Warthin tumor (smoking, bilateral, pertechnetate-avid).",
+      "Work up a salivary mass with FNA and imaging, and list the red flags for malignancy.",
+      "Identify the facial nerve during parotidectomy using the standard landmarks and describe parotidectomy types.",
+      "Anticipate and prevent the complications of parotidectomy — facial nerve injury, Frey syndrome, and others."
+    ],
+    summary: `
+      <h4>1. The 'rule of 80s' and clinical read</h4>
+      <p>Roughly <strong>80% of salivary tumors are in the parotid</strong>, <strong>~80% of parotid tumors are benign</strong>, and <strong>~80% of benign parotid tumors are pleomorphic adenomas</strong>. A key principle: <strong>the smaller the gland, the higher the proportion malignant</strong> (parotid lowest; submandibular higher; sublingual and minor glands highest). A <strong>mobile, painless mass</strong> is usually benign; <strong>red flags for malignancy</strong> are <strong>pain, facial-nerve weakness, fixation to skin/deep tissue, rapid growth, cervical nodes, and skin involvement</strong>.</p>
+      <h4>2. Pleomorphic adenoma (benign mixed tumor)</h4>
+      <p>The <strong>most common salivary neoplasm</strong> and the most common parotid tumor. Histology is <strong>mixed</strong> — epithelial, myoepithelial, and a <strong>chondromyxoid stroma</strong>. Two surgical imperatives: it has <strong>pseudopod extensions through an incomplete capsule</strong>, so <strong>enucleation causes recurrence — you must excise with a cuff of normal tissue</strong> (superficial/partial parotidectomy; gland excision for submandibular); and over many years it can undergo <strong>malignant transformation to carcinoma ex pleomorphic adenoma</strong> (suspect with sudden growth or new pain/nerve weakness in a long-standing mass).</p>
+      <h4>3. Warthin tumor (papillary cystadenoma lymphomatosum)</h4>
+      <p>The <strong>second most common benign parotid tumor</strong> and the one most relevant surgically for a parotid-tail mass. Key associations: <strong>almost exclusively parotid (classically the tail)</strong>, strongly linked to <strong>smoking</strong>, typically <strong>older men</strong>, and it can be <strong>bilateral or multifocal (~10%)</strong> — the salivary tumor most likely to be bilateral. It is <strong>cystic</strong>, composed of <strong>oncocytic epithelium with a lymphoid stroma</strong>, and uniquely <strong>takes up technetium-99m pertechnetate ("hot" on scintigraphy)</strong>. <strong>FNA</strong> shows oncocytes, lymphocytes, and proteinaceous/cystic debris. Malignant potential is <strong>very low</strong>, so options are <strong>superficial parotidectomy</strong> or, in select elderly/poor-surgical candidates, <strong>observation</strong>.</p>
+      <h4>4. Work-up</h4>
+      <p><strong>Fine-needle aspiration (FNA)</strong> is the first-line test (safe, no facial-nerve risk, guides planning). <strong>Imaging</strong>: <strong>MRI</strong> best defines soft tissue, deep-lobe extension, and perineural spread; CT and ultrasound (with US-guided FNA) are also used. Avoid <strong>incisional/open biopsy</strong> of a parotid mass (tumor spillage, facial-nerve risk) — excisional parotidectomy is both diagnostic and therapeutic.</p>
+      <h4>5. Facial nerve and parotidectomy</h4>
+      <p>The <strong>facial nerve (CN VII)</strong> divides the parotid into <strong>superficial and deep lobes</strong> (a surgical, not true anatomic, plane). <strong>Landmarks to find the main trunk</strong>: the <strong>tragal pointer</strong> (nerve lies ~1 cm deep and inferior to its tip), the <strong>tympanomastoid suture</strong> (nerve ~6–8 mm deep, just medial), the <strong>posterior belly of digastric</strong> (nerve at the same depth at its attachment), the <strong>stylomastoid foramen</strong>, and <strong>retrograde dissection</strong> from a peripheral branch. At the <strong>pes anserinus</strong> the trunk splits into <strong>temporofacial (upper)</strong> and <strong>cervicofacial (lower)</strong> divisions, giving five branches — <strong>temporal, zygomatic, buccal, marginal mandibular, cervical</strong>. Use a <strong>facial-nerve monitor</strong>. <strong>Superficial parotidectomy</strong> (removing the lobe lateral to the nerve) suffices for most benign tumors; a <strong>partial/extracapsular dissection</strong> is used for small lateral tumors; <strong>total parotidectomy</strong> is needed for deep-lobe disease.</p>
+      <h4>6. Complications</h4>
+      <ul>
+        <li><strong>Facial-nerve injury</strong> — temporary weakness common (especially the marginal mandibular → asymmetric smile), permanent paralysis less so; monitor and preserve.</li>
+        <li><strong>Frey syndrome</strong> (gustatory sweating) — aberrant <strong>parasympathetic (auriculotemporal nerve) reinnervation of skin sweat glands</strong>; flushing/sweating of the cheek while eating. Confirm with the <strong>Minor starch-iodine test</strong>; treat with <strong>botulinum toxin</strong>; prevent with an interposition flap (e.g., SMAS, acellular dermis).</li>
+        <li><strong>Great auricular nerve sacrifice</strong> → <strong>earlobe numbness</strong>.</li>
+        <li><strong>First-bite syndrome</strong> (deep-lobe/parapharyngeal surgery), <strong>sialocele/salivary fistula</strong>, and hematoma.</li>
+      </ul>
+      <p>For the <strong>submandibular gland</strong>, excision risks the <strong>marginal mandibular, lingual, and hypoglossal nerves</strong>.</p>
+    `,
+    keyPoints: [
+      { category: "Rule of 80s / red flags", items: [
+        "~80% of salivary tumors are parotid; ~80% of parotid tumors are benign; ~80% of those are pleomorphic adenoma. Smaller gland → higher % malignant.",
+        "Benign = mobile, painless. Malignant red flags: pain, facial weakness, fixation, rapid growth, nodes, skin involvement."
+      ]},
+      { category: "Pleomorphic adenoma", items: [
+        "Most common salivary/parotid tumor; mixed (epithelial + myoepithelial + chondromyxoid stroma).",
+        "DON'T enucleate (pseudopods → recurrence) — excise with a cuff (superficial/partial parotidectomy). Can transform → carcinoma ex pleomorphic adenoma."
+      ]},
+      { category: "Warthin tumor", items: [
+        "2nd most common benign parotid tumor; almost only parotid (tail); SMOKING; older men; BILATERAL/multifocal (~10%).",
+        "Cystic; oncocytes + lymphoid stroma; HOT on technetium-99m pertechnetate. Very low malignant potential → superficial parotidectomy or observe."
+      ]},
+      { category: "Surgery / complications", items: [
+        "CN VII splits parotid into superficial/deep lobes. Trunk landmarks: tragal pointer (~1cm deep-inferior), tympanomastoid suture (~6–8mm, medial), posterior belly of digastric, stylomastoid foramen, retrograde. Pes anserinus → temporofacial + cervicofacial → 5 branches.",
+        "Complications: facial nerve injury (marginal mandibular → smile), Frey syndrome (auriculotemporal → gustatory sweating; Minor starch-iodine; botox; flap prevents), great auricular numbness, sialocele, first-bite."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 85 · Benign Neoplasms of the Salivary Glands", subtitle: "Cummings 8e · Chapter 85", body: "<p style='font-size:18px;line-height:1.55;'>Rule of 80s, pleomorphic adenoma vs Warthin, and the facial-nerve roadmap for parotidectomy.</p>" },
+      { title: "Rule of 80s", body: "<ul><li>~80% of salivary tumors = parotid.</li><li>~80% of parotid tumors = benign.</li><li>~80% of those = pleomorphic adenoma.</li><li>Smaller gland → higher % malignant.</li></ul>" },
+      { title: "Benign vs malignant signs", body: "<ul><li>Benign: mobile, painless mass.</li><li><strong>Red flags</strong>: pain, facial weakness, fixation, rapid growth, nodes, skin involvement.</li></ul>" },
+      { title: "Pleomorphic adenoma", body: "<ul><li>Most common salivary/parotid tumor; mixed (epithelial + myoepithelial + chondromyxoid).</li><li><strong>Don't enucleate</strong> (pseudopods → recurrence) — excise with a cuff.</li><li>Can transform → carcinoma ex pleomorphic adenoma.</li></ul>" },
+      { title: "Warthin tumor", body: "<ul><li>2nd most common benign parotid tumor; parotid TAIL.</li><li><strong>Smoking</strong>, older men, <strong>bilateral/multifocal ~10%</strong>.</li><li>Cystic; oncocytes + lymphoid stroma; <strong>HOT on Tc-99m pertechnetate</strong>.</li><li>Very low malignant potential → superficial parotidectomy or observe.</li></ul>" },
+      { title: "Work-up", body: "<ul><li><strong>FNA</strong> first-line (no facial-nerve risk).</li><li><strong>MRI</strong> best for soft tissue/deep lobe/perineural; CT, US-guided FNA.</li><li>Avoid open/incisional biopsy of a parotid mass.</li></ul>" },
+      { title: "Facial nerve landmarks", body: "<ul><li><strong>Tragal pointer</strong> — nerve ~1 cm deep & inferior.</li><li><strong>Tympanomastoid suture</strong> — nerve ~6–8 mm, just medial.</li><li><strong>Posterior belly of digastric</strong>; stylomastoid foramen; retrograde.</li></ul>" },
+      { title: "Branches & parotidectomy", body: "<ul><li><strong>Pes anserinus</strong> → temporofacial + cervicofacial → 5 branches (temporal, zygomatic, buccal, marginal mandibular, cervical).</li><li>Superficial parotidectomy for most benign; total for deep lobe. Use nerve monitor.</li></ul>" },
+      { title: "Complications", body: "<ul><li>Facial nerve weakness (marginal mandibular → smile).</li><li><strong>Frey syndrome</strong> (auriculotemporal → gustatory sweating; Minor starch-iodine; botox; flap prevents).</li><li>Great auricular numbness; sialocele/fistula; first-bite.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Pleomorphic adenoma: most common, don't enucleate, can transform.</li><li>Warthin: smoking, parotid tail, bilateral, hot on pertechnetate, very low malignant risk.</li><li>Find CN VII by the tragal pointer/tympanomastoid suture/digastric; beware Frey & marginal mandibular.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Facial nerve main-trunk landmarks", body: "<ul><li><strong>Tragal pointer</strong>: nerve ~1 cm deep and inferior to its tip.</li><li><strong>Tympanomastoid suture</strong>: nerve ~6–8 mm deep, just medial — the most reliable landmark.</li><li><strong>Posterior belly of digastric</strong> attachment: nerve at the same depth.</li><li>Alternatives: stylomastoid foramen; retrograde dissection from a distal branch (e.g., marginal mandibular along the facial vessels).</li></ul>" },
+      { title: "The five branches (pes anserinus)", body: "<ul><li>Trunk → <strong>temporofacial</strong> (upper) + <strong>cervicofacial</strong> (lower) divisions.</li><li>Branches: <strong>Temporal, Zygomatic, Buccal, Marginal mandibular, Cervical</strong>.</li><li>Marginal mandibular (smile/lower lip) and temporal (brow) are least redundant — most consequential if injured.</li></ul>" }
+    ],
+    pearls: [
+      "The rule of 80s: about 80% of salivary tumors are in the parotid, 80% of parotid tumors are benign, and 80% of benign parotid tumors are pleomorphic adenomas — and the smaller the gland, the higher the proportion malignant.",
+      "Pleomorphic adenoma must be excised with a cuff of normal tissue (superficial/partial parotidectomy), never enucleated, because capsular pseudopods cause recurrence, and long-standing lesions can undergo malignant transformation to carcinoma ex pleomorphic adenoma.",
+      "Warthin tumor occurs almost exclusively in the parotid (classically the tail), is strongly linked to smoking in older men, is the salivary tumor most likely to be bilateral/multifocal, and uniquely takes up technetium-99m pertechnetate ('hot' on scintigraphy) with very low malignant potential.",
+      "FNA is the first-line test for a salivary mass (no facial-nerve risk); open/incisional biopsy of a parotid mass is avoided because of tumor spillage and facial-nerve injury.",
+      "The facial nerve main trunk is found using the tragal pointer (nerve ~1 cm deep and inferior), the tympanomastoid suture (nerve ~6–8 mm deep just medial — the most reliable landmark), and the posterior belly of digastric, with retrograde dissection as an alternative.",
+      "Frey syndrome (gustatory sweating) results from aberrant auriculotemporal-nerve parasympathetic reinnervation of cheek sweat glands, is confirmed with the Minor starch-iodine test, treated with botulinum toxin, and prevented with an interposition flap at surgery."
+    ],
+    flashcards: [
+      { q: "State the salivary gland 'rule of 80s' and the malignancy gradient by gland.", a: "About 80% of salivary neoplasms arise in the parotid, ~80% of parotid tumors are benign, and ~80% of benign parotid tumors are pleomorphic adenomas. The smaller the gland, the higher the proportion of tumors that are malignant — lowest in the parotid, higher in the submandibular, and highest in the sublingual and minor salivary glands." },
+      { q: "Why must a pleomorphic adenoma not be enucleated, and what is its long-term risk?", a: "Because it has microscopic pseudopod extensions through an incomplete capsule, so enucleation leaves tumor behind and causes recurrence — it must be removed with a cuff of normal tissue (superficial or partial parotidectomy; gland excision for submandibular). Over years it can undergo malignant transformation to carcinoma ex pleomorphic adenoma." },
+      { q: "What are the defining features of Warthin tumor?", a: "Papillary cystadenoma lymphomatosum: the second most common benign parotid tumor, occurring almost exclusively in the parotid (classically the tail), strongly associated with smoking in older men, the salivary tumor most likely to be bilateral/multifocal (~10%), cystic with oncocytic epithelium and lymphoid stroma, and uniquely avid for technetium-99m pertechnetate ('hot' on scintigraphy). Malignant potential is very low." },
+      { q: "What is the first-line investigation for a salivary mass, and which biopsy is avoided?", a: "Fine-needle aspiration (FNA) is first-line — safe, avoids the facial nerve, and guides planning — supplemented by imaging (MRI best for soft tissue/deep lobe/perineural spread; CT; ultrasound-guided FNA). Open/incisional biopsy of a parotid mass is avoided because of tumor spillage and facial-nerve risk; parotidectomy serves as the excisional diagnosis and treatment." },
+      { q: "List the landmarks used to identify the facial nerve main trunk during parotidectomy.", a: "The tragal pointer (nerve lies about 1 cm deep and inferior to its tip), the tympanomastoid suture line (nerve about 6–8 mm deep just medial — the most reliable landmark), and the posterior belly of digastric at its attachment (nerve at the same depth), plus the stylomastoid foramen and retrograde dissection from an identified peripheral branch." },
+      { q: "Describe the branching of the facial nerve within the parotid.", a: "The main trunk enters the parotid and divides at the pes anserinus into the temporofacial (upper) and cervicofacial (lower) divisions, which give the five terminal branches: temporal, zygomatic, buccal, marginal mandibular, and cervical. The marginal mandibular (smile/lower lip) and temporal (brow) branches have the least cross-innervation and are most consequential if injured." },
+      { q: "What is Frey syndrome and how is it diagnosed, treated, and prevented?", a: "Gustatory sweating and flushing of the cheek during eating, caused by aberrant regeneration of parasympathetic auriculotemporal-nerve fibers (originally to the parotid) onto the skin's sweat glands after parotidectomy. It is diagnosed with the Minor starch-iodine test, treated with botulinum toxin injections, and prevented by placing an interposition barrier (e.g., SMAS or acellular dermal flap) at surgery." },
+      { q: "Which nerves are at risk during submandibular gland excision?", a: "The marginal mandibular branch of the facial nerve (asymmetric smile/lower lip — protected by a sub-platysmal incision below the mandible), the lingual nerve (tongue sensation and taste; it loops around the submandibular duct/ganglion), and the hypoglossal nerve (tongue movement) deep in the submandibular triangle." }
+    ],
+    quiz: [
+      { stem: "A 65-year-old male smoker has a soft, cystic mass in the tail of the parotid; FNA shows oncocytes, lymphocytes, and proteinaceous debris. The most likely diagnosis is:",
+        options: ["Pleomorphic adenoma", "Warthin tumor", "Mucoepidermoid carcinoma", "Adenoid cystic carcinoma"],
+        correct: 1, explanation: "A cystic parotid-tail mass in an older male smoker with oncocytes and lymphoid stroma on FNA is a Warthin tumor. Pleomorphic adenoma (option 1) shows epithelial/myoepithelial cells with chondromyxoid stroma, not oncocytes/lymphocytes. Mucoepidermoid (option 2) and adenoid cystic (option 3) carcinomas are malignant with different cytology and often red-flag features." },
+      { stem: "Why is a pleomorphic adenoma removed with a cuff of normal tissue rather than enucleated?",
+        options: ["It is radiosensitive", "Capsular pseudopod extensions cause recurrence if enucleated", "It never recurs", "Enucleation protects the facial nerve better"],
+        correct: 1, explanation: "Pleomorphic adenoma has microscopic pseudopods through an incomplete capsule, so enucleation leaves tumor and recurs; it must be excised with a margin (superficial/partial parotidectomy). It is not primarily treated by radiation (option 1), it clearly can recur (option 3), and enucleation does not better protect the nerve (option 4) — proper parotidectomy with nerve dissection does." },
+      { stem: "Which imaging finding is characteristic of (and relatively specific for) Warthin tumor?",
+        options: ["Uptake of technetium-99m pertechnetate ('hot' nodule)", "Microcalcifications with taller-than-wide shape", "Perineural spread along V3", "Dense homogeneous enhancement with bone erosion"],
+        correct: 0, explanation: "Warthin tumors characteristically take up technetium-99m pertechnetate, appearing 'hot' on scintigraphy. Microcalcifications/taller-than-wide (option 1) describe suspicious thyroid nodules. Perineural spread (option 2) suggests malignancy (e.g., adenoid cystic). Bone erosion with aggressive enhancement (option 3) suggests malignancy, not a benign Warthin tumor." },
+      { stem: "During superficial parotidectomy, which is the most reliable landmark for the facial nerve main trunk?",
+        options: ["The tympanomastoid suture line (nerve ~6–8 mm deep, just medial)", "The hyoid bone", "The carotid bifurcation", "The submandibular duct"],
+        correct: 0, explanation: "The tympanomastoid suture line is the most reliable landmark — the nerve lies about 6–8 mm deep just medial to it (the tragal pointer and posterior belly of digastric are also used). The hyoid (option 1), carotid bifurcation (option 2), and submandibular duct (option 3) are not facial-nerve-trunk landmarks." },
+      { stem: "A patient reports sweating and flushing over the cheek whenever they eat, months after parotidectomy. The diagnosis and a confirmatory test are:",
+        options: ["Salivary fistula — sialography", "Frey syndrome — Minor starch-iodine test", "First-bite syndrome — EMG", "Facial nerve injury — electroneuronography"],
+        correct: 1, explanation: "Gustatory sweating and flushing after parotidectomy is Frey syndrome (aberrant auriculotemporal parasympathetic reinnervation of sweat glands), confirmed with the Minor starch-iodine test and treated with botulinum toxin. A salivary fistula (option 1) leaks saliva, not sweat. First-bite syndrome (option 2) is pain with the first bite, not sweating. Facial nerve injury (option 3) causes weakness, not gustatory sweating." },
+      { stem: "Which clinical feature is a red flag that a salivary mass may be malignant?",
+        options: ["Soft, mobile, painless mass", "Facial nerve weakness and fixation to surrounding tissue", "Slow growth over years", "Location in the parotid"],
+        correct: 1, explanation: "Facial-nerve weakness and fixation (plus pain, rapid growth, cervical nodes, skin involvement) are red flags for malignancy. A soft, mobile, painless mass (option 1) and slow growth (option 3) favor a benign process, and parotid location (option 4) actually carries the lowest malignancy rate among salivary glands." }
+    ],
+    signs: [
+      { name: "Parotid-tail cystic mass in an older male smoker", category: "clinical", description: "Soft cystic mass at the parotid tail; FNA oncocytes + lymphocytes.", implication: "Warthin tumor — superficial parotidectomy or observation (very low malignant risk)." },
+      { name: "Facial nerve weakness with a salivary mass", category: "clinical", description: "Any facial-nerve dysfunction accompanying a parotid mass.", implication: "Red flag for malignancy — image (MRI) and plan oncologic resection." },
+      { name: "Gustatory sweating after parotidectomy", category: "clinical", description: "Cheek sweating/flushing while eating.", implication: "Frey syndrome — Minor starch-iodine test; botulinum toxin; prevent with interposition flap." },
+      { name: "Technetium-99m pertechnetate-avid parotid nodule", category: "lab", description: "'Hot' uptake on salivary scintigraphy.", implication: "Characteristic of Warthin tumor (and oncocytoma)." },
+      { name: "Earlobe numbness after parotid surgery", category: "clinical", description: "Sensory loss over the earlobe/lower ear.", implication: "Great auricular nerve sacrifice — common, expected." }
+    ],
+    podcastTitle: "Deep Dive · Benign Neoplasms of the Salivary Glands",
+    podcastDuration: "~20 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. If you're operating a parotid tumor, this is your chapter: benign salivary neoplasms and the facial-nerve roadmap. Marcus, start with the framework everyone quotes." },
+      { speaker: "cohost", text: "The rule of 80s. About eighty percent of salivary tumors are in the parotid, about eighty percent of parotid tumors are benign, and about eighty percent of those benign parotid tumors are pleomorphic adenomas. And the crucial corollary: the smaller the gland, the higher the chance a tumor is malignant — parotid is the lowest risk, submandibular higher, and sublingual and minor glands the highest. So a parotid mass is probably benign, but a sublingual or minor-gland mass is guilty until proven innocent." },
+      { speaker: "host",   text: "How do you read benign versus malignant clinically?" },
+      { speaker: "cohost", text: "A benign tumor is typically a soft, mobile, painless mass that's been slowly enlarging. The red flags for malignancy are pain, facial-nerve weakness — that's a big one, because the nerve runs through the parotid — fixation to skin or deep tissue, rapid growth, cervical lymphadenopathy, and skin involvement or ulceration. Facial weakness with a parotid mass is malignancy until proven otherwise." },
+      { speaker: "host",   text: "Let's do the two benign tumors. Pleomorphic adenoma first." },
+      { speaker: "cohost", text: "Pleomorphic adenoma — the benign mixed tumor — is the most common salivary neoplasm and the most common parotid tumor. Histologically it's mixed: epithelial and myoepithelial cells in a chondromyxoid stroma. Two surgical imperatives define it. First, it has pseudopod extensions poking through an incomplete capsule, so if you just enucleate it, you leave microscopic tumor behind and it recurs — you must take it with a cuff of normal tissue, which in the parotid means a superficial or partial parotidectomy, and for the submandibular gland means removing the whole gland. Second, over many years it can undergo malignant transformation into carcinoma ex pleomorphic adenoma — so a long-standing lump that suddenly grows or becomes painful or causes nerve weakness is a red flag." },
+      { speaker: "host",   text: "Now Warthin — which is especially relevant for a parotid-tail mass." },
+      { speaker: "cohost", text: "Warthin tumor, formally papillary cystadenoma lymphomatosum, is the second most common benign parotid tumor. The associations are high-yield: it's almost exclusively in the parotid, classically the tail; it's strongly linked to smoking; it's typically in older men; and it's the salivary tumor most likely to be bilateral or multifocal, around ten percent. Pathologically it's cystic, with oncocytic epithelium sitting on a lymphoid stroma, and it has a party trick — it takes up technetium-99m pertechnetate, so it's 'hot' on scintigraphy, which is fairly specific. FNA shows oncocytes, lymphocytes, and that proteinaceous cystic debris. And its malignant potential is very low, which matters for management." },
+      { speaker: "host",   text: "So how do you manage a Warthin?" },
+      { speaker: "cohost", text: "Because the malignant potential is so low, you have two legitimate options. A superficial parotidectomy is definitive and is what you'll usually do, especially in a healthy surgical candidate who wants it out. But in a select elderly or poor-surgical-risk patient with a classic FNA and imaging, observation is reasonable, precisely because it so rarely turns malignant. Contrast that with pleomorphic adenoma, which you remove because of recurrence and transformation risk." },
+      { speaker: "host",   text: "Work-up — what and what not to do?" },
+      { speaker: "cohost", text: "FNA is first-line — it's safe, it doesn't threaten the facial nerve, and it guides your plan. For imaging, MRI is best for soft-tissue detail, deep-lobe extension, and perineural spread; CT and ultrasound with US-guided FNA are also used. The thing you do not do is an open or incisional biopsy of a parotid mass — you risk spilling tumor and injuring the facial nerve. The parotidectomy itself is your excisional biopsy and your treatment." },
+      { speaker: "host",   text: "This is the part you need cold for tomorrow — finding the facial nerve. Walk the landmarks." },
+      { speaker: "cohost", text: "The facial nerve splits the parotid into a superficial and a deep lobe — that's a surgical plane, not a true anatomic division. To find the main trunk, you have a set of reliable landmarks. The tragal pointer: the nerve lies about one centimeter deep and inferior to the tip of the cartilaginous tragal pointer. The tympanomastoid suture line: the nerve sits about six to eight millimeters deep, just medial to it — that's the most reliable landmark. The posterior belly of digastric: follow it to its attachment and the nerve is at the same depth. You've also got the stylomastoid foramen, and retrograde dissection, where you find a distal branch — classically the marginal mandibular along the facial vessels — and trace it back. And you use a facial-nerve monitor throughout." },
+      { speaker: "host",   text: "And the branching?" },
+      { speaker: "cohost", text: "The trunk enters and divides at the pes anserinus — the 'goose's foot' — into the temporofacial, upper, and cervicofacial, lower, divisions, which then give the five terminal branches: temporal, zygomatic, buccal, marginal mandibular, and cervical. The marginal mandibular, which controls the lower lip and the smile, and the temporal, which lifts the brow, have the least cross-innervation, so injuring them is the most visible and the least likely to recover. For a benign superficial tumor you do a superficial parotidectomy, removing the lobe lateral to the nerve; a small lateral tumor may get a partial or extracapsular dissection; and a deep-lobe tumor needs a total parotidectomy." },
+      { speaker: "host",   text: "Complications — the ones you'll consent for." },
+      { speaker: "cohost", text: "Facial-nerve weakness — temporary is common, especially the marginal mandibular giving an asymmetric smile, and permanent paralysis is uncommon if you preserve and monitor the nerve. Frey syndrome — gustatory sweating — where the cut parasympathetic auriculotemporal fibers that used to drive the parotid regrow onto the skin's sweat glands, so the cheek sweats and flushes when the patient eats; you confirm it with the Minor starch-iodine test, treat it with botulinum toxin, and you can prevent it by laying an interposition barrier like a SMAS or acellular dermal flap at the time of surgery. Sacrificing the great auricular nerve leaves earlobe numbness, which is common and you warn about it. And there's first-bite syndrome with deep-lobe or parapharyngeal surgery, plus sialocele or salivary fistula, and hematoma." },
+      { speaker: "host",   text: "Let's do a case — basically your tomorrow. A 66-year-old male smoker has a 2 cm soft, mobile, painless mass in the parotid tail. FNA shows oncocytes and lymphocytes; the facial nerve is normal. Walk it." },
+      { speaker: "cohost", text: "This is a classic Warthin tumor — older male smoker, parotid tail, cystic, oncocytes and lymphocytes on FNA, normal nerve. Given he's a surgical candidate and wants it addressed, I'd plan a superficial parotidectomy with facial-nerve monitoring: identify the main trunk using the tympanomastoid suture and tragal pointer, dissect the nerve branches, and remove the superficial lobe containing the tumor with a cuff of normal gland. I'd consent him specifically for temporary facial weakness — particularly the marginal mandibular and the smile — great auricular numbness of the earlobe, Frey syndrome, sialocele, and hematoma, and I'd consider an interposition flap to reduce Frey. If he were frail or a poor operative candidate with this classic picture, observation would be defensible given Warthin's very low malignant potential." },
+      { speaker: "host",   text: "Change it: intra-op, instead of a clean Warthin the tumor is firm, fixed, and the monitor shows the nerve running right into it. Reframe." },
+      { speaker: "cohost", text: "Fixation and a nerve that's involved flips my concern to malignancy. I'd get a frozen section. If it's a malignant salivary tumor, the operation changes — a more complete parotidectomy, possible neck dissection, and the hard intraoperative decision about the facial nerve: you preserve a functioning nerve if you can dissect it free, but a nerve directly invaded by cancer may have to be sacrificed and grafted, which is a conversation you ideally had in consent. The benign plan and the malignant plan are different operations, which is why the preoperative FNA and the red-flag assessment matter so much." },
+      { speaker: "host",   text: "One more, quick: post-op the patient can't fully smile on that side but the brow and eye close fine. What is it and what do you say?" },
+      { speaker: "cohost", text: "That's most likely a marginal mandibular branch weakness — the lower lip and smile — which is the branch most often bruised in a tail dissection. If the nerve was anatomically preserved and monitored, this is usually a neurapraxia that recovers over weeks to months, and I'd reassure while documenting the exam. The key is that you identified and preserved the nerve; temporary weakness of the most delicate branch is common and usually transient." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: the rule of 80s — parotid, benign, pleomorphic adenoma — and smaller glands are more often malignant. Two: pleomorphic adenoma is the most common, you excise it with a cuff rather than enucleate, and it can transform. Three: Warthin is the smoker's bilateral-prone parotid-tail tumor, hot on pertechnetate, oncocytes plus lymphocytes, very low malignant potential — superficial parotidectomy or observe." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: find the facial nerve by the tragal pointer, the tympanomastoid suture — most reliable, about six to eight millimeters deep just medial — and the posterior belly of digastric, with retrograde dissection as backup, then follow the pes anserinus to the five branches. Five: consent for and manage the complications — facial-nerve weakness especially the marginal mandibular, Frey syndrome diagnosed by the starch-iodine test and treated with botulinum toxin, great auricular numbness, sialocele, and first-bite — and a facial weakness with the original mass is a malignancy red flag." },
+      { speaker: "host",   text: "Rule of 80s, don't enucleate the pleomorphic, know your nerve landmarks — and you're ready for the parotid." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
   83: {
     objectives: [
       'List the major histologic subtypes of malignant salivary tumors and their typical behavior.',
@@ -20112,6 +20545,307 @@ const CONTENT = {
   },
 
   /* ============== UNIT 119 — DIFFERENTIATED THYROID CANCER (Cummings Ch. 122) ============== */
+  116: {
+    objectives: [
+      "Describe thyroid physiology and interpret thyroid function tests (TSH, free T4, antibodies).",
+      "Diagnose hypothyroidism (Hashimoto) and hyperthyroidism (Graves, toxic nodular disease) with their antibodies and uptake patterns.",
+      "Distinguish the thyroiditides — Hashimoto, subacute (de Quervain), silent/postpartum, Riedel, and suppurative.",
+      "Manage hyperthyroidism with antithyroid drugs, radioactive iodine, or surgery, and recognize thyroid storm.",
+      "List the surgical indications for benign thyroid disease, including compressive/substernal goiter."
+    ],
+    summary: `
+      <h4>1. Physiology and function tests</h4>
+      <p>The <strong>hypothalamic-pituitary-thyroid axis</strong>: TRH → <strong>TSH</strong> → thyroid release of <strong>T4 (and T3)</strong>, which feed back to suppress TSH. <strong>Iodine</strong> is the essential substrate. <strong>TSH is the most sensitive screening test</strong>: a <strong>low TSH with high free T4 = hyperthyroidism</strong>; a <strong>high TSH with low free T4 = primary hypothyroidism</strong>. Antibodies localize the cause: <strong>anti-TPO / anti-thyroglobulin</strong> (Hashimoto) and <strong>TSH-receptor antibody (TRAb)/thyroid-stimulating immunoglobulin (TSI)</strong> (Graves).</p>
+      <h4>2. Hypothyroidism</h4>
+      <p><strong>Hashimoto thyroiditis</strong> (chronic lymphocytic thyroiditis) is the <strong>most common cause of hypothyroidism in iodine-sufficient regions</strong> — autoimmune, <strong>anti-TPO positive</strong>, often with a firm goiter; it also carries a small risk of <strong>thyroid lymphoma</strong>. Treat with <strong>levothyroxine</strong>. Symptoms: fatigue, cold intolerance, weight gain, constipation, bradycardia, dry skin.</p>
+      <h4>3. Hyperthyroidism</h4>
+      <ul>
+        <li><strong>Graves disease</strong> — the most common cause; <strong>TRAb/TSI-mediated</strong>, with <strong>diffuse, homogeneously increased radioiodine uptake</strong>, and the extrathyroidal signs <strong>ophthalmopathy (proptosis)</strong> and <strong>pretibial myxedema</strong>.</li>
+        <li><strong>Toxic multinodular goiter (Plummer)</strong> and <strong>toxic adenoma</strong> — autonomous nodules with <strong>focal ('hot') uptake</strong>; no eye disease.</li>
+        <li><strong>Thyroiditis</strong> — a release of preformed hormone with <strong>low uptake</strong> (distinguishes it from Graves).</li>
+      </ul>
+      <p><strong>Thyroid storm</strong> is decompensated thyrotoxicosis (fever, tachyarrhythmia, agitation, delirium) — a medical emergency treated with <strong>beta-blocker, thionamide (PTU), iodine (given after the thionamide), and corticosteroids</strong>.</p>
+      <h4>4. The thyroiditides</h4>
+      <ul>
+        <li><strong>Hashimoto</strong> — autoimmune, anti-TPO, hypothyroid, firm goiter.</li>
+        <li><strong>Subacute (de Quervain) granulomatous thyroiditis</strong> — <strong>painful, tender</strong> gland after a viral illness, with an <strong>elevated ESR</strong>; self-limited (transient hyper → hypo → euthyroid); treat with NSAIDs/steroids.</li>
+        <li><strong>Silent / postpartum thyroiditis</strong> — painless, autoimmune, self-limited.</li>
+        <li><strong>Riedel thyroiditis</strong> — rare, <strong>dense fibrosis ('woody,' fixed, 'hard-as-wood' gland)</strong> invading surrounding tissues; part of IgG4-related disease.</li>
+        <li><strong>Acute suppurative thyroiditis</strong> — bacterial infection (consider a <strong>pyriform-sinus fistula</strong> in children) — antibiotics ± drainage.</li>
+      </ul>
+      <h4>5. Goiter and medical therapy</h4>
+      <p><strong>Goiter</strong> (diffuse or multinodular) can enlarge substernally and cause compression — a <strong>positive Pemberton sign</strong> (facial plethora and venous distension on raising the arms) indicates thoracic-inlet obstruction. <strong>Antithyroid drugs</strong>: <strong>methimazole</strong> (first-line; teratogenic in the first trimester — avoid) and <strong>propylthiouracil (PTU)</strong> (preferred in the <strong>first trimester</strong> and in <strong>thyroid storm</strong>, where it also blocks peripheral T4→T3 conversion). Both risk <strong>agranulocytosis</strong> (stop and check CBC for fever/sore throat) and <strong>hepatotoxicity</strong>. <strong>Radioactive iodine (I-131)</strong> ablates overactive tissue (avoid in pregnancy; can worsen Graves eye disease).</p>
+      <h4>6. Surgical indications for benign thyroid disease</h4>
+      <p>Operate for a <strong>compressive or substernal goiter</strong> (airway/dysphagia/Pemberton), <strong>Graves disease failing or intolerant of medical therapy</strong> (or with significant ophthalmopathy, or desiring definitive control), a <strong>suspicious or indeterminate nodule</strong> (see the neoplasm chapter), <strong>cosmesis</strong>, and <strong>hyperthyroidism in pregnancy</strong> uncontrolled on drugs. Render a hyperthyroid patient <strong>euthyroid before elective surgery</strong> (beta-blocker ± thionamide ± iodine) to avoid precipitating thyroid storm.</p>
+    `,
+    keyPoints: [
+      { category: "Function tests", items: [
+        "TSH = most sensitive screen. Low TSH + high free T4 = hyperthyroid; high TSH + low free T4 = primary hypothyroid.",
+        "Antibodies: anti-TPO/anti-Tg = Hashimoto; TRAb/TSI = Graves."
+      ]},
+      { category: "Hypo / hyper", items: [
+        "Hashimoto = most common hypothyroidism (iodine-sufficient areas), anti-TPO, firm goiter, small lymphoma risk → levothyroxine.",
+        "Graves = most common hyperthyroidism, TRAb/TSI, DIFFUSE uptake, ophthalmopathy + pretibial myxedema. Toxic MNG/adenoma = focal 'hot' uptake, no eye disease. Thyroiditis = LOW uptake."
+      ]},
+      { category: "Thyroiditis", items: [
+        "Subacute de Quervain: PAINFUL, post-viral, ↑ESR, self-limited (NSAIDs/steroids). Silent/postpartum: painless, self-limited.",
+        "Riedel: woody, fibrotic, invasive (IgG4-related). Acute suppurative: bacterial — in kids think pyriform-sinus fistula."
+      ]},
+      { category: "Treatment / surgery", items: [
+        "Methimazole first-line (teratogenic 1st trimester); PTU in 1st trimester & thyroid storm (blocks T4→T3). Both: agranulocytosis + hepatotoxicity. RAI avoid in pregnancy/worsens eye disease.",
+        "Thyroid storm: beta-blocker + PTU + iodine (after thionamide) + steroids. Surgery for compressive/substernal goiter, Graves failing therapy, suspicious nodule — render EUTHYROID before elective surgery."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 119 · Disorders of the Thyroid Gland", subtitle: "Cummings 8e · Chapter 119", body: "<p style='font-size:18px;line-height:1.55;'>TSH-anchored diagnosis, antibody and uptake patterns, the thyroiditides, and when benign thyroid disease needs surgery.</p>" },
+      { title: "Function tests", body: "<ul><li><strong>TSH</strong> = most sensitive screen.</li><li>Low TSH + high free T4 = <strong>hyperthyroid</strong>.</li><li>High TSH + low free T4 = <strong>primary hypothyroid</strong>.</li></ul>" },
+      { title: "Antibodies", body: "<ul><li><strong>Anti-TPO / anti-Tg</strong> → Hashimoto.</li><li><strong>TRAb / TSI</strong> → Graves.</li></ul>" },
+      { title: "Hypothyroidism", body: "<ul><li><strong>Hashimoto</strong> = most common cause (iodine-sufficient areas).</li><li>Anti-TPO+, firm goiter, small lymphoma risk.</li><li>Treat: <strong>levothyroxine</strong>.</li></ul>" },
+      { title: "Hyperthyroidism", body: "<ul><li><strong>Graves</strong> — TRAb/TSI, <strong>diffuse uptake</strong>, ophthalmopathy, pretibial myxedema.</li><li><strong>Toxic MNG / adenoma</strong> — focal 'hot' uptake, no eye disease.</li><li><strong>Thyroiditis</strong> — LOW uptake.</li></ul>" },
+      { title: "Thyroid storm", body: "<ul><li>Fever, tachyarrhythmia, agitation/delirium — emergency.</li><li><strong>Beta-blocker + PTU + iodine (after thionamide) + steroids.</strong></li></ul>" },
+      { title: "Thyroiditides", body: "<ul><li><strong>Subacute (de Quervain)</strong>: painful, post-viral, ↑ESR, self-limited.</li><li>Silent/postpartum: painless, self-limited.</li><li><strong>Riedel</strong>: woody, fibrotic, invasive (IgG4).</li><li>Acute suppurative: bacterial (kids → pyriform-sinus fistula).</li></ul>" },
+      { title: "Goiter", body: "<ul><li>Diffuse/multinodular; substernal extension.</li><li><strong>Pemberton sign</strong>: facial plethora + venous distension on raising arms = thoracic-inlet obstruction.</li></ul>" },
+      { title: "Antithyroid drugs & RAI", body: "<ul><li><strong>Methimazole</strong> first-line (avoid 1st trimester — teratogenic).</li><li><strong>PTU</strong>: 1st trimester & thyroid storm (blocks T4→T3).</li><li>Both: <strong>agranulocytosis</strong>, hepatotoxicity. RAI: avoid in pregnancy; worsens eye disease.</li></ul>" },
+      { title: "Surgical indications", body: "<ul><li>Compressive/substernal goiter.</li><li>Graves failing/intolerant of medical therapy.</li><li>Suspicious nodule; cosmesis; uncontrolled hyperthyroidism in pregnancy.</li><li><strong>Render euthyroid before elective surgery.</strong></li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>TSH anchors diagnosis; antibodies and uptake pattern give the cause.</li><li>Graves = diffuse uptake + eye disease; toxic nodules = focal; thyroiditis = low uptake.</li><li>Methimazole first-line (PTU in 1st trimester/storm); make a hyperthyroid patient euthyroid before surgery.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Uptake patterns on radioiodine scan", body: "<ul><li><strong>Diffuse</strong> increased uptake → Graves.</li><li><strong>Focal ('hot')</strong> uptake → toxic adenoma / toxic multinodular goiter.</li><li><strong>Low/absent</strong> uptake → thyroiditis (preformed hormone release) or exogenous thyroid hormone.</li></ul>" },
+      { title: "Substernal goiter & the thoracic inlet", body: "<ul><li>A goiter can extend retrosternally and compress the trachea, esophagus, and great veins.</li><li><strong>Pemberton sign</strong> unmasks thoracic-inlet obstruction when the arms are raised.</li></ul>" }
+    ],
+    pearls: [
+      "TSH is the most sensitive thyroid screening test: a low TSH with high free T4 is hyperthyroidism and a high TSH with low free T4 is primary hypothyroidism; antibodies (anti-TPO for Hashimoto, TRAb/TSI for Graves) identify the cause.",
+      "Hashimoto thyroiditis is the most common cause of hypothyroidism in iodine-sufficient regions, is anti-TPO positive, and carries a small risk of thyroid lymphoma.",
+      "The radioiodine uptake pattern distinguishes hyperthyroid causes: diffuse uptake in Graves (with ophthalmopathy and pretibial myxedema), focal 'hot' uptake in toxic adenoma/multinodular goiter, and low uptake in thyroiditis.",
+      "Subacute (de Quervain) thyroiditis is a painful, tender gland after a viral illness with an elevated ESR and a self-limited course through transient hyperthyroidism to hypothyroidism and back to euthyroid; Riedel thyroiditis is a rare, woody, invasive fibrosis (IgG4-related).",
+      "Methimazole is first-line antithyroid therapy but is teratogenic in the first trimester, where PTU is preferred (PTU is also used in thyroid storm because it blocks peripheral T4-to-T3 conversion); both can cause agranulocytosis and hepatotoxicity.",
+      "Surgical indications for benign thyroid disease include a compressive or substernal goiter (airway/dysphagia/Pemberton sign), Graves disease failing or intolerant of medical therapy, and a suspicious nodule — and a hyperthyroid patient must be rendered euthyroid before elective surgery to avoid precipitating thyroid storm."
+    ],
+    flashcards: [
+      { q: "How do you interpret TSH and free T4 to classify thyroid dysfunction?", a: "TSH is the most sensitive screen. A low TSH with a high free T4 indicates hyperthyroidism; a high TSH with a low free T4 indicates primary hypothyroidism; a high TSH with normal free T4 is subclinical hypothyroidism. Antibodies then identify the cause — anti-TPO/anti-thyroglobulin for Hashimoto and TRAb/TSI for Graves." },
+      { q: "What is the most common cause of hypothyroidism in iodine-sufficient areas and its features?", a: "Hashimoto (chronic lymphocytic) thyroiditis — an autoimmune thyroiditis that is anti-TPO positive, often with a firm goiter, causing fatigue, cold intolerance, weight gain, constipation, and bradycardia. It is treated with levothyroxine and carries a small risk of thyroid lymphoma." },
+      { q: "How does the radioiodine uptake pattern distinguish causes of hyperthyroidism?", a: "Diffuse, homogeneously increased uptake indicates Graves disease (with ophthalmopathy and pretibial myxedema, TRAb/TSI positive); focal 'hot' uptake indicates a toxic adenoma or toxic multinodular goiter (no eye disease); and low or absent uptake indicates thyroiditis (release of preformed hormone) or exogenous thyroid hormone." },
+      { q: "What characterizes subacute (de Quervain) thyroiditis?", a: "A painful, tender thyroid following a viral illness, with an elevated ESR and a classic self-limited course — transient hyperthyroidism (hormone release), then hypothyroidism, then return to euthyroid. It is treated symptomatically with NSAIDs or corticosteroids, not antithyroid drugs." },
+      { q: "What is Riedel thyroiditis?", a: "A rare, chronic fibrosing thyroiditis in which dense fibrosis replaces and extends beyond the gland, producing a hard, 'woody,' fixed thyroid that can invade and compress adjacent structures. It is part of the IgG4-related disease spectrum and can mimic malignancy." },
+      { q: "Compare methimazole and PTU, including pregnancy and thyroid storm.", a: "Methimazole is first-line (once-daily, more potent) but is teratogenic in the first trimester, so PTU is preferred in the first trimester; PTU is also used in thyroid storm because it additionally blocks peripheral conversion of T4 to T3. Both can cause agranulocytosis (stop and check a CBC for fever/sore throat) and hepatotoxicity." },
+      { q: "How is thyroid storm managed?", a: "As an emergency: a beta-blocker (e.g., propranolol) to control adrenergic symptoms, a thionamide (PTU) to block synthesis and peripheral conversion, iodine given AFTER the thionamide to block hormone release (Wolff-Chaikoff), and corticosteroids (reduce T4-to-T3 conversion and treat relative adrenal insufficiency), plus supportive care." },
+      { q: "What are the surgical indications for benign thyroid disease?", a: "A compressive or substernal goiter (airway or swallowing symptoms, positive Pemberton sign), Graves disease that fails or is intolerant of medical therapy (or with significant ophthalmopathy, or when definitive control is desired), a suspicious/indeterminate nodule, cosmetic concern, and uncontrolled hyperthyroidism in pregnancy — always rendering the patient euthyroid before elective surgery." }
+    ],
+    quiz: [
+      { stem: "A patient has a low TSH, high free T4, diffuse increased radioiodine uptake, proptosis, and pretibial myxedema. The diagnosis is:",
+        options: ["Toxic adenoma", "Graves disease", "Subacute (de Quervain) thyroiditis", "Hashimoto thyroiditis"],
+        correct: 1, explanation: "Diffuse increased uptake with ophthalmopathy and pretibial myxedema is Graves disease (TRAb/TSI-mediated). A toxic adenoma (option 1) shows focal 'hot' uptake and no eye disease. De Quervain thyroiditis (option 2) is painful with LOW uptake. Hashimoto (option 3) causes hypothyroidism, not this hyperthyroid picture." },
+      { stem: "A patient has a painful, tender thyroid two weeks after a viral upper respiratory infection, with an elevated ESR and transient hyperthyroidism. The diagnosis and treatment are:",
+        options: ["Graves disease — radioactive iodine", "Subacute (de Quervain) thyroiditis — NSAIDs/steroids", "Acute suppurative thyroiditis — IV antibiotics", "Toxic multinodular goiter — surgery"],
+        correct: 1, explanation: "A painful, tender gland after a viral illness with elevated ESR is subacute (de Quervain) thyroiditis, treated symptomatically with NSAIDs or corticosteroids as it is self-limited. Graves (option 1) is painless with diffuse uptake. Suppurative thyroiditis (option 2) is a bacterial infection with systemic sepsis signs. Toxic MNG (option 3) is painless with focal uptake." },
+      { stem: "Which antithyroid drug is preferred in the first trimester of pregnancy and in thyroid storm?",
+        options: ["Methimazole", "Propylthiouracil (PTU)", "Levothyroxine", "Radioactive iodine"],
+        correct: 1, explanation: "PTU is preferred in the first trimester (methimazole is teratogenic then) and in thyroid storm (it also blocks peripheral T4-to-T3 conversion). Methimazole (option 1) is first-line otherwise. Levothyroxine (option 2) treats hypothyroidism. Radioactive iodine (option 3) is contraindicated in pregnancy." },
+      { stem: "A patient with a large multinodular goiter develops facial plethora and distended neck veins when raising both arms above the head. This sign is:",
+        options: ["Chvostek sign", "Pemberton sign (thoracic-inlet obstruction)", "Trousseau sign", "Horner syndrome"],
+        correct: 1, explanation: "Facial plethora and venous distension on raising the arms is a positive Pemberton sign, indicating thoracic-inlet obstruction from a substernal goiter — a surgical indication. Chvostek (option 1) and Trousseau (option 3) signs indicate hypocalcemia. Horner syndrome (option 4) is ptosis-miosis-anhidrosis from sympathetic chain involvement." },
+      { stem: "A patient on methimazole develops fever and a severe sore throat. The most important immediate action is:",
+        options: ["Increase the methimazole dose", "Stop the drug and check a complete blood count for agranulocytosis", "Add aspirin and continue", "Start levothyroxine"],
+        correct: 1, explanation: "Fever and sore throat on a thionamide suggest agranulocytosis — stop the drug immediately and check a CBC. Increasing the dose (option 1) is dangerous. Aspirin (option 2) does not address the neutropenia. Levothyroxine (option 3) is irrelevant to this adverse drug reaction." },
+      { stem: "Which hyperthyroid cause characteristically shows LOW radioiodine uptake?",
+        options: ["Graves disease", "Thyroiditis (release of preformed hormone)", "Toxic adenoma", "Toxic multinodular goiter"],
+        correct: 1, explanation: "Thyroiditis causes thyrotoxicosis by releasing preformed hormone from a damaged gland, so uptake is LOW. Graves (option 1) shows diffuse increased uptake, and toxic adenoma (option 2) and toxic multinodular goiter (option 3) show focal increased ('hot') uptake." }
+    ],
+    signs: [
+      { name: "Diffuse uptake + proptosis + pretibial myxedema", category: "clinical", description: "Diffuse radioiodine uptake with ophthalmopathy and pretibial skin changes.", implication: "Graves disease (TRAb/TSI) — antithyroid drugs, RAI, or surgery." },
+      { name: "Painful tender thyroid with high ESR", category: "clinical", description: "Tender gland after a viral illness, elevated ESR, transient thyrotoxicosis.", implication: "Subacute (de Quervain) thyroiditis — self-limited; NSAIDs/steroids." },
+      { name: "Woody, fixed thyroid", category: "clinical", description: "Rock-hard, fixed gland invading surrounding tissue.", implication: "Riedel thyroiditis (IgG4) — can mimic malignancy; biopsy to confirm." },
+      { name: "Positive Pemberton sign", category: "clinical", description: "Facial plethora/venous distension on raising the arms.", implication: "Substernal goiter with thoracic-inlet obstruction — surgical indication." },
+      { name: "Anti-TPO antibodies", category: "lab", description: "Antithyroid-peroxidase antibodies.", implication: "Hashimoto thyroiditis (autoimmune hypothyroidism)." },
+      { name: "TSH-receptor antibody (TRAb/TSI)", category: "lab", description: "Stimulating antibody to the TSH receptor.", implication: "Graves disease." }
+    ],
+    podcastTitle: "Deep Dive · Disorders of the Thyroid Gland",
+    podcastDuration: "~20 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. This pairs with the thyroid-neoplasm chapter: the benign and functional disorders of the thyroid. Marcus, anchor us in the function tests." },
+      { speaker: "cohost", text: "Everything starts with TSH — it's the most sensitive screen. Low TSH with a high free T4 is hyperthyroidism; high TSH with a low free T4 is primary hypothyroidism; high TSH with a normal free T4 is subclinical hypothyroidism. Then the antibodies tell you the cause: anti-TPO and anti-thyroglobulin point to Hashimoto, and TSH-receptor antibody — TRAb, or the stimulating immunoglobulin TSI — points to Graves. TSH to classify, antibodies to attribute." },
+      { speaker: "host",   text: "Hypothyroidism — the big one." },
+      { speaker: "cohost", text: "Hashimoto thyroiditis, chronic lymphocytic thyroiditis, is the most common cause of hypothyroidism in iodine-sufficient parts of the world. It's autoimmune, anti-TPO positive, often with a firm goiter, and it gives the classic hypothyroid picture — fatigue, cold intolerance, weight gain, constipation, bradycardia, dry skin. You treat it with levothyroxine. One thing to flag: Hashimoto carries a small increased risk of thyroid lymphoma, so a rapidly enlarging gland in a Hashimoto patient deserves attention." },
+      { speaker: "host",   text: "Hyperthyroidism — walk the causes, and tie each to the scan." },
+      { speaker: "cohost", text: "The uptake pattern is the key. Graves disease is the most common cause, TRAb/TSI-mediated, and it shows diffuse, homogeneously increased radioiodine uptake, plus the extrathyroidal signs no other cause has — the eye disease, ophthalmopathy with proptosis, and pretibial myxedema. A toxic adenoma or a toxic multinodular goiter — Plummer disease — are autonomous nodules, so they show focal, 'hot' uptake, and crucially no eye disease. And thyroiditis causes thyrotoxicosis by dumping preformed hormone from a damaged gland, so its uptake is low. So: diffuse equals Graves, focal equals toxic nodule, low equals thyroiditis." },
+      { speaker: "host",   text: "And the emergency — thyroid storm." },
+      { speaker: "cohost", text: "Thyroid storm is decompensated thyrotoxicosis — high fever, tachyarrhythmia, agitation or delirium, and it can be fatal. The treatment stack: a beta-blocker like propranolol to control the adrenergic surge; a thionamide, PTU, to block synthesis and, importantly, peripheral T4-to-T3 conversion; iodine to block hormone release — but you give the iodine after the thionamide, so you don't fuel the gland; and corticosteroids, which cut T4-to-T3 conversion and cover relative adrenal insufficiency. Plus supportive care." },
+      { speaker: "host",   text: "Run the thyroiditides, since they're confusable." },
+      { speaker: "cohost", text: "Hashimoto we covered — autoimmune, painless, hypothyroid. Subacute, de Quervain, granulomatous thyroiditis is the painful one: a tender gland after a viral illness, with an elevated ESR, and a classic self-limited course that swings from transient hyperthyroid, as hormone leaks out, to hypothyroid, then back to euthyroid — you treat it symptomatically with NSAIDs or steroids, not antithyroid drugs. Silent and postpartum thyroiditis are painless, autoimmune, and self-limited. Riedel thyroiditis is the rare, woody one — dense fibrosis that makes the gland hard as wood and fixed, invading surrounding tissue, and it's part of IgG4-related disease and can mimic cancer. And acute suppurative thyroiditis is a bacterial infection — in a child, think of a pyriform-sinus fistula as the source." },
+      { speaker: "host",   text: "Goiter and the compression sign." },
+      { speaker: "cohost", text: "A goiter, diffuse or multinodular, can grow down behind the sternum — a substernal goiter — and compress the trachea, esophagus, and great veins. The classic exam finding is Pemberton sign: have the patient raise both arms over the head, and if they develop facial plethora and distended neck veins, you've unmasked thoracic-inlet obstruction. That's a surgical indication." },
+      { speaker: "host",   text: "Medical therapy — the drugs and their traps." },
+      { speaker: "cohost", text: "The antithyroid drugs are the thionamides. Methimazole is first-line — once daily, potent — but it's teratogenic in the first trimester, so you avoid it then. PTU is preferred in the first trimester, and also in thyroid storm because it blocks peripheral T4-to-T3 conversion. Both share two dangerous toxicities: agranulocytosis — so any patient with fever or a sore throat stops the drug and gets a CBC immediately — and hepatotoxicity. Radioactive iodine, I-131, ablates overactive tissue, but you avoid it in pregnancy and it can worsen Graves eye disease." },
+      { speaker: "host",   text: "And when does benign thyroid disease come to us for surgery?" },
+      { speaker: "cohost", text: "A compressive or substernal goiter with airway or swallowing symptoms or a positive Pemberton sign; Graves disease that fails or can't tolerate medical therapy, or with significant ophthalmopathy, or when the patient wants definitive control; a suspicious or indeterminate nodule, which bridges to the neoplasm chapter; cosmesis; and uncontrolled hyperthyroidism in pregnancy. And the safety rule from the surgery chapter: render a hyperthyroid patient euthyroid first — beta-blocker, thionamide, sometimes iodine — before elective thyroidectomy, so you don't precipitate thyroid storm on the table." },
+      { speaker: "host",   text: "Let's do a case. A 35-year-old woman has palpitations, tremor, heat intolerance, a diffusely enlarged thyroid, and bulging eyes. Labs: suppressed TSH, high free T4. Walk it." },
+      { speaker: "cohost", text: "Diffuse goiter plus eye signs plus biochemical hyperthyroidism is Graves disease — I'd confirm with TRAb and, if needed, a radioiodine scan showing diffuse uptake. Options are three: antithyroid drugs, starting methimazole unless she's in the first trimester of pregnancy; radioactive iodine, avoided in pregnancy and cautious given her eye disease since it can worsen it; or surgery, total thyroidectomy, which gives rapid definitive control and is attractive with significant ophthalmopathy or a large goiter. Whatever the path, a beta-blocker now for symptoms, and if we choose surgery I render her euthyroid first." },
+      { speaker: "host",   text: "Change it: a different patient has a painful, tender thyroid after a cold, ESR is sky-high, and she's transiently hyperthyroid. Reframe." },
+      { speaker: "cohost", text: "Painful, tender, post-viral, high ESR, transient hyperthyroid — that's subacute de Quervain thyroiditis, not Graves. The uptake would be low, confirming it's hormone release, not overproduction. So I don't give antithyroid drugs or radioactive iodine — I treat symptomatically with NSAIDs or corticosteroids and a beta-blocker for symptoms, and I reassure her it's self-limited, cycling through a hypothyroid phase before recovering. Recognizing pain plus low uptake keeps you from mistreating this as Graves." },
+      { speaker: "host",   text: "One more, quick: a patient on methimazole calls with fever and a bad sore throat. What do you say?" },
+      { speaker: "cohost", text: "Stop the methimazole now and get a CBC today — fever and sore throat on a thionamide is agranulocytosis until proven otherwise, and it can be life-threatening. You don't push through it or just add antibiotics blindly; you hold the drug, check the count, and manage neutropenia. It's the classic thionamide safety counseling you give at the start of therapy." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: TSH is the most sensitive screen — low TSH high T4 is hyperthyroid, high TSH low T4 is hypothyroid — and antibodies, anti-TPO for Hashimoto and TRAb for Graves, give the cause. Two: Hashimoto is the most common hypothyroidism, treated with levothyroxine, with a small lymphoma risk. Three: the uptake pattern splits hyperthyroidism — diffuse Graves with eye disease, focal toxic nodules, low-uptake thyroiditis." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: know the thyroiditides — painful de Quervain with high ESR, woody Riedel, bacterial suppurative — and the compressive substernal goiter with its Pemberton sign. Five: methimazole first-line but PTU in the first trimester and in thyroid storm, both risking agranulocytosis and hepatotoxicity; treat storm with beta-blocker, PTU, iodine after the thionamide, and steroids; and operate for compressive goiter, medically refractory Graves, or a suspicious nodule — after rendering the patient euthyroid." },
+      { speaker: "host",   text: "TSH first, read the uptake, know the thyroiditides — and make them euthyroid before you operate." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
+  117: {
+    objectives: [
+      "Work up a thyroid nodule — TSH first, then ultrasound and FNA with the Bethesda system.",
+      "Distinguish the thyroid cancers (papillary, follicular, medullary, anaplastic, lymphoma) and their markers.",
+      "Choose extent of surgery (lobectomy vs total thyroidectomy) and the role of central neck dissection.",
+      "Master the surgical anatomy — recurrent and superior laryngeal nerves, parathyroids, and Berry's ligament.",
+      "Recognize and manage thyroidectomy complications — RLN injury, hypocalcemia, and postoperative hematoma."
+    ],
+    summary: `
+      <h4>1. Work-up of a thyroid nodule</h4>
+      <p><strong>Check a TSH first.</strong> If TSH is <strong>low</strong>, get a radioiodine <strong>scan</strong>: a <strong>hyperfunctioning ('hot') nodule is almost always benign</strong>. If TSH is <strong>normal or high</strong>, get a <strong>thyroid ultrasound</strong> and, based on size and suspicious features, an <strong>FNA</strong>. Suspicious ultrasound features: <strong>hypoechoic, microcalcifications, taller-than-wide, irregular margins, extrathyroidal extension</strong>. FNA is reported by the <strong>Bethesda system</strong> (I nondiagnostic, II benign, III AUS/FLUS, IV follicular neoplasm, V suspicious for malignancy, VI malignant), each with a defined malignancy risk and management; <strong>molecular testing (e.g., Afirma, ThyroSeq)</strong> refines indeterminate categories (III/IV).</p>
+      <h4>2. The thyroid cancers</h4>
+      <ul>
+        <li><strong>Papillary (PTC)</strong> — most common (~80%); <strong>lymphatic</strong> spread to neck nodes; excellent prognosis; <strong>psammoma bodies, 'Orphan Annie' nuclei</strong>; <strong>BRAF</strong> mutation.</li>
+        <li><strong>Follicular (FTC)</strong> — <strong>hematogenous</strong> spread (lung/bone); diagnosis requires <strong>capsular or vascular invasion</strong>, so it <strong>cannot be diagnosed on FNA</strong> (Bethesda IV → diagnostic lobectomy).</li>
+        <li><strong>Medullary (MTC)</strong> — from <strong>parafollicular C cells</strong>; secretes <strong>calcitonin</strong> (and CEA) as tumor markers; associated with <strong>RET / MEN 2</strong>; <strong>rule out pheochromocytoma BEFORE surgery</strong>.</li>
+        <li><strong>Anaplastic</strong> — elderly, <strong>rapidly enlarging</strong>, airway-threatening, dismal prognosis.</li>
+        <li><strong>Lymphoma</strong> — arises in a background of <strong>Hashimoto thyroiditis</strong>.</li>
+      </ul>
+      <h4>3. Extent of surgery</h4>
+      <p><strong>Lobectomy</strong> suffices for low-risk differentiated cancer (≤4 cm, unifocal, no extrathyroidal extension, no nodal/distant disease). <strong>Total thyroidectomy</strong> is preferred for tumors <strong>&gt;4 cm, gross extrathyroidal extension, bilateral disease, nodal or distant metastases, prior radiation, or when radioactive iodine is planned</strong>. <strong>Central (level VI) neck dissection</strong> is therapeutic for clinically positive nodes; prophylactic central dissection is controversial (may reduce regional recurrence without proven survival benefit).</p>
+      <h4>4. Surgical anatomy — the nerves</h4>
+      <ul>
+        <li><strong>Recurrent laryngeal nerve (RLN)</strong> runs in the <strong>tracheoesophageal groove</strong>; its relationship to the <strong>inferior thyroid artery</strong> is variable (anterior, posterior, or between branches). It is <strong>most vulnerable at the ligament of Berry</strong>, where it lies closest to the gland. A rare <strong>non-recurrent RLN on the right</strong> accompanies an aberrant subclavian artery (arteria lusoria). Injury: <strong>unilateral → hoarse, breathy voice; bilateral → airway obstruction</strong>.</li>
+        <li><strong>External branch of the superior laryngeal nerve (EBSLN)</strong> runs near the <strong>superior pole and superior thyroid artery</strong> — ligate those vessels <strong>low, on the capsule</strong>, to protect it; injury causes <strong>loss of high pitch and vocal fatigue</strong> (cricothyroid).</li>
+      </ul>
+      <h4>5. Surgical anatomy — parathyroids and landmarks</h4>
+      <p>Preserve the <strong>four parathyroid glands</strong> and their blood supply (mainly the <strong>inferior thyroid artery</strong>). <strong>Superior parathyroids</strong> (4th pouch) are more constant, usually posterior near the cricothyroid junction; <strong>inferior parathyroids</strong> (3rd pouch) are more variable, migrating with the thymus. A <strong>devascularized gland is autotransplanted</strong> (e.g., into the sternocleidomastoid). Useful landmarks: the <strong>tubercle of Zuckerkandl</strong> (the RLN runs deep/medial to it), <strong>Berry's ligament</strong> (posterior suspensory ligament), and the <strong>pyramidal lobe</strong>.</p>
+      <h4>6. Complications</h4>
+      <ul>
+        <li><strong>RLN injury</strong> — hoarseness (unilateral) or airway compromise (bilateral); use intraoperative nerve monitoring and identify the nerve.</li>
+        <li><strong>Hypocalcemia / hypoparathyroidism</strong> — common and usually transient after total thyroidectomy; <strong>permanent</strong> if all parathyroids are damaged. Symptoms: <strong>perioral and fingertip numbness/tingling, Chvostek and Trousseau signs</strong>, tetany. Check <strong>calcium and PTH</strong>; treat with <strong>calcium and calcitriol (active vitamin D)</strong>.</li>
+        <li><strong>Postoperative neck hematoma</strong> — an <strong>airway emergency</strong>: an expanding neck with stridor/respiratory distress requires <strong>opening the wound at the bedside immediately</strong> to decompress, then return to the OR.</li>
+        <li>Also <strong>EBSLN injury</strong>, hypothyroidism, <strong>thyroid storm</strong> (uncontrolled Graves), seroma, and a low-neck <strong>chyle leak</strong> (thoracic duct, left side).</li>
+      </ul>
+    `,
+    keyPoints: [
+      { category: "Nodule work-up", items: [
+        "TSH FIRST: low → radioiodine scan (hot nodule almost always benign); normal/high → ultrasound ± FNA.",
+        "Suspicious US: hypoechoic, microcalcifications, taller-than-wide, irregular margins, ETE. Bethesda I–VI; molecular testing for indeterminate III/IV."
+      ]},
+      { category: "Cancer types", items: [
+        "Papillary (~80%, lymphatic, psammoma/Orphan Annie, BRAF, good prognosis). Follicular (hematogenous; needs capsular/vascular invasion → can't dx on FNA → lobectomy).",
+        "Medullary (C cells, CALCITONIN+CEA, RET/MEN2 — rule out PHEOCHROMOCYTOMA first). Anaplastic (elderly, airway, dismal). Lymphoma (Hashimoto)."
+      ]},
+      { category: "Extent / nodes", items: [
+        "Lobectomy: low-risk ≤4 cm, unifocal, no ETE/nodes. Total thyroidectomy: >4 cm, ETE, bilateral, nodal/distant mets, prior radiation, RAI planned.",
+        "Central (level VI) neck dissection therapeutic for +nodes; prophylactic controversial."
+      ]},
+      { category: "Anatomy / complications", items: [
+        "RLN in tracheoesophageal groove, variable to inferior thyroid artery, MOST VULNERABLE at ligament of Berry; non-recurrent on right (arteria lusoria). EBSLN at superior pole — ligate superior vessels low on capsule.",
+        "Parathyroids: inferior thyroid artery supply — preserve/autotransplant. Complications: RLN injury, hypocalcemia (Ca+PTH; treat Ca + calcitriol; Chvostek/Trousseau), POSTOP HEMATOMA = open at bedside, thyroid storm, chyle leak."
+      ]}
+    ],
+    slides: [
+      { title: "Chapter 120 · Management of Thyroid Neoplasms", subtitle: "Cummings 8e · Chapter 120", body: "<p style='font-size:18px;line-height:1.55;'>Work up with TSH → ultrasound → FNA (Bethesda); operate knowing the RLN, EBSLN, parathyroids — and treat a postop hematoma as an airway emergency.</p>" },
+      { title: "Nodule work-up", body: "<ul><li><strong>TSH first.</strong> Low → radioiodine scan (hot = almost always benign).</li><li>Normal/high → <strong>ultrasound ± FNA</strong>.</li><li>Suspicious US: hypoechoic, microcalcs, taller-than-wide, irregular margins, ETE.</li></ul>" },
+      { title: "Bethesda system", body: "<ul><li>I nondiagnostic · II benign · III AUS/FLUS · IV follicular neoplasm · V suspicious · VI malignant.</li><li>Molecular testing (Afirma/ThyroSeq) for indeterminate III/IV.</li></ul>" },
+      { title: "Papillary & follicular", body: "<ul><li><strong>Papillary</strong>: ~80%, lymphatic spread, psammoma/Orphan-Annie nuclei, BRAF, good prognosis.</li><li><strong>Follicular</strong>: hematogenous; needs capsular/vascular invasion → <strong>can't diagnose on FNA</strong> → diagnostic lobectomy.</li></ul>" },
+      { title: "Medullary, anaplastic, lymphoma", body: "<ul><li><strong>Medullary</strong>: C cells, <strong>calcitonin + CEA</strong>, RET/MEN2 — <strong>rule out pheochromocytoma first</strong>.</li><li><strong>Anaplastic</strong>: elderly, rapid, airway, dismal.</li><li><strong>Lymphoma</strong>: Hashimoto background.</li></ul>" },
+      { title: "Extent of surgery", body: "<ul><li><strong>Lobectomy</strong>: low-risk ≤4 cm, unifocal, no ETE/nodes.</li><li><strong>Total thyroidectomy</strong>: >4 cm, ETE, bilateral, nodal/distant, prior radiation, RAI planned.</li><li>Central (level VI) dissection: therapeutic for +nodes.</li></ul>" },
+      { title: "RLN anatomy", body: "<ul><li>Runs in the <strong>tracheoesophageal groove</strong>.</li><li>Variable to the <strong>inferior thyroid artery</strong>.</li><li><strong>Most vulnerable at the ligament of Berry.</strong></li><li>Non-recurrent on the right → arteria lusoria.</li></ul>" },
+      { title: "EBSLN & parathyroids", body: "<ul><li><strong>EBSLN</strong> at the superior pole → ligate superior vessels LOW on the capsule (protects high pitch).</li><li><strong>Parathyroids</strong>: inferior thyroid artery supply — preserve; autotransplant if devascularized.</li><li>Landmark: Zuckerkandl tubercle (RLN deep/medial).</li></ul>" },
+      { title: "Complications", body: "<ul><li><strong>RLN injury</strong>: hoarse (unilateral) / airway (bilateral).</li><li><strong>Hypocalcemia</strong>: perioral/fingertip tingling, Chvostek/Trousseau → Ca + calcitriol.</li><li><strong>Postop hematoma = airway emergency → OPEN AT BEDSIDE.</strong></li><li>EBSLN injury, thyroid storm, chyle leak (left low neck).</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>TSH → US → FNA (Bethesda); hot nodule is benign; follicular needs surgery to diagnose.</li><li>Medullary: calcitonin/RET — rule out pheochromocytoma before operating.</li><li>Identify the RLN (vulnerable at Berry's ligament) and parathyroids; a postop hematoma is opened at the bedside.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Recurrent laryngeal nerve", body: "<ul><li>Ascends in the <strong>tracheoesophageal groove</strong>; crosses the inferior thyroid artery (anterior/posterior/interdigitating).</li><li><strong>Ligament of Berry</strong> — nerve closest to the gland here: the classic injury site.</li><li>Right side can be <strong>non-recurrent</strong> (aberrant right subclavian / arteria lusoria).</li></ul>" },
+      { title: "Parathyroids & vessels", body: "<ul><li><strong>Superior</strong> parathyroids (4th pouch): constant, posterolateral near the cricothyroid junction.</li><li><strong>Inferior</strong> parathyroids (3rd pouch): variable, migrate with thymus.</li><li>Both mainly supplied by the <strong>inferior thyroid artery</strong> — preserve its branches; autotransplant a devascularized gland.</li></ul>" }
+    ],
+    pearls: [
+      "Work up a thyroid nodule with TSH first: a low TSH prompts a radioiodine scan (a hot, hyperfunctioning nodule is almost always benign), while a normal or high TSH prompts ultrasound and, for suspicious features, FNA reported by the Bethesda system.",
+      "Follicular carcinoma is diagnosed by capsular or vascular invasion and therefore cannot be diagnosed on FNA — a follicular neoplasm (Bethesda IV) requires a diagnostic lobectomy.",
+      "In medullary thyroid carcinoma, measure calcitonin and CEA and test for RET/MEN 2, and rule out a pheochromocytoma before thyroid surgery to avoid an intraoperative hypertensive crisis.",
+      "The recurrent laryngeal nerve runs in the tracheoesophageal groove with a variable relationship to the inferior thyroid artery and is most vulnerable at the ligament of Berry, where it lies closest to the gland; a right non-recurrent nerve accompanies an aberrant subclavian artery.",
+      "Protect the external branch of the superior laryngeal nerve by ligating the superior pole vessels low on the thyroid capsule; its injury causes loss of high pitch and vocal fatigue.",
+      "A postoperative neck hematoma after thyroidectomy is an airway emergency — open the wound at the bedside immediately to decompress, then take the patient back to the operating room; and hypocalcemia (perioral/fingertip tingling, Chvostek/Trousseau signs) is managed with calcium and calcitriol."
+    ],
+    flashcards: [
+      { q: "What is the first test in the work-up of a thyroid nodule, and how does it branch?", a: "A serum TSH. If TSH is low, obtain a radioiodine scan — a hyperfunctioning ('hot') nodule is almost always benign and usually needs no FNA. If TSH is normal or high, obtain a thyroid ultrasound and perform FNA based on size and suspicious sonographic features, reporting cytology by the Bethesda system." },
+      { q: "What are suspicious ultrasound features of a thyroid nodule?", a: "Marked hypoechogenicity, microcalcifications, a taller-than-wide shape, irregular or infiltrative margins, and extrathyroidal extension. These features raise the TI-RADS level and lower the size threshold for FNA." },
+      { q: "Why can't follicular carcinoma be diagnosed on FNA?", a: "Because the diagnosis depends on demonstrating capsular or vascular invasion, which requires examining the whole lesion's architecture — not possible on a cytologic aspirate. A follicular neoplasm (Bethesda IV) therefore needs a diagnostic lobectomy for definitive histology (molecular testing can refine risk)." },
+      { q: "What must be done before operating on medullary thyroid carcinoma?", a: "Measure calcitonin and CEA (its tumor markers), test for RET mutation/MEN 2 syndromes, and crucially rule out a pheochromocytoma (part of MEN 2) before surgery — an unrecognized pheochromocytoma can precipitate a life-threatening intraoperative hypertensive crisis; it must be treated first." },
+      { q: "When is total thyroidectomy preferred over lobectomy for differentiated thyroid cancer?", a: "For tumors larger than 4 cm, gross extrathyroidal extension, bilateral disease, cervical nodal or distant metastases, a history of radiation, or when radioactive iodine therapy is planned. Lobectomy suffices for low-risk unifocal tumors ≤4 cm without extrathyroidal extension or nodal disease." },
+      { q: "Where is the recurrent laryngeal nerve most vulnerable, and what are the consequences of injury?", a: "It is most vulnerable at the ligament of Berry, where it lies closest to the thyroid gland, and it has a variable relationship to the inferior thyroid artery in the tracheoesophageal groove. Unilateral injury causes a hoarse, breathy voice; bilateral injury causes airway obstruction. A right non-recurrent nerve (with an aberrant subclavian artery) is a rare trap." },
+      { q: "How are the parathyroid glands protected during thyroidectomy?", a: "By preserving their blood supply, mainly from the inferior thyroid artery — dissecting on the thyroid capsule and preserving the parathyroid branches. A devascularized or inadvertently removed parathyroid is autotransplanted (e.g., minced into a pocket in the sternocleidomastoid) to preserve function." },
+      { q: "How do you recognize and manage a postoperative neck hematoma after thyroidectomy?", a: "A rapidly expanding, tense neck swelling with respiratory distress or stridor is an airway emergency from an expanding hematoma compressing the airway. Open the wound at the bedside immediately to evacuate the clot and relieve compression, secure the airway, and return to the operating room for definitive hemostasis." }
+    ],
+    quiz: [
+      { stem: "A euthyroid patient has a solid thyroid nodule with microcalcifications and a taller-than-wide shape. The next best step is:",
+        options: ["Radioiodine uptake scan", "Ultrasound-guided FNA", "Start levothyroxine suppression", "Immediate total thyroidectomy"],
+        correct: 1, explanation: "With a normal TSH and suspicious sonographic features, ultrasound-guided FNA (Bethesda) is the next step. A radioiodine scan (option 1) is indicated when TSH is LOW (to find a hot nodule). Levothyroxine suppression (option 3) is not a diagnostic step. Proceeding straight to total thyroidectomy (option 4) skips the diagnosis." },
+      { stem: "An FNA returns 'follicular neoplasm' (Bethesda IV). The appropriate next step is:",
+        options: ["Reassure — it is benign", "Diagnostic (hemi)thyroid lobectomy", "Total thyroidectomy with neck dissection", "Repeat FNA in 2 years"],
+        correct: 1, explanation: "Follicular carcinoma is diagnosed by capsular/vascular invasion, which FNA cannot show, so a follicular neoplasm needs a diagnostic lobectomy (molecular testing can refine risk). It is not simply benign (option 1), total thyroidectomy with neck dissection (option 2) is over-treatment before a diagnosis, and a 2-year delay (option 4) is unsafe for an indeterminate nodule." },
+      { stem: "Before operating on medullary thyroid carcinoma, which must be excluded to avoid a dangerous intraoperative crisis?",
+        options: ["Hyperparathyroidism", "Pheochromocytoma", "Graves disease", "Hashimoto thyroiditis"],
+        correct: 1, explanation: "Medullary carcinoma is associated with MEN 2, which includes pheochromocytoma; an unrecognized pheochromocytoma can cause a fatal hypertensive crisis during surgery, so it must be excluded (and treated first). Hyperparathyroidism (option 1) is also in MEN 2 but is not the acute intraoperative danger. Graves (option 2) and Hashimoto (option 3) are unrelated to this specific crisis." },
+      { stem: "During thyroidectomy, at which site is the recurrent laryngeal nerve most likely to be injured?",
+        options: ["At the thoracic inlet", "At the ligament of Berry", "At the isthmus", "At the pyramidal lobe"],
+        correct: 1, explanation: "The RLN lies closest to the gland at the ligament of Berry (its posterior suspensory ligament), the classic injury site. The thoracic inlet (option 1), isthmus (option 2), and pyramidal lobe (option 3) are not where the nerve is most vulnerable." },
+      { stem: "Two hours after total thyroidectomy, a patient has a rapidly enlarging, tense neck and stridor. The immediate action is:",
+        options: ["Obtain a stat CT of the neck", "Open the wound at the bedside to evacuate the hematoma", "Give IV calcium", "Nebulized epinephrine and observe"],
+        correct: 1, explanation: "An expanding neck hematoma compressing the airway is an emergency — open the wound at the bedside immediately to decompress, then go to the OR. A CT (option 1) dangerously delays airway relief. IV calcium (option 2) treats hypocalcemia, not a hematoma. Nebulized epinephrine with observation (option 4) will not relieve mechanical compression and risks losing the airway." },
+      { stem: "To protect the external branch of the superior laryngeal nerve during thyroidectomy, you should:",
+        options: ["Ligate the superior pole vessels high, away from the capsule", "Ligate the superior pole vessels low, individually, on the thyroid capsule", "Divide the inferior thyroid artery first", "Avoid identifying the recurrent laryngeal nerve"],
+        correct: 1, explanation: "Ligating the superior pole vessels low and individually, right on the thyroid capsule, keeps you away from the EBSLN and protects it (preserving high pitch). Ligating high/en masse (option 1) risks the nerve. The inferior thyroid artery (option 3) relates to the RLN and parathyroids, not the EBSLN, and you should always identify the RLN (option 4)." }
+    ],
+    signs: [
+      { name: "Expanding tense neck with stridor post-thyroidectomy", category: "clinical", description: "Rapid neck swelling and respiratory distress hours after surgery.", implication: "Airway-compromising hematoma — OPEN the wound at the bedside immediately, then OR." },
+      { name: "Perioral/fingertip tingling, Chvostek/Trousseau", category: "clinical", description: "Neuromuscular irritability from low calcium after total thyroidectomy.", implication: "Hypocalcemia/hypoparathyroidism — check Ca and PTH; treat with calcium + calcitriol." },
+      { name: "Breathy, hoarse voice after surgery", category: "clinical", description: "New dysphonia with an immobile vocal fold.", implication: "Recurrent laryngeal nerve injury (unilateral); bilateral → airway obstruction." },
+      { name: "Elevated calcitonin / CEA", category: "lab", description: "Tumor markers of medullary thyroid carcinoma.", implication: "Medullary carcinoma — test RET/MEN 2 and rule out pheochromocytoma before surgery." },
+      { name: "Hot nodule on radioiodine scan", category: "lab", description: "Hyperfunctioning nodule with suppressed TSH.", implication: "Almost always benign — usually no FNA needed." }
+    ],
+    podcastTitle: "Deep Dive · Management of Thyroid Neoplasms",
+    podcastDuration: "~21 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, here with Marcus. You're doing a thyroidectomy tomorrow, so this is the chapter: the work-up, the cancers, and above all the surgical anatomy and complications. Marcus, start with the nodule work-up, because it begins long before the OR." },
+      { speaker: "cohost", text: "The rule is TSH first. Always start with a TSH. If the TSH is low, the nodule might be hyperfunctioning, so you get a radioiodine scan — and a hot, hyperfunctioning nodule is almost always benign, so it usually doesn't even need an FNA. If the TSH is normal or high, you go to ultrasound, and you FNA based on size and suspicious features. The suspicious ultrasound features to know are hypoechogenicity, microcalcifications, a taller-than-wide shape, irregular margins, and extrathyroidal extension." },
+      { speaker: "host",   text: "And the FNA reporting?" },
+      { speaker: "cohost", text: "The Bethesda system, six categories: one nondiagnostic, two benign, three atypia of undetermined significance, four follicular neoplasm, five suspicious for malignancy, six malignant — each with its own malignancy risk and management. For the indeterminate categories, three and four, molecular testing like Afirma or ThyroSeq helps refine whether you operate. And a key teaching point lives in category four: a follicular neoplasm can't be called cancer on FNA." },
+      { speaker: "host",   text: "Explain that, because it's a classic." },
+      { speaker: "cohost", text: "Follicular carcinoma is diagnosed by capsular or vascular invasion — you have to see the tumor breaching its capsule or getting into vessels, which requires the whole architecture, not a cytology smear. So FNA can't distinguish a benign follicular adenoma from a follicular carcinoma; both look like a follicular neoplasm. That's why Bethesda four leads to a diagnostic lobectomy — you take the lobe to get the histology." },
+      { speaker: "host",   text: "Run the cancers for me." },
+      { speaker: "cohost", text: "Papillary is the most common, about eighty percent — it spreads through lymphatics to neck nodes, has an excellent prognosis, and shows psammoma bodies and 'Orphan Annie' nuclei, often with a BRAF mutation. Follicular spreads hematogenously to lung and bone and, as we said, needs invasion to diagnose. Medullary comes from the parafollicular C cells, secretes calcitonin and CEA as markers, and is linked to RET mutations and MEN two — and the critical surgical point is you must rule out a pheochromocytoma before you operate. Anaplastic is the elderly patient with a rapidly enlarging, airway-threatening mass and a dismal prognosis. And thyroid lymphoma arises in a Hashimoto background." },
+      { speaker: "host",   text: "Why is the pheochromocytoma point so important?" },
+      { speaker: "cohost", text: "Because medullary carcinoma can be part of MEN two, which includes pheochromocytoma, and if you take a patient with an undiagnosed pheochromocytoma to the OR, the anesthetic and surgical stress can trigger a catastrophic hypertensive crisis. So in medullary cancer you screen for and treat the pheochromocytoma first — operate on the adrenal before the thyroid. It's a can't-miss sequencing rule." },
+      { speaker: "host",   text: "Extent of surgery — lobectomy versus total." },
+      { speaker: "cohost", text: "For low-risk differentiated cancer — a unifocal tumor four centimeters or smaller, no extrathyroidal extension, no nodal or distant disease — a lobectomy is appropriate. You go to total thyroidectomy for tumors bigger than four centimeters, gross extrathyroidal extension, bilateral disease, nodal or distant metastases, prior radiation, or when you're planning radioactive iodine, which needs the whole gland gone. A central compartment, level six, neck dissection is therapeutic when there are clinically positive central nodes; doing it prophylactically is controversial — it may cut regional recurrence without a proven survival benefit and adds parathyroid and nerve risk." },
+      { speaker: "host",   text: "Now the anatomy you need in your hands tomorrow. The recurrent laryngeal nerve." },
+      { speaker: "cohost", text: "The recurrent laryngeal nerve ascends in the tracheoesophageal groove and has a variable relationship to the inferior thyroid artery — it can run anterior to the artery, posterior, or interdigitate between its branches, so you don't assume, you identify. The place it's most vulnerable is the ligament of Berry, the posterior suspensory ligament, because that's where the nerve lies closest to the gland as it enters the larynx. And the classic trap: on the right, rarely, the nerve is non-recurrent — it comes directly off the vagus because of an aberrant right subclavian artery, the arteria lusoria. Injure the nerve on one side and you get a hoarse, breathy voice; injure both and you get airway obstruction." },
+      { speaker: "host",   text: "And the superior laryngeal nerve?" },
+      { speaker: "cohost", text: "The external branch of the superior laryngeal nerve runs near the superior pole alongside the superior thyroid artery, and it drives the cricothyroid, the pitch muscle. To protect it, you ligate the superior pole vessels low and individually, right on the thyroid capsule, rather than grabbing a big pedicle up high. Injure it and the patient loses their high pitch and the voice fatigues — the classic subtle post-thyroidectomy voice injury." },
+      { speaker: "host",   text: "Parathyroids." },
+      { speaker: "cohost", text: "Four glands, and their blood supply is mainly the inferior thyroid artery, so you dissect on the thyroid capsule and preserve the little parathyroid branches. The superior parathyroids, from the fourth pouch, are more constant, usually posterior near the cricothyroid junction; the inferior parathyroids, from the third pouch, are more variable and migrate with the thymus. If you devascularize or accidentally remove one, you autotransplant it — mince it and tuck it into a muscle pocket, typically the sternocleidomastoid — to preserve function. And a nice landmark is the tubercle of Zuckerkandl: the recurrent nerve runs deep and medial to it." },
+      { speaker: "host",   text: "Complications — the ones that define the first postoperative day." },
+      { speaker: "cohost", text: "Recurrent nerve injury, which you minimize by identifying and monitoring the nerve. Hypocalcemia from parathyroid injury — common and usually transient after total thyroidectomy, permanent if all four glands are compromised; the patient gets perioral and fingertip numbness and tingling, you can elicit Chvostek and Trousseau signs, and you check calcium and PTH and treat with calcium and calcitriol, the active vitamin D. External superior laryngeal nerve injury. Hypothyroidism. Thyroid storm if you operated on uncontrolled Graves. A seroma. And a chyle leak in the low left neck from the thoracic duct. But the one that will kill a patient on the ward is the postoperative neck hematoma." },
+      { speaker: "host",   text: "Drill that one — it's the emergency." },
+      { speaker: "cohost", text: "An expanding neck hematoma after thyroidectomy is an airway emergency. The patient develops a rapidly enlarging, tense neck and then stridor and respiratory distress — the clot compresses the airway, partly through venous and lymphatic congestion of the larynx. The action is not to order a CT and not to wait — you open the wound at the bedside immediately, evacuate the clot to decompress the airway, and then take them back to the OR for definitive hemostasis. Every thyroid ward should have a clip remover or suture scissors at the bedside for exactly this. Opening the neck at the bedside saves the airway." },
+      { speaker: "host",   text: "Let's do a case built for your day. A 45-year-old with a 2.5 cm papillary carcinoma on FNA, no extrathyroidal extension, no abnormal nodes, normal contralateral lobe. What operation, and what are you protecting?" },
+      { speaker: "cohost", text: "A unifocal papillary cancer at two-and-a-half centimeters, no extrathyroidal extension, no nodes — that's low-risk, and a lobectomy is appropriate; you wouldn't automatically do a total unless there's a reason like planned radioactive iodine or bilateral disease. Intraoperatively I identify and preserve the recurrent laryngeal nerve in the tracheoesophageal groove, watching it especially at the ligament of Berry; I ligate the superior pole vessels low on the capsule to protect the external superior laryngeal nerve; and I meticulously preserve the parathyroids and their inferior-thyroid-artery blood supply, autotransplanting any that look devascularized. Nerve monitoring is on. Postop I watch the neck for hematoma and check calcium if it becomes a completion or total." },
+      { speaker: "host",   text: "Twist: on the first postoperative evening she has tingling around her mouth and in her fingertips, and Chvostek is positive. Manage it." },
+      { speaker: "cohost", text: "That's hypocalcemia from transient hypoparathyroidism — common after a total or completion thyroidectomy. I check a calcium, ideally an ionized calcium, and a PTH, and I start oral calcium and calcitriol, the active vitamin D, escalating to IV calcium if she's symptomatic or severely low. Most of these are transient and resolve as the parathyroids recover; permanent hypoparathyroidism is the feared outcome if all four glands were damaged, which is exactly why intraoperative parathyroid preservation matters so much." },
+      { speaker: "host",   text: "One more, quick: two hours post-op a different patient has a tense, swelling neck and is starting to struggle to breathe. What do you do in the next sixty seconds?" },
+      { speaker: "cohost", text: "Open the neck at the bedside right now. That's an expanding hematoma compressing the airway, and the life-saving move is to release the skin and strap-muscle closure immediately to evacuate the clot and decompress — you do not wait for imaging or the OR. Then secure the airway and take them back for definitive hemostasis. Bedside decompression first; everything else second." },
+      { speaker: "host",   text: "Give me the five to walk out with." },
+      { speaker: "cohost", text: "One: work up a nodule with TSH first — low means scan and a hot nodule is benign; normal or high means ultrasound and FNA by Bethesda — and a follicular neoplasm needs a diagnostic lobectomy because FNA can't show invasion. Two: know the cancers — papillary lymphatic and common, follicular hematogenous, medullary with calcitonin and RET where you rule out pheochromocytoma first, anaplastic the airway emergency, lymphoma on Hashimoto. Three: lobectomy for low-risk tumors four centimeters or less; total thyroidectomy for larger, extrathyroidal, bilateral, nodal, or radioiodine-planned disease." },
+      { speaker: "host",   text: "Four and five." },
+      { speaker: "cohost", text: "Four: the recurrent laryngeal nerve is in the tracheoesophageal groove, variable to the inferior thyroid artery, most vulnerable at the ligament of Berry, and non-recurrent on the right with an arteria lusoria; protect the external superior laryngeal nerve by ligating the superior pole low on the capsule, and preserve the parathyroids on their inferior-thyroid-artery supply, autotransplanting devascularized ones. Five: the complications are recurrent nerve injury, hypocalcemia treated with calcium and calcitriol, and the airway-threatening postoperative hematoma that you open at the bedside immediately — plus thyroid storm and chyle leak." },
+      { speaker: "host",   text: "TSH to FNA, know your nerves and parathyroids, and open the neck at the bedside if it bleeds — that's your thyroidectomy." },
+      { speaker: "cohost", text: "That's the chapter." }
+    ]
+  },
   119: {
     objectives: [
       'Distinguish papillary from follicular thyroid cancer clinically and pathologically.',
@@ -23393,12 +24127,12 @@ function renderMobileTabbar() {
   const items = [
     { id: 'dashboard',  label: 'Home',     icon: I.home },
     { id: 'curriculum', label: 'Chapters', icon: I.curriculum },
-    { id: 'tumor-board', label: 'Tumor', icon: I.book },
+    { id: 'podcast',    label: 'Podcasts', icon: I.podcast || I.book },
     { id: 'practice',   label: 'Practice', icon: I.quiz }
   ];
   const moreIcon = '<svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
   // "More" surfaces every other section so nothing is unreachable on phones.
-  const moreViews = ['tumor-board','my-research','research','notebook','projects','resources'];
+  const moreViews = ['podcast','notebook','resources'];
   const moreActive = moreViews.indexOf(state.view) > -1 || state.mmOpen;
   return `
     <div class="mobile-tabbar">
@@ -23421,13 +24155,8 @@ function renderMobileMore() {
     { id: 'dashboard',  label: 'Home',         emoji: '🏠' },
     { id: 'curriculum', label: 'Curriculum',   emoji: '📚' },
     { id: 'podcast',    label: 'Podcasts',     emoji: '🎙️' },
-    { id: 'tumor-board',label: 'Tumor Board',  emoji: '🎗️' },
     { id: 'practice',   label: 'Practice',     emoji: '🎯' },
-    { id: 'research',   label: 'Research update', emoji: '🔬' },
-    { id: 'my-research',label: 'My Research',  emoji: '🧪', mgr: true },
     { id: 'notebook',   label: 'My Notes',     emoji: '📓' },
-    { id: 'projects',   label: 'Projects',     emoji: '🗂️', mgr: true },
-    { id: 'dashboard-mgr', label: 'Doctors',   emoji: '👥', mgr: true },
     { id: 'resources',  label: 'Settings',     emoji: '⚙️' }
   ].filter(it => isManager() || !it.mgr);
   return `
@@ -23459,20 +24188,15 @@ function renderSidebar() {
     { id: 'dashboard',  label: 'Home 🏠',             icon: I.home || I.curriculum },
     { id: 'curriculum', label: 'Curriculum',          icon: I.curriculum },
     { id: 'podcast',    label: 'Podcasts 🎙️',          icon: I.podcast || I.book },
-    { id: 'tumor-board', label: 'Tumor Board 🎗️',     icon: I.book },
     { id: 'practice',   label: 'Practice 🎯',         icon: I.quiz },
-    { id: 'research',   label: 'Research 🔬',         icon: I.book },
-    { id: 'my-research', label: 'My Research 🧪',    icon: I.book, mgr: true },
     { id: 'notebook',   label: 'My Notes 📓',        icon: I.book },
-    { id: 'projects',   label: 'Projects 🧪',         icon: I.book, mgr: true },
-    { id: 'dashboard-mgr', label: 'Doctors 👥',       icon: I.book, mgr: true },
     { id: 'resources',  label: 'Settings ⚙️',         icon: I.gear || I.book }
   ].filter(it => isManager() || !it.mgr);
   // Show "Recent project" shortcut if one exists
   let recentProjectHTML = '';
   const sortedProjects = (state.projects || []).slice().sort((a,b) =>
     (b.updatedAt || b.createdAt || '').localeCompare(a.updatedAt || a.createdAt || ''));
-  const recent = sortedProjects[0];
+  const recent = null; // projects removed from learning-only nav
   if (recent) {
     const isActive = state.view === 'projects' && state.activeProjectId === recent.id;
     recentProjectHTML = `
@@ -24049,6 +24773,32 @@ window.__jumpToSection = function(id){
     if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch(_){}
 };
+/* Side-rail quick scroll: glide the curriculum list to (the nearest card at or after) a chapter
+   number — e.g. 50/100/150/200 — so reaching the middle of the book is one tap, no hunting.
+   This SCROLLS the list (keeps you in the curriculum); it does not open the chapter. */
+window.__scrollToChapter = function(n){
+  try {
+    n = parseInt(n, 10); if (isNaN(n)) return;
+    if (n <= 0) { try { safeScrollTo(0); } catch(_){}; return; }
+    var cards = Array.prototype.slice.call(document.querySelectorAll('[id^="wk-card-"]'));
+    if (!cards.length) return;
+    var best = null, bestDiff = Infinity, maxCh = 0;
+    cards.forEach(function(el){
+      var c = parseInt(el.getAttribute('data-chapter'), 10); if (isNaN(c)) return;
+      if (c > maxCh) maxCh = c;
+      var d = c - n;
+      // prefer the first card at or after n; fall back to closest below if none above
+      if (d >= 0 && d < bestDiff) { bestDiff = d; best = el; }
+    });
+    if (!best) { // n is past the last chapter → go to the highest card
+      cards.forEach(function(el){ if (parseInt(el.getAttribute('data-chapter'),10) === maxCh) best = el; });
+    }
+    if (best && best.scrollIntoView) {
+      best.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      try { best.classList.add('wk-flash'); setTimeout(function(){ best.classList.remove('wk-flash'); }, 1400); } catch(_){}
+    }
+  } catch(_){}
+};
 function renderCurriculum() {
   const sectionGroups = SECTIONS.map(sec => ({
     sec,
@@ -24100,6 +24850,18 @@ function renderCurriculum() {
     </div>
 
     ${searching ? smartResultsHTML(sq) : `
+    ${(() => {
+      // Quick-scroll side rail: Top, chapter milestones (50/100/150/200), End.
+      const maxCh = CURRICULUM.reduce((m, w) => Math.max(m, w.chapter || w.week || 0), 0);
+      const stops = [50, 100, 150, 200].filter(n => n <= maxCh);
+      return `
+      <div class="chapter-rail" role="navigation" aria-label="Jump to chapter">
+        <div class="chapter-rail-label">Jump</div>
+        <button class="rail-ends" title="Top of the curriculum" onclick="window.__scrollToChapter(0)" aria-label="Top">↑</button>
+        ${stops.map(n => `<button title="Scroll to around chapter ${n}" onclick="window.__scrollToChapter(${n})">${n}</button>`).join('')}
+        <button class="rail-ends" title="End of the curriculum" onclick="window.__scrollToChapter(${maxCh})" aria-label="End">↓</button>
+      </div>`;
+    })()}
     <!-- Status legend -->
     <div class="curriculum-legend">
       <div class="legend-item"><span class="legend-swatch swatch-done"></span> <strong>Completed</strong> · marked done</div>
@@ -24142,7 +24904,7 @@ function renderCurriculum() {
                       : w.missing          ? 'PDF not uploaded yet'
                       :                      'Outline only';
             return `
-              <div class="${cls}" data-action="open-week" data-week="${w.week}">
+              <div class="${cls}" id="wk-card-${w.chapter || w.week}" data-chapter="${w.chapter || w.week}" data-action="open-week" data-week="${w.week}">
                 <div class="week-num">${numLabel}</div>
                 <div style="flex:1;min-width:0;">
                   <div class="week-title">${w.title}</div>
@@ -27060,7 +27822,7 @@ function renderResources() {
       <p style="margin:0 0 14px;font-size:13.5px;color:var(--text-soft);line-height:1.6;">To be fully safe, download a backup file. You can restore it after any update, on a new phone, or in a different browser — so you never lose a thing.</p>
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
         <button class="btn btn-primary" data-action="backup-progress">⬇️ Download backup</button>
-        <label class="btn btn-light" style="cursor:pointer;margin:0;">⬆️ Restore from backup<input type="file" accept="application/json,.json" style="display:none;" onchange="window.__importProgress(this)"></label>
+        <label class="btn btn-light" style="cursor:pointer;margin:0;">⬆️ Restore from backup<input type="file" style="display:none;" onchange="window.__importProgress(this)"></label>
         <span id="backup-status" style="font-size:12.5px;color:var(--text-soft);"></span>
       </div>
       <div style="margin-top:12px;background:var(--bg-mute);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12.5px;color:var(--text-soft);line-height:1.55;">
@@ -31281,10 +32043,37 @@ function renderNotebook() {
 /* ---------- BACKUP & RESTORE (full study state) ----------
    Downloads / restores exactly what the app persists to localStorage, so a user can carry
    their progress across app updates, web addresses, browsers, and devices. */
+/* Count completed chapters across the manager bucket + every client bucket in a store object. */
+function _countCompleted(store) {
+  try {
+    let n = 0;
+    const tally = p => { if (p) Object.keys(p).forEach(k => { if (p[k] && p[k].completed) n++; }); };
+    if (store) {
+      tally(store.managerProgress || store.progress);
+      const cp = store.clientProgress || {};
+      Object.keys(cp).forEach(name => { if (cp[name]) tally(cp[name].progress); });
+    }
+    return n;
+  } catch (e) { return 0; }
+}
 function exportProgress() {
   try {
-    persist(); // make sure the very latest state is written before we read it
-    const raw = localStorage.getItem(STORE_KEY) || '{}';
+    persist();          // flush the latest live state to the main store
+    _writeCritical();   // and to the small critical bucket
+    const parse = k => { try { const r = localStorage.getItem(k); return r ? JSON.parse(r) : null; } catch (e) { return null; } };
+    const store = parse(STORE_KEY) || {};
+    // Self-contained, versioned envelope: carries ALL three storage buckets so a restore can
+    // rebuild progress even if one bucket was trimmed/evicted on the original device.
+    const envelope = {
+      __entAcademyBackup: true,
+      version: 2,
+      savedAt: new Date().toISOString(),
+      completedChapters: _countCompleted(store),
+      store: store,
+      critical: parse(CRIT_KEY),
+      prog: parse(PROG_KEY)
+    };
+    const raw = JSON.stringify(envelope);
     const blob = new Blob([raw], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -31296,7 +32085,7 @@ function exportProgress() {
     a.remove();
     setTimeout(() => { try { URL.revokeObjectURL(url); } catch (e) {} }, 2000);
     const kb = Math.max(1, Math.round(raw.length / 1024));
-    if (typeof appToast === 'function') appToast('✓ Backup downloaded (' + kb + ' KB) — keep this file; restore it anytime to recover your progress.');
+    if (typeof appToast === 'function') appToast('✓ Backup downloaded (' + envelope.completedChapters + ' chapters, ' + kb + ' KB). Keep this file — restore it anytime, on any device.');
   } catch (e) {
     alert('Backup failed: ' + (e && e.message ? e.message : e));
   }
@@ -31308,16 +32097,37 @@ window.__importProgress = function (input) {
   reader.onload = function (e) {
     try {
       const data = JSON.parse(String(e.target.result || '{}'));
-      if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('This is not a valid ENT Academy backup file.');
-      const chapters = data.progress ? Object.keys(data.progress).length : 0;
-      if (!confirm('Restore this backup?\n\nIt contains ' + chapters + ' chapter records and will replace the current progress on this device.')) {
+      if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error('This file is not a valid ENT Academy backup.');
+      // Accept BOTH the new envelope (version 2) and a legacy raw-store backup.
+      const isEnvelope = data.__entAcademyBackup === true || data.version === 2 || ('store' in data && ('critical' in data || 'prog' in data));
+      const store    = isEnvelope ? (data.store || {}) : data;
+      const critical = isEnvelope ? data.critical : null;
+      const prog     = isEnvelope ? data.prog : null;
+      if (!store || typeof store !== 'object') throw new Error('This file is not a valid ENT Academy backup.');
+      const chapters = _countCompleted(store) || (store.managerProgress ? Object.keys(store.managerProgress).length : (store.progress ? Object.keys(store.progress).length : 0));
+      if (!confirm('Restore this backup?\n\nIt contains ' + chapters + ' completed chapters and will be merged into this device (your existing progress is never lost — the best of both is kept).')) {
         input.value = ''; return;
       }
-      localStorage.setItem(STORE_KEY, JSON.stringify(data));
+      // Write every bucket we have, so loadStored() and the self-heal paths all see the data.
+      try { localStorage.setItem(STORE_KEY, JSON.stringify(store)); } catch (qe) {}
+      if (critical) { try { localStorage.setItem(CRIT_KEY, JSON.stringify(critical)); } catch (qe) {} }
+      if (prog)     { try { localStorage.setItem(PROG_KEY, JSON.stringify(prog));   } catch (qe) {} }
+      // Mirror into IndexedDB too, so an eviction of localStorage self-heals from the restored data.
+      try {
+        if (typeof idbPut === 'function') {
+          idbPut('app-state-backup', JSON.stringify(store)).catch(function(){});
+          if (critical) idbPut('app-critical-backup', JSON.stringify(critical)).catch(function(){});
+        }
+      } catch (ie) {}
+      // Rebuild live state from the restored buckets (loadStored also merges the critical fallback,
+      // so completed chapters are unioned — nothing is lost), then flush it back out cleanly.
       loadStored();
+      try { if (typeof bindProgressForUser === 'function') bindProgressForUser(); } catch (be) {}
+      try { persist(); } catch (pe) {}
+      const restored = _countCompleted({ managerProgress: state.managerProgress, clientProgress: state.clientProgress });
       setState({ view: 'dashboard' });
       safeScrollTo(0);
-      if (typeof appToast === 'function') appToast('✓ Progress restored from your backup.');
+      if (typeof appToast === 'function') appToast('✓ Restored — ' + restored + ' completed chapters are back.');
     } catch (err) {
       alert('Could not restore: ' + (err && err.message ? err.message : err));
     }
