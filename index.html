@@ -3679,22 +3679,52 @@
     font-size: 12px;
   }
   /* ---- Curriculum quick-scroll side rail (jump to the middle of the book in one tap) ---- */
-  .chapter-rail {
-    position: fixed; right: 14px; top: 50%; transform: translateY(-50%);
-    z-index: 60; display: flex; flex-direction: column; gap: 6px;
-    background: var(--card); border: 1px solid var(--border); border-radius: 999px;
-    padding: 8px 6px; box-shadow: 0 6px 24px rgba(11,30,54,.14);
+  /* Floating "Chapters" button that opens a pop-up navigator by book Part */
+  .chapnav-fab {
+    position: fixed; right: 18px; bottom: 22px; z-index: 70;
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--navy-900, #0b1e36); color: #fff; border: none;
+    padding: 12px 18px; border-radius: 999px; cursor: pointer;
+    font-size: 14px; font-weight: 700; box-shadow: 0 8px 28px rgba(11,30,54,.28);
+    transition: transform .12s, box-shadow .12s;
   }
-  .chapter-rail-label { font-size: 9.5px; letter-spacing: .04em; text-transform: uppercase;
-    color: var(--text-faint); text-align: center; margin-bottom: 1px; }
-  .chapter-rail button {
-    border: none; background: var(--bg-mute); color: var(--navy-900);
-    width: 42px; height: 34px; border-radius: 999px; cursor: pointer;
-    font-size: 13px; font-weight: 700; line-height: 1; transition: background .15s, transform .1s;
+  .chapnav-fab:hover { transform: translateY(-1px); box-shadow: 0 10px 32px rgba(11,30,54,.34); }
+  .chapnav-fab:active { transform: scale(.97); }
+  .chapnav-backdrop {
+    position: fixed; inset: 0; z-index: 71; background: rgba(5,11,20,.42);
+    display: none; align-items: flex-end; justify-content: flex-end;
   }
-  .chapter-rail button:hover { background: var(--accent, #4338ca); color: #fff; }
-  .chapter-rail button:active { transform: scale(.94); }
-  .chapter-rail button.rail-ends { font-size: 15px; background: transparent; height: 28px; }
+  .chapnav-backdrop.open { display: flex; }
+  .chapnav-panel {
+    background: var(--card, #fff); color: var(--text, #0b1e36);
+    width: min(420px, 92vw); max-height: 78vh; margin: 0 16px 92px 0;
+    border: 1px solid var(--border); border-radius: 18px; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(5,11,20,.45); display: flex; flex-direction: column;
+    animation: chapnavIn .16s ease-out;
+  }
+  @keyframes chapnavIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .chapnav-head {
+    padding: 16px 18px 12px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  }
+  .chapnav-head h3 { margin: 0; font-family: var(--font-serif); font-size: 18px; color: var(--navy-900); }
+  .chapnav-close { border: none; background: var(--bg-mute); color: var(--text-soft);
+    width: 30px; height: 30px; border-radius: 999px; cursor: pointer; font-size: 16px; line-height: 1; }
+  .chapnav-go { display: flex; gap: 8px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--border); }
+  .chapnav-go input { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid var(--border);
+    border-radius: 9px; font-size: 14px; background: var(--card); color: var(--text); outline: none; }
+  .chapnav-go button { border: none; background: var(--accent, #4338ca); color: #fff;
+    padding: 10px 14px; border-radius: 9px; font-weight: 700; cursor: pointer; font-size: 14px; }
+  .chapnav-list { overflow-y: auto; padding: 8px; }
+  .chapnav-item {
+    display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+    padding: 12px 14px; border: none; background: transparent; border-radius: 11px;
+    cursor: pointer; color: var(--text); transition: background .12s;
+  }
+  .chapnav-item:hover { background: var(--bg-mute); }
+  .chapnav-stripe { width: 6px; height: 34px; border-radius: 4px; flex-shrink: 0; }
+  .chapnav-item-title { font-weight: 650; font-size: 14.5px; color: var(--navy-900); line-height: 1.25; }
+  .chapnav-item-sub { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
   .wk-flash { animation: wkFlash 1.3s ease-out; }
   @keyframes wkFlash {
     0% { box-shadow: 0 0 0 0 rgba(67,56,202,.0); }
@@ -3702,9 +3732,8 @@
     100% { box-shadow: 0 0 0 0 rgba(67,56,202,0); }
   }
   @media (max-width: 720px) {
-    .chapter-rail { right: 8px; padding: 6px 5px; gap: 5px; }
-    .chapter-rail button { width: 38px; height: 30px; font-size: 12px; }
-    .chapter-rail-label { display: none; }
+    .chapnav-fab { right: 12px; bottom: 76px; padding: 11px 16px; font-size: 13px; }
+    .chapnav-panel { margin: 0 8px 96px 0; width: 94vw; }
   }
 </style>
 <style id="loader-v2-css">
@@ -3977,6 +4006,7 @@ const I = {
 
 /* ---------------- SECTIONS (Cummings 8e Parts) ---------------- */
 const SECTIONS = [
+  { id: 'surgprep',    name: '⭐ Surgery Prep · on-call',                          chapters: 'prep',   volume: 'Prep',   color: '#eab308' },
   { id: 'foundations', name: 'Foundations',                                       chapters: '1–4',    volume: 'Vol. 1', color: '#64748b' },
   { id: 'part1',       name: 'Part 1 · General Otolaryngology',                   chapters: '5–14',   volume: 'Vol. 1', color: '#3b82f6' },
   { id: 'part2',       name: 'Part 2 · Facial Plastic & Reconstructive Surgery',  chapters: '15–33',  volume: 'Vol. 1', color: '#f97316' },
@@ -3988,6 +4018,11 @@ const SECTIONS = [
 ];
 
 /* ---------------- CURRICULUM (Cummings 8e — chapter-ordered, 215 chapters) ---------------- */
+/* Surgery-prep units (not Cummings chapters) — focused study for upcoming operations. */
+const SURGERY_PREP = [
+  { week: 900, section: 'surgprep', chapter: 900, prep: true, title: 'Tonsillectomy, Revision & Tonsilloliths', chapters: 'Surgery prep · Tonsil' },
+  { week: 901, section: 'surgprep', chapter: 901, prep: true, title: 'Thyroglossal Duct Cyst & the Sistrunk Procedure', chapters: 'Surgery prep · Neck' }
+];
 /* Foundations (chs 1-4) = research / statistics / disparities / COVID — summarized as one unit.
    All remaining chapters (5-215) are individual units in chapter order. */
 const FOUNDATIONS_SUMMARY = `
@@ -4001,6 +4036,7 @@ const FOUNDATIONS_SUMMARY = `
   </ul>
 `;
 const CURRICULUM = [
+  ...SURGERY_PREP,
   // ====== FOUNDATIONS ======
   { week: 1, section: 'foundations', chapter: null, chapterRange: '1–4', title: 'Foundations — Research, Statistics, Disparities & COVID-19', chapters: 'Vol. 1 · Ch. 1–4', page: 2, isFoundations: true },
 
@@ -15751,6 +15787,269 @@ const CONTENT = {
       { speaker: "cohost", text: "That's the chapter." }
     ]
   },
+  900: {
+    objectives: [
+      "Describe tonsillar anatomy, the tonsillar bed, and the blood supply relevant to surgery.",
+      "State the indications for tonsillectomy, including tonsilloliths and revision/completion.",
+      "Explain why tonsilloliths form and recur, especially in a crypt-bearing tonsil remnant.",
+      "Compare intracapsular vs extracapsular techniques and the specific challenges of revision surgery.",
+      "Recognize and manage post-tonsillectomy hemorrhage (primary vs secondary) and other complications."
+    ],
+    summary: `
+      <h4>1. Anatomy — fossa, bed, and the five arteries</h4>
+      <p>The <strong>palatine tonsil</strong> sits in the tonsillar fossa between the <strong>palatoglossal (anterior) and palatopharyngeal (posterior) pillars</strong>, with a <strong>fibrous capsule</strong> on its deep (lateral) surface and deep <strong>crypts</strong> on its medial surface. The surgical <strong>bed is the superior constrictor muscle</strong>. Blood supply comes from <strong>five vessels</strong>, mostly branches of the external carotid: the <strong>tonsillar branch of the facial artery</strong> (dominant, at the lower pole), the <strong>ascending pharyngeal</strong>, the <strong>lingual (dorsal lingual branch)</strong>, the <strong>ascending palatine (facial)</strong>, and the <strong>descending palatine (maxillary)</strong>. The <strong>glossopharyngeal nerve</strong> runs just deep to the lower pole (injury causes tongue-base numbness and referred otalgia), and the <strong>internal carotid artery lies ~2–2.5 cm posterolateral</strong> — important when dissecting a scarred bed.</p>
+      <h4>2. Indications for tonsillectomy</h4>
+      <p><strong>Recurrent tonsillitis</strong> by <strong>Paradise criteria</strong> (≥7 episodes in 1 year, ≥5/year for 2 years, or ≥3/year for 3 years); <strong>obstructive sleep-disordered breathing</strong> (the commonest pediatric indication); <strong>recurrent or complicated peritonsillar abscess</strong>; <strong>symptomatic tonsilloliths</strong> (halitosis, foreign-body sensation, recurrent debris); <strong>tonsillar asymmetry or suspected malignancy (lymphoma/SCC)</strong>; and <strong>chronic tonsillitis</strong>.</p>
+      <h4>3. Tonsilloliths and why they recur in a remnant</h4>
+      <p><strong>Tonsilloliths</strong> are calcified debris that accumulate in the <strong>tonsillar crypts</strong>, causing <strong>halitosis, a foreign-body/globus sensation, and recurrent white debris</strong>. They are driven by deep, retentive crypts — so they are especially problematic in a <strong>crypt-bearing tonsillar remnant</strong>, for example after a prior <strong>intracapsular (partial) tonsillectomy</strong> or tonsillar regrowth. Conservative measures (gargles, manual/water-jet expression, improved oral hygiene) help, but <strong>recurrent, symptomatic stones in a remnant are a classic indication for completion/revision tonsillectomy</strong> to remove the remaining crypt-bearing tissue.</p>
+      <h4>4. Techniques — intracapsular vs extracapsular, and revision</h4>
+      <p><strong>Extracapsular (total) tonsillectomy</strong> dissects the whole tonsil off the capsule/constrictor (cold steel with ligation, monopolar/bipolar electrocautery, coblation, or harmonic). <strong>Intracapsular (partial)</strong> tonsillectomy leaves a thin rim of tonsil on the capsule — <strong>less pain and less bleeding</strong>, but a risk of <strong>regrowth and persistent crypts/tonsilloliths</strong>. <strong>Revision/completion tonsillectomy</strong> (for regrowth, retained crypt tissue, or recurrent stones) is harder: <strong>scarring obliterates the normal plane, distorts landmarks, and raises the bleeding risk</strong>, so you stay meticulous on the capsule/constrictor plane and take special care at the lower pole where the facial artery's tonsillar branch enters.</p>
+      <h4>5. Hemorrhage — the complication that matters</h4>
+      <p><strong>Primary hemorrhage</strong> occurs <strong>within 24 hours</strong>, is usually <strong>technical</strong>, and is the more dangerous. <strong>Secondary hemorrhage</strong> occurs classically on <strong>postoperative day 5–10</strong> as the <strong>eschar sloughs</strong>. Management: resuscitate and <strong>secure the airway</strong>, assess the bed; a small clot/ooze may be observed or cauterized under local, but <strong>active bleeding mandates return to the operating room</strong> for control/ligation under general anesthesia. <strong>Tranexamic acid</strong> is a useful adjunct. Any post-tonsillectomy bleed is treated seriously because of airway and aspiration risk, and it is worse in a <strong>revision</strong> bed.</p>
+      <h4>6. Other complications and perioperative care</h4>
+      <p><strong>Pain and dehydration</strong> (odynophagia, poor intake), <strong>post-obstructive pulmonary edema</strong> (after relieving chronic obstruction), rare <strong>velopharyngeal insufficiency</strong> and <strong>nasopharyngeal stenosis</strong> (from overaggressive cautery), and taste disturbance. Screen for <strong>bleeding disorders</strong>; in children, <strong>avoid codeine</strong> (FDA warning — ultra-rapid metabolizers) and use <strong>acetaminophen and ibuprofen</strong> (NSAIDs do not meaningfully increase bleeding). Children with <strong>OSA</strong> are opioid-sensitive and need <strong>postoperative respiratory monitoring</strong>.</p>
+    `,
+    keyPoints: [
+      { category: "Anatomy", items: [
+        "Palatine tonsil between palatoglossal (ant) & palatopharyngeal (post) pillars; capsule laterally; bed = superior constrictor.",
+        "5 arteries (mostly ECA): tonsillar branch of facial (dominant, lower pole), ascending pharyngeal, lingual, ascending palatine, descending palatine. Glossopharyngeal n. at lower pole; ICA ~2–2.5 cm posterolateral."
+      ]},
+      { category: "Indications", items: [
+        "Recurrent tonsillitis (Paradise: 7/1yr, 5/yr×2, 3/yr×3), obstructive SDB (commonest pediatric), recurrent/complicated PTA.",
+        "Symptomatic tonsilloliths, asymmetry/suspected malignancy, chronic tonsillitis."
+      ]},
+      { category: "Tonsilloliths & revision", items: [
+        "Calcified crypt debris → halitosis, foreign-body sensation; worst in crypt-bearing REMNANT (after intracapsular/partial or regrowth).",
+        "Conservative first; recurrent symptomatic stones in a remnant → completion/revision tonsillectomy. Revision: scarring, distorted plane, higher bleed risk; care at lower pole (facial a.)."
+      ]},
+      { category: "Hemorrhage / periop", items: [
+        "Primary <24h (technical, more dangerous) vs secondary POD 5–10 (eschar slough). Active bleed → OR; secure airway; TXA adjunct.",
+        "Avoid codeine in children (FDA); use acetaminophen + ibuprofen (NSAIDs don't ↑ bleeding meaningfully); OSA kids need postop respiratory monitoring; watch post-obstructive pulmonary edema."
+      ]}
+    ],
+    slides: [
+      { title: "Surgery Prep · Tonsillectomy, Revision & Tonsilloliths", subtitle: "Focused study · tonsil surgery", body: "<p style='font-size:18px;line-height:1.55;'>Anatomy of the fossa and its five arteries, the indications (including stones in a remnant), and the hemorrhage you must manage cold.</p>" },
+      { title: "Tonsillar fossa", body: "<ul><li>Between palatoglossal (anterior) & palatopharyngeal (posterior) pillars.</li><li>Fibrous capsule on the deep/lateral surface.</li><li>Deep crypts medially.</li><li>Bed = superior constrictor muscle.</li></ul>" },
+      { title: "Blood supply — 5 arteries", body: "<ul><li><strong>Tonsillar branch of facial</strong> — dominant, lower pole.</li><li>Ascending pharyngeal.</li><li>Lingual (dorsal lingual).</li><li>Ascending palatine (facial).</li><li>Descending palatine (maxillary).</li></ul>" },
+      { title: "Danger neighbors", body: "<ul><li>Glossopharyngeal nerve at the lower pole → numbness/referred otalgia if injured.</li><li>Internal carotid ~2–2.5 cm posterolateral — beware in a scarred revision bed.</li></ul>" },
+      { title: "Indications", body: "<ul><li>Recurrent tonsillitis — Paradise (7/1yr, 5/yr×2, 3/yr×3).</li><li>Obstructive SDB (commonest pediatric).</li><li>Recurrent/complicated peritonsillar abscess.</li><li>Symptomatic tonsilloliths; asymmetry/suspected malignancy.</li></ul>" },
+      { title: "Tonsilloliths", body: "<ul><li>Calcified debris in crypts.</li><li>Halitosis, foreign-body/globus sensation, recurrent white debris.</li><li>Worst in a crypt-bearing <strong>remnant</strong> (post intracapsular/partial or regrowth).</li></ul>" },
+      { title: "Managing tonsilloliths", body: "<ul><li>Conservative: gargles, manual/water-jet expression, oral hygiene.</li><li>Recurrent + symptomatic in a remnant → <strong>completion/revision tonsillectomy</strong>.</li></ul>" },
+      { title: "Technique", body: "<ul><li>Extracapsular (total): off the capsule/constrictor — cold steel/cautery/coblation.</li><li>Intracapsular (partial): less pain/bleeding but regrowth & persistent crypts/stones.</li><li>Revision: scarred plane, distorted landmarks, higher bleed risk.</li></ul>" },
+      { title: "Hemorrhage", body: "<ul><li><strong>Primary &lt;24 h</strong> — technical, more dangerous.</li><li><strong>Secondary POD 5–10</strong> — eschar slough.</li><li>Secure airway, resuscitate; active bleed → OR; TXA adjunct.</li></ul>" },
+      { title: "Other complications & periop", body: "<ul><li>Pain/dehydration; post-obstructive pulmonary edema; rare VPI/nasopharyngeal stenosis.</li><li>Screen bleeding disorders; avoid codeine in kids; acetaminophen + ibuprofen.</li><li>OSA children: postop respiratory monitoring.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Bed is the superior constrictor; the tonsillar branch of the facial artery at the lower pole is the main bleeder; ICA sits ~2–2.5 cm posterolateral.</li><li>Recurrent symptomatic tonsilloliths in a crypt-bearing remnant = indication for completion/revision tonsillectomy (harder, higher bleed risk).</li><li>Primary bleed &lt;24 h vs secondary POD 5–10 — secure the airway and return to OR for active bleeding; avoid codeine in children.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "Tonsillar bed and relations", body: "<ul><li>Bed: superior constrictor muscle; just lateral lie the styloglossus and the parapharyngeal space.</li><li>Internal carotid artery ~2–2.5 cm posterolateral to the tonsillar fossa — scar tissue in revision surgery can draw it closer and distort the plane.</li></ul>" },
+      { title: "Arterial supply (lower pole dominant)", body: "<ul><li>Lower pole: tonsillar branch of the facial artery (main), ascending palatine, dorsal lingual.</li><li>Upper pole: ascending pharyngeal, descending palatine (from the maxillary artery).</li></ul>" }
+    ],
+    pearls: [
+      "The palatine tonsil lies between the palatoglossal and palatopharyngeal pillars with a capsule on its deep surface; the surgical bed is the superior constrictor muscle, and the internal carotid artery lies about 2–2.5 cm posterolateral.",
+      "The tonsil's dominant blood supply is the tonsillar branch of the facial artery at the lower pole, with contributions from the ascending pharyngeal, lingual, ascending palatine, and descending palatine arteries.",
+      "Indications for tonsillectomy include recurrent tonsillitis by Paradise criteria, obstructive sleep-disordered breathing (the commonest pediatric indication), recurrent/complicated peritonsillar abscess, symptomatic tonsilloliths, and tonsillar asymmetry suspicious for malignancy.",
+      "Tonsilloliths are calcified crypt debris causing halitosis and a foreign-body sensation; they are especially prone to recur in a crypt-bearing tonsillar remnant after a prior intracapsular (partial) tonsillectomy or regrowth, making recurrent symptomatic stones an indication for completion/revision tonsillectomy.",
+      "Revision/completion tonsillectomy is harder than primary surgery because scarring obliterates the normal dissection plane, distorts landmarks, and increases the bleeding risk — stay on the capsule/constrictor plane and take special care at the lower pole.",
+      "Primary post-tonsillectomy hemorrhage occurs within 24 hours (usually technical and more dangerous), whereas secondary hemorrhage classically occurs on postoperative day 5–10 as the eschar sloughs; active bleeding requires securing the airway and returning to the operating room, with tranexamic acid a useful adjunct.",
+      "In children, avoid codeine (FDA warning) and use acetaminophen and ibuprofen for analgesia (NSAIDs do not meaningfully increase bleeding), and monitor children with OSA for postoperative respiratory depression and post-obstructive pulmonary edema."
+    ],
+    flashcards: [
+      { q: "What are the boundaries and surgical bed of the palatine tonsil, and where is the internal carotid artery?", a: "The palatine tonsil lies in the tonsillar fossa between the palatoglossal (anterior) and palatopharyngeal (posterior) pillars, with a fibrous capsule on its deep/lateral surface and crypts medially. The surgical bed is the superior constrictor muscle, and the internal carotid artery lies about 2–2.5 cm posterolateral — a key relation in a scarred revision field." },
+      { q: "List the five arteries supplying the tonsil and the dominant one.", a: "The tonsillar branch of the facial artery (dominant, at the lower pole), the ascending pharyngeal artery, the dorsal lingual branch of the lingual artery, the ascending palatine artery (from the facial), and the descending palatine artery (from the maxillary). Most are external carotid branches; the lower-pole facial branch is the main surgical bleeder." },
+      { q: "What are the Paradise criteria and the main indications for tonsillectomy?", a: "Paradise criteria for recurrent tonsillitis: ≥7 episodes in 1 year, ≥5 per year for 2 years, or ≥3 per year for 3 years. Other indications: obstructive sleep-disordered breathing (commonest pediatric indication), recurrent/complicated peritonsillar abscess, symptomatic tonsilloliths, tonsillar asymmetry or suspected malignancy, and chronic tonsillitis." },
+      { q: "Why do tonsilloliths form, and why are they a problem in a tonsillar remnant?", a: "They are calcified debris that collects in the deep tonsillar crypts, causing halitosis, a foreign-body sensation, and recurrent white debris. A crypt-bearing remnant — left after an intracapsular (partial) tonsillectomy or from regrowth — retains the crypts that trap debris, so stones recur there; recurrent symptomatic stones in a remnant are a classic indication for completion/revision tonsillectomy." },
+      { q: "How does intracapsular differ from extracapsular tonsillectomy, and what is the trade-off?", a: "Extracapsular (total) tonsillectomy removes the entire tonsil off the capsule/superior constrictor. Intracapsular (partial) tonsillectomy leaves a thin rim of tonsil on the capsule, causing less postoperative pain and bleeding, but at the cost of possible regrowth and persistent crypts that retain tonsilloliths." },
+      { q: "Why is revision/completion tonsillectomy more challenging?", a: "Prior surgery and inflammation scar the fossa, obliterating the normal avascular plane, distorting landmarks, and pulling nearby structures (including the internal carotid) closer, all of which increase the bleeding and injury risk. The surgeon works meticulously on the capsule/constrictor plane and is especially careful at the lower pole where the facial artery's tonsillar branch enters." },
+      { q: "Distinguish primary from secondary post-tonsillectomy hemorrhage and outline management.", a: "Primary hemorrhage occurs within 24 hours, is usually technical, and is the more dangerous; secondary hemorrhage classically occurs on postoperative day 5–10 as the eschar sloughs. Management: resuscitate and secure the airway, assess the bed; small ooze may be observed/cauterized, but active bleeding requires return to the OR for control under general anesthesia. Tranexamic acid is a useful adjunct." },
+      { q: "What are the key pediatric analgesia and monitoring points after tonsillectomy?", a: "Avoid codeine (FDA warning because ultra-rapid CYP2D6 metabolizers risk fatal respiratory depression); use acetaminophen and ibuprofen, as NSAIDs do not meaningfully increase bleeding. Children with OSA are opioid-sensitive and need postoperative respiratory monitoring, and all patients are watched for post-obstructive pulmonary edema and dehydration." }
+    ],
+    quiz: [
+      { stem: "The dominant arterial supply to the tonsil, usually encountered at the lower pole, is the:",
+        options: ["Internal carotid artery", "Tonsillar branch of the facial artery", "Vertebral artery", "Superior thyroid artery"],
+        correct: 1, explanation: "The tonsillar branch of the facial artery is the dominant supply at the lower pole and the main surgical bleeder. The internal carotid (option 0) lies ~2–2.5 cm posterolateral and is not a supply; the vertebral (option 2) and superior thyroid (option 3) do not supply the tonsil." },
+      { stem: "Recurrent, symptomatic tonsilloliths persisting in a crypt-bearing remnant after a prior partial tonsillectomy are best managed by:",
+        options: ["Lifelong antibiotics", "Completion/revision tonsillectomy", "Radiation", "Ignoring them"],
+        correct: 1, explanation: "Recurrent symptomatic stones in a crypt-bearing remnant are a classic indication for completion/revision tonsillectomy to remove the retained crypt tissue. Antibiotics (option 0) and radiation (option 2) don't address the crypts, and symptomatic disease shouldn't simply be ignored (option 3)." },
+      { stem: "A patient bleeds briskly from the tonsillar fossa on postoperative day 6. This is:",
+        options: ["Primary hemorrhage", "Secondary hemorrhage (eschar slough)", "Expected and benign", "A sign of infection only"],
+        correct: 1, explanation: "Bleeding around day 5–10 as the eschar sloughs is secondary hemorrhage. Primary hemorrhage (option 0) is within 24 hours; post-tonsillectomy bleeding is never simply benign (option 2), and while infection can contribute, the mechanism here is eschar separation (option 3)." },
+      { stem: "Which analgesic should be AVOIDED in children after tonsillectomy?",
+        options: ["Acetaminophen", "Ibuprofen", "Codeine", "Both acetaminophen and ibuprofen"],
+        correct: 2, explanation: "Codeine is contraindicated in children post-tonsillectomy (FDA warning — ultra-rapid metabolizers risk fatal respiratory depression). Acetaminophen and ibuprofen (options 0,1,3) are the recommended agents; NSAIDs do not meaningfully increase bleeding." },
+      { stem: "During revision tonsillectomy, which structure, lying roughly 2–2.5 cm posterolateral to the fossa, must be respected because scarring may distort its position?",
+        options: ["Internal jugular vein", "Internal carotid artery", "Hypoglossal nerve", "Thoracic duct"],
+        correct: 1, explanation: "The internal carotid artery lies about 2–2.5 cm posterolateral to the tonsillar fossa and can be drawn closer or its plane distorted by scarring in revision surgery. The IJV, hypoglossal nerve, and thoracic duct (options 0,2,3) are not the key posterolateral relation of the tonsillar bed." },
+      { stem: "The surgical bed on which the tonsil lies (and off which it is dissected) is the:",
+        options: ["Superior constrictor muscle", "Masseter muscle", "Mylohyoid muscle", "Thyrohyoid membrane"],
+        correct: 0, explanation: "The tonsil is dissected off its capsule from the superior constrictor muscle, which forms the bed. The masseter, mylohyoid, and thyrohyoid membrane (options 1,2,3) are unrelated to the tonsillar bed." }
+    ],
+    signs: [
+      { name: "Halitosis + white crypt debris", category: "clinical", description: "Bad breath with expressible white/yellow concretions from the tonsil.", implication: "Tonsilloliths — conservative care; revision/completion if recurrent in a remnant." },
+      { name: "Bleeding on POD 5–10", category: "clinical", description: "Oral bleeding roughly a week after tonsillectomy.", implication: "Secondary hemorrhage (eschar slough) — assess, secure airway, OR if active." },
+      { name: "Bleeding within 24 h", category: "clinical", description: "Hemorrhage on the day of surgery.", implication: "Primary (technical) hemorrhage — more dangerous; return to OR." },
+      { name: "Unilateral tonsillar enlargement", category: "clinical", description: "Asymmetrically large tonsil, especially with B symptoms.", implication: "Rule out malignancy (lymphoma/SCC) — excisional tonsillectomy for diagnosis." },
+      { name: "Post-relief respiratory distress (OSA child)", category: "clinical", description: "Pulmonary edema/desaturation after relieving chronic obstruction.", implication: "Post-obstructive pulmonary edema — monitor OSA children closely postop." }
+    ],
+    podcastTitle: "Deep Dive · Tonsillectomy, Revision & Tonsilloliths",
+    podcastDuration: "~19 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — I'm Elena, with Marcus. This one's a surgery-prep special: tonsillectomy, with a focus on revision surgery and tonsilloliths, because that's what's on the table tomorrow. Marcus, ground us in the anatomy first, because the anatomy is the whole safety story." },
+      { speaker: "cohost", text: "It absolutely is. The palatine tonsil sits in the tonsillar fossa, bounded in front by the palatoglossal pillar and behind by the palatopharyngeal pillar. On its deep, lateral surface it has a fibrous capsule — that capsule is your dissection plane — and on its medial surface it has those deep crypts that matter so much for stones. The bed the tonsil sits on is the superior constrictor muscle. And the relation you never forget: the internal carotid artery runs roughly two to two-and-a-half centimeters posterolateral to the fossa. In a normal tonsillectomy that's a comfortable margin, but in a scarred revision bed the plane distorts and that artery can effectively sit closer, so you respect it." },
+      { speaker: "host",   text: "And the blood supply — the five arteries." },
+      { speaker: "cohost", text: "Five vessels, almost all from the external carotid, and they roughly split by pole. At the lower pole, the big one — the dominant supply and your main bleeder — is the tonsillar branch of the facial artery, joined by the ascending palatine, also off the facial, and the dorsal lingual branch of the lingual artery. At the upper pole you have the ascending pharyngeal and the descending palatine, which comes off the maxillary. So when you think bleeding, think lower pole and think facial artery. One more neighbor: the glossopharyngeal nerve runs just deep to the lower pole, and if you injure it you get tongue-base numbness and referred ear pain." },
+      { speaker: "host",   text: "Let's do indications, then zoom into the two that matter tomorrow." },
+      { speaker: "cohost", text: "The classic list: recurrent tonsillitis judged by the Paradise criteria — seven episodes in one year, five a year for two years, or three a year for three years; obstructive sleep-disordered breathing, which is the commonest pediatric indication; recurrent or complicated peritonsillar abscess; tonsillar asymmetry or anything suspicious for malignancy like lymphoma or squamous carcinoma; chronic tonsillitis; and — the one driving tomorrow's case — symptomatic tonsilloliths. Stones that keep causing halitosis, a foreign-body sensation, and recurrent debris are a legitimate surgical indication when conservative care fails." },
+      { speaker: "host",   text: "So explain tonsilloliths properly — why they form and why they haunt a remnant." },
+      { speaker: "cohost", text: "Tonsilloliths are just calcified debris — trapped food, bacteria, desquamated cells — that concretes inside the tonsillar crypts. Deep, branching crypts are retentive, so debris sits, mineralizes, and you get a stone. Patients complain of bad breath they can't shake, a globus or foreign-body feeling, and coughing up little white stones. Now, the key insight for revision surgery: the stones live in the crypts, so if a previous operation left crypt-bearing tonsil tissue behind, the stones come back in that remnant. That happens classically after an intracapsular — partial — tonsillectomy, which deliberately leaves a rim of tonsil on the capsule, or after tonsillar regrowth. So you can have a patient who was 'done' years ago and is now miserable with recurrent stones in a stubborn remnant." },
+      { speaker: "host",   text: "And the management ladder for those stones?" },
+      { speaker: "cohost", text: "Start conservative: salt-water or other gargles, gentle manual or water-jet expression of the crypts, and good oral hygiene — that clears many patients. But when the stones are recurrent and genuinely symptomatic, and especially when they're being generated by a crypt-bearing remnant, the definitive answer is a completion or revision tonsillectomy to remove that remaining tissue. No crypts, no stones." },
+      { speaker: "host",   text: "Technique — and why revision is a different animal." },
+      { speaker: "cohost", text: "In a primary case you pick your method — cold-steel dissection with ligation, monopolar or bipolar electrocautery, coblation, harmonic — and you decide extracapsular versus intracapsular. Extracapsular, the total tonsillectomy, takes the whole tonsil off the capsule and constrictor. Intracapsular leaves a thin rim on the capsule, which means less pain and less bleeding, but at the price of possible regrowth and — our theme — persistent crypts and stones. Revision or completion surgery is harder across the board: the prior inflammation and surgery scar the fossa, so the clean avascular plane is gone, the landmarks are distorted, bleeding risk goes up, and that posterolateral carotid relationship is less forgiving. You work carefully right on the capsule-constrictor plane and you're especially deliberate at the lower pole where the facial artery's tonsillar branch comes in." },
+      { speaker: "host",   text: "Now the complication that defines this operation — bleeding." },
+      { speaker: "cohost", text: "Post-tonsillectomy hemorrhage splits into two by timing. Primary hemorrhage is within twenty-four hours — it's usually a technical issue, a vessel that wasn't fully secured, and it's the more dangerous one. Secondary hemorrhage is the classic postoperative day five to ten bleed, when the eschar — the scab over the raw fossa — sloughs off and exposes a vessel. Either way the principles are the same and they start with the airway: resuscitate, secure the airway because of aspiration risk, and assess the fossa. A small clot or ooze you might observe or cauterize under local, but active bleeding means back to the operating room for control under general anesthesia. Tranexamic acid is a helpful adjunct. And all of this is worse and more likely in a revision bed, so you counsel the patient specifically about it." },
+      { speaker: "host",   text: "Round out the other complications and the perioperative pearls." },
+      { speaker: "cohost", text: "Beyond bleeding: pain and dehydration are the common ones — these patients hurt and don't want to drink, so you plan analgesia and hydration. There's post-obstructive pulmonary edema in a patient whose chronic obstruction you just relieved. Rare but real are velopharyngeal insufficiency and nasopharyngeal stenosis from overaggressive cautery, and taste changes from glossopharyngeal irritation. Perioperatively: screen for a bleeding disorder in the history. In children, avoid codeine — the FDA warned against it because ultra-rapid metabolizers can have fatal respiratory depression — and use acetaminophen plus ibuprofen; NSAIDs do not meaningfully raise bleeding risk. And children with OSA are exquisitely opioid-sensitive, so they get postoperative respiratory monitoring." },
+      { speaker: "host",   text: "Let's bring it together with a case — essentially tomorrow's patient. An adult who had a partial tonsillectomy years ago now has months of bad breath, a foreign-body sensation on one side, and keeps coughing up white stones from a visible tonsil remnant. Walk me through your thinking and plan." },
+      { speaker: "cohost", text: "So this is recurrent symptomatic tonsilloliths in a crypt-bearing remnant after a prior intracapsular tonsillectomy — a textbook indication for completion, or revision, tonsillectomy. First I'd confirm the story and examine: see the remnant, express the stones, and rule out asymmetry suspicious for malignancy. I'd confirm conservative measures have genuinely failed — gargles, expression, hygiene. Then I consent specifically for the revision risks: scarred plane, distorted landmarks, and a higher bleeding risk than a primary case, including that posterolateral carotid. In the OR, I operate right on the capsule-constrictor plane to excise the entire remnant with its crypts, paying particular attention at the lower pole to the tonsillar branch of the facial artery, securing hemostasis meticulously because the scarred bed is unforgiving." },
+      { speaker: "host",   text: "And then take it into the postoperative danger zone — day six, he calls with bleeding." },
+      { speaker: "cohost", text: "Day six fits secondary hemorrhage — the eschar is sloughing. I bring him in immediately. Airway first: sit him up, suction, and be ready to secure the airway because of aspiration risk, and resuscitate with IV access and fluids or blood as needed. I examine the fossa; if it's a small clot or minor ooze I might cauterize under local and give tranexamic acid. But if he's actively bleeding, he goes straight back to the operating room for control under general anesthesia — identify the vessel, which given the lower-pole location is likely a facial artery tributary, and ligate or cauterize it. I don't minimize a post-tonsillectomy bleed, especially in a revision patient." },
+      { speaker: "host",   text: "Give me the takeaways." },
+      { speaker: "cohost", text: "One: the tonsil sits on the superior constrictor between the two pillars, its dominant supply is the tonsillar branch of the facial artery at the lower pole, and the internal carotid is about two to two-and-a-half centimeters posterolateral — respect it, especially in a scarred field. Two: tonsilloliths are crypt debris, and recurrent symptomatic stones in a crypt-bearing remnant after a partial tonsillectomy are a real indication for completion or revision tonsillectomy, which is harder and bleeds more than a primary case." },
+      { speaker: "host",   text: "And three." },
+      { speaker: "cohost", text: "Three: know your hemorrhage — primary within twenty-four hours, technical and dangerous, versus secondary on day five to ten from eschar slough — secure the airway and return to the OR for active bleeding, use tranexamic acid, and in children avoid codeine, use acetaminophen and ibuprofen, and monitor OSA kids for respiratory depression." },
+      { speaker: "host",   text: "Stay on the capsule, mind the lower-pole artery, and never take a post-tonsillectomy bleed lightly — good luck tomorrow." },
+      { speaker: "cohost", text: "That's the prep." }
+    ]
+  },
+  901: {
+    objectives: [
+      "Explain the embryology of the thyroglossal duct and where cysts arise.",
+      "Recognize the classic presentation of a thyroglossal duct cyst and its differential.",
+      "Understand why confirming a normal orthotopic thyroid before excision is mandatory.",
+      "Describe the Sistrunk procedure and why the central hyoid must be removed.",
+      "Know the risks — infection, recurrence, and the ~1% carcinoma (usually papillary)."
+    ],
+    summary: `
+      <h4>1. Embryology — the tract from tongue to neck</h4>
+      <p>The thyroid gland originates at the <strong>foramen cecum</strong> at the base of the tongue (junction of the anterior two-thirds and posterior third) and <strong>descends in the midline</strong>, passing <strong>intimately through or just anterior to the hyoid bone</strong>, to its final pretracheal position. The path it travels is the <strong>thyroglossal duct</strong>, which normally <strong>involutes</strong>. If any segment persists, it can form a <strong>thyroglossal duct cyst (TGDC)</strong> anywhere along the tract — most commonly <strong>at or just below the hyoid, in or near the midline</strong>.</p>
+      <h4>2. Presentation and differential</h4>
+      <p>A TGDC is the <strong>most common congenital midline neck mass</strong>. It is typically a <strong>smooth, painless, midline (or slightly paramedian) cyst</strong> that classically <strong>elevates with swallowing and with tongue protrusion</strong> (because the tract tethers it to the hyoid and foramen cecum). It often presents in childhood or young adulthood but at any age, and may first appear when it <strong>enlarges or becomes infected after an upper respiratory infection</strong>, sometimes forming an abscess or a draining sinus/fistula. The midline <strong>differential</strong> includes <strong>dermoid cyst</strong> (does NOT move with tongue protrusion), <strong>ectopic/lingual thyroid</strong>, a <strong>Delphian (prelaryngeal) node</strong>, and a <strong>plunging ranula</strong>.</p>
+      <h4>3. The mandatory pre-excision check — confirm a normal thyroid</h4>
+      <p>Before removing a TGDC you <strong>must confirm a normal, orthotopic thyroid gland</strong> — usually with <strong>ultrasound</strong> (and TSH). The reason is critical: the cyst/tract can contain <strong>the patient's only functioning thyroid tissue</strong> (e.g., with a lingual thyroid and no normal gland), and excising it would render the patient <strong>hypothyroid/athyreotic</strong>. If the ultrasound is ambiguous, a <strong>thyroid uptake scan</strong> confirms a functioning orthotopic gland. Lingual thyroid at the foramen cecum is the commonest ectopic site.</p>
+      <h4>4. The Sistrunk procedure</h4>
+      <p>Definitive treatment is the <strong>Sistrunk procedure</strong>: <strong>en-bloc excision of the cyst AND the entire tract AND the central portion of the hyoid bone AND a core of tongue-base muscle up to the foramen cecum</strong>. <strong>Removing the central hyoid is the key step</strong> — the duct passes through/against it, and simple cyst excision that spares the hyoid has a <strong>high recurrence rate (up to ~50%)</strong>, whereas the Sistrunk procedure drops recurrence to <strong>under ~5%</strong>.</p>
+      <h4>5. Infection first, then operate</h4>
+      <p><strong>Treat active infection before definitive surgery.</strong> Operating on an acutely infected or abscessed cyst distorts planes and raises recurrence; give <strong>antibiotics</strong>, and <strong>incise and drain a frank abscess</strong> if needed, then perform the Sistrunk procedure <strong>once inflammation settles</strong>. Incision and drainage (or incomplete excision) can itself produce a chronic <strong>sinus/fistula</strong>.</p>
+      <h4>6. Carcinoma in a TGDC</h4>
+      <p>Roughly <strong>1% of thyroglossal duct cysts harbor carcinoma</strong>, almost always <strong>papillary thyroid carcinoma</strong> arising in thyroid tissue within the cyst. Suspect it in <strong>adults with a solid component, calcification, or a rapidly enlarging/irregular mass</strong>. Management still centers on the Sistrunk procedure, with evaluation of the thyroid and nodes and consideration of <strong>total thyroidectomy and adjuvant therapy</strong> for higher-risk disease.</p>
+    `,
+    keyPoints: [
+      { category: "Embryology", items: [
+        "Thyroid descends from the foramen cecum (tongue base) through/anterior to the hyoid to the pretracheal position; the thyroglossal duct normally involutes.",
+        "Persistence → thyroglossal duct cyst anywhere along the tract, most commonly at/just below the hyoid, midline."
+      ]},
+      { category: "Presentation / DDx", items: [
+        "Most common congenital midline neck mass; smooth midline cyst that ELEVATES with swallowing AND tongue protrusion; may infect after URI.",
+        "Midline DDx: dermoid (does NOT move with tongue protrusion), ectopic/lingual thyroid, Delphian node, plunging ranula."
+      ]},
+      { category: "Pre-excision rule", items: [
+        "MUST confirm a normal orthotopic thyroid first (ultrasound + TSH; uptake scan if ambiguous) — the cyst may hold the ONLY functioning thyroid tissue.",
+        "Lingual thyroid (foramen cecum) is the commonest ectopic site."
+      ]},
+      { category: "Sistrunk / risks", items: [
+        "Sistrunk = en-bloc cyst + tract + CENTRAL HYOID + tongue-base core to foramen cecum. Removing central hyoid is key: recurrence drops from ~50% (simple excision) to <5%.",
+        "Treat infection first (antibiotics ± I&D), then operate. ~1% harbor carcinoma (usually papillary) — suspect with solid component/calcification in adults."
+      ]}
+    ],
+    slides: [
+      { title: "Surgery Prep · Thyroglossal Duct Cyst & Sistrunk", subtitle: "Focused study · midline neck", body: "<p style='font-size:18px;line-height:1.55;'>Foramen cecum to the neck through the hyoid — confirm a normal thyroid, then take the cyst, the tract, and the central hyoid.</p>" },
+      { title: "Embryology", body: "<ul><li>Thyroid starts at the foramen cecum (tongue base).</li><li>Descends midline, through/anterior to the hyoid, to pretracheal position.</li><li>Thyroglossal duct normally involutes.</li><li>Persistence → cyst along the tract (usually at/just below hyoid).</li></ul>" },
+      { title: "Presentation", body: "<ul><li>Most common congenital midline neck mass.</li><li>Smooth, painless, midline cyst.</li><li><strong>Elevates with swallowing AND tongue protrusion.</strong></li><li>May enlarge/infect after a URI; abscess or fistula.</li></ul>" },
+      { title: "Midline differential", body: "<ul><li>Dermoid — does NOT move with tongue protrusion.</li><li>Ectopic/lingual thyroid.</li><li>Delphian (prelaryngeal) node.</li><li>Plunging ranula.</li></ul>" },
+      { title: "MANDATORY pre-op check", body: "<ul><li>Confirm a <strong>normal orthotopic thyroid</strong> before excision.</li><li>Ultrasound + TSH (uptake scan if ambiguous).</li><li>The cyst may hold the ONLY functioning thyroid tissue.</li><li>Removing it then → hypothyroid/athyreotic.</li></ul>" },
+      { title: "Sistrunk procedure", body: "<ul><li>En-bloc: cyst + tract.</li><li>+ <strong>Central portion of the hyoid bone</strong>.</li><li>+ Core of tongue-base muscle to the foramen cecum.</li></ul>" },
+      { title: "Why remove the central hyoid", body: "<ul><li>Duct runs through/against the hyoid.</li><li>Simple cyst excision → recurrence up to ~50%.</li><li>Sistrunk → recurrence <~5%.</li></ul>" },
+      { title: "Infection first", body: "<ul><li>Treat active infection before definitive surgery.</li><li>Antibiotics; I&D a frank abscess if needed.</li><li>Operate once inflammation settles.</li><li>I&D/incomplete excision can create a sinus/fistula.</li></ul>" },
+      { title: "Carcinoma in a TGDC", body: "<ul><li>~1% harbor carcinoma — usually papillary thyroid carcinoma.</li><li>Suspect with solid component, calcification, rapid/irregular growth (adults).</li><li>Sistrunk + thyroid/node evaluation; consider total thyroidectomy ± adjuvant for higher risk.</li></ul>" },
+      { title: "Three takeaways", body: "<ol style='font-size:17px;'><li>Midline cyst that moves with tongue protrusion = thyroglossal duct cyst (dermoid does not move).</li><li>Confirm a normal orthotopic thyroid BEFORE excision — the cyst may be the only functioning thyroid.</li><li>Sistrunk (cyst + tract + central hyoid + tongue-base core) cuts recurrence from ~50% to <5%; treat infection first; ~1% harbor papillary carcinoma.</li></ol>" }
+    ],
+    anatomy: [
+      { title: "The thyroglossal tract", body: "<ul><li>Runs from the foramen cecum at the tongue base, down through or immediately adjacent to the body of the hyoid, to the pretracheal thyroid bed.</li><li>Because the duct is intimate with the hyoid, the central hyoid must be removed en bloc to clear the tract.</li></ul>" },
+      { title: "Ectopic thyroid", body: "<ul><li>Failure of descent leaves thyroid tissue along the tract; the commonest ectopic site is the lingual thyroid at the foramen cecum.</li><li>A lingual thyroid may be the patient's only functioning thyroid tissue — hence the mandatory pre-excision imaging.</li></ul>" }
+    ],
+    pearls: [
+      "The thyroid descends from the foramen cecum at the tongue base through or just anterior to the hyoid bone to its pretracheal position, and a persistent thyroglossal duct along that path can form a cyst anywhere, most commonly at or just below the hyoid in the midline.",
+      "A thyroglossal duct cyst is the most common congenital midline neck mass and classically elevates with both swallowing and tongue protrusion, distinguishing it from a dermoid cyst, which does not move with tongue protrusion.",
+      "Before excising a thyroglossal duct cyst you must confirm a normal orthotopic thyroid gland (ultrasound and TSH, with an uptake scan if ambiguous), because the cyst/tract can contain the patient's only functioning thyroid tissue and its removal would render them hypothyroid.",
+      "The Sistrunk procedure — en-bloc removal of the cyst, the tract, the central portion of the hyoid bone, and a core of tongue-base tissue to the foramen cecum — is the definitive treatment; removing the central hyoid drops recurrence from up to about 50% (simple excision) to under about 5%.",
+      "Active infection must be treated first (antibiotics, with incision and drainage of a frank abscess) and definitive surgery delayed until inflammation settles, because operating on an infected cyst distorts planes and raises recurrence, and incision/incomplete excision can create a chronic sinus or fistula.",
+      "About 1% of thyroglossal duct cysts harbor carcinoma, almost always papillary thyroid carcinoma, suspected in adults with a solid component, calcification, or rapid/irregular growth; management centers on the Sistrunk procedure with thyroid and nodal evaluation."
+    ],
+    flashcards: [
+      { q: "Trace the embryologic origin and descent of the thyroid and relate it to thyroglossal duct cysts.", a: "The thyroid arises at the foramen cecum at the base of the tongue (junction of the anterior two-thirds and posterior third) and descends in the midline through or just anterior to the hyoid bone to its pretracheal position. The path is the thyroglossal duct, which normally involutes; persistence of any segment forms a thyroglossal duct cyst, most often at or just below the hyoid." },
+      { q: "What is the classic presentation of a thyroglossal duct cyst and how is it distinguished from a dermoid?", a: "It is the most common congenital midline neck mass — a smooth, painless, midline (or slightly paramedian) cyst that elevates with swallowing and with tongue protrusion because the tract tethers it to the hyoid and foramen cecum. A dermoid cyst, by contrast, does not move with tongue protrusion. TGDCs may enlarge or become infected after an upper respiratory infection." },
+      { q: "Why must you confirm a normal orthotopic thyroid before excising a thyroglossal duct cyst?", a: "Because the cyst or tract can contain the patient's only functioning thyroid tissue (for example, with a lingual thyroid and absent normal gland). Removing it would leave the patient hypothyroid/athyreotic. Confirm a normal orthotopic gland with ultrasound and TSH, using a thyroid uptake scan if the ultrasound is ambiguous." },
+      { q: "Describe the Sistrunk procedure and the step that prevents recurrence.", a: "En-bloc excision of the cyst, the entire thyroglossal tract, the central portion of the hyoid bone, and a core of tongue-base muscle up to the foramen cecum. Removing the central hyoid — through which the duct passes — is the key step; it reduces recurrence from up to about 50% with simple cyst excision to under about 5%." },
+      { q: "How should an infected thyroglossal duct cyst be managed before definitive surgery?", a: "Treat the infection first with antibiotics, and incise and drain a frank abscess if necessary, then delay the Sistrunk procedure until the inflammation settles. Operating on an acutely infected cyst distorts tissue planes and raises recurrence, and incision/drainage or incomplete excision can create a chronic sinus or fistula." },
+      { q: "What malignancy can arise in a thyroglossal duct cyst, how often, and when should you suspect it?", a: "About 1% of thyroglossal duct cysts harbor carcinoma, almost always papillary thyroid carcinoma arising from thyroid tissue within the cyst. Suspect it in adults with a solid component, calcification, or a rapidly enlarging/irregular mass; management still centers on the Sistrunk procedure with thyroid and nodal evaluation and consideration of total thyroidectomy and adjuvant therapy for higher-risk disease." },
+      { q: "List the differential diagnosis of a midline neck mass.", a: "Thyroglossal duct cyst (moves with tongue protrusion), dermoid cyst (does not move with tongue protrusion), ectopic/lingual thyroid, a Delphian (prelaryngeal) lymph node, and a plunging ranula. The thyroid itself and midline lipomas can also present in the midline." }
+    ],
+    quiz: [
+      { stem: "A midline neck cyst elevates when the patient protrudes the tongue. The most likely diagnosis is:",
+        options: ["Dermoid cyst", "Thyroglossal duct cyst", "Branchial cleft cyst", "Carotid body tumor"],
+        correct: 1, explanation: "Elevation with tongue protrusion is classic for a thyroglossal duct cyst (tethered to the hyoid/foramen cecum). A dermoid (option 0) does not move with tongue protrusion, a branchial cleft cyst (option 2) is lateral, and a carotid body tumor (option 3) is a lateral vascular mass." },
+      { stem: "Before excising a thyroglossal duct cyst, the mandatory step is to:",
+        options: ["Start radioactive iodine", "Confirm a normal orthotopic thyroid gland (ultrasound/TSH)", "Perform an open biopsy", "Give chemotherapy"],
+        correct: 1, explanation: "You must confirm a normal orthotopic thyroid first, because the cyst may contain the only functioning thyroid tissue. Radioiodine (option 0) and chemotherapy (option 3) are not pre-excision steps, and open biopsy (option 2) is unnecessary and risks a fistula." },
+      { stem: "The Sistrunk procedure reduces recurrence primarily by removing the:",
+        options: ["Entire thyroid gland", "Central portion of the hyoid bone (with cyst and tract)", "Submandibular gland", "Sternocleidomastoid"],
+        correct: 1, explanation: "Removing the central hyoid, through which the duct runs, along with the cyst and tract to the foramen cecum, is what drops recurrence from ~50% to <5%. The thyroid (option 0), submandibular gland (option 2), and sternocleidomastoid (option 3) are not removed." },
+      { stem: "An acutely infected, abscessed thyroglossal duct cyst should first be managed by:",
+        options: ["Immediate Sistrunk procedure", "Antibiotics (and I&D of an abscess), then Sistrunk once settled", "Radiation", "Observation indefinitely"],
+        correct: 1, explanation: "Treat the infection first — antibiotics and drainage of a frank abscess — then perform the Sistrunk procedure after inflammation resolves. Operating acutely (option 0) distorts planes and raises recurrence; radiation (option 2) and indefinite observation (option 3) are inappropriate." },
+      { stem: "Carcinoma arising in a thyroglossal duct cyst is most commonly:",
+        options: ["Squamous cell carcinoma", "Papillary thyroid carcinoma", "Melanoma", "Lymphoma"],
+        correct: 1, explanation: "About 1% of TGDCs harbor carcinoma, almost always papillary thyroid carcinoma arising in intracystic thyroid tissue. SCC, melanoma, and lymphoma (options 0,2,3) are not the typical TGDC malignancy." },
+      { stem: "Which midline lesion does NOT elevate with tongue protrusion, helping distinguish it from a thyroglossal duct cyst?",
+        options: ["Dermoid cyst", "Lingual thyroid", "Thyroglossal duct cyst", "Foramen cecum remnant"],
+        correct: 0, explanation: "A dermoid cyst is not tethered to the hyoid/foramen cecum, so it does not move with tongue protrusion — unlike a thyroglossal duct cyst. This mobility distinction is a key bedside sign (options 1,2,3 do not provide this contrast)." }
+    ],
+    signs: [
+      { name: "Elevation with tongue protrusion", category: "clinical", description: "Midline neck mass rises when the tongue is protruded or on swallowing.", implication: "Thyroglossal duct cyst — tethered to hyoid/foramen cecum." },
+      { name: "No movement with tongue protrusion", category: "clinical", description: "Midline mass that stays put on tongue protrusion.", implication: "Favors dermoid cyst over thyroglossal duct cyst." },
+      { name: "Absent orthotopic thyroid on US", category: "imaging", description: "No normal thyroid in the pretracheal bed; possible lingual thyroid.", implication: "The cyst may be the only functioning thyroid — do NOT excise without endocrine planning." },
+      { name: "Post-URI enlargement / draining sinus", category: "clinical", description: "Cyst swells or discharges after an upper respiratory infection.", implication: "Infected thyroglossal duct cyst — antibiotics ± I&D first, then Sistrunk." },
+      { name: "Solid/calcified component in an adult", category: "imaging", description: "Internal solid nodule or calcification within the cyst.", implication: "Raises concern for carcinoma (papillary) — evaluate thyroid and nodes." }
+    ],
+    podcastTitle: "Deep Dive · Thyroglossal Duct Cyst & the Sistrunk Procedure",
+    podcastDuration: "~18 min - deep dive",
+    podcastScript: [
+      { speaker: "host",   text: "Welcome to ENT Academy — Elena with Marcus, and this is the second surgery-prep episode: the thyroglossal duct cyst and the Sistrunk procedure, the other operation on the list tomorrow. Marcus, this one really starts with embryology, doesn't it?" },
+      { speaker: "cohost", text: "It does — the embryology isn't background here, it's the operation. The thyroid gland begins life at the foramen cecum, right at the base of the tongue where the anterior two-thirds meets the posterior third. From there it descends in the midline of the neck, and critically it passes through or immediately against the hyoid bone on its way down to its final home in front of the trachea. The track it follows is the thyroglossal duct, and normally that duct involutes and disappears. But if any piece of it persists, that piece can balloon into a thyroglossal duct cyst, and it can sit anywhere along the route — most often right at or just below the hyoid, in the midline. Hold onto that intimacy between the duct and the hyoid — it's the reason the operation looks the way it does." },
+      { speaker: "host",   text: "How does it show up clinically?" },
+      { speaker: "cohost", text: "It's the most common congenital midline neck mass. Classically it's a smooth, painless, midline — or just off-midline — cyst, and the signature sign is that it elevates when the patient swallows and, even more specifically, when they protrude the tongue. That upward movement happens because the tract tethers the cyst to the hyoid and up to the foramen cecum, so sticking out the tongue tugs it. It usually shows up in kids or young adults but can appear at any age, and very often it announces itself by swelling up or getting infected after an upper respiratory infection — sometimes turning into an abscess or leaving a little draining sinus." },
+      { speaker: "host",   text: "And the midline differential, so we don't anchor too fast." },
+      { speaker: "cohost", text: "Good, because midline has a differential. The big distinguisher is that tongue-protrusion movement: a dermoid cyst, the main mimic, does not move with tongue protrusion, because it isn't tethered to the hyoid. Also in the midline differential are an ectopic or lingual thyroid, a Delphian — prelaryngeal — lymph node sitting over the cricothyroid membrane, and a plunging ranula. So the bedside maneuver — have them stick out their tongue — immediately sorts thyroglossal cyst from dermoid." },
+      { speaker: "host",   text: "Now the step people get burned on — the pre-operative thyroid check. Why is it non-negotiable?" },
+      { speaker: "cohost", text: "This is the single most important safety point in the whole chapter. Before you remove a thyroglossal duct cyst, you must confirm the patient has a normal thyroid gland sitting in its normal, orthotopic position — usually with an ultrasound, plus a TSH. Here's why it's non-negotiable: in some patients the thyroid never descended properly, and the only functioning thyroid tissue they have is ectopic — a lingual thyroid at the foramen cecum, or thyroid tissue within the cyst or tract itself. If you blithely excise the cyst in that patient, you've just removed their entire thyroid and made them hypothyroid, even athyreotic. So you confirm a normal gland is present first; if the ultrasound is ambiguous, you get a thyroid uptake scan to prove there's a functioning orthotopic gland before you cut." },
+      { speaker: "host",   text: "Okay — the operation itself. Describe the Sistrunk procedure and why it's built the way it is." },
+      { speaker: "cohost", text: "The Sistrunk procedure is an en-bloc excision of four things together: the cyst, the entire thyroglossal tract running up from it, the central portion of the hyoid bone, and a core of tongue-base muscle following the tract up to the foramen cecum. The piece everyone must remember is the central hyoid. Because the duct passes through or right against the hyoid, if you just shell out the cyst and leave the hyoid alone, you leave tract behind and the thing comes back — simple cyst excision has a recurrence rate reported as high as around fifty percent. Take the central hyoid with the specimen, as Sistrunk described, and recurrence drops to under about five percent. That single bony step is the difference between a cure and a revision." },
+      { speaker: "host",   text: "What about when it's infected at presentation?" },
+      { speaker: "cohost", text: "You don't operate hot. If the cyst is acutely infected or abscessed, you treat the infection first — antibiotics, and incision and drainage if there's a frank abscess — and you wait for the inflammation to settle before doing the definitive Sistrunk. Two reasons: operating in an inflamed field distorts the tissue planes and makes it far more likely you'll leave tract behind, which drives recurrence; and incision and drainage, or any incomplete excision, can itself set up a chronic draining sinus or fistula. So: cool it down, then do the proper en-bloc operation." },
+      { speaker: "host",   text: "And the malignancy angle — small but important." },
+      { speaker: "cohost", text: "About one percent of thyroglossal duct cysts harbor a carcinoma, and it's almost always a papillary thyroid carcinoma arising from thyroid tissue within the cyst. You raise your suspicion in an adult whose cyst has a solid component, calcification, or is growing rapidly or irregularly. The backbone of treatment is still the Sistrunk procedure, but now you also evaluate the thyroid gland and the neck nodes, and for higher-risk disease you consider completing a total thyroidectomy and adding adjuvant therapy, managed like a thyroid cancer." },
+      { speaker: "host",   text: "Let's consolidate with a case — essentially tomorrow's patient. A young adult has a painless midline neck lump that moves up when they swallow and when they stick out their tongue, and it flared briefly after a cold last month. Walk the whole plan." },
+      { speaker: "cohost", text: "The movement with tongue protrusion plus the midline location and the post-URI flare make this a thyroglossal duct cyst until proven otherwise — and that tongue-protrusion sign already argues against a dermoid. I confirm the clinical picture and examine the tongue base. Then the mandatory step: an ultrasound to characterize the cyst and, crucially, to confirm a normal orthotopic thyroid is present, with a TSH; if the thyroid picture is ambiguous, I get an uptake scan before committing. Assuming a normal gland and no active infection, I plan a Sistrunk procedure — removing the cyst, the tract, the central portion of the hyoid, and a core of tongue-base tissue to the foramen cecum — and I counsel that taking the central hyoid is what keeps it from recurring." },
+      { speaker: "host",   text: "Now throw in two curveballs: first the ultrasound shows no normal thyroid in the neck; then, in a different adult, the cyst has a solid calcified nodule." },
+      { speaker: "cohost", text: "Curveball one — no orthotopic thyroid on ultrasound — stops me cold. That ectopic tissue, possibly a lingual thyroid, may be the patient's only functioning thyroid, so I do not simply excise the cyst. I involve endocrinology, fully assess thyroid function and the ectopic tissue, and plan around preserving thyroid function or managing lifelong replacement deliberately — not discovering it the hard way postoperatively. Curveball two — a solid, calcified nodule in an adult's cyst — raises carcinoma, usually papillary. I still do the Sistrunk, but I work it up like a thyroid cancer: evaluate the thyroid gland and neck nodes, and plan for possible total thyroidectomy and adjuvant therapy depending on the pathology and risk." },
+      { speaker: "host",   text: "Takeaways." },
+      { speaker: "cohost", text: "One: a thyroglossal duct cyst follows the thyroid's descent from the foramen cecum through the hyoid, it's the most common congenital midline neck mass, and it elevates with swallowing and tongue protrusion — a dermoid doesn't move with the tongue. Two: before you ever excise one, confirm a normal orthotopic thyroid with ultrasound and TSH, because the cyst may be the patient's only functioning thyroid tissue." },
+      { speaker: "host",   text: "And three." },
+      { speaker: "cohost", text: "Three: the definitive operation is the Sistrunk procedure — cyst, tract, central hyoid, and a tongue-base core to the foramen cecum — and removing that central hyoid is what cuts recurrence from around fifty percent to under five; treat any infection first, and remember that about one percent harbor a carcinoma, usually papillary." },
+      { speaker: "host",   text: "Confirm the thyroid, take the central hyoid, and cool the infection before you operate — good luck tomorrow." },
+      { speaker: "cohost", text: "That's the prep." }
+    ]
+  },
   70: {
     objectives: [
       "Describe the cancer-immunity cycle and the three phases of immunoediting (elimination, equilibrium, escape).",
@@ -26323,6 +26622,26 @@ window.__scrollToChapter = function(n){
     }
   } catch(_){}
 };
+/* Pop-up chapter navigator (by book Part). */
+window.__toggleChapNav = function(open){
+  try {
+    var bd = document.getElementById('chapnav-backdrop');
+    if (!bd) return;
+    if (open) { bd.classList.add('open'); var inp=document.getElementById('chapnav-chapter-input'); if(inp) setTimeout(function(){try{inp.focus();}catch(_){}} ,50); }
+    else { bd.classList.remove('open'); }
+  } catch(_){}
+};
+window.__chapNavGoSection = function(id){
+  window.__toggleChapNav(false);
+  // let the panel close before scrolling
+  setTimeout(function(){ try { window.__jumpToSection(id); } catch(_){} }, 60);
+};
+window.__chapNavGoChapter = function(v){
+  var n = parseInt(v, 10);
+  if (!n || isNaN(n)) { try{ appToast('Enter a chapter number.'); }catch(_){}; return; }
+  window.__toggleChapNav(false);
+  setTimeout(function(){ try { window.__scrollToChapter(n); } catch(_){} }, 60);
+};
 function renderCurriculum() {
   const sectionGroups = SECTIONS.map(sec => ({
     sec,
@@ -26375,15 +26694,35 @@ function renderCurriculum() {
 
     ${searching ? smartResultsHTML(sq) : `
     ${(() => {
-      // Quick-scroll side rail: Top, chapter milestones (50/100/150/200), End.
-      const maxCh = CURRICULUM.reduce((m, w) => Math.max(m, w.chapter || w.week || 0), 0);
-      const stops = [50, 100, 150, 200].filter(n => n <= maxCh);
+      // Floating "Chapters" button + pop-up navigator organized by book Part (chapter headings).
+      const rows = SECTIONS.map(sec => {
+        const weeks = CURRICULUM.filter(w => w.section === sec.id);
+        if (!weeks.length) return '';
+        const range = sec.chapters ? ('Ch. ' + sec.chapters) : (weeks.length + ' units');
+        return `
+          <button class="chapnav-item" onclick="window.__chapNavGoSection('${sec.id}')">
+            <span class="chapnav-stripe" style="background:${sec.color};"></span>
+            <span style="flex:1;min-width:0;">
+              <span class="chapnav-item-title">${escapeHTML(sec.name)}</span>
+              <span class="chapnav-item-sub">${range} · ${weeks.length} unit${weeks.length>1?'s':''}</span>
+            </span>
+          </button>`;
+      }).join('');
       return `
-      <div class="chapter-rail" role="navigation" aria-label="Jump to chapter">
-        <div class="chapter-rail-label">Jump</div>
-        <button class="rail-ends" title="Top of the curriculum" onclick="window.__scrollToChapter(0)" aria-label="Top">↑</button>
-        ${stops.map(n => `<button title="Scroll to around chapter ${n}" onclick="window.__scrollToChapter(${n})">${n}</button>`).join('')}
-        <button class="rail-ends" title="End of the curriculum" onclick="window.__scrollToChapter(${maxCh})" aria-label="End">↓</button>
+      <button class="chapnav-fab" onclick="window.__toggleChapNav(true)" aria-label="Open chapter navigator">☰ Chapters</button>
+      <div class="chapnav-backdrop" id="chapnav-backdrop" onclick="if(event.target===this)window.__toggleChapNav(false)">
+        <div class="chapnav-panel" role="dialog" aria-label="Chapter navigator">
+          <div class="chapnav-head">
+            <h3>Jump to a Part</h3>
+            <button class="chapnav-close" onclick="window.__toggleChapNav(false)" aria-label="Close">✕</button>
+          </div>
+          <div class="chapnav-go">
+            <input id="chapnav-chapter-input" type="number" min="1" inputmode="numeric" placeholder="Go to chapter #…"
+              onkeydown="if(event.key==='Enter'){window.__chapNavGoChapter(this.value);}" />
+            <button onclick="window.__chapNavGoChapter(document.getElementById('chapnav-chapter-input').value)">Go →</button>
+          </div>
+          <div class="chapnav-list">${rows}</div>
+        </div>
       </div>`;
     })()}
     <!-- Status legend -->
@@ -26417,7 +26756,7 @@ function renderCurriculum() {
                             : hasC                 ? 'state-ready'
                             :                       'state-empty';
             const cls = ['week-card', cardState, held ? 'state-held' : '', isCurrent ? 'current' : '', w.isFoundations ? 'foundations' : '', w.missing ? 'missing-pdf' : ''].join(' ');
-            const numLabel = w.isFoundations ? '1–4' : (w.chapter || w.week);
+            const numLabel = w.prep ? '⭐' : (w.isFoundations ? '1–4' : (w.chapter || w.week));
             // Status badge with icon — clearer at-a-glance
             const statusBadge = cardState === 'state-done'  ? '<span class="week-status status-done">✓ Done</span>'
                               : cardState === 'state-ready' ? '<span class="week-status status-ready">📘 Ready</span>'
@@ -33643,15 +33982,16 @@ window.__importProgress = function (input) {
           if (critical) idbPut('app-critical-backup', JSON.stringify(critical)).catch(function(){});
         }
       } catch (ie) {}
-      // Rebuild live state from the restored buckets (loadStored also merges the critical fallback,
-      // so completed chapters are unioned — nothing is lost), then flush it back out cleanly.
-      loadStored();
-      try { if (typeof bindProgressForUser === 'function') bindProgressForUser(); } catch (be) {}
-      try { persist(); } catch (pe) {}
-      const restored = _countCompleted({ managerProgress: state.managerProgress, clientProgress: state.clientProgress });
-      setState({ view: 'dashboard' });
-      safeScrollTo(0);
-      if (typeof appToast === 'function') appToast('✓ Restored — ' + restored + ' completed chapters are back.');
+      // The ONLY reliable way to load a restore on every device (mobile Safari included) is a full
+      // reload: the app re-boots from the localStorage we just wrote, exactly as if freshly opened —
+      // no stale in-memory state, no manager/client rebinding edge cases. We stash a one-shot flag so
+      // the reloaded app can confirm the restore to the user.
+      try { localStorage.setItem('ent-restore-toast', String(chapters)); } catch (_t) {}
+      input.value = '';
+      alert('✓ Backup loaded — ' + chapters + ' completed chapters.\n\nThe app will now reload to apply your saved progress.');
+      try { if (typeof _writeCritical === 'function') { /* make sure critical is current before reload */ } } catch(_){}
+      setTimeout(function(){ try { location.reload(); } catch(_) { location.href = location.href; } }, 150);
+      return;
     } catch (err) {
       alert('Could not restore: ' + (err && err.message ? err.message : err));
     }
@@ -37696,6 +38036,14 @@ function renderStudyTrackerWidget() {
 loadStored();
 // Remove any lingering ElevenLabs key resurrected from an old build (app uses OpenAI HD now).
 if (typeof _purgeElevenLabsOnce === 'function') _purgeElevenLabsOnce();
+// One-shot confirmation after a backup restore (set just before the reload in __importProgress).
+try {
+  var _rt = localStorage.getItem('ent-restore-toast');
+  if (_rt != null) {
+    localStorage.removeItem('ent-restore-toast');
+    setTimeout(function(){ try { if (typeof appToast === 'function') appToast('✓ Backup restored — ' + _rt + ' completed chapters loaded.'); } catch(_){} }, 3200);
+  }
+} catch(_){}
 // Append the capstone clinical case to each episode (once).
 if (typeof applyExtraTeach === 'function') applyExtraTeach();
 if (typeof applyExtraTeach2 === 'function') applyExtraTeach2();
