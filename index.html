@@ -26475,17 +26475,33 @@ function showApiKeyPrompt() {
   document.getElementById('startup-openai-save').addEventListener('click', async () => {
     const v = (document.getElementById('startup-openai-key').value || '').trim();
     if (!v) { feedback('Paste OpenAI key first.', true); return; }
-    feedback('⏳ Verifying with OpenAI…', false);
+    // SAVE FIRST — never reject a valid key because a browser verify call failed. We verify against
+    // the ACTUAL endpoint the podcast uses (/v1/audio/speech), not /v1/models: modern project keys
+    // (sk-proj-…) can do TTS while being unable to list models, so /v1/models wrongly "rejects" them.
+    state.openaiKey = v;
+    try { if (typeof TTS_CACHE !== 'undefined' && TTS_CACHE.clear) TTS_CACHE.clear(); } catch(_){}
+    persist();
+    feedback('⏳ Saved — checking HD voice…', false);
+    let ok = false, reason = '';
     try {
-      const r = await fetch('https://api.openai.com/v1/models', { headers: { 'authorization': 'Bearer ' + v } });
-      if (!r.ok) throw new Error('Key rejected (HTTP ' + r.status + ')');
-      state.openaiKey = v;
-      persist();
-      feedback('✅ OpenAI key saved.', false);
-      setTimeout(() => { closeOverlay(); setState({}); }, 1200);
-    } catch (e) {
-      feedback('❌ ' + (e.message || 'Verification failed'), true);
-    }
+      let r = await fetch('https://api.openai.com/v1/audio/speech', {
+        method: 'POST',
+        headers: { 'authorization': 'Bearer ' + v, 'content-type': 'application/json' },
+        body: JSON.stringify({ model: 'gpt-4o-mini-tts', voice: (state.openaiVoices && state.openaiVoices.host) || 'shimmer', input: 'ENT Academy voice check.', response_format: 'mp3' })
+      });
+      if (!r.ok) {
+        r = await fetch('https://api.openai.com/v1/audio/speech', {
+          method: 'POST',
+          headers: { 'authorization': 'Bearer ' + v, 'content-type': 'application/json' },
+          body: JSON.stringify({ model: 'tts-1-hd', voice: 'shimmer', input: 'ENT Academy voice check.', response_format: 'mp3' })
+        });
+        if (!r.ok) reason = 'HTTP ' + r.status; else ok = true;
+      } else ok = true;
+      if (ok) { const b = await r.blob(); ok = !!(b && b.size > 200); if (!ok) reason = 'empty audio'; }
+    } catch (e) { reason = (e && e.message) || String(e); }
+    if (ok) feedback('✅ OpenAI key saved — HD voice working.', false);
+    else feedback('✔ Key saved. (Couldn’t auto-verify: ' + reason + ' — often just a browser check; your podcasts may still work.)', false);
+    setTimeout(() => { closeOverlay(); setState({}); }, 1700);
   });
   document.getElementById('startup-key-skip').addEventListener('click', () => {
     state.apiKeyPromptDismissed = todayKey();
@@ -37272,8 +37288,8 @@ function attachListeners() {
             } catch (e) { reason = (e && e.message) || String(e); }
             if (!ok) {
               try {
-                alert('⚠️ OpenAI HD voice did NOT work.\n\nReason: ' + reason +
-                  '\n\nMost common fixes:\n• Key is wrong or was revoked → make a new key at platform.openai.com/api-keys\n• No billing/credit on the OpenAI account → add credit\n• The key’s project has no TTS access\n\nUntil this is fixed the app will read podcasts with the basic device voice. TIP: pre-DOWNLOAD each surgery chapter now (Save offline) while online, so the HD audio is saved on your phone for tomorrow.');
+                alert('✔ Your OpenAI key IS saved and will be used for podcasts.\n\nI just couldn’t auto-play a test clip here. Reason: ' + reason +
+                  '\n\nThis is OFTEN only a browser/CORS check failing, not a bad key — try playing a podcast and it may well work. If podcasts truly stay on the basic voice, check:\n• billing/credit on the OpenAI account\n• the key’s project has TTS access\n• the key wasn’t revoked (make a fresh one at platform.openai.com/api-keys)\n\nTIP: pre-DOWNLOAD each surgery chapter (Save offline) while online so HD audio is on your phone.');
               } catch(_){}
             }
           })();
