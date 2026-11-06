@@ -28005,14 +28005,14 @@ function renderDashboard() {
   const _nextUp = nextUpWeek();
   const _nuW = _nextUp ? getWeek(_nextUp) : null;
   const nextUpHTML = _nuW ? `
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--card);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:12px;padding:14px 18px;margin-bottom:16px;">
-      <div style="font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--accent);">Up next</div>
-      <div style="flex:1;min-width:0;">
-        <div style="font-family:var(--font-serif);font-size:16px;color:var(--navy-900);">Ch.${_nuW.chapter || _nuW.week} · ${escapeHTML(_nuW.title)}</div>
-        <div style="font-size:12px;color:var(--text-soft);">Next in order, skipping chapters you've put on hold.</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-left:4px solid var(--accent);border-radius:14px;padding:16px 18px;margin-bottom:16px;">
+      <div style="font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:var(--accent);margin-bottom:7px;">Up next</div>
+      <div style="font-family:var(--font-serif);font-size:17px;line-height:1.3;color:var(--navy-900);overflow-wrap:break-word;word-break:normal;">Ch.${_nuW.chapter || _nuW.week} · ${escapeHTML(_nuW.title)}</div>
+      <div style="font-size:12px;color:var(--text-soft);margin-top:5px;line-height:1.45;">Next in order, skipping chapters you've put on hold.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+        <button class="btn btn-primary" data-action="open-week" data-week="${_nuW.week}" style="flex:1;min-width:140px;">Start →</button>
+        <button class="btn btn-ghost btn-sm" data-action="toggle-hold" data-week="${_nuW.week}" title="Not now — put it on hold and suggest the next one">⏸ Hold</button>
       </div>
-      <button class="btn btn-primary" data-action="open-week" data-week="${_nuW.week}">Start →</button>
-      <button class="btn btn-ghost btn-sm" data-action="toggle-hold" data-week="${_nuW.week}" title="Not now — put it on hold and suggest the next one">⏸ Hold</button>
     </div>` : '';
   return `
     ${heroHTML}
@@ -28272,6 +28272,16 @@ function renderCurriculum() {
           ${SECTIONS.map(s => `<option value="${s.id}">${escapeHTML(s.name)}</option>`).join('')}
         </select>
       </div>
+    </div>
+
+    <!-- Save / Load progress — surfaced right here on the Chapters screen so marks are easy to back up and restore -->
+    <div class="card" style="margin-bottom:16px;border:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:190px;">
+        <div style="font-weight:700;color:var(--navy-900);font-size:14.5px;">💾 Your progress — ${prog.done} of ${prog.total} chapters marked done</div>
+        <div style="font-size:12px;color:var(--text-soft);margin-top:3px;line-height:1.45;">Save a backup file now, then <strong>Load backup</strong> to restore all your marks after an update or on a new device.</div>
+      </div>
+      <button class="btn btn-primary btn-sm" data-action="backup-progress">⬇ Save backup</button>
+      <label class="btn btn-light btn-sm" style="cursor:pointer;margin:0;">⬆ Load backup<input type="file" style="display:none;" onchange="window.__importProgress(this)"></label>
     </div>
 
     ${searching ? smartResultsHTML(sq) : `
@@ -31365,10 +31375,12 @@ function renderPodcast() {
       </div>`;
   } else {
     const status = state.podcastStatus;
-    const ttsAvailable = typeof window !== 'undefined' && 'speechSynthesis' in window;
+    const _hasHdKey = !!(state.openaiKey || state.elevenLabsKey);
+    const ttsAvailable = (typeof window !== 'undefined' && 'speechSynthesis' in window) || _hasHdKey;
+    const _playLabel = status === 'paused' ? 'Resume' : (_hasHdKey ? 'Play · HD voice' : 'Play');
     const playBtn = status === 'playing'
       ? `<button class="btn btn-light" data-action="pod-pause">${I.pause} Pause</button>`
-      : `<button class="btn btn-primary" data-action="pod-play" ${ttsAvailable ? '' : 'disabled title="Browser TTS unavailable"'}>${I.play} ${status === 'paused' ? 'Resume' : 'Play with browser TTS'}</button>`;
+      : `<button class="btn btn-primary" data-action="pod-play" ${ttsAvailable ? '' : 'disabled title="No voice available"'}>${I.play} ${_playLabel}</button>`;
     const stopBtn = (status !== 'stopped') ? `<button class="btn btn-light" data-action="pod-stop">${I.stop} Stop</button>` : '';
     const liveDot = (status === 'playing') ? `<span class="tts-status"><span class="pulse"></span> Live</span>` : '';
 
@@ -31587,6 +31599,46 @@ const ELEVENLABS_VOICES = {
   cohost: 'pNInz6obpgDQGcFmaJgB'  // Adam
 };
 
+/* One OpenAI /audio/speech POST, with retry/backoff on transient rate-limit (429) and 5xx.
+   This is the heart of the "key works but podcast uses the robot voice" fix: a VALID, funded
+   key on a new/low OpenAI usage tier gets 429 "rate limit reached" when a long Deep Dive fires
+   many requests — and usage still shows on the dashboard. We must RETRY those, not give up.
+   We distinguish that from a TRUE out-of-credit (insufficient_quota / billing), which we don't
+   retry. Returns {ok, status, blob, body, quota}. */
+async function _openaiSpeechPost(body) {
+  const MAX = 4;
+  let lastStatus = 0, lastBody = '';
+  for (let attempt = 0; attempt <= MAX; attempt++) {
+    let resp;
+    try {
+      resp = await fetch('https://api.openai.com/v1/audio/speech', {
+        method: 'POST',
+        headers: { 'authorization': 'Bearer ' + state.openaiKey, 'content-type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+    } catch (netErr) {
+      // network blip — back off and retry
+      if (attempt < MAX) { await new Promise(r => setTimeout(r, 500 * Math.pow(2, attempt))); continue; }
+      return { ok: false, status: 0, body: String((netErr && netErr.message) || netErr), quota: false };
+    }
+    if (resp.ok) { const blob = await resp.blob(); return { ok: true, status: 200, blob: blob }; }
+    lastStatus = resp.status;
+    lastBody = await resp.text().catch(() => '');
+    const isQuota = /insufficient_quota|billing_hard_limit|exceeded your current quota/i.test(lastBody);
+    const retriable = !isQuota && (resp.status === 429 || resp.status === 500 || resp.status === 503);
+    if (retriable && attempt < MAX) {
+      // Honor Retry-After when present, else exponential backoff with jitter.
+      let waitMs = 0;
+      const ra = resp.headers && resp.headers.get && resp.headers.get('retry-after');
+      if (ra) { const n = parseFloat(ra); if (!isNaN(n)) waitMs = n * 1000; }
+      if (!waitMs) waitMs = Math.min(8000, 600 * Math.pow(2, attempt)) + Math.floor(Math.random() * 300);
+      await new Promise(r => setTimeout(r, waitMs));
+      continue;
+    }
+    return { ok: false, status: resp.status, body: lastBody, quota: isQuota };
+  }
+  return { ok: false, status: lastStatus, body: lastBody, quota: /insufficient_quota|billing_hard_limit|exceeded your current quota/i.test(lastBody) };
+}
 async function openaiTtsBlobUrl(speakerId, text) {
   const userVoices = state.openaiVoices || {};
   const voice = userVoices[speakerId] || OPENAI_VOICES[speakerId] || 'ballad';
@@ -31598,50 +31650,26 @@ async function openaiTtsBlobUrl(speakerId, text) {
   const instructions = OPENAI_STYLE[speakerId] || OPENAI_STYLE.host;
   // Apply same medical-abbreviation preprocessing so OpenAI doesn't say "ent" instead of E-N-T etc.
   const inputText = (typeof preprocessTtsText === 'function') ? preprocessTtsText(text) : text;
-  // Use gpt-4o-mini-tts — significantly more natural than legacy tts-1-hd
-  const resp = await fetch('https://api.openai.com/v1/audio/speech', {
-    method: 'POST',
-    headers: {
-      'authorization': 'Bearer ' + state.openaiKey,
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      model: 'gpt-4o-mini-tts',
-      voice: voice,
-      input: inputText,
-      instructions: instructions,
-      response_format: 'mp3'
-    })
-  });
-  if (!resp.ok) {
-    // Fall back to tts-1-hd for accounts without gpt-4o-mini-tts access yet.
-    // tts-1-hd only supports the 6 classic voices, so map the chosen voice to its NEAREST
-    // classic voice. This keeps a fallback turn sounding like the same person as the
-    // gpt-4o-mini-tts turns — otherwise the podcast voice would switch mid-episode.
+  // 1) Primary: gpt-4o-mini-tts (most natural), WITH retry/backoff on rate-limit.
+  let r = await _openaiSpeechPost({ model: 'gpt-4o-mini-tts', voice: voice, input: inputText, instructions: instructions, response_format: 'mp3' });
+  if (!r.ok && !r.quota) {
+    // 2) Fall back to tts-1-hd for accounts without gpt-4o-mini-tts access (model/400/404),
+    //    also with retry/backoff. tts-1-hd supports only the 6 classic voices → map to nearest.
     const TTS1HD_NEAREST = {
       shimmer:'shimmer', nova:'nova', coral:'nova', sage:'shimmer', alloy:'alloy',
       echo:'echo', onyx:'onyx', ash:'onyx', ballad:'onyx', fable:'fable'
     };
     const fbVoice = TTS1HD_NEAREST[voice] || (['alloy','echo','fable','onyx','nova','shimmer'].indexOf(voice) >= 0 ? voice : 'onyx');
-    const fallback = await fetch('https://api.openai.com/v1/audio/speech', {
-      method: 'POST',
-      headers: { 'authorization': 'Bearer ' + state.openaiKey, 'content-type': 'application/json' },
-      body: JSON.stringify({ model: 'tts-1-hd', voice: fbVoice, input: inputText, response_format: 'mp3', speed: 1.0 })
-    });
-    if (!fallback.ok) {
-      const err = await fallback.text();
-      throw new Error('OpenAI TTS ' + fallback.status + ': ' + err.slice(0, 200));
-    }
-    const blob = await fallback.blob();
-    const url = URL.createObjectURL(blob);
-    TTS_CACHE.set(cacheKey, url);
-    try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
-    return url;
+    r = await _openaiSpeechPost({ model: 'tts-1-hd', voice: fbVoice, input: inputText, response_format: 'mp3', speed: 1.0 });
   }
-  const blob = await resp.blob();
-  const url = URL.createObjectURL(blob);
+  if (!r.ok) {
+    // Tag quota explicitly so the UI can tell "out of credit" from a transient rate-limit.
+    const tag = r.quota ? 'quota' : 'ratelimit';
+    throw new Error('OpenAI TTS ' + (r.status || 0) + ' [' + tag + ']: ' + String(r.body || '').slice(0, 200));
+  }
+  const url = URL.createObjectURL(r.blob);
   TTS_CACHE.set(cacheKey, url);
-  try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, blob); } catch(_){}
+  try { if (typeof ttsStoreBlob === 'function') ttsStoreBlob(speakerId, text, r.blob); } catch(_){}
   return url;
 }
 
@@ -31836,7 +31864,10 @@ async function ttsAudioCached(speakerId, text){
 var __ttsInflight = new Map();
 var __ttsActive = 0;
 var __ttsQueue = [];
-function __ttsDrain(){ while (__ttsActive < 2 && __ttsQueue.length){ var n = __ttsQueue.shift(); n(); } }
+// OpenAI's new/low usage tiers rate-limit bursts hard, so serialize to 1 concurrent request when
+// using OpenAI; ElevenLabs tolerates 2. Fewer concurrent requests = far fewer 429s = HD voice holds.
+function __ttsMax(){ try { return state.elevenLabsKey ? 2 : 1; } catch(_) { return 1; } }
+function __ttsDrain(){ while (__ttsActive < __ttsMax() && __ttsQueue.length){ var n = __ttsQueue.shift(); n(); } }
 function __ttsGate(fn){
   return new Promise(function(resolve, reject){
     function run(){
@@ -31846,7 +31877,7 @@ function __ttsGate(fn){
         function(e){ __ttsActive--; __ttsDrain(); reject(e); }
       );
     }
-    if (__ttsActive < 2) run(); else __ttsQueue.push(run);
+    if (__ttsActive < __ttsMax()) run(); else __ttsQueue.push(run);
   });
 }
 async function bestTtsBlobUrl(speakerId, text) {
@@ -31991,15 +32022,22 @@ function cachedTtsUrl(speakerId, text) {
    wondering why a podcast suddenly sounds robotic / ignores their chosen voices. */
 function explainTtsError(msg) {
   const m = String(msg || '');
-  if (/\b401\b|invalid api key|unauthorized|invalid_api_key/i.test(m))
-    return 'your ElevenLabs API key was rejected — re-check it in Settings.';
-  if (/\b429\b|quota|credit|limit|exceeded|insufficient/i.test(m))
-    return 'your ElevenLabs monthly character quota is used up — Deep Dive episodes are long, so the free tier runs out fast. Add credits, or paste an OpenAI key in Settings for HD voices.';
-  if (/\b403\b/i.test(m))
-    return 'ElevenLabs blocked this request (plan/permission) — check your account.';
+  const provider = (function(){ try { return state.elevenLabsKey ? 'ElevenLabs' : 'OpenAI'; } catch(_) { return 'the HD voice'; } })();
   if (/No HD TTS key/i.test(m))
-    return 'no HD voice key is set — add an ElevenLabs or OpenAI key in Settings.';
-  return 'the HD voice service did not respond. Check your key/quota in Settings.';
+    return 'no HD voice key is set — add an OpenAI (or ElevenLabs) key in Settings.';
+  if (/\b401\b|invalid api key|unauthorized|invalid_api_key/i.test(m))
+    return 'your ' + provider + ' API key was rejected — re-check it in Settings.';
+  // A TRUE out-of-credit is tagged [quota] (insufficient_quota / billing) — only then is it credit.
+  if (/\[quota\]|insufficient_quota|billing_hard_limit|exceeded your current quota/i.test(m))
+    return 'your ' + provider + ' account is out of credit — add billing/credit at platform.openai.com, then try again.';
+  // A 429 WITHOUT the quota tag is a transient rate limit — the key is fine; it just got throttled.
+  if (/\[ratelimit\]|\b429\b|rate.?limit|too many requests/i.test(m))
+    return 'your ' + provider + ' key hit a temporary rate limit (common on a new account), not an out-of-credit — the app auto-retries; try the podcast again in a moment, or Save it offline to fetch the clips gently.';
+  if (/\b403\b/i.test(m))
+    return provider + ' blocked this request (plan/permission) — check your account.';
+  if (/\b404\b|model/i.test(m))
+    return 'your ' + provider + ' key cannot access the TTS model yet — check model access/billing on the account.';
+  return 'the HD voice service did not respond. Check your key/credit in Settings, then retry.';
 }
 
 /* ---------- EXTENDED DEEP DIVE PODCAST GENERATOR ----------
